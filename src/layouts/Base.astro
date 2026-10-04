@@ -79,6 +79,14 @@ const year = new Date().getFullYear();
     <meta name="twitter:card" content="summary_large_image" />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
     <script defer src="/_vercel/insights/script.js"></script>
+    <!-- Google Analytics 4: page analytics only. Advertising features and Google signals are off. -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-NK4ZVDMCWC"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NK4ZVDMCWC', { allow_google_signals: false, allow_ad_personalization_signals: false });
+    </script>
   </head>
   <body class="min-h-screen flex flex-col">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-white px-3 py-2 rounded">Skip to content</a>
