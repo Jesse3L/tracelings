@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import FontTool from '../../components/FontTool.tsx';
+import { SITE } from '../../config';
+
+const title = `Name Coloring Pages Maker (Free Printable) | ${SITE.name}`;
+const description = "Turn your child's name into a free coloring page with big bubble letters and stars, hearts or flowers around it. Prints on Letter or A4.";
+const url = new URL('/name-coloring-pages/', SITE.url).href;
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Name Coloring Page Maker', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any (web browser)', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Name Coloring Pages', item: url },
+  ] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Name coloring pages</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Name coloring pages</span></h1>
+      <p class="mt-4 text-lg text-muted">Big bubble letters of your child's name, with shapes to color all around it.</p>
+    </header>
+
+    <FontTool client:load kind="coloring" source="name-coloring" />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free name coloring page maker puts your child's name in big outlined bubble letters, then fills the page with stars, hearts,
+        flowers or bubbles to color. Long names split onto two lines automatically, and every page prints on Letter or A4.
+      </p>
+      <h2>Ways to use a name coloring page</h2>
+      <ul>
+        <li><strong>Name recognition.</strong> Coloring each letter while saying its name helps preschoolers learn the letters in their name.</li>
+        <li><strong>Classroom door or cubby tags.</strong> Print one for each child at the start of the year.</li>
+        <li><strong>Party place cards.</strong> Kids color their own name while they wait for cake.</li>
+        <li><strong>A quiet-time activity.</strong> Pair it with a <a href="/name-tracing/">name tracing worksheet</a> for a short practice session.</li>
+      </ul>
+      <h2>Tips for little colorers</h2>
+      <ul>
+        <li>Chunky crayons are easier for ages 2 to 4 than thin colored pencils.</li>
+        <li>Ask your child to color each letter a different color, then name the letters together.</li>
+        <li>Turn the sheet sideways if they want more room for the long letters.</li>
+      </ul>
+      <p>Looking for more to color? Seasonal coloring pages are on the way, starting with Thanksgiving and Christmas.</p>
+    </article>
+  </div>
+</Base>

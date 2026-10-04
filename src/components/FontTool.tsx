@@ -1,0 +1,132 @@
+import { useEffect, useMemo, useState } from 'preact/hooks';
+import type { LineSize, Paper, Practice, Page } from '../lib/sheet';
+import { pageToSvg } from '../lib/render';
+import { loadFont, type LoadedFont } from '../lib/fontshape';
+import { buildCursiveSheet, cleanCursiveText } from '../lib/cursive';
+import { buildColoringPage, type Theme } from '../lib/coloring';
+import { needsEmail } from '../lib/gate';
+import { savePdf } from '../lib/download';
+import { Segmented } from './Tracer';
+import EmailGate from './EmailGate';
+
+type Kind = 'cursive' | 'coloring';
+
+export default function FontTool(props: { kind: Kind; preset?: string; source?: string }) {
+  const kind = props.kind;
+  const [font, setFont] = useState<LoadedFont | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [text, setText] = useState(props.preset ?? '');
+  const [size, setSize] = useState<LineSize>('large');
+  const [practice, setPractice] = useState<Practice>('trace-write');
+  const [modelRow, setModelRow] = useState(true);
+  const [paper, setPaper] = useState<Paper>('letter');
+  const [theme, setTheme] = useState<Theme>('stars');
+  const [caps, setCaps] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [gate, setGate] = useState(false);
+  const [done, setDone] = useState(false);
+  const source = props.source ?? (kind === 'cursive' ? 'cursive' : 'name-coloring');
+
+  useEffect(() => {
+    loadFont(kind === 'cursive' ? 'cursive' : 'bubble').then(setFont).catch(() => setFailed(true));
+    if (!props.preset) {
+      try {
+        const n = sessionStorage.getItem('tl-name');
+        if (n) setText(n);
+      } catch { /* storage unavailable */ }
+    }
+  }, []);
+
+  const page: Page | null = useMemo(() => {
+    if (!font) return null;
+    return kind === 'cursive'
+      ? buildCursiveSheet(font, { text, size, paper, practice, modelRow, credit: true })
+      : buildColoringPage(font, { name: text, theme, paper, caps, credit: true });
+  }, [font, text, size, paper, practice, modelRow, theme, caps]);
+  const svg = useMemo(() => (page ? pageToSvg(page) : ''), [page]);
+
+  const slug = cleanCursiveText(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || (kind === 'cursive' ? 'cursive' : 'name');
+  const filename = kind === 'cursive' ? `${slug}-cursive-worksheet.pdf` : `${slug}-coloring-page.pdf`;
+
+  async function save() {
+    if (!page) return;
+    setBusy(true);
+    try { await savePdf([page], filename, kind === 'cursive' ? 'Cursive practice worksheet' : 'Name coloring page'); setDone(true); }
+    finally { setBusy(false); }
+  }
+
+  return (
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] items-start">
+      <form class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6" onSubmit={(e) => { e.preventDefault(); needsEmail() ? setGate(true) : save(); }}>
+        <label class="block mb-5">
+          <span class="block text-[15px] font-bold mb-2">{kind === 'cursive' ? 'Name, word or short sentence' : "Child's name"}</span>
+          <input
+            id={`${kind}-text`}
+            type="text"
+            value={text}
+            maxLength={kind === 'cursive' ? 40 : 16}
+            autoComplete="off"
+            spellcheck={false}
+            placeholder={kind === 'cursive' ? 'Type a name or word' : 'Type a name'}
+            onInput={(e) => setText((e.target as HTMLInputElement).value)}
+            class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-2xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
+          />
+          <span class="block text-[13px] text-muted mt-2">Stays on this device.</span>
+        </label>
+
+        {kind === 'cursive' ? (
+          <>
+            <Segmented legend="Line size" name="size" value={size} onChange={setSize} options={[
+              { v: 'large', label: 'Large', sub: 'starting out' },
+              { v: 'medium', label: 'Medium', sub: 'most kids' },
+              { v: 'small', label: 'Small', sub: 'confident' },
+            ]} />
+            <Segmented legend="Practice rows" name="practice" value={practice} onChange={setPractice} options={[
+              { v: 'trace-write', label: 'Trace, then write', sub: 'blank rows last' },
+              { v: 'trace', label: 'Trace only', sub: 'every row gray' },
+            ]} />
+            <label class="mb-5 flex items-center gap-3 cursor-pointer text-[15px]">
+              <input id="cursive-model" type="checkbox" class="size-4 accent-[#5b86d9]" checked={modelRow} onChange={(e) => setModelRow((e.target as HTMLInputElement).checked)} />
+              Solid example on the first row
+            </label>
+          </>
+        ) : (
+          <>
+            <Segmented legend="Shapes around the name" name="theme" value={theme} onChange={setTheme} options={[
+              { v: 'stars', label: 'Stars' },
+              { v: 'hearts', label: 'Hearts' },
+              { v: 'flowers', label: 'Flowers' },
+              { v: 'bubbles', label: 'Bubbles' },
+            ]} />
+            <label class="mb-5 flex items-center gap-3 cursor-pointer text-[15px]">
+              <input id="coloring-caps" type="checkbox" class="size-4 accent-[#5b86d9]" checked={caps} onChange={(e) => setCaps((e.target as HTMLInputElement).checked)} />
+              All capital letters
+            </label>
+          </>
+        )}
+
+        <Segmented legend="Paper" name="paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
+
+        <button type="submit" disabled={busy || !page} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {busy ? 'Making your PDF…' : 'Download PDF'}
+        </button>
+        {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}
+        <div class="mt-4 rounded-lg border border-dashed border-rule/60 bg-white/70 p-3 text-[14px] leading-snug text-muted">
+          <span class="font-bold text-ink">Members</span> will get seasonal themes, a whole class set in one PDF and no footer line.{' '}
+          <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">Join the founding waitlist</a>
+        </div>
+      </form>
+
+      <figure class="lg:sticky lg:top-6">
+        {svg ? (
+          <div class="sheet-frame overflow-hidden" dangerouslySetInnerHTML={{ __html: svg }} />
+        ) : (
+          <div class="sheet-frame aspect-[8.5/11] grid place-items-center text-muted">{failed ? 'The letters didn’t load. Refresh the page to try again.' : 'Loading letters…'}</div>
+        )}
+        <figcaption class="mt-3 text-[13px] text-muted">Live preview. The PDF prints at full size on {paper === 'letter' ? 'US Letter' : 'A4'} paper.</figcaption>
+      </figure>
+
+      <EmailGate open={gate} source={source} onClose={() => setGate(false)} onDone={() => { setGate(false); save(); }} />
+    </div>
+  );
+}

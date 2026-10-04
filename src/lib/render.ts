@@ -11,7 +11,8 @@ export function pageToSvg(p: Page): string {
     if (it.kind === 'line') {
       out.push(`<line x1="${it.x1}" y1="${it.y1}" x2="${it.x2}" y2="${it.y2}" stroke="${it.color}" stroke-width="${it.width}"${it.dash ? ` stroke-dasharray="${it.dash.join(' ')}"` : ''}/>`);
     } else if (it.kind === 'path') {
-      out.push(`<path d="${it.d}" fill="none" stroke="${it.color}" stroke-width="${it.width}" stroke-linecap="round" stroke-linejoin="round"${it.dash ? ` stroke-dasharray="${it.dash.join(' ')}"` : ''}/>`);
+      const stroke = it.width > 0 ? ` stroke="${it.color}" stroke-width="${it.width}" stroke-linecap="round" stroke-linejoin="round"${it.dash ? ` stroke-dasharray="${it.dash.join(' ')}"` : ''}` : '';
+      out.push(`<path d="${it.d}" fill="${it.fill ?? 'none'}"${it.evenOdd ? ' fill-rule="evenodd"' : ''}${stroke}/>`);
     } else if (it.kind === 'dot') {
       out.push(`<circle cx="${it.cx}" cy="${it.cy}" r="${it.r}" fill="${it.color}"/>`);
     } else {
@@ -44,7 +45,14 @@ export async function pagesToPdf(pages: Page[], title = 'Name tracing worksheet'
       if (it.kind === 'line') {
         page.drawLine({ start: { x: it.x1, y: Y(it.y1) }, end: { x: it.x2, y: Y(it.y2) }, thickness: it.width, color: c(it.color), dashArray: it.dash });
       } else if (it.kind === 'path') {
-        page.drawSvgPath(it.d, { x: 0, y: p.h, borderColor: c(it.color), borderWidth: it.width, borderDashArray: it.dash, borderLineCap: LineCapStyle.Round });
+        page.drawSvgPath(it.d, {
+          x: 0, y: p.h,
+          color: it.fill ? c(it.fill) : undefined,
+          borderColor: it.width > 0 ? c(it.color) : undefined,
+          borderWidth: it.width > 0 ? it.width : undefined,
+          borderDashArray: it.dash,
+          borderLineCap: LineCapStyle.Round,
+        });
       } else if (it.kind === 'dot') {
         page.drawCircle({ x: it.cx, y: Y(it.cy), size: it.r, color: c(it.color) });
       } else {

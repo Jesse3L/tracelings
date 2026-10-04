@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import FontTool from '../../components/FontTool.tsx';
+import { SITE } from '../../config';
+
+const title = `Cursive Name & Word Worksheet Generator (Free) | ${SITE.name}`;
+const description = 'Make free cursive handwriting worksheets from any name, word or short sentence. Connected cursive on guide lines, trace then write. Prints on Letter or A4.';
+const url = new URL('/cursive/', SITE.url).href;
+const faqs = [
+  { q: 'What style of cursive does this use?', a: 'A traditional looped cursive close to what most US schools teach, with connected letters. It comes from an open-licensed school handwriting font designed for teaching.' },
+  { q: 'What age should kids start cursive?', a: 'Many schools introduce cursive somewhere between second and third grade, around ages 7 to 9, once print handwriting feels comfortable. Some families start earlier at home. Your child’s teacher can tell you what their school uses.' },
+  { q: 'Can I make a cursive name worksheet?', a: 'Yes. Type your child’s name and the sheet shows it in connected cursive, with a solid example on the first row and gray letters to trace below.' },
+  { q: 'Is the name I type stored?', a: 'No. The worksheet is built in your browser and the text never leaves your device.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Cursive Worksheet Generator', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any (web browser)', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Cursive Worksheets', item: url },
+  ] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Cursive worksheets</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Cursive worksheet generator</span></h1>
+      <p class="mt-4 text-lg text-muted">Type a name, word or short sentence and get connected cursive to trace and copy.</p>
+    </header>
+
+    <FontTool client:load kind="cursive" source="cursive" />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free cursive worksheet generator turns any name, word or sentence into connected cursive on handwriting lines. The first row
+        shows a solid example, the gray rows are for tracing, and the blank rows at the bottom are for writing without help.
+      </p>
+      <h2>How to use these cursive worksheets</h2>
+      <ol>
+        <li><strong>Start with their name.</strong> A cursive name is the word most kids want to learn first, and it covers several letter joins at once.</li>
+        <li><strong>Trace slowly, without lifting.</strong> Cursive is about the flow from one letter into the next. Tracing the gray letters in one smooth motion builds that habit.</li>
+        <li><strong>Move to short words.</strong> Try family names, pets or spelling words once the name feels easy.</li>
+      </ol>
+      <h2>Tips for learning cursive</h2>
+      <ul>
+        <li><strong>Learn letters in families.</strong> Letters that start the same way, like a, c, d, g and o, are easier to learn together.</li>
+        <li><strong>Watch the joins.</strong> Most mistakes happen between letters, not in them. Point out where one letter hands off to the next.</li>
+        <li><strong>Keep the paper tilted.</strong> A slight slant toward the writing hand makes cursive feel more natural.</li>
+      </ul>
+      <p>Want every letter? Print the <a href="/cursive-alphabet/">cursive alphabet worksheets</a>. Still working on print? Try <a href="/name-tracing/">name tracing</a> or <a href="/letter-tracing/">letter tracing</a>.</p>
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </article>
+  </div>
+</Base>

@@ -11,5 +11,5 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   integrations: [preact(), sitemap({ filter: (page) => !page.includes('/api/') })],
-  vite: { plugins: [tailwindcss()] },
+  vite: { plugins: [tailwindcss()], build: { target: 'es2022' } },
 });

@@ -15,7 +15,7 @@ const SIZES: { v: LineSize; label: string; age: string }[] = [
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const DIGITS = '0123456789'.split('');
 
-function Segmented<T extends string>(props: {
+export function Segmented<T extends string>(props: {
   legend: string;
   name: string;
   value: T;

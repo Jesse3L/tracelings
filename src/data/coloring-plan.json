@@ -1,0 +1,992 @@
+{
+  "notes": {
+    "researchDate": "2026-10-04",
+    "source": "Ubersuggest, United States (locId 2840), English. SD = SEO difficulty (0-100).",
+    "topKeywords": [
+      {
+        "keyword": "christmas coloring pages",
+        "volume": 135000,
+        "sd": 31,
+        "note": "Peaks Nov-Dec; free/print variants 14.8k-27.1k at SD 26-30"
+      },
+      {
+        "keyword": "unicorn coloring pages",
+        "volume": 49500,
+        "sd": 23,
+        "note": "Flat year-round; \"unicorn coloring pages for free\" 9.9k at SD 8"
+      },
+      {
+        "keyword": "dinosaur coloring pages",
+        "volume": 49500,
+        "sd": 28,
+        "note": "Flat year-round; \"dinosaur coloring pages t rex\" 9.9k SD 23; species pages (spinosaurus 2.9k, triceratops 1.6k, raptor 1.3k) all SD ~20"
+      },
+      {
+        "keyword": "flower coloring pages",
+        "volume": 49500,
+        "sd": 26,
+        "note": "Peaks 74k Mar-May. Not in launch 12; strong candidate for phase 2 (publish by Feb)"
+      },
+      {
+        "keyword": "simple coloring pages",
+        "volume": 40500,
+        "sd": 31,
+        "note": "Evergreen. \"easy coloring pages\" same volume but SD 46"
+      },
+      {
+        "keyword": "fall coloring pages",
+        "volume": 40500,
+        "sd": 24,
+        "note": "Peaks Sep-Oct (201k Sep); mostly past peak, consider for next August"
+      },
+      {
+        "keyword": "thanksgiving coloring pages",
+        "volume": 33100,
+        "sd": 26,
+        "note": "Peaks Nov; \"turkey coloring page\" hits 165k in Nov at SD 27"
+      },
+      {
+        "keyword": "easter coloring pages",
+        "volume": 33100,
+        "sd": 28,
+        "note": "Peaks Mar (201k); \"spring coloring pages\" 33.1k SD 23 peaks Mar-Apr"
+      },
+      {
+        "keyword": "animal coloring pages",
+        "volume": 33100,
+        "sd": 28,
+        "note": "Evergreen; phase 2 candidate"
+      },
+      {
+        "keyword": "valentine coloring pages",
+        "volume": 27100,
+        "sd": 26,
+        "note": "Peaks Feb (165k); \"heart coloring pages\" 18.1k SD 24 evergreen with Jan-Feb bump"
+      },
+      {
+        "keyword": "winter coloring pages",
+        "volume": 27100,
+        "sd": 21,
+        "note": "Peaks Dec (165k) and Jan (110k)"
+      },
+      {
+        "keyword": "car coloring pages",
+        "volume": 22200,
+        "sd": 27,
+        "note": "Flat year-round; \"truck coloring pages\" 8.1k SD 27"
+      },
+      {
+        "keyword": "st patricks day coloring pages",
+        "volume": 18100,
+        "sd": 12,
+        "note": "Lowest SD found; peaks Mar (135k)"
+      }
+    ],
+    "otherKeywordsChecked": [
+      {
+        "keyword": "food coloring pages",
+        "volume": 9900,
+        "sd": 27
+      },
+      {
+        "keyword": "turkey coloring page",
+        "volume": 14800,
+        "sd": 27
+      },
+      {
+        "keyword": "preschool coloring pages",
+        "volume": 8100,
+        "sd": 46
+      },
+      {
+        "keyword": "easy coloring pages",
+        "volume": 40500,
+        "sd": 46
+      },
+      {
+        "keyword": "space coloring pages",
+        "volume": 6600,
+        "sd": 41
+      },
+      {
+        "keyword": "sea animal coloring pages",
+        "volume": 6600,
+        "sd": 22
+      },
+      {
+        "keyword": "snowman coloring page",
+        "volume": 6600,
+        "sd": 27
+      },
+      {
+        "keyword": "new years coloring pages",
+        "volume": 6600,
+        "sd": 26
+      },
+      {
+        "keyword": "bug coloring pages",
+        "volume": 5400,
+        "sd": 22
+      },
+      {
+        "keyword": "ocean coloring pages",
+        "volume": 4400,
+        "sd": 31
+      },
+      {
+        "keyword": "farm animal coloring pages",
+        "volume": 3600,
+        "sd": 33
+      },
+      {
+        "keyword": "hanukkah coloring pages",
+        "volume": 2900,
+        "sd": 22
+      },
+      {
+        "keyword": "coloring pages for toddlers / toddler coloring pages",
+        "volume": 0,
+        "sd": 4,
+        "note": "Ubersuggest reports 0 volume (data gap, not real demand absence); target via \"simple coloring pages\" and on-page toddler/preschool wording"
+      }
+    ],
+    "phase2Candidates": [
+      "flower-coloring-pages (49.5k/26, by Feb)",
+      "spring-coloring-pages (33.1k/23, by Feb)",
+      "animal-coloring-pages (33.1k/28)",
+      "food-coloring-pages (9.9k/27)",
+      "sea-animal-coloring-pages (6.6k/22) + ocean (4.4k/31)",
+      "bug-coloring-pages (5.4k/22, by Mar)",
+      "farm-animal-coloring-pages (3.6k/33)",
+      "heart-coloring-pages (18.1k/24, standalone)"
+    ],
+    "serpObservations": [
+      "Crayola (DA 79) holds #1-2 on every head term checked (thanksgiving, dinosaur, winter, unicorn, simple coloring pages) and takes the bulk of clicks.",
+      "Small/mid coloring-page sites DO rank on page one: reallycolor.com (DA 27) is #3 for dinosaur and #4 for unicorn; cutecoloringpagesforkids.com (DA 28) is #3 for simple coloring pages; mondaymandala.com (DA 39) is top 6 on every term; coloringbliss.com (DA 32) #8-10; yaycoloringpages.com (DA 29) around #12-14.",
+      "Other recurring rankers: abcmouse.com (DA 67), homemade-gifts-made-easy.com (DA 65, strong on seasonal with heavy Pinterest shares), Pinterest boards, teacherspayteachers, Etsy listings, stock sites (Adobe, iStock), nps.gov for dinosaurs.",
+      "Google shows an image pack at or near #1 on most of these terms, so image filename, alt text and an indexable full-size image matter as much as the page text. Unicorn SERP also has a short-videos block.",
+      "Winning page pattern is a collection hub titled \"N [Theme] Coloring Pages (Free PDF Printables)\" linking to individual sheets; numbers in titles are common across the top 10.",
+      "Long-tail modifiers with \"free\", \"printable\", \"pdf\", \"easy\", \"cute\", \"preschool\" carry SD 15-30 and real volume (e.g. \"free printables thanksgiving coloring pages\" 1.9k SD 7, \"free printable dinosaur coloring pages pdf\" 720 SD 15).",
+      "Large share of seasonal long tail is character-based (Disney, Bluey, Hello Kitty, Snoopy, Grinch, Nightmare Before Christmas, Stitch, Pokemon) and was excluded per brief."
+    ],
+    "priorityLogic": "Ordered by publishBy: Thanksgiving is live-now (Nov spike), Christmas by Oct 20 to get indexed before the Nov ramp; evergreen dinosaur/unicorn slotted early since they earn year-round; Hanukkah (begins Dec 4, 2026) and Winter by Nov 1; later holidays ~6-8 weeks before their spike month."
+  },
+  "collections": [
+    {
+      "slug": "thanksgiving-coloring-pages",
+      "title": "Thanksgiving Coloring Pages",
+      "primaryKeyword": "thanksgiving coloring pages",
+      "volume": 33100,
+      "sd": 26,
+      "season": "thanksgiving",
+      "publishBy": "2026-10-08",
+      "intro": "These free Thanksgiving coloring pages give kids something calm to do while the turkey roasts or the table gets set. Every sheet uses bold outlines and big open shapes, so preschoolers can color without frustration and older kids can add patterns and details. Print a stack for the kids' table, use them in a classroom harvest unit, or send one home with a note about what your child is thankful for. Each page downloads as a free printable PDF.",
+      "pages": [
+        {
+          "slug": "turkey-coloring-page",
+          "title": "Turkey Coloring Page",
+          "prompt": "children's coloring book page, a happy cartoon turkey standing proudly with its tail feathers fanned out wide, a few fallen leaves on the ground, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Printable coloring page of a smiling turkey with a big fan of tail feathers",
+          "description": "A cheerful turkey shows off a big fan of tail feathers, each one wide enough for little hands. Try coloring every feather a different fall shade, then count them together. It's an easy way to sneak counting practice into Thanksgiving week."
+        },
+        {
+          "slug": "cute-turkey-coloring-page",
+          "title": "Cute Turkey Coloring Page",
+          "prompt": "children's coloring book page, a round cute baby turkey wearing a tiny pilgrim hat and hugging an ear of corn, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cute baby turkey in a pilgrim hat holding an ear of corn, ready to color",
+          "description": "This chubby little turkey wears a pilgrim hat and hugs an ear of corn. The rounded body makes it a great first holiday page for toddlers. Older kids can add dots to the corn kernels and stripes to the hat band for fine motor practice."
+        },
+        {
+          "slug": "pumpkin-pie-coloring-page",
+          "title": "Pumpkin Pie Coloring Page",
+          "prompt": "children's coloring book page, a whole pumpkin pie on a plate with a big swirl of whipped cream on top and a pie server beside it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Pumpkin pie with whipped cream on a plate, black and white coloring page",
+          "description": "A whole pumpkin pie with a swirl of whipped cream sits ready for the holiday table. Ask your child what other desserts their family makes in November, then draw one on the back. Orange and tan crayons cover the big filling area quickly."
+        },
+        {
+          "slug": "cornucopia-coloring-page",
+          "title": "Cornucopia Coloring Page",
+          "prompt": "children's coloring book page, a woven horn of plenty basket spilling out apples, pears, corn, grapes and a small pumpkin, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cornucopia horn of plenty overflowing with fruit and vegetables to color",
+          "description": "This horn of plenty spills out apples, corn, grapes and a little pumpkin. Name each food out loud as your child colors it, and talk about which ones grow on trees and which grow on the ground. A handy page for preschool harvest units."
+        },
+        {
+          "slug": "happy-thanksgiving-coloring-page",
+          "title": "Happy Thanksgiving Coloring Page",
+          "prompt": "children's coloring book page, the words HAPPY THANKSGIVING in big rounded bubble letters above a small pumpkin and two oak leaves, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Happy Thanksgiving bubble letters with a pumpkin and leaves to color",
+          "description": "Big bubble letters spell out Happy Thanksgiving above a pumpkin and two oak leaves. Kindergartners can trace each letter with a finger before coloring, which builds early writing skills. Finished pages make simple placemats or a welcome sign for the front door."
+        },
+        {
+          "slug": "thanksgiving-dinner-coloring-page",
+          "title": "Thanksgiving Dinner Coloring Page",
+          "prompt": "children's coloring book page, a simple dinner table with a roast turkey on a platter, a bowl of mashed potatoes, an ear of corn and a pie, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Thanksgiving dinner table with roast turkey, potatoes, corn and pie coloring sheet",
+          "description": "A roast turkey, mashed potatoes, corn and pie fill this holiday table. Let your child pick which dish is their favorite and color it first. It's a natural starting point for talking about family traditions and who is coming to dinner this year."
+        },
+        {
+          "slug": "scarecrow-coloring-page",
+          "title": "Scarecrow Coloring Page",
+          "prompt": "children's coloring book page, a smiling scarecrow with a floppy straw hat and patched overalls standing in a small corn field with one friendly crow on its arm, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Friendly scarecrow in patched overalls standing in a corn field, printable coloring page",
+          "description": "A friendly scarecrow in patched overalls keeps watch over a small corn field. Each patch is a perfect spot for a different pattern, like stripes, dots or zigzags. Pattern practice like this quietly builds the visual skills kids use later for reading."
+        },
+        {
+          "slug": "mayflower-ship-coloring-page",
+          "title": "Mayflower Ship Coloring Page",
+          "prompt": "children's coloring book page, a simple wooden sailing ship with three tall sails on gentle ocean waves, a few seagulls in the sky, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Simple sailing ship like the Mayflower on ocean waves, coloring page for kids",
+          "description": "A tall sailing ship crosses gentle waves under a few seagulls. Pair it with a short picture book about the 1620 voyage for a homeschool history lesson. Kids can color the sails white with a light gray edge, or invent their own flag colors."
+        }
+      ]
+    },
+    {
+      "slug": "christmas-coloring-pages",
+      "title": "Christmas Coloring Pages",
+      "primaryKeyword": "christmas coloring pages",
+      "volume": 135000,
+      "sd": 31,
+      "season": "christmas",
+      "publishBy": "2026-10-20",
+      "intro": "Our free Christmas coloring pages are made for small hands and busy December days. You'll find Santa, reindeer, gingerbread cookies, stockings and a quiet nativity scene, all drawn with thick lines and roomy shapes that toddlers and early elementary kids can actually finish. Print them for a classroom party, slip a few into an advent activity calendar, or keep a pile on the kitchen table while cookies bake. Every page is a free PDF sized for standard letter paper.",
+      "pages": [
+        {
+          "slug": "santa-claus-coloring-page",
+          "title": "Santa Claus Coloring Page",
+          "prompt": "children's coloring book page, a jolly Santa Claus waving, with a big round belly, fluffy beard, and a large sack of presents over his shoulder, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Jolly Santa Claus waving with a sack of presents, free Christmas coloring page",
+          "description": "Santa waves hello with a fluffy beard and an overstuffed sack of presents. Cotton balls glued onto the beard and hat trim turn this into a quick texture craft. Younger kids can stick to red and white, while older ones add wrapping paper patterns."
+        },
+        {
+          "slug": "christmas-tree-coloring-page",
+          "title": "Christmas Tree Coloring Page",
+          "prompt": "children's coloring book page, a decorated Christmas tree with large round ornaments, a simple garland, a big star on top and three wrapped gifts underneath, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Decorated Christmas tree with ornaments, star and presents to color",
+          "description": "A tall tree with big round ornaments, a garland and a star waits for color. Try a color-by-instruction game: make three ornaments red, two blue and one gold. It's a festive way to practice following directions and counting at the same time."
+        },
+        {
+          "slug": "reindeer-coloring-page",
+          "title": "Reindeer Coloring Page",
+          "prompt": "children's coloring book page, a friendly reindeer with large branching antlers standing in the snow with a jingle bell collar, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Friendly reindeer with antlers and a jingle bell collar in the snow, coloring sheet",
+          "description": "A friendly reindeer with tall antlers and a jingle bell collar stands in fresh snow. Fun fact for curious kids: both male and female reindeer grow antlers. Brown and tan crayons work well, though a purple reindeer is always welcome."
+        },
+        {
+          "slug": "gingerbread-man-coloring-page",
+          "title": "Gingerbread Man Coloring Page",
+          "prompt": "children's coloring book page, a smiling gingerbread man cookie with icing zigzags on his arms and legs, three gumdrop buttons, and a peppermint candy beside him, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Smiling gingerbread man cookie with icing and gumdrop buttons, printable",
+          "description": "This smiling gingerbread cookie has icing zigzags and three gumdrop buttons. Read the classic gingerbread man story together, then let your child decorate him however they like. Glitter glue on the icing lines makes a sparkly finish for the fridge."
+        },
+        {
+          "slug": "christmas-ornament-coloring-page",
+          "title": "Christmas Ornament Coloring Page",
+          "prompt": "children's coloring book page, three large round Christmas ornaments hanging from ribbons, each with a simple band of stripes, stars or dots, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Three large Christmas ornaments with stripes, stars and dots to color",
+          "description": "Three big ornaments hang from ribbons, each with its own simple pattern. Cut them out after coloring and punch a hole at the top to make paper ornaments for the tree. Older kids can design a brand-new pattern on the back."
+        },
+        {
+          "slug": "christmas-stocking-coloring-page",
+          "title": "Christmas Stocking Coloring Page",
+          "prompt": "children's coloring book page, a large Christmas stocking with a fuzzy cuff, hanging from a hook, with a candy cane and a teddy bear peeking out the top, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Christmas stocking with candy cane and teddy bear peeking out, coloring page",
+          "description": "A big stocking with a fuzzy cuff holds a candy cane and a peeking teddy bear. Have kids write or draw their name on the cuff before coloring. It doubles as a sweet wish list prompt: what else should go inside?"
+        },
+        {
+          "slug": "christmas-presents-coloring-page",
+          "title": "Christmas Presents Coloring Page",
+          "prompt": "children's coloring book page, a stack of four wrapped Christmas presents of different sizes with big bows and ribbons, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Stack of wrapped Christmas presents with bows, kids coloring page",
+          "description": "Four wrapped presents in different sizes stack up with big bows on top. Ask which box is biggest and which is smallest to practice comparing sizes. Each box has room for its own wrapping paper design, from stripes to snowflakes."
+        },
+        {
+          "slug": "nativity-scene-coloring-page",
+          "title": "Nativity Scene Coloring Page",
+          "prompt": "children's coloring book page, a simple nativity scene in a wooden stable with Mary, Joseph, baby Jesus in a manger, a sheep, a donkey and a bright star above, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Simple nativity scene with Mary, Joseph and baby Jesus in a stable to color",
+          "description": "A gentle nativity scene shows Mary, Joseph and baby Jesus in a stable under a bright star. It pairs well with a Sunday school lesson or a family reading of the Christmas story. Soft blues and browns keep it peaceful."
+        }
+      ]
+    },
+    {
+      "slug": "dinosaur-coloring-pages",
+      "title": "Dinosaur Coloring Pages",
+      "primaryKeyword": "dinosaur coloring pages",
+      "volume": 49500,
+      "sd": 28,
+      "season": "evergreen",
+      "publishBy": "2026-10-25",
+      "intro": "Dinosaur fans, this collection is for you. These free dinosaur coloring pages include the big names kids ask about most, like T. rex, triceratops, stegosaurus and spinosaurus, each drawn friendly rather than scary with chunky outlines that are easy to stay inside. They work well for preschool dinosaur units, rainy afternoons, or a dino birthday party activity table. Every page comes with a quick fact you can share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "t-rex-coloring-page",
+          "title": "T. rex Coloring Page",
+          "prompt": "children's coloring book page, a friendly T. rex standing in a jungle with two palm trees and a small volcano in the background, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Friendly T. rex dinosaur standing between palm trees, printable coloring page",
+          "description": "A friendly T. rex stomps through the jungle past two palm trees and a small volcano. Quick fact to share: a T. rex tooth could be as long as a banana. Kids love comparing their own arms to its famously tiny ones."
+        },
+        {
+          "slug": "triceratops-coloring-page",
+          "title": "Triceratops Coloring Page",
+          "prompt": "children's coloring book page, a gentle triceratops with three horns and a big frilled neck shield, eating leaves from a low bush, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Triceratops with three horns and a neck frill eating leaves, coloring sheet",
+          "description": "This gentle triceratops munches leaves beside a low bush. Count the three horns together, since the name literally means three-horned face. The big neck frill is a great canvas for bright patterns, and scientists still debate what colors it really was."
+        },
+        {
+          "slug": "stegosaurus-coloring-page",
+          "title": "Stegosaurus Coloring Page",
+          "prompt": "children's coloring book page, a smiling stegosaurus with a row of large back plates and a spiked tail, walking on grass, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Smiling stegosaurus with back plates and spiked tail, dinosaur coloring page",
+          "description": "A smiling stegosaurus shows off its big back plates and spiky tail. Ask your child to count the plates, then color them in an alternating pattern. Its brain was roughly the size of a lime, which always gets a laugh."
+        },
+        {
+          "slug": "spinosaurus-coloring-page",
+          "title": "Spinosaurus Coloring Page",
+          "prompt": "children's coloring book page, a spinosaurus with a tall sail on its back standing in shallow river water catching a fish, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Spinosaurus with a tall back sail catching a fish in a river, coloring page",
+          "description": "A spinosaurus wades through a river with a fish in its long jaws. This dinosaur was bigger than a T. rex and spent much of its time in water. Blue crayons for the river and a bold sail make this page pop."
+        },
+        {
+          "slug": "brachiosaurus-coloring-page",
+          "title": "Brachiosaurus Coloring Page",
+          "prompt": "children's coloring book page, a tall long-necked brachiosaurus reaching up to eat leaves from a tall tree, with a small hill behind it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Long-necked brachiosaurus eating leaves from a tall tree, coloring sheet",
+          "description": "A long-necked brachiosaurus stretches high to reach the treetops. Its neck alone was longer than a school bus, which helps kids picture just how huge it was. Older children can draw a tiny person beside it to show scale."
+        },
+        {
+          "slug": "velociraptor-coloring-page",
+          "title": "Velociraptor Coloring Page",
+          "prompt": "children's coloring book page, a small friendly velociraptor with simple feathers on its arms, running across open ground, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Small feathered velociraptor running, free dinosaur coloring page for kids",
+          "description": "This speedy raptor dashes across open ground with feathers on its arms. Real velociraptors were about the size of a turkey, not the giants seen in movies. That surprises most kids, and it makes a good conversation starter about how scientists learn from fossils."
+        },
+        {
+          "slug": "ankylosaurus-coloring-page",
+          "title": "Ankylosaurus Coloring Page",
+          "prompt": "children's coloring book page, a sturdy ankylosaurus with armored back plates and a big club tail, standing near some ferns, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Armored ankylosaurus with a club tail standing near ferns, coloring page",
+          "description": "A sturdy ankylosaurus wears bumpy armor and swings a heavy club tail. Kids can color each armor bump separately for great fine motor practice. Talk about how its armor worked like a turtle shell to keep it safe from bigger dinosaurs."
+        },
+        {
+          "slug": "baby-dinosaur-egg-coloring-page",
+          "title": "Baby Dinosaur Hatching Coloring Page",
+          "prompt": "children's coloring book page, a cute baby dinosaur hatching out of a cracked egg in a nest of sticks, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cute baby dinosaur hatching from a cracked egg in a nest, coloring page",
+          "description": "A cute baby dinosaur peeks out of a cracked egg in a twig nest. This simple design is ideal for toddlers just learning to hold a crayon. Point out that dinosaurs hatched from eggs, just like birds, their modern relatives."
+        }
+      ]
+    },
+    {
+      "slug": "unicorn-coloring-pages",
+      "title": "Unicorn Coloring Pages",
+      "primaryKeyword": "unicorn coloring pages",
+      "volume": 49500,
+      "sd": 23,
+      "season": "evergreen",
+      "publishBy": "2026-10-31",
+      "intro": "Rainbows, sparkles and flowing manes fill these free unicorn coloring pages. Each design keeps the lines thick and the shapes generous, so young kids can enjoy the magic without getting lost in tiny details. You'll find baby unicorns, winged unicorns, a castle scene and a birthday cake page that fits right into a unicorn party. Grab your brightest markers, print as many as you like, and let imaginations run. Every page downloads as a free PDF.",
+      "pages": [
+        {
+          "slug": "rainbow-unicorn-coloring-page",
+          "title": "Rainbow Unicorn Coloring Page",
+          "prompt": "children's coloring book page, a happy unicorn prancing under a big arching rainbow with fluffy clouds at each end, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Happy unicorn prancing under a big rainbow, printable unicorn coloring page",
+          "description": "A happy unicorn prances beneath a big rainbow with clouds at each end. Use the rainbow to practice color order: red, orange, yellow, green, blue and purple. Kids who learn a silly sentence for the order usually remember it for years."
+        },
+        {
+          "slug": "winged-unicorn-coloring-page",
+          "title": "Winged Unicorn Coloring Page",
+          "prompt": "children's coloring book page, a unicorn with large feathered wings flying over a small hill with stars in the sky, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Winged unicorn flying over a hill with stars, free coloring page",
+          "description": "This winged unicorn soars over a hill beneath a sky full of stars. The big feathered wings are perfect for color blending, so try two crayon shades layered lightly. Ask your child where the unicorn is flying to tonight and write down the story."
+        },
+        {
+          "slug": "baby-unicorn-coloring-page",
+          "title": "Baby Unicorn Coloring Page",
+          "prompt": "children's coloring book page, a cute chubby baby unicorn sitting in a patch of flowers with a small horn and big eyes, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cute baby unicorn sitting in flowers, easy coloring page for toddlers",
+          "description": "A chubby baby unicorn sits in a patch of flowers with big sparkly eyes. The rounded shapes make it one of our easiest unicorn pages, great for toddlers. Older siblings can add hearts or stars to the background for extra fun."
+        },
+        {
+          "slug": "unicorn-head-coloring-page",
+          "title": "Unicorn Head Coloring Page",
+          "prompt": "children's coloring book page, a large unicorn head in profile with a long swirled horn, a flowing mane and a flower crown, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large unicorn head with swirled horn and flower crown to color",
+          "description": "A big unicorn portrait shows a swirled horn, flowing mane and flower crown. Each section of mane can be its own color, which makes this a favorite for marker sets. Cut it out after coloring and tape it to a craft stick for a puppet."
+        },
+        {
+          "slug": "princess-and-unicorn-coloring-page",
+          "title": "Princess and Unicorn Coloring Page",
+          "prompt": "children's coloring book page, a little princess in a simple gown and crown gently petting a unicorn in a meadow, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Princess petting a unicorn in a meadow, kids coloring page",
+          "description": "A little princess gently pets her unicorn friend in a sunny meadow. This page invites storytelling, so ask your child to name both characters before they start. The gown and mane both have plenty of open space for patterns and sparkles."
+        },
+        {
+          "slug": "unicorn-castle-coloring-page",
+          "title": "Unicorn Castle Coloring Page",
+          "prompt": "children's coloring book page, a unicorn standing in front of a fairy tale castle with three towers and pointed roofs, a winding path leading to the door, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Unicorn in front of a fairy tale castle with towers, coloring sheet",
+          "description": "A unicorn stands outside a fairy tale castle with three pointed towers. Count the windows together, then color each tower roof a different shade. It's a nice page for practicing shapes too, since the castle is built from squares, rectangles and triangles."
+        },
+        {
+          "slug": "unicorn-on-cloud-coloring-page",
+          "title": "Unicorn on a Cloud Coloring Page",
+          "prompt": "children's coloring book page, a sleepy unicorn curled up on a fluffy cloud with a crescent moon and a few stars around, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Sleepy unicorn curled up on a cloud with moon and stars, coloring page",
+          "description": "A sleepy unicorn curls up on a puffy cloud under a crescent moon. This calm design makes a soothing bedtime wind-down activity. Soft pastel crayons or colored pencils give it a dreamy look that's lovely to hang above a bed."
+        },
+        {
+          "slug": "unicorn-birthday-cake-coloring-page",
+          "title": "Unicorn Birthday Cake Coloring Page",
+          "prompt": "children's coloring book page, a tall three-layer birthday cake topped with a unicorn horn, two ears and candles, with sprinkles on the frosting, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Unicorn birthday cake with horn, ears and candles, printable coloring page",
+          "description": "A three-layer unicorn cake comes topped with a horn, ears and candles. Set out copies at a birthday party as a calm activity while guests arrive. Kids can add the right number of candles for the birthday child's age."
+        }
+      ]
+    },
+    {
+      "slug": "winter-coloring-pages",
+      "title": "Winter Coloring Pages",
+      "primaryKeyword": "winter coloring pages",
+      "volume": 27100,
+      "sd": 21,
+      "season": "winter",
+      "publishBy": "2026-11-01",
+      "intro": "These free winter coloring pages cover the whole snowy season, not just the holidays, so they stay useful well into January and February. Kids will find snowmen, penguins, polar bears, mittens, sledding and a warm mug of cocoa, all with clean bold lines and large spaces to color. They're a good fit for indoor recess, snow days, and preschool weather units. Print a few for a cozy afternoon; each one is a free PDF download.",
+      "pages": [
+        {
+          "slug": "snowman-coloring-page",
+          "title": "Snowman Coloring Page",
+          "prompt": "children's coloring book page, a happy snowman with three snowballs, a top hat, a carrot nose, stick arms and a scarf, standing in the snow, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Happy snowman with top hat, scarf and carrot nose, winter coloring page",
+          "description": "A happy snowman with a top hat, scarf and carrot nose stands in fresh snow. Talk about the three snowball sizes, from biggest to smallest. Glue on paper scraps for the scarf to turn it into a quick collage."
+        },
+        {
+          "slug": "mittens-coloring-page",
+          "title": "Mittens Coloring Page",
+          "prompt": "children's coloring book page, a matching pair of large mittens connected by a string, each with a simple snowflake and stripe design, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Pair of mittens with snowflake and stripe designs to color",
+          "description": "A matching pair of mittens hangs on a string, ready to decorate. Make them a matching game: whatever your child colors on the left mitten has to appear on the right one. It's sneaky practice in symmetry and careful looking."
+        },
+        {
+          "slug": "penguin-coloring-page",
+          "title": "Penguin Coloring Page",
+          "prompt": "children's coloring book page, a cute penguin wearing a knit hat standing on an ice floe with a small fish beside it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cute penguin in a knit hat standing on ice, printable winter coloring page",
+          "description": "A cute penguin in a knit hat stands on an icy floe next to a fish. Penguins can't fly, but they swim faster than most people can run. Kids usually keep the body black and white, then go wild on the hat."
+        },
+        {
+          "slug": "polar-bear-coloring-page",
+          "title": "Polar Bear Coloring Page",
+          "prompt": "children's coloring book page, a fluffy polar bear sitting on snow with a small cub beside it and a simple ice hill behind them, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Polar bear and cub sitting in the snow, kids coloring sheet",
+          "description": "A polar bear and her cub sit together on the snow. Here's a surprising fact: polar bears have black skin under their white fur. Light blue shading on the snow helps the white bears stand out on the page."
+        },
+        {
+          "slug": "snowflake-coloring-page",
+          "title": "Snowflake Coloring Page",
+          "prompt": "children's coloring book page, one very large six-pointed snowflake with simple wide branches filling the page, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large six-pointed snowflake with wide branches, coloring page",
+          "description": "One big snowflake fills the whole page with wide, easy branches. Count the six points together, because real snowflakes almost always have six sides. Color each branch the same way for a symmetry challenge, or use cool blues and purples for a frosty look."
+        },
+        {
+          "slug": "sledding-coloring-page",
+          "title": "Sledding Coloring Page",
+          "prompt": "children's coloring book page, a happy child in a winter coat and hat riding a sled down a snowy hill, with a pine tree on the side, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Child sledding down a snowy hill in a winter coat, coloring page",
+          "description": "A happy kid zooms down a snowy hill on a sled past a pine tree. Ask your child what they love to do on snowy days, then add it to the background. The coat and hat are a fun place to match your child's own winter gear."
+        },
+        {
+          "slug": "hot-cocoa-coloring-page",
+          "title": "Hot Cocoa Coloring Page",
+          "prompt": "children's coloring book page, a big mug of hot cocoa topped with marshmallows and a swirl of steam, sitting next to a cookie, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Mug of hot cocoa with marshmallows and a cookie, winter coloring page",
+          "description": "A big mug of hot cocoa is topped with marshmallows and curls of steam. Color it while sipping a real cup for the coziest afternoon. Kids can count the marshmallows and decorate the mug with their own pattern."
+        },
+        {
+          "slug": "igloo-coloring-page",
+          "title": "Igloo Coloring Page",
+          "prompt": "children's coloring book page, a round igloo made of large snow blocks with a small arched doorway and a husky dog sitting in front, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Igloo made of snow blocks with a husky dog in front, coloring page",
+          "description": "A round igloo built from snow blocks has a friendly husky sitting by the door. Talk about how packed snow can actually hold in warmth. Each block is a big, easy shape, so younger kids can color one at a time."
+        }
+      ]
+    },
+    {
+      "slug": "hanukkah-coloring-pages",
+      "title": "Hanukkah Coloring Pages",
+      "primaryKeyword": "hanukkah coloring pages",
+      "volume": 2900,
+      "sd": 22,
+      "season": "hanukkah",
+      "publishBy": "2026-11-01",
+      "intro": "Celebrate the Festival of Lights with these free Hanukkah coloring pages. The set includes a menorah with all nine candles, a spinning dreidel, latkes, jelly doughnuts and chocolate gelt, each drawn simply enough for preschoolers and still fun for older kids. Use them to explain the holiday's story, keep little ones busy before candle lighting, or decorate a classroom for a winter holidays unit. Hanukkah 2026 begins at sundown on December 4. Every page is a free PDF.",
+      "pages": [
+        {
+          "slug": "menorah-coloring-page",
+          "title": "Menorah Coloring Page",
+          "prompt": "children's coloring book page, a Hanukkah menorah with nine candles, the middle shamash candle raised higher than the other eight, each candle with a small flame, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Hanukkah menorah with nine candles and raised center candle, coloring page",
+          "description": "A Hanukkah menorah holds nine candles, with the helper candle, called the shamash, raised in the middle. Count the eight nights together and color one more flame each evening. It turns the page into a simple countdown kids can watch grow."
+        },
+        {
+          "slug": "dreidel-coloring-page",
+          "title": "Dreidel Coloring Page",
+          "prompt": "children's coloring book page, a large spinning top dreidel with plain blank faces, tilted slightly as if spinning, with motion lines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large spinning dreidel with motion lines, free Hanukkah coloring page",
+          "description": "A big dreidel spins with motion lines all around it. The faces are left blank so older kids can copy the Hebrew letters nun, gimel, hey and shin. Afterward, play a real round with raisins or pennies to learn what each letter means."
+        },
+        {
+          "slug": "star-of-david-coloring-page",
+          "title": "Star of David Coloring Page",
+          "prompt": "children's coloring book page, one large six-pointed Star of David made of two overlapping triangles, with a few small sparkles around it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large Star of David made of two triangles, coloring sheet",
+          "description": "A large Star of David is made from two overlapping triangles. Point out the triangles and count the six points, which makes this a good shapes lesson too. Blue and white is traditional, but any colors your child chooses will look bright."
+        },
+        {
+          "slug": "jelly-doughnut-coloring-page",
+          "title": "Sufganiyot Jelly Doughnut Coloring Page",
+          "prompt": "children's coloring book page, three round jelly doughnuts dusted with sugar on a plate, one with a little jelly peeking out, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Three jelly doughnuts on a plate, sufganiyot Hanukkah coloring page",
+          "description": "Three round jelly doughnuts, called sufganiyot, sit on a plate with jelly peeking out. Foods fried in oil remind families of the oil that lasted eight nights. Ask your child which jelly flavor they'd pick, then color it in."
+        },
+        {
+          "slug": "latkes-coloring-page",
+          "title": "Latkes Coloring Page",
+          "prompt": "children's coloring book page, a stack of round potato latkes on a plate with a small bowl of applesauce and a spoon, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Stack of potato latkes with applesauce, Hanukkah coloring page",
+          "description": "A stack of crispy potato latkes comes with a bowl of applesauce. Some families top theirs with sour cream instead, so ask which your child prefers. Golden yellows and browns work best, and the plate rim is a fun place for a pattern."
+        },
+        {
+          "slug": "hanukkah-gelt-coloring-page",
+          "title": "Hanukkah Gelt Coloring Page",
+          "prompt": "children's coloring book page, a small mesh bag spilling out round chocolate coins, with a few coins scattered on the table, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Bag of chocolate gelt coins spilling onto a table, coloring page",
+          "description": "A little mesh bag spills out round chocolate coins called gelt. Kids can design their own coin faces before coloring them gold or silver. Use the coins for a quick counting game afterward: how many landed outside the bag?"
+        },
+        {
+          "slug": "oil-jug-coloring-page",
+          "title": "Hanukkah Oil Jar Coloring Page",
+          "prompt": "children's coloring book page, a small old-fashioned clay oil jar with a handle, glowing softly, with simple light rays around it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Small clay oil jar glowing with light rays, Hanukkah story coloring page",
+          "description": "A small clay jar glows with light, a nod to the Hanukkah story of oil that lasted eight nights. Tell the story in simple words while your child colors. The light rays look wonderful in yellow and orange against a dark blue background."
+        },
+        {
+          "slug": "happy-hanukkah-coloring-page",
+          "title": "Happy Hanukkah Coloring Page",
+          "prompt": "children's coloring book page, the words HAPPY HANUKKAH in big rounded bubble letters with a small menorah and a dreidel below, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Happy Hanukkah bubble letters with menorah and dreidel to color",
+          "description": "Big bubble letters spell Happy Hanukkah above a small menorah and dreidel. This page makes an easy homemade card, so fold it in half after coloring. Kids just learning letters can trace each one before filling it in."
+        }
+      ]
+    },
+    {
+      "slug": "simple-coloring-pages",
+      "title": "Simple Coloring Pages for Toddlers and Preschool",
+      "primaryKeyword": "simple coloring pages",
+      "volume": 40500,
+      "sd": 31,
+      "season": "evergreen",
+      "publishBy": "2026-11-08",
+      "intro": "These simple coloring pages are built for the youngest artists, roughly ages 2 to 4. Each sheet shows one big, familiar object, like an apple, a sun or a fish, with extra-thick outlines and almost no small details. That makes them perfect for toddlers learning to grip a crayon, preschool centers, and early speech practice as kids name what they see. Chunky crayons and dot markers both work well. Every page is a free printable PDF.",
+      "pages": [
+        {
+          "slug": "easy-apple-coloring-page",
+          "title": "Easy Apple Coloring Page",
+          "prompt": "children's coloring book page, one big round apple with a short stem and a single leaf, centered on the page, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "One big apple with a leaf, simple coloring page for toddlers",
+          "description": "One big apple with a stem and leaf fills the page. It's a great first coloring sheet for toddlers who are just learning to hold a crayon. Name the color as they choose it, red, green or yellow, to build vocabulary."
+        },
+        {
+          "slug": "easy-sun-coloring-page",
+          "title": "Easy Sun Coloring Page",
+          "prompt": "children's coloring book page, a big smiling sun with a round face and short wide triangle rays, centered on the page, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Big smiling sun with wide rays, easy coloring page for preschool",
+          "description": "A big smiling sun with wide, chunky rays is easy for little hands to fill in. Count the rays together as your child colors each one. Talk about what the sun gives us, like light, warmth and help for plants to grow."
+        },
+        {
+          "slug": "easy-balloon-coloring-page",
+          "title": "Easy Balloons Coloring Page",
+          "prompt": "children's coloring book page, three big round balloons with curly strings tied together, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Three big balloons with strings, simple toddler coloring page",
+          "description": "Three big round balloons float on curly strings. Ask your toddler to color each balloon a different color, then name them together. It's a simple way to practice colors and the numbers one, two and three."
+        },
+        {
+          "slug": "easy-fish-coloring-page",
+          "title": "Easy Fish Coloring Page",
+          "prompt": "children's coloring book page, one big friendly fish with a round body, a simple tail fin, a big eye and two bubbles, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "One big friendly fish with bubbles, easy coloring page for kids",
+          "description": "One friendly fish blows two bubbles across the page. The large body is perfect for dot markers or finger paint. Older preschoolers can add stripes or spots, then count them out loud. Blue crayon water around it is a bonus."
+        },
+        {
+          "slug": "easy-star-coloring-page",
+          "title": "Easy Star Coloring Page",
+          "prompt": "children's coloring book page, one large five-pointed star with rounded points and a happy face, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large five-pointed star with a smile, simple coloring page",
+          "description": "A big smiling star with soft, rounded points is quick for toddlers to finish. Count the five points together. Finished stars make great rewards on a chore or potty chart, or you can cut them out to hang from the ceiling."
+        },
+        {
+          "slug": "easy-house-coloring-page",
+          "title": "Easy House Coloring Page",
+          "prompt": "children's coloring book page, a simple house with a triangle roof, a square door, two square windows and a round bush, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Simple house with triangle roof, door and windows, toddler coloring page",
+          "description": "A simple house is made of a triangle roof, square windows and a door. Point to each shape and name it as your child colors. Ask who lives inside, then draw family members in the windows."
+        },
+        {
+          "slug": "easy-butterfly-coloring-page",
+          "title": "Easy Butterfly Coloring Page",
+          "prompt": "children's coloring book page, one big butterfly with four large rounded wings each holding one big circle, a simple body and two antennae, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Big simple butterfly with rounded wings, easy coloring page",
+          "description": "One big butterfly spreads four rounded wings, each with a single circle. Color the left and right sides to match for an early lesson in symmetry. It's an easy follow-up to reading a caterpillar story together."
+        },
+        {
+          "slug": "easy-puppy-coloring-page",
+          "title": "Easy Puppy Coloring Page",
+          "prompt": "children's coloring book page, one cute sitting puppy with floppy ears, a round head and a wagging tail, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cute sitting puppy with floppy ears, simple coloring page for toddlers",
+          "description": "A cute puppy with floppy ears sits and wags its tail. Ask your child to give the puppy a name and decide if it has spots. Practicing the dog sound and naming body parts, like ears, nose and tail, makes it a mini language lesson."
+        }
+      ]
+    },
+    {
+      "slug": "car-and-truck-coloring-pages",
+      "title": "Car and Truck Coloring Pages",
+      "primaryKeyword": "car coloring pages",
+      "volume": 22200,
+      "sd": 27,
+      "season": "evergreen",
+      "publishBy": "2026-11-15",
+      "intro": "Vroom into this collection of free car and truck coloring pages. Kids who love anything with wheels will find a race car, fire truck, dump truck, school bus, tractor, monster truck and more, each drawn as a generic vehicle with bold outlines and big panels to fill. These pages fit nicely into community helper lessons, transportation units, or a long car ride with a clipboard. Print a whole fleet for free, one PDF at a time.",
+      "pages": [
+        {
+          "slug": "race-car-coloring-page",
+          "title": "Race Car Coloring Page",
+          "prompt": "children's coloring book page, a low sleek race car with big wheels, a rear spoiler and a large blank circle on the side for a number, with speed lines behind it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Race car with big wheels and speed lines, printable car coloring page",
+          "description": "A sleek race car zooms forward with speed lines behind it. The blank circle on the door is for your child's lucky number. Talk about checkered flags and let them draw one in the corner to show who won."
+        },
+        {
+          "slug": "fire-truck-coloring-page",
+          "title": "Fire Truck Coloring Page",
+          "prompt": "children's coloring book page, a fire truck with a long ladder on top, a hose reel, flashing light and big wheels, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Fire truck with ladder and hose, kids coloring page",
+          "description": "A fire truck carries a long ladder, a hose reel and a flashing light. Use it to talk about firefighters as community helpers and practicing your family's fire escape plan. Classic red is the favorite, though some real fire trucks are yellow."
+        },
+        {
+          "slug": "dump-truck-coloring-page",
+          "title": "Dump Truck Coloring Page",
+          "prompt": "children's coloring book page, a big dump truck with its bed tipped up, pouring out a pile of large rocks, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Dump truck tipping out a pile of rocks, construction coloring page",
+          "description": "A big dump truck tips its bed and pours out a pile of rocks. Kids can color each rock a different shade of gray or brown. Pair it with sand-box play to show how the truck's bed lifts and empties."
+        },
+        {
+          "slug": "police-car-coloring-page",
+          "title": "Police Car Coloring Page",
+          "prompt": "children's coloring book page, a friendly police car with a light bar on the roof, a star badge shape on the door and big wheels, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Police car with light bar and star on the door, coloring sheet",
+          "description": "A friendly police car has a light bar on top and a star on the door. Explain that police officers are helpers kids can go to if they're lost. Practicing your phone number together makes a useful follow-up."
+        },
+        {
+          "slug": "school-bus-coloring-page",
+          "title": "School Bus Coloring Page",
+          "prompt": "children's coloring book page, a long school bus with a row of windows, a stop sign arm on the side and big wheels, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Long school bus with windows and stop sign arm, coloring page",
+          "description": "A long school bus with a row of windows is ready for the morning route. Kids can draw friends' faces in each window. Talk about bus safety rules, like staying seated and waiting for the driver's signal to cross."
+        },
+        {
+          "slug": "tractor-coloring-page",
+          "title": "Tractor Coloring Page",
+          "prompt": "children's coloring book page, a farm tractor with one huge back wheel, one small front wheel and a simple cab, parked in a field, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Farm tractor with big back wheel in a field, coloring page for kids",
+          "description": "A farm tractor with one huge back wheel waits in the field. Ask why the back wheels are so much bigger than the front ones. Green, red and yellow are common tractor colors, so your child can pick a favorite."
+        },
+        {
+          "slug": "monster-truck-coloring-page",
+          "title": "Monster Truck Coloring Page",
+          "prompt": "children's coloring book page, a monster truck with giant tires jumping over a small dirt ramp, with simple dust clouds, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Monster truck with giant tires jumping a ramp, printable coloring page",
+          "description": "A monster truck with giant tires flies over a dirt ramp. The big tires are fun to fill with zigzag tread patterns. Kids can design a flame or lightning bolt paint job and give their truck a bold name."
+        },
+        {
+          "slug": "garbage-truck-coloring-page",
+          "title": "Garbage Truck Coloring Page",
+          "prompt": "children's coloring book page, a garbage truck with a large rear loader and a lifting arm holding a trash can, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Garbage truck lifting a trash can, kids coloring page",
+          "description": "A garbage truck lifts a trash can with its mechanical arm. Many toddlers watch for this truck every week, so it's an instant favorite. Use it to talk about recycling and which items go in which bin."
+        }
+      ]
+    },
+    {
+      "slug": "new-years-coloring-pages",
+      "title": "New Year's Coloring Pages",
+      "primaryKeyword": "new years coloring pages",
+      "volume": 6600,
+      "sd": 26,
+      "season": "new-year",
+      "publishBy": "2026-11-25",
+      "intro": "Ring in 2027 with these free New Year's coloring pages. Kids can color fireworks, party hats, a midnight clock and a big Happy New Year 2027 banner, plus a goals page where they draw what they hope to do this year. The thick outlines and roomy shapes work for toddlers through second graders. Use them at a family countdown party, for a classroom January kickoff, or as a calm activity on New Year's Day. Each page is a free PDF.",
+      "pages": [
+        {
+          "slug": "fireworks-coloring-page",
+          "title": "Fireworks Coloring Page",
+          "prompt": "children's coloring book page, three large bursting fireworks in the night sky above a simple row of town rooftops, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Fireworks bursting over town rooftops, New Year coloring page",
+          "description": "Three big fireworks burst over a row of rooftops. Try coloring on black paper with bright crayons, or color the sky dark first so the bursts glow. Talk about the sounds fireworks make, and why some pets hide when they hear them."
+        },
+        {
+          "slug": "party-hats-coloring-page",
+          "title": "Party Hats Coloring Page",
+          "prompt": "children's coloring book page, two cone-shaped party hats with pom-poms and a party horn noisemaker, surrounded by a few streamers, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Party hats and noisemaker with streamers, New Year coloring sheet",
+          "description": "Two party hats with pom-poms sit beside a noisemaker and streamers. Kids can color the hats in matching patterns for themselves and a sibling. Cut them out to make paper crowns for your countdown celebration."
+        },
+        {
+          "slug": "midnight-clock-coloring-page",
+          "title": "Midnight Clock Coloring Page",
+          "prompt": "children's coloring book page, a large round clock face with big numbers showing both hands pointing to 12, with a few stars around it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large clock with both hands at 12 for midnight, coloring page",
+          "description": "A big clock shows both hands pointing straight up to 12. It's a natural moment to teach how to read an analog clock. Ask your child what time they think they'll be asleep on New Year's Eve."
+        },
+        {
+          "slug": "happy-new-year-2027-coloring-page",
+          "title": "Happy New Year 2027 Coloring Page",
+          "prompt": "children's coloring book page, the words HAPPY NEW YEAR and the numbers 2027 in big rounded bubble letters surrounded by confetti and stars, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Happy New Year 2027 bubble letters with confetti, coloring page",
+          "description": "Big bubble letters spell Happy New Year 2027 with confetti all around. Count each digit together and talk about what year comes next. It makes a cheerful sign for the front door or the classroom wall in January."
+        },
+        {
+          "slug": "new-year-balloons-coloring-page",
+          "title": "New Year Balloons Coloring Page",
+          "prompt": "children's coloring book page, a bunch of five big balloons with ribbons, one shaped like a star, with confetti falling, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Bunch of balloons with confetti, New Year party coloring page",
+          "description": "Five big balloons float with ribbons as confetti falls. Ask your child to color them in a repeating pattern, like gold, silver, gold. Bonus challenge: count the confetti pieces and see who finds the most."
+        },
+        {
+          "slug": "new-year-bear-coloring-page",
+          "title": "New Year Party Bear Coloring Page",
+          "prompt": "children's coloring book page, a cute teddy bear wearing a party hat and blowing a party horn, holding a balloon, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Teddy bear in party hat blowing a horn, New Year coloring page",
+          "description": "A cute bear in a party hat blows a noisemaker and holds a balloon. Little kids love giving him a name and a favorite color. It's a perfect pick for toddlers who'll be asleep long before midnight."
+        },
+        {
+          "slug": "new-year-goals-coloring-page",
+          "title": "My New Year Goals Coloring Page",
+          "prompt": "children's coloring book page, the words MY GOALS at the top with three large empty star shapes below, each star big enough to draw inside, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "My Goals page with three empty stars to draw in, New Year activity",
+          "description": "Three big empty stars wait for your child's goals for the new year. Younger kids can draw a picture, like riding a bike, while older ones write a word or two. Keep it somewhere visible and check back in spring."
+        },
+        {
+          "slug": "countdown-rocket-coloring-page",
+          "title": "New Year Countdown Rocket Coloring Page",
+          "prompt": "children's coloring book page, a cartoon rocket ship blasting off with the numbers 3, 2, 1 in large circles along its smoke trail, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Rocket blasting off with 3, 2, 1 countdown numbers, coloring page",
+          "description": "A rocket blasts off with the numbers three, two and one along its smoke trail. Count down together just like at midnight. Kids who love space will happily color the flames bright orange and add planets in the corners."
+        }
+      ]
+    },
+    {
+      "slug": "valentines-day-coloring-pages",
+      "title": "Valentine's Day Coloring Pages",
+      "primaryKeyword": "valentine coloring pages",
+      "volume": 27100,
+      "sd": 26,
+      "season": "valentines",
+      "publishBy": "2026-12-15",
+      "intro": "Spread a little love with these free Valentine's Day coloring pages. The set includes big hearts, a cuddly bear, a puppy, a dinosaur and a unicorn holding valentines, plus a mailbox page that's perfect for classroom card swaps. Every design uses thick outlines and roomy hearts that preschoolers can fill with reds, pinks and purples. Print them for a classroom party, add a note on the back for grandparents, or just enjoy a cozy February afternoon. Each page is a free PDF.",
+      "pages": [
+        {
+          "slug": "big-heart-coloring-page",
+          "title": "Heart Coloring Page",
+          "prompt": "children's coloring book page, one very large heart in the center surrounded by six smaller hearts, extra thick outlines, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large heart surrounded by smaller hearts, Valentine coloring page",
+          "description": "One big heart sits in the middle with six little hearts around it. Count the hearts together, then color them from lightest pink to darkest red. Write a loved one's name in the big heart and it becomes a homemade card."
+        },
+        {
+          "slug": "valentine-teddy-bear-coloring-page",
+          "title": "Valentine Teddy Bear Coloring Page",
+          "prompt": "children's coloring book page, a cuddly teddy bear sitting and hugging a big heart, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Teddy bear hugging a big heart, Valentine coloring page",
+          "description": "A cuddly teddy bear sits and hugs a big heart. This simple design is great for toddlers celebrating their first Valentine's Day. Older kids can add a message on the heart, like a friend's name."
+        },
+        {
+          "slug": "valentine-puppy-coloring-page",
+          "title": "Valentine Puppy Coloring Page",
+          "prompt": "children's coloring book page, a cute puppy holding a heart-shaped balloon in its mouth by the string, sitting next to a small gift box, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Puppy holding a heart balloon, Valentine coloring sheet",
+          "description": "A playful puppy holds a heart balloon string next to a small gift box. Kids can give the puppy spots, patches or stripes. Ask what kind of gift they'd give someone they love, then draw it inside the box."
+        },
+        {
+          "slug": "valentine-dinosaur-coloring-page",
+          "title": "Valentine Dinosaur Coloring Page",
+          "prompt": "children's coloring book page, a friendly little T. rex holding a big heart in its tiny arms, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Little T. rex holding a big heart, Valentine dinosaur coloring page",
+          "description": "A friendly little T. rex holds a big heart with its tiny arms. It's a sweet pick for kids who want something besides flowers and bows. Pair it with a classic dino pun like 'You're dino-mite' on the back."
+        },
+        {
+          "slug": "valentine-unicorn-coloring-page",
+          "title": "Valentine Unicorn Coloring Page",
+          "prompt": "children's coloring book page, a happy unicorn with a heart-shaped mark on its side, standing on a cloud with small hearts floating around, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Unicorn with hearts standing on a cloud, Valentine coloring page",
+          "description": "A happy unicorn stands on a cloud as little hearts float by. The mane and hearts are perfect for pinks, purples and reds. Glitter glue on the horn adds a bit of extra Valentine sparkle."
+        },
+        {
+          "slug": "valentine-mailbox-coloring-page",
+          "title": "Valentine Mailbox Coloring Page",
+          "prompt": "children's coloring book page, a classic mailbox with its flag up and three heart-decorated envelopes peeking out, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Mailbox stuffed with heart envelopes, Valentine coloring page",
+          "description": "A mailbox overflows with heart-covered envelopes. It's a great page to color before a classroom card exchange. Talk about how mail travels from one house to another, and practice writing friends' names on the envelopes."
+        },
+        {
+          "slug": "be-my-valentine-coloring-page",
+          "title": "Be My Valentine Coloring Page",
+          "prompt": "children's coloring book page, the words BE MY VALENTINE in big rounded bubble letters inside a large heart frame, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Be My Valentine bubble letters inside a heart, coloring page",
+          "description": "Big bubble letters spell Be My Valentine inside a large heart frame. Trace the letters with a finger first for early handwriting practice. Fold the finished page in half and it's ready to hand to someone special."
+        },
+        {
+          "slug": "love-bugs-coloring-page",
+          "title": "Love Bugs Coloring Page",
+          "prompt": "children's coloring book page, two cute ladybugs facing each other with heart-shaped spots on their backs, sitting on a big leaf, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Two ladybugs with heart spots on a leaf, Valentine coloring page",
+          "description": "Two cute ladybugs with heart-shaped spots sit on a big leaf. Count the spots on each bug and see if they match. It's a fun tie-in to spring bug lessons, and the leaf gives kids plenty of green to color."
+        }
+      ]
+    },
+    {
+      "slug": "st-patricks-day-coloring-pages",
+      "title": "St. Patrick's Day Coloring Pages",
+      "primaryKeyword": "st patricks day coloring pages",
+      "volume": 18100,
+      "sd": 12,
+      "season": "st-patricks",
+      "publishBy": "2027-01-15",
+      "intro": "Get ready for a little luck with these free St. Patrick's Day coloring pages. You'll find shamrocks, a four-leaf clover, a cheerful leprechaun, a pot of gold, a rainbow and even a leprechaun trap design that pairs with the classroom tradition. Each page has thick outlines and big open shapes, so kids from toddlers to second grade can join in. Break out every green crayon you own and print as many as you need. Every page is a free PDF.",
+      "pages": [
+        {
+          "slug": "shamrock-coloring-page",
+          "title": "Shamrock Coloring Page",
+          "prompt": "children's coloring book page, one large three-leaf shamrock with a short stem, with three smaller shamrocks around it, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large three-leaf shamrock with smaller shamrocks, coloring page",
+          "description": "One big three-leaf shamrock is surrounded by smaller ones. Count the three leaves, then compare with our four-leaf clover page. Try using a different shade of green for each leaf to see how many greens your crayon box holds."
+        },
+        {
+          "slug": "four-leaf-clover-coloring-page",
+          "title": "Four-Leaf Clover Coloring Page",
+          "prompt": "children's coloring book page, one large four-leaf clover with heart-shaped leaves and a curved stem, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large four-leaf clover with heart-shaped leaves, coloring sheet",
+          "description": "A big four-leaf clover has heart-shaped leaves and a curved stem. Only about one in ten thousand clovers has four leaves, which is why they're considered lucky. Go on a clover hunt outside after coloring."
+        },
+        {
+          "slug": "leprechaun-coloring-page",
+          "title": "Leprechaun Coloring Page",
+          "prompt": "children's coloring book page, a cheerful leprechaun with a curly beard, a tall buckled hat and a vest, holding a gold coin, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Cheerful leprechaun with buckled hat holding a gold coin, coloring page",
+          "description": "A cheerful leprechaun in a buckled hat holds up a shiny gold coin. Kids can give him an orange or red beard and pick their own vest color. Ask your child to tell a short story about where he hid the rest of his gold."
+        },
+        {
+          "slug": "pot-of-gold-coloring-page",
+          "title": "Pot of Gold Coloring Page",
+          "prompt": "children's coloring book page, a round black pot overflowing with big gold coins, with a few coins on the ground, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Pot overflowing with gold coins, St. Patrick's Day coloring page",
+          "description": "A round pot overflows with big gold coins. Count the coins together, then try adding a few more with a gold crayon. It's a simple counting activity that fits right into a kindergarten math center."
+        },
+        {
+          "slug": "rainbow-coloring-page",
+          "title": "Rainbow Coloring Page",
+          "prompt": "children's coloring book page, a big arching rainbow with six wide bands, a fluffy cloud at one end and a small pot of gold at the other, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Rainbow with cloud and pot of gold, coloring page",
+          "description": "A wide rainbow stretches from a fluffy cloud to a pot of gold. Use it to practice color order from red on top to purple on the bottom. Talk about how real rainbows appear when sunlight shines through raindrops."
+        },
+        {
+          "slug": "leprechaun-hat-coloring-page",
+          "title": "Leprechaun Hat Coloring Page",
+          "prompt": "children's coloring book page, a large tall leprechaun hat with a wide band and a big buckle, with a shamrock tucked in the band, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Tall leprechaun hat with buckle and shamrock, coloring page",
+          "description": "A tall leprechaun hat has a wide band, a big buckle and a shamrock tucked in. Color it, cut it out and tape it to a paper headband for an instant costume. Perfect for class parades or St. Patrick's Day photos."
+        },
+        {
+          "slug": "leprechaun-trap-coloring-page",
+          "title": "Leprechaun Trap Coloring Page",
+          "prompt": "children's coloring book page, a simple leprechaun trap made of a box propped up with a stick, a small ladder leading up, and gold coins as bait, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Leprechaun trap with box, ladder and gold coins, coloring page",
+          "description": "A box propped on a stick, a tiny ladder and gold coins make a classic leprechaun trap. Color this one to plan your own design, then build a real trap from cardboard. Classrooms love checking the traps on St. Patrick's morning."
+        },
+        {
+          "slug": "happy-st-patricks-day-coloring-page",
+          "title": "Happy St. Patrick's Day Coloring Page",
+          "prompt": "children's coloring book page, the words HAPPY ST. PATRICK'S DAY in big rounded bubble letters with shamrocks around the edges, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Happy St. Patrick's Day bubble letters with shamrocks, coloring page",
+          "description": "Big bubble letters spell Happy St. Patrick's Day with shamrocks all around. It makes a festive door sign or classroom banner. Kids practicing their letters can trace each one before coloring them in rainbow order."
+        }
+      ]
+    },
+    {
+      "slug": "easter-coloring-pages",
+      "title": "Easter Coloring Pages",
+      "primaryKeyword": "easter coloring pages",
+      "volume": 33100,
+      "sd": 28,
+      "season": "easter",
+      "publishBy": "2027-01-31",
+      "intro": "Hop into spring with these free Easter coloring pages. The collection includes the Easter bunny, decorated eggs, a full basket, baby chicks, an egg hunt scene, a spring lamb, and a cross with lilies for families who celebrate the religious side of the holiday. Every page uses bold outlines and wide spaces that preschoolers can fill with pastel colors. They're ideal for Sunday school, classroom parties, or a quiet activity before the egg hunt. Easter 2027 falls on March 28. Each page is a free PDF.",
+      "pages": [
+        {
+          "slug": "easter-bunny-coloring-page",
+          "title": "Easter Bunny Coloring Page",
+          "prompt": "children's coloring book page, a smiling Easter bunny with long ears standing and holding a decorated egg, with grass and two flowers at its feet, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Easter bunny holding a decorated egg, free Easter coloring page",
+          "description": "A smiling Easter bunny holds a decorated egg in the grass. Glue a cotton ball on the tail for a soft, touchable finish. Ask your child where they think the bunny will hide the egg this year."
+        },
+        {
+          "slug": "easter-egg-coloring-page",
+          "title": "Easter Egg Coloring Page",
+          "prompt": "children's coloring book page, one very large Easter egg divided into wide bands with zigzags, dots and stripes, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Large Easter egg with zigzag, dot and stripe bands, coloring page",
+          "description": "One big egg is divided into wide bands of zigzags, dots and stripes. Color each band differently to practice patterns. Afterward, use the finished page as a design plan when you dye and decorate real eggs together."
+        },
+        {
+          "slug": "easter-basket-coloring-page",
+          "title": "Easter Basket Coloring Page",
+          "prompt": "children's coloring book page, a woven Easter basket with a big handle and bow, filled with grass and five decorated eggs, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Easter basket with bow filled with decorated eggs, coloring sheet",
+          "description": "A woven basket with a big bow holds five decorated eggs. Count the eggs together and design each one differently. The basket weave is great for brown crayon practice, and the grass can be any shade of green."
+        },
+        {
+          "slug": "baby-chick-coloring-page",
+          "title": "Baby Chick Coloring Page",
+          "prompt": "children's coloring book page, a fluffy baby chick standing next to a cracked eggshell with a few spring flowers, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Fluffy baby chick beside a cracked eggshell, coloring page",
+          "description": "A fluffy baby chick stands beside its cracked eggshell. Talk about how chicks hatch after about three weeks of being kept warm. Yellow is the obvious pick, but brown and black chicks are real too."
+        },
+        {
+          "slug": "easter-egg-hunt-coloring-page",
+          "title": "Easter Egg Hunt Coloring Page",
+          "prompt": "children's coloring book page, a child with a basket searching a garden with eggs hidden behind a bush, under a tree and in the grass, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Child on an Easter egg hunt in a garden, coloring page",
+          "description": "A child with a basket searches the garden for hidden eggs. Challenge your little one to find and color all the eggs on the page. It's a hidden-picture game and a coloring sheet in one."
+        },
+        {
+          "slug": "spring-lamb-coloring-page",
+          "title": "Spring Lamb Coloring Page",
+          "prompt": "children's coloring book page, a fluffy lamb standing in a meadow with a few daisies, fluffy wool drawn as big simple curls, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Fluffy lamb standing in a meadow with daisies, coloring page",
+          "description": "A fluffy lamb stands in a meadow full of daisies. The big wool curls are fun to fill with white, cream or pale gray. Spring is when many lambs are born, which makes this a nice farm lesson tie-in."
+        },
+        {
+          "slug": "easter-cross-lilies-coloring-page",
+          "title": "Easter Cross and Lilies Coloring Page",
+          "prompt": "children's coloring book page, a simple wooden cross on a small hill with large Easter lilies at its base and a sunrise behind, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Wooden cross with Easter lilies and sunrise, Christian coloring page",
+          "description": "A simple cross stands on a hill with Easter lilies at its base and a sunrise behind it. It's a good fit for Sunday school or a family devotion time. Soft yellows and oranges in the sky make the scene glow."
+        },
+        {
+          "slug": "bunny-painting-eggs-coloring-page",
+          "title": "Bunny Painting Eggs Coloring Page",
+          "prompt": "children's coloring book page, a cute bunny holding a paintbrush painting stripes on an egg, with a small paint pot and two finished eggs nearby, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
+          "alt": "Bunny painting an Easter egg with a brush, coloring page",
+          "description": "A busy bunny paints stripes on an egg with two finished eggs beside it. Your child gets to finish the job with their own colors. Talk about the steps the bunny follows, which is a fun way to practice sequencing words like first, next and last."
+        }
+      ]
+    }
+  ]
+}
