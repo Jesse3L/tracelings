@@ -52,6 +52,8 @@ interface Variation { id: string; cents: number; cadence: string; name: string }
 let variationCache: { at: number; list: Variation[] } | null = null;
 
 /** Reads subscription plan variations from the Square catalog (created in the Square Dashboard) and matches them by price and cadence. */
+export function clearPlanCache() { variationCache = null; }
+
 export async function planVariations(): Promise<Variation[]> {
   if (variationCache && Date.now() - variationCache.at < 10 * 60_000) return variationCache.list;
   const list: Variation[] = [];
