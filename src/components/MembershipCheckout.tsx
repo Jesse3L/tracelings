@@ -85,7 +85,7 @@ export default function MembershipCheckout() {
       <button type="submit" disabled={state === 'sending' || !member.loaded} class="btn-pencil mt-5 w-full px-5 py-3.5 text-lg disabled:opacity-60">
         {state === 'sending' ? 'Opening secure checkout…' : 'Continue to secure checkout'}
       </button>
-      <p class="mt-3 text-[13px] text-muted">Payment is handled by Square. We never see your card number. Cancel anytime from your account page.</p>
+      <p class="mt-3 text-[13px] text-muted">Your plan renews automatically at the same price until you cancel. Cancel anytime from your account page, and get a full refund within 14 days if it's not for you. See the <a href="/terms/" class="text-[#2f5fc4] underline underline-offset-2">membership terms</a>. Payment is handled by Square; we never see your card number.</p>
       <p class="mt-2 text-[13px] text-muted">Already a member? <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Sign in</a></p>
     </form>
   );

@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+---
+<Base title={`Terms of Use and Membership Terms | ${SITE.name}`} description={`The terms for using ${SITE.name} printables and for ${SITE.name} memberships: billing, renewal, cancellation and refunds.`}>
+  <article class="prose-tl mx-auto max-w-[68ch] px-4 sm:px-6 pt-12">
+    <h1 class="text-[2.2rem] font-bold"><span class="ruled">Terms</span></h1>
+    <p class="mt-6"><em>Last updated October 4, 2026.</em></p>
+    <p>{SITE.name} is run by Veridian Ventures LLC in Texas. By using the site you agree to these terms. If you don't agree, please don't use the site.</p>
+
+    <h2>Using the printables</h2>
+    <p>Everything you make or download here is free for personal, family, homeschool and classroom use. You can print as many copies as you need and share them with your own students. Please don't resell the printables, bundle them into a product, or post the PDF files for download on another website. Linking to our pages is always welcome.</p>
+    <p>The site is made for adults. Children shouldn't use it on their own.</p>
+
+    <h2>Membership and billing</h2>
+    <ul>
+      <li><strong>Plans:</strong> Family is $5.99 a month or $39 a year. Classroom is $79 a year. The founding plan is $29 a year for the first 200 members. Prices are in US dollars, and sales tax is added where required.</li>
+      <li><strong>Automatic renewal:</strong> your membership renews automatically at the end of each month or year at the same price, and the card you used is charged until you cancel. If we ever change the price of your plan, we'll email you at least 30 days before it applies to you.</li>
+      <li><strong>Payments:</strong> handled by Square. We never see or store your full card number.</li>
+    </ul>
+
+    <h2>Canceling</h2>
+    <p>Cancel anytime from your <a href="/account/">account page</a> in two clicks, or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> and we'll do it for you. After you cancel, you won't be charged again and member features stay on until the end of the period you already paid for.</p>
+
+    <h2>Refunds</h2>
+    <p>If you're not happy within 14 days of your first payment, or within 14 days of a yearly renewal, email us and we'll refund that payment in full. Outside that window, payments aren't refundable, but you can cancel to stop future charges.</p>
+
+    <h2>The site itself</h2>
+    <p>We work hard to keep the tools running, but the site is provided as is, and we can't promise it will always be available or error free. We may add, change or retire features over time. If we ever retire a member feature you're paying for, you can cancel and ask for a refund of the unused part of your current period.</p>
+    <p>To the extent the law allows, our total liability to you is limited to what you paid us in the 12 months before the claim. These terms are governed by the laws of the State of Texas.</p>
+
+    <h2>Changes and contact</h2>
+    <p>If we change these terms, we'll update the date at the top, and for meaningful changes to membership terms we'll email members first. Questions? Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+  </article>
+</Base>
