@@ -10,6 +10,6 @@ export default defineConfig({
   trailingSlash: 'always',
   output: 'static',
   adapter: vercel(),
-  integrations: [preact(), sitemap({ filter: (page) => !page.includes('/api/') && !page.includes('/404') && !page.includes('/account/') })],
+  integrations: [preact(), sitemap({ filter: (page) => !page.includes('/api/') && !page.includes('/404') && !page.includes('/account/') && !page.includes('/class-pack/') })],
   vite: { plugins: [tailwindcss()], build: { target: 'es2022' } },
 });

@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import ClassPack from '../../components/ClassPack.tsx';
+import { SITE } from '../../config';
+---
+<Base title={`Class Pack: Worksheets for Every Child | ${SITE.name}`} description="Members: download a name tracing sheet, cursive sheet and name coloring page for every child in your class, in one PDF." noindex>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10">
+    <h1 class="text-[2.1rem] sm:text-[2.6rem] font-bold"><span class="ruled">Class pack</span></h1>
+    <p class="mt-4 max-w-[62ch] text-[1.075rem] text-muted">Save your class list once, then print a personalized set for every child in a single PDF. Names stay on this device.</p>
+    <div class="mt-8"><ClassPack client:load /></div>
+  </div>
+</Base>

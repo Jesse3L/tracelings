@@ -105,7 +105,7 @@ export default function AccountPanel() {
         {welcome && (
           <div class="rounded-xl border border-[#9fd3b8] bg-[#eef8f2] p-5" role="status">
             <p class="font-bold text-lg text-ink">Welcome to Tracelings membership!</p>
-            <p class="mt-1 text-muted">Member printing is on in this browser. Try a <a href="/name-tracing/" class={linkCls}>class list of names</a> to see it.</p>
+            <p class="mt-1 text-muted">Member printing is on in this browser. Start with a <a href="/class-pack/" class={linkCls}>class pack</a>: paste your names once and print everything.</p>
           </div>
         )}
         <div class="rounded-xl border border-hairline bg-white p-6">
@@ -120,7 +120,8 @@ export default function AccountPanel() {
           <h3 class="mt-6 font-bold">What’s included now</h3>
           <ul class="mt-2 list-disc pl-5 text-[15px] text-muted space-y-1">
             <li>No footer line on any printable</li>
-            <li>Several names in one PDF on the <a href="/name-tracing/" class={linkCls}>name tracing</a> tool</li>
+            <li>A saved class list that works in <a href="/name-tracing/" class={linkCls}>name tracing</a>, <a href="/cursive/" class={linkCls}>cursive</a> and <a href="/name-coloring-pages/" class={linkCls}>name coloring pages</a></li>
+            <li><a href="/class-pack/" class={linkCls}>Class packs</a>: every child’s tracing, cursive and coloring pages in one PDF</li>
             <li>No email prompts on downloads</li>
             <li>New member features as they launch, at no extra cost</li>
           </ul>

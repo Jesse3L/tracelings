@@ -5,6 +5,8 @@ import { needsEmail, countDownload } from '../lib/gate';
 import EmailGate from './EmailGate';
 import { useMember } from '../lib/member';
 import WordChips from './WordChips';
+import RosterPanel from './RosterPanel';
+import { useRoster } from '../lib/roster';
 
 type Mode = 'name' | 'letter' | 'number' | 'words';
 type Case = 'both' | 'upper' | 'lower';
@@ -69,10 +71,12 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   const source = props.source ?? `${mode}-tracing`;
   const member = useMember();
   const credit = !member.member;
-  const [classList, setClassList] = useState('');
+  const [roster] = useRoster();
+  const [useList, setUseList] = useState(false);
+  useEffect(() => { if (roster.length) setUseList(true); }, [roster.length > 0]);
   const listNames = useMemo(
-    () => (member.member && mode === 'name' ? classList.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean).slice(0, member.maxNames ?? 8) : []),
-    [classList, member.member, member.maxNames, mode],
+    () => (member.member && mode === 'name' && useList ? roster.slice(0, member.maxNames ?? 8) : []),
+    [roster, useList, member.member, member.maxNames, mode],
   );
 
   // A name typed on the homepage is handed over in this tab only, never through the URL.
@@ -175,18 +179,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
           </label>
         )}
         {mode === 'name' && member.member && (
-          <label class="block mb-5">
-            <span class="block text-[15px] font-bold mb-2">Class list <span class="font-normal text-muted">(members, up to {member.maxNames ?? 8} names)</span></span>
-            <textarea
-              id="tracer-class-list"
-              rows={4}
-              value={classList}
-              onInput={(e) => setClassList((e.target as HTMLTextAreaElement).value)}
-              placeholder={'One name per line\nAva\nLiam\nNoah'}
-              class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
-            />
-            <span class="block text-[13px] text-muted mt-2">{listNames.length ? `${listNames.length} sheets in one PDF. The preview shows the first name.` : 'Leave empty to print the single name above.'}</span>
-          </label>
+          <RosterPanel use={useList} onUse={setUseList} maxNames={member.maxNames ?? 8} what="a tracing sheet" />
         )}
 
         {mode !== 'name' && props.pick && (
@@ -270,14 +263,14 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
 
         {noWords && <p class="mb-3 text-[14px] text-[#b4232c]" role="alert">Choose at least one word to make a sheet.</p>}
         <button type="submit" disabled={busy || noWords} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : 'Download PDF'}
+          {busy ? 'Making your PDF…' : listNames.length ? `Download ${listNames.length} sheets` : 'Download PDF'}
         </button>
         {done ? (
           <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>
         ) : null}
         <div class="mt-4 rounded-lg border border-dashed border-rule/60 bg-white/70 p-3 text-[14px] leading-snug text-muted">
           {member.member ? (
-            <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets{mode === 'name' ? ', and class lists print in one PDF' : ''}. <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
+            <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets{mode === 'name' ? ', and class lists print in one PDF' : ''}. <a href="/class-pack/" class="text-[#2f5fc4] underline underline-offset-2">Make a class pack</a> · <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
           ) : (
             <><span class="font-bold text-ink">Members</span> print a whole class list in one PDF, with no footer line on any sheet.{' '}
             <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">See membership</a></>
