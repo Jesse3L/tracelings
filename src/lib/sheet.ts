@@ -62,6 +62,12 @@ export function styleName(raw: string, style: LetterStyle): string {
 const EXTRA_GLYPHS: Record<string, Glyph> = {
   "'": { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
   '’': { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
+  // Sentence punctuation for the word tracing tool.
+  '.': { w: 0.04, strokes: [], dots: [[0.02, -0.03]] },
+  ',': { w: 0.06, strokes: [[['M', 0.05, -0.05], ['L', 0, 0.13]]] },
+  '!': { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.28]]], dots: [[0, -0.03]] },
+  '?': { w: 0.4, strokes: [[['M', 0, -0.78], ['C', 0, -1.03, 0.4, -1.03, 0.4, -0.78], ['C', 0.4, -0.58, 0.2, -0.55, 0.2, -0.3]]], dots: [[0.2, -0.03]] },
+  '-': { w: 0.28, strokes: [[['M', 0, -0.27], ['L', 0.28, -0.27]]] },
 };
 export const glyphFor = (ch: string): Glyph | undefined => GLYPHS[ch] ?? EXTRA_GLYPHS[ch];
 

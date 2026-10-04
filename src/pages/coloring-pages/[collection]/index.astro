@@ -10,7 +10,61 @@ export function getStaticPaths() {
 }
 const { c } = Astro.props;
 const n = c.pages.length;
-const title = fitTitle(`${n} ${c.title}`, ['(Free Printable PDFs)', '(Free Printables)', 'Free']);
+const title = c.slug === 'simple-coloring-pages'
+  ? `Simple Coloring Pages for Toddlers (Free) | ${SITE.name}`
+  : fitTitle(`Free Printable ${c.title}`, []);
+// One or two related tools per collection, so families can add a personalized or handwriting page.
+const tools: Record<string, { href: string; label: string; p: string }[]> = {
+  'thanksgiving-coloring-pages': [
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Put each child’s name on a coloring page for Thanksgiving place cards.' },
+    { href: '/letter-tracing/t/', label: 'Letter T tracing', p: 'T is for turkey. Trace capital T and lowercase t.' },
+  ],
+  'christmas-coloring-pages': [
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Make a name page to color for stockings, gift tags or the kids’ table.' },
+    { href: '/cursive/', label: 'Cursive worksheets', p: 'Older kids can practice writing a holiday message or a letter to Santa in cursive.' },
+  ],
+  'dinosaur-coloring-pages': [
+    { href: '/letter-tracing/d/', label: 'Letter D tracing', p: 'D is for dinosaur. Trace capital D and lowercase d.' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Pair a dinosaur page with your child’s name in big letters to color.' },
+  ],
+  'unicorn-coloring-pages': [
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Your child’s name with stars, hearts or flowers around it.' },
+    { href: '/letter-tracing/u/', label: 'Letter U tracing', p: 'U is for unicorn. Trace capital U and lowercase u.' },
+  ],
+  'winter-coloring-pages': [
+    { href: '/letter-tracing/s/', label: 'Letter S tracing', p: 'S is for snow and snowman. Trace capital S and lowercase s.' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'A cozy indoor activity: color a page with your own name.' },
+  ],
+  'hanukkah-coloring-pages': [
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Make a name page to color for each night or each guest.' },
+    { href: '/number-tracing/1-10/', label: 'Number tracing 1-10', p: 'Count the candles, then trace the numbers 1 to 10.' },
+  ],
+  'simple-coloring-pages': [
+    { href: '/bubble-letters/', label: 'Bubble letters', p: 'Big, plain letter outlines that are easy for toddlers to color.' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Your toddler’s name in large letters with simple shapes.' },
+  ],
+  'car-and-truck-coloring-pages': [
+    { href: '/letter-tracing/t/', label: 'Letter T tracing', p: 'T is for truck. Trace capital T and lowercase t.' },
+    { href: '/letter-tracing/c/', label: 'Letter C tracing', p: 'C is for car. Trace capital C and lowercase c.' },
+  ],
+  'new-years-coloring-pages': [
+    { href: '/number-tracing/', label: 'Number tracing', p: 'Practice writing the numbers in the new year.' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Start the year with a page that has your child’s name on it.' },
+  ],
+  'valentines-day-coloring-pages': [
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Choose the hearts theme for a personalized valentine.' },
+    { href: '/cursive/', label: 'Cursive worksheets', p: 'Write a short valentine message in cursive to trace.' },
+  ],
+  'st-patricks-day-coloring-pages': [
+    { href: '/letter-tracing/l/', label: 'Letter L tracing', p: 'L is for leprechaun and lucky. Trace capital L and lowercase l.' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'A name page to color green from top to bottom.' },
+  ],
+  'easter-coloring-pages': [
+    { href: '/letter-tracing/e/', label: 'Letter E tracing', p: 'E is for egg and Easter. Trace capital E and lowercase e.' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Make a name tag to color for each Easter basket.' },
+  ],
+};
+const related = tools[c.slug] ?? [{ href: '/name-coloring-pages/', label: 'Name coloring pages', p: 'Make a coloring page with your child’s name.' }];
 const x = (extra.collections as Record<string, { skills: string[]; ideas: string[]; faq: { q: string; a: string }[] }>)[c.slug];
 const description = `${n} free printable ${c.title.toLowerCase()} for kids with bold, simple lines. Download any page as a full-size PDF for Letter or A4 paper.`;
 const url = new URL(`/coloring-pages/${c.slug}/`, SITE.url).href;
@@ -23,14 +77,13 @@ const schema = [
     { '@type': 'ListItem', position: 2, name: 'Coloring Pages', item: SITE.url + '/coloring-pages/' },
     { '@type': 'ListItem', position: 3, name: c.title, item: url },
   ] },
+  ...(x?.faq?.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: x.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
 ];
 ---
 <Base title={title} description={description} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/coloring-pages/" class="hover:text-ink">Coloring pages</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">{c.title}</span>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/coloring-pages/" class="hover:text-ink">Coloring pages</a> <span aria-hidden="true">/</span> <span aria-current="page">{c.title}</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{c.title}</span></h1>
@@ -67,6 +120,20 @@ const schema = [
         </div>
       </article>
     )}
+
+    <section class="mt-14" aria-labelledby="pair">
+      <h2 id="pair" class="text-[1.45rem] font-bold">Pair it with a worksheet</h2>
+      <ul class="mt-4 grid gap-4 sm:grid-cols-2 max-w-4xl">
+        {related.map((t) => (
+          <li>
+            <a href={t.href} class="block h-full rounded-xl border border-hairline bg-white p-5 hover:border-rule">
+              <span class="block font-bold text-lg text-ink">{t.label}</span>
+              <span class="block mt-1 text-muted leading-relaxed">{t.p}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
 
     <section class="mt-14" aria-labelledby="more">
       <h2 id="more" class="text-[1.45rem] font-bold">More coloring pages</h2>

@@ -1,0 +1,97 @@
+---
+import Base from '../../layouts/Base.astro';
+import Seo2AlphabetChart from '../../components/seo/Seo2AlphabetChart.tsx';
+import { SITE } from '../../config';
+
+const title = `Free Printable Alphabet Chart: Print & Cursive | ${SITE.name}`;
+const description = 'Free printable alphabet chart in print or cursive. Capital and lowercase letters A to Z on one page for the wall, desk or folder. Download a free PDF.';
+const url = new URL('/alphabet-chart/', SITE.url).href;
+
+const faqs = [
+  { q: 'Is this alphabet chart free to print?', a: 'Yes. Your first PDF downloads right away. After that we ask for your email once, and every chart and worksheet stays free on that device for home and classroom use.' },
+  { q: 'Can I print a cursive alphabet chart?', a: 'Yes. Choose Cursive under Letter style to get every capital and lowercase cursive letter from A to Z on one page. It uses a traditional looped cursive close to what most US schools teach.' },
+  { q: 'What size does the chart print?', a: 'Choose US Letter or A4 before you download. The chart fills the page at full size. For a bigger wall chart, most home and office printers can scale a page up across several sheets in the print settings.' },
+  { q: 'What is the difference between print and ball-and-stick letters?', a: 'Ball-and-stick is a simple print style built from circles and straight lines, which is how many preschool and kindergarten classes first teach letters. It matches the letters on our tracing worksheets, so the chart and the practice sheets look the same.' },
+  { q: 'Should the chart show capital and lowercase letters together?', a: 'For most kids, yes. Seeing A and a side by side helps them learn that both are the same letter. A capital-only chart can be easier for very young children, and a lowercase chart is handy once they start reading words.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Printable Alphabet Chart Maker',
+    url,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Any (web browser)',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    audience: { '@type': 'Audience', audienceType: 'Parents, teachers and homeschool families' },
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Alphabet Chart', item: url },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Alphabet chart</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free printable alphabet chart</span></h1>
+      <p class="mt-4 text-lg text-muted">Capital and lowercase letters A to Z on one page, in print or cursive. Pick a style and print.</p>
+    </header>
+
+    <Seo2AlphabetChart client:load source="alphabet-chart" />
+
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free printable alphabet chart shows every letter from A to Z on handwriting lines, with the capital and lowercase side by
+        side. Choose clear ball-and-stick print letters for preschool and kindergarten, or switch to a cursive alphabet chart for older
+        kids learning joined handwriting. Each chart prints on one page as a free PDF.
+      </p>
+
+      <h2>Ways to use an ABC alphabet chart</h2>
+      <ul>
+        <li><strong>Wall chart:</strong> Hang it at your child's eye level near where they draw or do homework, so they can glance up to check a letter.</li>
+        <li><strong>Desk strip or folder page:</strong> Tape a copy inside a homework folder or on the table. Kids look things up more when the chart is close.</li>
+        <li><strong>Letter-sound practice:</strong> Point to a letter and say its sound together, then find something in the room that starts with it.</li>
+        <li><strong>Handwriting check:</strong> The letters sit on the same top, middle and bottom lines as our worksheets, so kids can compare their writing to the chart.</li>
+        <li><strong>Alphabet games:</strong> Call out a letter and have your child put a counter on it, or race to find the letters in their name.</li>
+      </ul>
+
+      <h2>Print or cursive?</h2>
+      <p>
+        Most kids learn print first, usually from preschool through first grade, so the print chart is the right choice for young learners.
+        A cursive chart helps once cursive starts, often around second or third grade, and it is handy for adults relearning cursive too.
+        The green starting dots on the print chart show where each stroke begins, which helps if the chart doubles as a writing guide.
+      </p>
+      <p>
+        For practice to go with the chart, print the <a href="/letter-tracing/">letter tracing worksheets</a> for print letters or the <a href="/cursive-alphabet/">cursive alphabet worksheets</a> for cursive.
+      </p>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>More free printables</h2>
+      <p>
+        Make a <a href="/name-tracing/">name tracing worksheet</a> with your child's name, practice numbers with <a href="/number-tracing/">number tracing worksheets</a>, or color a <a href="/bubble-letters/">bubble letter</a> for each letter of the alphabet.
+      </p>
+    </article>
+  </div>
+</Base>

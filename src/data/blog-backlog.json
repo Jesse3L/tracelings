@@ -2,108 +2,117 @@
   "updated": "2026-10-04",
   "items": [
     {
-      "id": 1,
-      "status": "todo",
-      "publishAfter": "2026-10-06",
-      "primaryKeyword": "thanksgiving activities for preschoolers",
-      "volume": 1900,
-      "sd": 19,
-      "workingTitle": "Thanksgiving Activities for Preschoolers That Build Little Hands",
-      "angle": "A short list of low-prep Thanksgiving activities sorted by skill (fine motor, name writing, counting), with a 'thankful for' name page kids trace and decorate.",
-      "linkTo": [
-        "/name-tracing/",
-        "/number-tracing/"
-      ],
-      "season": "thanksgiving"
-    },
-    {
       "id": 2,
       "status": "todo",
-      "publishAfter": "2026-10-09",
+      "publishAfter": "2026-10-06",
       "primaryKeyword": "thanksgiving crafts for preschoolers",
       "volume": 5400,
       "sd": 24,
       "workingTitle": "Thanksgiving Crafts for Preschoolers With Their Name on Them",
       "angle": "Crafts that double as name practice: handprint turkeys with a traced name, feather name banners, a place card kids write for the family table. Supplies list and age notes for 3s vs 5s.",
       "linkTo": [
-        "/name-tracing/",
-        "/name-coloring-pages/"
-      ],
-      "season": "thanksgiving"
-    },
-    {
-      "id": 3,
-      "status": "todo",
-      "publishAfter": "2026-10-13",
-      "primaryKeyword": "thanksgiving fine motor activities",
-      "volume": 140,
-      "sd": 24,
-      "workingTitle": "Thanksgiving Fine Motor Activities You Can Set Up in 5 Minutes",
-      "angle": "Turkey feather sorting, corn kernel pinching, pie dough rolling and tong transfers, each tied to the grip skill it builds, ending with a short tracing warm-down.",
-      "linkTo": [
-        "/letter-tracing/t/",
+        "/name-coloring-pages/",
+        "/coloring-pages/thanksgiving-coloring-pages/",
         "/name-tracing/"
       ],
       "season": "thanksgiving"
     },
     {
-      "id": 4,
+      "id": 1,
       "status": "todo",
-      "publishAfter": "2026-10-16",
-      "primaryKeyword": "name activities for preschool",
-      "volume": 1000,
-      "sd": 22,
-      "workingTitle": "15 Name Activities for Preschool That Aren't Worksheets",
-      "angle": "Hands-on name games for home and classroom (name puzzles, rice dig, name hopscotch, sign-in clipboard) grouped by recognize, build, and write, with how to tie each one back to a traced name.",
+      "publishAfter": "2026-10-09",
+      "primaryKeyword": "thanksgiving activities for preschoolers",
+      "volume": 1900,
+      "sd": 19,
+      "workingTitle": "Thanksgiving Activities for Preschoolers That Build Little Hands",
+      "angle": "A short list of low-prep Thanksgiving activities sorted by skill (fine motor, name writing, counting), with a 'thankful for' name page kids trace and decorate.",
       "linkTo": [
-        "/name-tracing/",
-        "/letter-tracing/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 5,
-      "status": "todo",
-      "publishAfter": "2026-10-20",
-      "primaryKeyword": "tripod grasp",
-      "volume": 1300,
-      "sd": 20,
-      "workingTitle": "Tripod Grasp: What It Is and How to Encourage It",
-      "angle": "Plain-language explanation of the tripod grasp, what it looks like, why short crayons and vertical surfaces help, and when a different grip is fine. Cautious age ranges plus when to ask a teacher or OT.",
-      "linkTo": [
-        "/letter-tracing/",
+        "/coloring-pages/thanksgiving-coloring-pages/",
+        "/number-tracing/",
         "/name-tracing/"
       ],
-      "season": "evergreen"
+      "season": "thanksgiving"
     },
     {
       "id": 6,
       "status": "todo",
-      "publishAfter": "2026-10-23",
+      "publishAfter": "2026-10-13",
       "primaryKeyword": "fine motor activities preschool",
       "volume": 2900,
       "sd": 20,
       "workingTitle": "Fine Motor Activities for Preschool, Grouped by the Skill They Build",
-      "angle": "Activities sorted into hand strength, finger isolation, pincer grasp, two-hand coordination and pencil control, so parents and teachers can pick what their child actually needs instead of a random list.",
+      "angle": "Activities sorted into hand strength, finger isolation, pincer grasp, two-hand coordination and pencil control, so parents and teachers can pick what their child actually needs instead of a random list. Close with a short seasonal swap list (turkey feathers and pumpkin seeds in fall, cotton-ball snow and mitten clips in winter) so this one page also covers thanksgiving and winter fine motor searches.",
       "linkTo": [
         "/letter-tracing/",
         "/name-tracing/",
-        "/number-tracing/"
+        "/number-tracing/",
+        "/coloring-pages/simple-coloring-pages/"
       ],
       "season": "evergreen"
     },
     {
-      "id": 7,
+      "id": 30,
       "status": "todo",
-      "publishAfter": "2026-10-27",
-      "primaryKeyword": "name recognition activities",
-      "volume": 390,
-      "sd": 17,
-      "workingTitle": "Name Recognition Activities: Help Your Child Spot Their Name Anywhere",
-      "angle": "Games that come before writing: name hunts, matching the first letter, finding their name among classmates' names. Includes how teachers can run these with a whole class list.",
+      "publishAfter": "2026-10-16",
+      "primaryKeyword": "kindergarten readiness checklist",
+      "volume": 2900,
+      "sd": 25,
+      "workingTitle": "Kindergarten Readiness Checklist: What Actually Matters",
+      "angle": "A checklist grouped by self-care, social, fine motor, letters and numbers, with notes on what schools commonly look for and which items kids often pick up during kindergarten itself. Refresh it each spring before kindergarten registration.",
       "linkTo": [
         "/name-tracing/",
-        "/letter-tracing/"
+        "/letter-tracing/",
+        "/number-tracing/1-10/",
+        "/sight-words/pre-k/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 9,
+      "status": "todo",
+      "publishAfter": "2026-10-20",
+      "primaryKeyword": "christmas crafts for preschoolers",
+      "volume": 1600,
+      "sd": 25,
+      "workingTitle": "Christmas Crafts for Preschoolers (Plus a Name Ornament Kids Trace)",
+      "angle": "Six simple crafts that preschoolers can do mostly on their own, each with a step where they trace or write their name, such as a traced-name ornament or a signed handprint card.",
+      "linkTo": [
+        "/coloring-pages/christmas-coloring-pages/",
+        "/name-coloring-pages/",
+        "/name-tracing/"
+      ],
+      "season": "christmas"
+    },
+    {
+      "id": 10,
+      "status": "todo",
+      "publishAfter": "2026-10-23",
+      "primaryKeyword": "letter to santa template",
+      "volume": 3600,
+      "sd": 32,
+      "workingTitle": "Letter to Santa Template for Kids Who Are Just Learning to Write",
+      "angle": "How to set up a Santa letter for pre-writers and early writers: draw-and-dictate for 3s, trace-the-words for 4s, fill-in-the-blank for 5 to 7 year olds, ending with a traced signature.",
+      "linkTo": [
+        "/name-tracing/",
+        "/letter-tracing/s/",
+        "/coloring-pages/christmas-coloring-pages/"
+      ],
+      "season": "christmas"
+    },
+    {
+      "id": 53,
+      "status": "todo",
+      "publishAfter": "2026-10-27",
+      "primaryKeyword": "what are sight words",
+      "volume": 8100,
+      "sd": 34,
+      "workingTitle": "What Are Sight Words? Dolch vs Fry Lists Explained",
+      "angle": "Answer the question in the opening: sight words are common words kids learn to read at a glance, and some don't follow the usual phonics rules. Then compare the two public-domain lists: Dolch (grouped by grade level, pre-primer to third grade, plus nouns) and Fry (the most common words in frequency order, in groups of 100). Say which a school might use and that it varies, how many words to expect per grade, and how to practice (read, trace, find in books). Link the grade-level sight word pages for each list. The 'list of sight words for preschool' keyword now belongs to /sight-words/pre-k/.",
+      "linkTo": [
+        "/sight-words/",
+        "/sight-words/pre-k/",
+        "/sight-words/kindergarten/",
+        "/sight-words/first-grade/"
       ],
       "season": "evergreen"
     },
@@ -117,166 +126,65 @@
       "workingTitle": "Christmas Activities for Preschoolers That Sneak in Learning",
       "angle": "Holiday activities mapped to skills: ornament counting, gift tag name writing, wrapping paper cutting, tracing a short holiday word list. Low-cost and doable at home or in class.",
       "linkTo": [
-        "/name-tracing/",
-        "/number-tracing/"
+        "/coloring-pages/christmas-coloring-pages/",
+        "/number-tracing/1-20/",
+        "/name-tracing/"
       ],
       "season": "christmas"
     },
     {
-      "id": 9,
+      "id": 41,
       "status": "todo",
       "publishAfter": "2026-11-03",
-      "primaryKeyword": "christmas crafts for preschoolers",
-      "volume": 1600,
-      "sd": 25,
-      "workingTitle": "Christmas Crafts for Preschoolers (Plus a Name Ornament Kids Trace)",
-      "angle": "Six simple crafts that preschoolers can do mostly on their own, each with a step where they trace or write their name, such as a traced-name ornament or a signed handprint card.",
+      "primaryKeyword": "cvc words for kindergarten",
+      "volume": 2400,
+      "sd": 22,
+      "workingTitle": "CVC Words for Kindergarten: Word Lists by Vowel and Easy Games",
+      "angle": "CVC word lists grouped by short vowel, a simple teaching order, blending games, and writing CVC words after tracing each letter. Note that 'cvc words' itself has high volume and low difficulty as a secondary target.",
       "linkTo": [
-        "/name-tracing/",
-        "/name-coloring-pages/"
+        "/word-tracing/",
+        "/letter-tracing/",
+        "/sight-words/kindergarten/"
       ],
-      "season": "christmas"
+      "season": "evergreen"
     },
     {
-      "id": 10,
+      "id": 5,
       "status": "todo",
       "publishAfter": "2026-11-06",
-      "primaryKeyword": "letter to santa template",
-      "volume": 3600,
-      "sd": 32,
-      "workingTitle": "Letter to Santa Template for Kids Who Are Just Learning to Write",
-      "angle": "How to set up a Santa letter for pre-writers and early writers: draw-and-dictate for 3s, trace-the-words for 4s, fill-in-the-blank for 5 to 7 year olds, ending with a traced signature.",
+      "primaryKeyword": "tripod grasp",
+      "volume": 1300,
+      "sd": 20,
+      "workingTitle": "Tripod Grasp: What It Is and How to Encourage It",
+      "angle": "Plain-language explanation of the tripod grasp, what it looks like, why short crayons and vertical surfaces help, and when a different grip is fine. Cautious age ranges plus when to ask a teacher or OT.",
       "linkTo": [
+        "/letter-tracing/",
         "/name-tracing/",
-        "/letter-tracing/s/"
+        "/coloring-pages/simple-coloring-pages/"
       ],
-      "season": "christmas"
-    },
-    {
-      "id": 11,
-      "status": "todo",
-      "publishAfter": "2026-11-10",
-      "primaryKeyword": "gingerbread man activities for preschool",
-      "volume": 260,
-      "sd": 25,
-      "workingTitle": "Gingerbread Man Activities for Preschool: Story, Letters and Fine Motor",
-      "angle": "Activities built around the classic story: retelling with sequence cards, a letter G hunt, playdough gingerbread with buttons to count, and a name-on-a-gingerbread tracing page.",
-      "linkTo": [
-        "/letter-tracing/g/",
-        "/number-tracing/"
-      ],
-      "season": "christmas"
+      "season": "evergreen"
     },
     {
       "id": 12,
       "status": "todo",
-      "publishAfter": "2026-11-13",
+      "publishAfter": "2026-11-10",
       "primaryKeyword": "winter activities for preschoolers",
       "volume": 1300,
       "sd": 23,
       "workingTitle": "Winter Activities for Preschoolers for Cold Indoor Days",
       "angle": "Indoor winter ideas sorted by energy level (calm, medium, wiggly) with a writing tie-in for each: snowflake letter matching, mitten name cards, snowball counting.",
       "linkTo": [
+        "/coloring-pages/winter-coloring-pages/",
         "/letter-tracing/",
-        "/number-tracing/",
+        "/number-tracing/1-10/",
         "/name-tracing/"
       ],
       "season": "winter"
-    },
-    {
-      "id": 13,
-      "status": "todo",
-      "publishAfter": "2026-11-17",
-      "primaryKeyword": "winter activities for kindergarten",
-      "volume": 210,
-      "sd": 17,
-      "workingTitle": "Winter Writing Activities for Kindergarten",
-      "angle": "Kindergarten-level winter writing: labeling a snowman, a 'my winter break' sentence frame, winter word tracing, and number writing to 20 with snow themes. For teachers planning January and parents over break.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/number-tracing/"
-      ],
-      "season": "winter"
-    },
-    {
-      "id": 14,
-      "status": "todo",
-      "publishAfter": "2026-11-20",
-      "primaryKeyword": "winter fine motor activities",
-      "volume": 110,
-      "sd": 20,
-      "workingTitle": "Winter Fine Motor Activities With Things You Already Have",
-      "angle": "Cotton ball snow transfers, ice and salt painting, mitten clothespin matching, cutting paper snowflakes, each with the hand skill it supports and a short tracing follow-up.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/name-tracing/"
-      ],
-      "season": "winter"
-    },
-    {
-      "id": 15,
-      "status": "todo",
-      "publishAfter": "2026-11-24",
-      "primaryKeyword": "pencil grip development",
-      "volume": 590,
-      "sd": 26,
-      "workingTitle": "Pencil Grip Development: The Stages From Fist to Fingertips",
-      "angle": "Walks through the typical grip stages (palmar, digital pronate, static tripod, dynamic tripod) with broad age ranges, what helps at each stage, and why forcing a grip early backfires.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/name-tracing/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 16,
-      "status": "todo",
-      "publishAfter": "2026-11-27",
-      "primaryKeyword": "b and d reversal",
-      "volume": 320,
-      "sd": 14,
-      "workingTitle": "b and d Reversal: Why It Happens and Simple Ways to Help",
-      "angle": "Explains why b/d mix-ups are common in early writers, gives concrete tricks (bed hand trick, start-point cues, tracing b and d on separate days) and when reversals are worth mentioning to a teacher.",
-      "linkTo": [
-        "/letter-tracing/b/",
-        "/letter-tracing/d/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 17,
-      "status": "todo",
-      "publishAfter": "2026-12-01",
-      "primaryKeyword": "pincer grasp activities",
-      "volume": 390,
-      "sd": 25,
-      "workingTitle": "Pincer Grasp Activities for Toddlers and Preschoolers",
-      "angle": "Pinching activities from easy to hard (cereal, pom poms, tweezers, stickers, pegboards) and how pincer strength leads into holding a crayon and tracing.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/number-tracing/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 18,
-      "status": "todo",
-      "publishAfter": "2026-12-04",
-      "primaryKeyword": "how to teach letters to preschoolers",
-      "volume": 260,
-      "sd": 20,
-      "workingTitle": "How to Teach Letters to Preschoolers Without Flashcard Drills",
-      "angle": "A practical order for teaching letters (name letters first, then high-use letters), short daily routines, and how to combine seeing, saying, building and tracing each letter.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/name-tracing/"
-      ],
-      "season": "evergreen"
     },
     {
       "id": 19,
       "status": "todo",
-      "publishAfter": "2026-12-08",
+      "publishAfter": "2026-11-13",
       "primaryKeyword": "playdough mats",
       "volume": 1600,
       "sd": 21,
@@ -284,7 +192,169 @@
       "angle": "How to make DIY playdough mats from printed tracing pages in sheet protectors, plus ways to use them: roll the letter, then trace it, then write it. Good for centers and rainy days.",
       "linkTo": [
         "/letter-tracing/",
+        "/number-tracing/1-10/",
+        "/bubble-letters/",
+        "/name-tracing/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 45,
+      "status": "todo",
+      "publishAfter": "2026-11-17",
+      "primaryKeyword": "left handed writing",
+      "volume": 1300,
+      "sd": 21,
+      "workingTitle": "Left Handed Writing Tips for Kids: Paper, Grip and Letter Tricks",
+      "angle": "How to set up paper tilt, grip height and seating for a left-handed child, why some letters feel backward, and how to avoid smudging. Do not try to switch hands.",
+      "linkTo": [
+        "/letter-tracing/",
+        "/name-tracing/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 31,
+      "status": "todo",
+      "publishAfter": "2026-11-20",
+      "primaryKeyword": "kindergarten readiness assessment",
+      "volume": 1900,
+      "sd": 19,
+      "workingTitle": "Kindergarten Readiness Assessment: What Your Child Might Be Asked to Do",
+      "angle": "What screenings typically include (writing their name, naming letters, counting, following directions), why they vary by district, and calm ways to practice without drilling.",
+      "linkTo": [
+        "/name-tracing/",
+        "/letter-tracing/",
+        "/number-tracing/1-20/",
+        "/sight-words/pre-k/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 4,
+      "status": "todo",
+      "publishAfter": "2026-11-24",
+      "primaryKeyword": "name activities for preschool",
+      "volume": 1000,
+      "sd": 22,
+      "workingTitle": "15 Name Activities for Preschool That Aren't Worksheets",
+      "angle": "Hands-on name games for home and classroom (name puzzles, rice dig, name hopscotch, sign-in clipboard) grouped by recognize, build, and write, with how to tie each one back to a traced name.",
+      "linkTo": [
+        "/name-tracing/",
+        "/name-coloring-pages/",
+        "/bubble-letters/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 7,
+      "status": "todo",
+      "publishAfter": "2026-11-27",
+      "primaryKeyword": "name recognition activities",
+      "volume": 390,
+      "sd": 17,
+      "workingTitle": "Name Recognition Activities: Help Your Child Spot Their Name Anywhere",
+      "angle": "Games that come before writing: name hunts, matching the first letter, finding their name among classmates' names. Includes how teachers can run these with a whole class list.",
+      "linkTo": [
+        "/name-tracing/",
+        "/name-coloring-pages/",
+        "/letter-tracing/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 11,
+      "status": "todo",
+      "publishAfter": "2026-12-01",
+      "primaryKeyword": "gingerbread man activities for preschool",
+      "volume": 260,
+      "sd": 25,
+      "workingTitle": "Gingerbread Man Activities for Preschool: Story, Letters and Fine Motor",
+      "angle": "Activities built around the classic story: retelling with sequence cards, a letter G hunt, playdough gingerbread with buttons to count, and a name-on-a-gingerbread tracing page.",
+      "linkTo": [
+        "/letter-tracing/g/",
+        "/number-tracing/1-10/",
+        "/coloring-pages/christmas-coloring-pages/"
+      ],
+      "season": "christmas"
+    },
+    {
+      "id": 13,
+      "status": "todo",
+      "publishAfter": "2026-12-04",
+      "primaryKeyword": "winter activities for kindergarten",
+      "volume": 210,
+      "sd": 17,
+      "workingTitle": "Winter Writing Activities for Kindergarten",
+      "angle": "Kindergarten-level winter writing: labeling a snowman, a 'my winter break' sentence frame, winter word tracing, and number writing to 20 with snow themes. For teachers planning January and parents over break.",
+      "linkTo": [
+        "/coloring-pages/winter-coloring-pages/",
+        "/sight-words/kindergarten/",
+        "/number-tracing/1-20/"
+      ],
+      "season": "winter"
+    },
+    {
+      "id": 15,
+      "status": "todo",
+      "publishAfter": "2026-12-08",
+      "primaryKeyword": "pencil grip development",
+      "volume": 590,
+      "sd": 26,
+      "workingTitle": "Pencil Grip Development: The Stages From Fist to Fingertips",
+      "angle": "Walks through the typical grip stages (palmar, digital pronate, static tripod, dynamic tripod) with broad age ranges, what helps at each stage, and why forcing a grip early backfires.",
+      "linkTo": [
+        "/letter-tracing/",
+        "/name-tracing/",
+        "/coloring-pages/simple-coloring-pages/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 16,
+      "status": "todo",
+      "publishAfter": "2026-12-11",
+      "primaryKeyword": "b and d reversal",
+      "volume": 320,
+      "sd": 14,
+      "workingTitle": "b and d Reversal: Why It Happens and Simple Ways to Help",
+      "angle": "Explains why b/d mix-ups are common in early writers, gives concrete tricks (bed hand trick, start-point cues, tracing b and d on separate days) and when reversals are worth mentioning to a teacher.",
+      "linkTo": [
+        "/letter-tracing/b/",
+        "/letter-tracing/d/",
+        "/alphabet-chart/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 17,
+      "status": "todo",
+      "publishAfter": "2026-12-15",
+      "primaryKeyword": "pincer grasp activities",
+      "volume": 390,
+      "sd": 25,
+      "workingTitle": "Pincer Grasp Activities for Toddlers and Preschoolers",
+      "angle": "Pinching activities from easy to hard (cereal, pom poms, tweezers, stickers, pegboards) and how pincer strength leads into holding a crayon and tracing.",
+      "linkTo": [
+        "/letter-tracing/",
         "/number-tracing/",
+        "/coloring-pages/simple-coloring-pages/"
+      ],
+      "season": "evergreen"
+    },
+    {
+      "id": 18,
+      "status": "todo",
+      "publishAfter": "2026-12-18",
+      "primaryKeyword": "how to teach letters to preschoolers",
+      "volume": 260,
+      "sd": 20,
+      "workingTitle": "How to Teach Letters to Preschoolers Without Flashcard Drills",
+      "angle": "A practical order for teaching letters (name letters first, then high-use letters), short daily routines, and how to combine seeing, saying, building and tracing each letter.",
+      "linkTo": [
+        "/letter-tracing/",
+        "/alphabet-chart/",
+        "/bubble-letters/",
         "/name-tracing/"
       ],
       "season": "evergreen"
@@ -292,7 +362,7 @@
     {
       "id": 20,
       "status": "todo",
-      "publishAfter": "2026-12-11",
+      "publishAfter": "2026-12-22",
       "primaryKeyword": "lateral quadrupod pencil grip",
       "volume": 480,
       "sd": 6,
@@ -307,7 +377,7 @@
     {
       "id": 21,
       "status": "todo",
-      "publishAfter": "2026-12-15",
+      "publishAfter": "2026-12-25",
       "primaryKeyword": "groundhog day activities for preschoolers",
       "volume": 390,
       "sd": 29,
@@ -315,45 +385,47 @@
       "angle": "Shadow tracing, a class prediction chart with names, letter G and H practice, and a simple counting game. Fits one morning in class or at home.",
       "linkTo": [
         "/letter-tracing/g/",
-        "/name-tracing/"
+        "/name-tracing/",
+        "/coloring-pages/winter-coloring-pages/"
       ],
       "season": "groundhog-day"
     },
     {
       "id": 22,
       "status": "todo",
-      "publishAfter": "2026-12-18",
+      "publishAfter": "2026-12-29",
       "primaryKeyword": "letter recognition activities for preschoolers",
       "volume": 880,
       "sd": 26,
       "workingTitle": "Letter Recognition Activities for Preschoolers (Ranked Easiest to Hardest)",
       "angle": "Activities ordered by difficulty: matching identical letters, matching upper to lower, finding letters in print, naming on sight. Includes how to tell which stage a child is in.",
       "linkTo": [
+        "/alphabet-chart/",
         "/letter-tracing/",
-        "/name-tracing/"
+        "/bubble-letters/"
       ],
       "season": "evergreen"
     },
     {
       "id": 23,
       "status": "todo",
-      "publishAfter": "2026-12-22",
+      "publishAfter": "2027-01-01",
       "primaryKeyword": "valentine's day activities for preschoolers",
       "volume": 390,
       "sd": 30,
       "workingTitle": "Valentine's Day Activities for Preschoolers That Practice Writing Names",
       "angle": "Valentine's activities centered on the class card exchange: tracing classmates' names, heart counting, letter V and the word 'love' tracing, and a sorting game.",
       "linkTo": [
-        "/name-tracing/",
-        "/letter-tracing/v/",
-        "/name-coloring-pages/"
+        "/coloring-pages/valentines-day-coloring-pages/",
+        "/name-coloring-pages/",
+        "/letter-tracing/v/"
       ],
       "season": "valentines"
     },
     {
       "id": 24,
       "status": "todo",
-      "publishAfter": "2026-12-25",
+      "publishAfter": "2027-01-05",
       "primaryKeyword": "number formation rhymes",
       "volume": 390,
       "sd": 20,
@@ -361,29 +433,31 @@
       "angle": "Original short rhymes for each digit with start-point cues, tips for saying them while tracing, and which numbers kids usually find hardest. Links to each number page.",
       "linkTo": [
         "/number-tracing/",
-        "/number-tracing/5/"
+        "/number-tracing/5/",
+        "/number-tracing/1-10/"
       ],
       "season": "evergreen"
     },
     {
       "id": 25,
       "status": "todo",
-      "publishAfter": "2026-12-29",
+      "publishAfter": "2027-01-08",
       "primaryKeyword": "valentines day activities for kindergarten",
       "volume": 260,
       "sd": 15,
       "workingTitle": "Valentines Day Activities for Kindergarten: Writing Class Cards Without Tears",
       "angle": "How kindergartners can sign 20 or more valentines without burnout: spread it over days, trace then write, pre-printed name lists, plus a few heart-themed math and word activities.",
       "linkTo": [
-        "/name-tracing/",
-        "/letter-tracing/"
+        "/coloring-pages/valentines-day-coloring-pages/",
+        "/sight-words/kindergarten/",
+        "/name-tracing/"
       ],
       "season": "valentines"
     },
     {
       "id": 26,
       "status": "todo",
-      "publishAfter": "2027-01-01",
+      "publishAfter": "2027-01-12",
       "primaryKeyword": "homeschool preschool schedule",
       "volume": 480,
       "sd": 16,
@@ -392,6 +466,7 @@
       "linkTo": [
         "/name-tracing/",
         "/letter-tracing/",
+        "/sight-words/pre-k/",
         "/membership/"
       ],
       "season": "evergreen"
@@ -399,7 +474,7 @@
     {
       "id": 27,
       "status": "todo",
-      "publishAfter": "2027-01-05",
+      "publishAfter": "2027-01-15",
       "primaryKeyword": "homeschool kindergarten schedule",
       "volume": 720,
       "sd": 18,
@@ -407,7 +482,8 @@
       "angle": "A sample daily and weekly kindergarten homeschool schedule with handwriting, reading and math blocks, plus how long each block should run for a 5 or 6 year old.",
       "linkTo": [
         "/letter-tracing/",
-        "/number-tracing/",
+        "/sight-words/kindergarten/",
+        "/number-tracing/1-20/",
         "/membership/"
       ],
       "season": "evergreen"
@@ -415,7 +491,7 @@
     {
       "id": 28,
       "status": "todo",
-      "publishAfter": "2027-01-08",
+      "publishAfter": "2027-01-19",
       "primaryKeyword": "free homeschool preschool curriculum",
       "volume": 880,
       "sd": 19,
@@ -423,77 +499,48 @@
       "angle": "A free, simple preschool plan using library books, household materials and free printables: weekly themes, a letter order, and a progress checklist parents can reuse.",
       "linkTo": [
         "/letter-tracing/",
-        "/name-tracing/",
-        "/number-tracing/"
+        "/number-tracing/1-10/",
+        "/sight-words/pre-k/",
+        "/coloring-pages/"
       ],
       "season": "evergreen"
     },
     {
       "id": 29,
       "status": "todo",
-      "publishAfter": "2027-01-12",
+      "publishAfter": "2027-01-22",
       "primaryKeyword": "dr seuss activities for preschoolers",
       "volume": 1300,
       "sd": 28,
       "workingTitle": "Dr. Seuss Activities for Preschoolers for Read Across America Week",
       "angle": "Rhyming games, a hat-stacking counting activity, and silly-word tracing inspired by rhyming books. Avoids using character art; focuses on activities parents and teachers can run.",
       "linkTo": [
-        "/letter-tracing/",
+        "/sight-words/kindergarten/",
+        "/word-tracing/",
         "/number-tracing/"
       ],
       "season": "read-across-america"
     },
     {
-      "id": 30,
-      "status": "todo",
-      "publishAfter": "2027-01-15",
-      "primaryKeyword": "kindergarten readiness checklist",
-      "volume": 2900,
-      "sd": 25,
-      "workingTitle": "Kindergarten Readiness Checklist: What Actually Matters",
-      "angle": "A checklist grouped by self-care, social, fine motor, letters and numbers, with notes on what schools commonly look for and which items kids often pick up during kindergarten itself. Timed for spring registration.",
-      "linkTo": [
-        "/name-tracing/",
-        "/letter-tracing/",
-        "/number-tracing/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 31,
-      "status": "todo",
-      "publishAfter": "2027-01-19",
-      "primaryKeyword": "kindergarten readiness assessment",
-      "volume": 1900,
-      "sd": 19,
-      "workingTitle": "Kindergarten Readiness Assessment: What Your Child Might Be Asked to Do",
-      "angle": "What screenings typically include (writing their name, naming letters, counting, following directions), why they vary by district, and calm ways to practice without drilling.",
-      "linkTo": [
-        "/name-tracing/",
-        "/letter-tracing/",
-        "/number-tracing/"
-      ],
-      "season": "evergreen"
-    },
-    {
       "id": 32,
       "status": "todo",
-      "publishAfter": "2027-01-22",
+      "publishAfter": "2027-01-26",
       "primaryKeyword": "st patricks day activities for preschoolers",
       "volume": 590,
       "sd": 19,
       "workingTitle": "St. Patrick's Day Activities for Preschoolers: Rainbows, Gold and Letters",
       "angle": "Rainbow color sorting, gold coin counting, shamrock letter matching and a lucky name banner kids trace. Quick setups for home or class.",
       "linkTo": [
-        "/name-tracing/",
-        "/number-tracing/"
+        "/coloring-pages/st-patricks-day-coloring-pages/",
+        "/number-tracing/1-10/",
+        "/name-tracing/"
       ],
       "season": "st-patricks-day"
     },
     {
       "id": 33,
       "status": "todo",
-      "publishAfter": "2027-01-26",
+      "publishAfter": "2027-01-29",
       "primaryKeyword": "spring activities for preschoolers",
       "volume": 1900,
       "sd": 24,
@@ -501,15 +548,15 @@
       "angle": "Spring activities that mix outdoor play and early literacy: nature letter hunts, sidewalk chalk name writing, seed counting, and a plant journal with traced labels.",
       "linkTo": [
         "/letter-tracing/",
-        "/name-tracing/",
-        "/number-tracing/"
+        "/number-tracing/1-10/",
+        "/coloring-pages/"
       ],
       "season": "spring"
     },
     {
       "id": 34,
       "status": "todo",
-      "publishAfter": "2027-01-29",
+      "publishAfter": "2027-02-02",
       "primaryKeyword": "spring crafts for preschoolers",
       "volume": 4400,
       "sd": 27,
@@ -517,31 +564,31 @@
       "angle": "Simple spring crafts like a tissue paper flower, a caterpillar with one letter of their name on each segment, and a coloring page of their name with spring patterns.",
       "linkTo": [
         "/name-coloring-pages/",
-        "/name-tracing/",
-        "/coloring-pages/"
+        "/coloring-pages/easter-coloring-pages/",
+        "/name-tracing/"
       ],
       "season": "spring"
     },
     {
       "id": 35,
       "status": "todo",
-      "publishAfter": "2027-02-02",
+      "publishAfter": "2027-02-05",
       "primaryKeyword": "easter activities for preschoolers",
       "volume": 720,
       "sd": 29,
       "workingTitle": "Easter Activities for Preschoolers: Egg Hunts With a Learning Twist",
       "angle": "Plastic egg letter matching, egg-filled counting, a name egg hunt, and bunny-themed tracing. Neutral, family-friendly, and works for groups.",
       "linkTo": [
+        "/coloring-pages/easter-coloring-pages/",
         "/letter-tracing/",
-        "/number-tracing/",
-        "/name-tracing/"
+        "/number-tracing/1-10/"
       ],
       "season": "easter"
     },
     {
       "id": 36,
       "status": "todo",
-      "publishAfter": "2027-02-05",
+      "publishAfter": "2027-02-09",
       "primaryKeyword": "is cursive still taught in schools",
       "volume": 590,
       "sd": 26,
@@ -549,37 +596,23 @@
       "angle": "A neutral overview of how cursive instruction varies by state and district, why some states have brought it back, and how to check your own school's plan. Cite state sources directly; no invented counts.",
       "linkTo": [
         "/cursive/",
-        "/letter-tracing/"
+        "/cursive-alphabet/"
       ],
       "season": "evergreen"
     },
     {
       "id": 37,
       "status": "todo",
-      "publishAfter": "2027-02-09",
+      "publishAfter": "2027-02-12",
       "primaryKeyword": "how to teach cursive writing",
       "volume": 320,
       "sd": 23,
       "workingTitle": "How to Teach Cursive Writing at Home, One Letter Family at a Time",
       "angle": "A home plan for cursive using letter families (c-a-d-g, then others), short daily sessions, and when a child is likely ready. Practical for ages 6 to 8 with a cautious readiness note.",
       "linkTo": [
+        "/cursive-alphabet/",
         "/cursive/",
-        "/letter-tracing/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 38,
-      "status": "todo",
-      "publishAfter": "2027-02-12",
-      "primaryKeyword": "list of sight words for preschool",
-      "volume": 3600,
-      "sd": 16,
-      "workingTitle": "List of Sight Words for Preschool (and How Many to Start With)",
-      "angle": "A short starter list drawn from the public-domain Dolch pre-primer list, how many words to introduce at a time, and simple games. Clear that sight words are optional in preschool.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/membership/"
+        "/cursive-name-tracing/"
       ],
       "season": "evergreen"
     },
@@ -593,8 +626,9 @@
       "workingTitle": "How to Teach Sight Words: A 10-Minute Daily Method",
       "angle": "A see it, say it, build it, write it method with a short weekly rotation, review tricks, and how tracing the word helps some kids remember spelling.",
       "linkTo": [
-        "/letter-tracing/",
-        "/membership/"
+        "/sight-words/",
+        "/sight-words/kindergarten/",
+        "/word-tracing/"
       ],
       "season": "evergreen"
     },
@@ -609,30 +643,15 @@
       "angle": "Side-by-side comparison of the two common styles (ball-and-stick vs slanted with tails), which one your child's school likely uses, and why consistency matters more than the choice.",
       "linkTo": [
         "/letter-tracing/",
-        "/name-tracing/",
-        "/cursive/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 41,
-      "status": "todo",
-      "publishAfter": "2027-02-23",
-      "primaryKeyword": "cvc words for kindergarten",
-      "volume": 2400,
-      "sd": 22,
-      "workingTitle": "CVC Words for Kindergarten: Word Lists by Vowel and Easy Games",
-      "angle": "CVC word lists grouped by short vowel, a simple teaching order, blending games, and writing CVC words after tracing each letter. Note that 'cvc words' itself has high volume and low difficulty as a secondary target.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/membership/"
+        "/cursive-alphabet/",
+        "/name-tracing/"
       ],
       "season": "evergreen"
     },
     {
       "id": 42,
       "status": "todo",
-      "publishAfter": "2027-02-26",
+      "publishAfter": "2027-02-23",
       "primaryKeyword": "earth day activities for preschoolers",
       "volume": 1900,
       "sd": 23,
@@ -648,22 +667,22 @@
     {
       "id": 43,
       "status": "todo",
-      "publishAfter": "2027-03-02",
-      "primaryKeyword": "how to write your name in cursive",
+      "publishAfter": "2027-02-26",
+      "primaryKeyword": "how to write cursive name",
       "volume": 590,
       "sd": 27,
-      "workingTitle": "How to Write Your Name in Cursive: A Guide for Kids and Parents",
-      "angle": "Step-by-step for writing a name in cursive: the capital letter, connecting strokes, and practicing the name as one flowing word. Aimed at 7 year olds and parents helping them.",
+      "workingTitle": "How to Write a Cursive Name: Step by Step for Kids and Parents",
+      "angle": "How to write a name in cursive: the cursive capital, joining each lowercase letter, and practicing the whole name as one flowing word. Point readers to the free cursive name tracing worksheet so they can print their child's own name. Aimed at 7 to 9 year olds and the parents helping them.",
       "linkTo": [
-        "/cursive/",
-        "/name-tracing/"
+        "/cursive-name-tracing/",
+        "/cursive-alphabet/"
       ],
       "season": "evergreen"
     },
     {
       "id": 44,
       "status": "todo",
-      "publishAfter": "2027-03-05",
+      "publishAfter": "2027-03-02",
       "primaryKeyword": "teaching letter sounds",
       "volume": 320,
       "sd": 27,
@@ -671,29 +690,15 @@
       "angle": "Which sounds to teach first, how to say sounds cleanly (no 'buh'), quick games, and pairing each sound with tracing its letter.",
       "linkTo": [
         "/letter-tracing/",
+        "/alphabet-chart/",
         "/letter-tracing/s/"
-      ],
-      "season": "evergreen"
-    },
-    {
-      "id": 45,
-      "status": "todo",
-      "publishAfter": "2027-03-09",
-      "primaryKeyword": "left handed writing",
-      "volume": 1300,
-      "sd": 21,
-      "workingTitle": "Left Handed Writing Tips for Kids: Paper, Grip and Letter Tricks",
-      "angle": "How to set up paper tilt, grip height and seating for a left-handed child, why some letters feel backward, and how to avoid smudging. Do not try to switch hands.",
-      "linkTo": [
-        "/letter-tracing/",
-        "/name-tracing/"
       ],
       "season": "evergreen"
     },
     {
       "id": 46,
       "status": "todo",
-      "publishAfter": "2027-03-12",
+      "publishAfter": "2027-03-05",
       "primaryKeyword": "writing numbers backwards",
       "volume": 260,
       "sd": 20,
@@ -709,7 +714,7 @@
     {
       "id": 47,
       "status": "todo",
-      "publishAfter": "2027-03-16",
+      "publishAfter": "2027-03-09",
       "primaryKeyword": "kindergarten handwriting",
       "volume": 720,
       "sd": 21,
@@ -718,14 +723,15 @@
       "linkTo": [
         "/letter-tracing/",
         "/name-tracing/",
-        "/number-tracing/"
+        "/number-tracing/1-20/",
+        "/sight-words/kindergarten/"
       ],
       "season": "evergreen"
     },
     {
       "id": 48,
       "status": "todo",
-      "publishAfter": "2027-03-19",
+      "publishAfter": "2027-03-12",
       "primaryKeyword": "letter of the week",
       "volume": 590,
       "sd": 27,
@@ -733,14 +739,16 @@
       "angle": "Honest pros and cons of a letter-a-week plan, a faster rotation many teachers use, and a sample week for either approach with tracing, sounds and a craft.",
       "linkTo": [
         "/letter-tracing/",
-        "/letter-tracing/a/"
+        "/letter-tracing/a/",
+        "/bubble-letters/a/",
+        "/alphabet-chart/"
       ],
       "season": "evergreen"
     },
     {
       "id": 49,
       "status": "todo",
-      "publishAfter": "2027-03-23",
+      "publishAfter": "2027-03-16",
       "primaryKeyword": "pre writing skills",
       "volume": 320,
       "sd": 29,
@@ -748,29 +756,30 @@
       "angle": "The basic strokes (vertical, horizontal, circle, cross, diagonal, square, triangle), the broad order kids usually master them in, and play-based ways to practice before letter tracing.",
       "linkTo": [
         "/letter-tracing/",
-        "/name-tracing/"
+        "/name-tracing/",
+        "/coloring-pages/simple-coloring-pages/"
       ],
       "season": "evergreen"
     },
     {
       "id": 50,
       "status": "todo",
-      "publishAfter": "2027-03-26",
+      "publishAfter": "2027-03-19",
       "primaryKeyword": "scissor skills",
       "volume": 320,
       "sd": 28,
       "workingTitle": "Scissor Skills: How to Teach Cutting, Step by Step",
       "angle": "From snipping straws to cutting curves: a progression, safe kid scissors tips, holding the paper with the helper hand, and how cutting supports writing.",
       "linkTo": [
-        "/letter-tracing/",
-        "/coloring-pages/"
+        "/coloring-pages/simple-coloring-pages/",
+        "/letter-tracing/"
       ],
       "season": "evergreen"
     },
     {
       "id": 51,
       "status": "todo",
-      "publishAfter": "2027-03-30",
+      "publishAfter": "2027-03-23",
       "primaryKeyword": "summer activities for preschoolers at home",
       "volume": 590,
       "sd": 20,
@@ -786,7 +795,7 @@
     {
       "id": 52,
       "status": "todo",
-      "publishAfter": "2027-04-02",
+      "publishAfter": "2027-03-26",
       "primaryKeyword": "summer bridge activities",
       "volume": 480,
       "sd": 20,
@@ -794,8 +803,9 @@
       "angle": "A low-pressure summer plan for 4 and 5 year olds: name writing, letters, counting to 20, and self-care skills, in 15 minutes a day. Notes the 'summer slide' worry without overstating it.",
       "linkTo": [
         "/name-tracing/",
-        "/letter-tracing/",
-        "/number-tracing/"
+        "/sight-words/kindergarten/",
+        "/number-tracing/1-20/",
+        "/word-tracing/"
       ],
       "season": "summer"
     }

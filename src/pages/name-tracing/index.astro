@@ -1,16 +1,21 @@
 ---
+import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
 import { SITE } from '../../config';
 
-const title = `Free Name Tracing Worksheet Generator | ${SITE.name}`;
-const description = 'Type your child’s name and print free name tracing worksheets in seconds. Pick letter style, line size and practice rows. PDF on Letter or A4.';
+const title = `Name Tracing Worksheets: Free Generator | ${SITE.name}`;
+const description = 'Make free name tracing worksheets with any name. Editable dotted letters on handwriting lines for preschool and kindergarten. Print a PDF, no sign-up.';
 const url = new URL('/name-tracing/', SITE.url).href;
 
-const faqs = [
+const faqs: { q: string; a: string; html?: string }[] = [
   { q: 'Are these name tracing worksheets really free?', a: 'Yes. Your first sheet downloads right away with nothing to fill in. After that we ask for your email once, and every sheet on that device stays free with no limit.' },
   { q: 'What paper size do the worksheets print on?', a: 'Choose US Letter or A4 before you download. The PDF is sized for that paper, so it prints at full size without cropping or shrinking.' },
-  { q: 'Can I make worksheets for several names or a whole class?', a: 'You can make a sheet for any name, one at a time, for free. Printing a full class set from one list is part of the membership, which is coming soon.' },
+  { q: 'How do I make an editable name tracing worksheet?', a: 'Type the name in the box above and the sheet updates as you go. Change the letter style, line size, practice rows and starting dots until it looks right, then download the PDF. You can come back and edit it for a different name any time.' },
+  { q: 'Can I add a last name or a first and last name?', a: 'Yes. Type a first and last name with a space between them, up to 24 characters. Longer names shrink a little so each one still fits on a single row.' },
+  { q: 'Are these name tracing sheets free with lines?', a: 'Yes. Every sheet prints on handwriting lines with a solid top line, a dashed middle line and a bottom line, and it costs nothing to download.' },
+  { q: 'How do I make name tracing worksheets in Word or Google Docs?', a: 'You don’t need to. Setting up dotted fonts and guide lines in Word or Google Docs takes a while and rarely lines up. The generator here builds the dotted letters and handwriting lines for you and gives you a PDF that prints at full size.' },
+  { q: 'Can I print name tracing worksheets for my whole class?', a: 'Yes. Anyone can make one name at a time for free. Members save a class list once and print every child’s sheet in one PDF, and they can build a full class pack of worksheets in one go.', html: 'Yes. Anyone can make one name at a time for free. <a href="/membership/">Members</a> save a class list once and print every child’s sheet in one PDF, and they can build a full <a href="/class-pack/">class pack</a> of worksheets in one go.' },
   { q: 'Why are the letters dotted?', a: 'Dotted letters show the shape while leaving the work to your child. Their pencil follows the path, and each row builds the muscle memory needed to write the name without a guide. The green dots mark where each stroke begins.' },
   { q: 'Should my child learn lowercase or capital letters first?', a: 'Most teachers start with a capital first letter followed by lowercase, because that’s how names are written in school. ALL CAPS can be easier for very young kids. If your preschool uses one style, match it at home.' },
   { q: 'Is my child’s name stored anywhere?', a: 'No. The worksheet is built right in your browser, and the name never leaves your device. We don’t save it, send it or see it.' },
@@ -51,17 +56,18 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Name tracing</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free name tracing worksheet generator</span></h1>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free name tracing worksheets: type a name, print in seconds</span></h1>
       <p class="mt-4 text-lg text-muted">Type a name, pick a style, print. Your sheet is ready in seconds.</p>
     </header>
 
     <Tracer client:load mode="name" source="name-tracing" />
+    <Preview k={'name-tracing'} caption="Example: a name tracing worksheet for Emma." />
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
-        {SITE.name} is a free name tracing generator that turns any name into a printable handwriting worksheet. Type your child's name,
-        choose capital first letter, all caps or lowercase, and pick a line size for their age. The PDF downloads in seconds, prints on
-        Letter or A4, and needs no account.
+        {SITE.name} is a free name tracing worksheet generator. Type your child's name to make editable name tracing sheets with dotted
+        letters on handwriting lines, then choose capital first letter, all caps or lowercase and pick a line size for their age. The PDF
+        downloads in seconds, prints on Letter or A4, and needs no account.
       </p>
 
       <h2>How to make a name tracing worksheet</h2>
@@ -72,7 +78,7 @@ const schema = [
         <li><strong>Download and print.</strong> Save the PDF and print it on regular paper. That's it.</li>
       </ol>
 
-      <h2>Tips for teaching your child to write their name</h2>
+      <h2>Name writing practice tips</h2>
       <p><strong>Start with the capital letter.</strong> A name has one capital at the front, and it's usually the letter kids recognize first. Let them master that one, then add the lowercase letters that follow.</p>
       <p><strong>Teach strokes from top to bottom.</strong> Most letters start at the top line and move down. Saying it out loud helps: "Start at the top, pull down." The green dots on each sheet show where every stroke begins.</p>
       <p><strong>Give little hands something chunky.</strong> Crayons, short fat pencils and triangle grips are easier to hold than a standard pencil. Snapping a crayon in half nudges kids toward a better grip on its own.</p>
@@ -80,13 +86,15 @@ const schema = [
       <p><strong>Trace, then copy, then write on their own.</strong> Begin with the dotted letters. Once tracing feels easy, have them copy the name on the blank rows at the bottom. The last step is writing it from memory with no model at all.</p>
       <p><strong>Praise the effort, not the perfection.</strong> Wobbly letters are normal for a long time. Point out the letter they got right and let the rest go for today.</p>
 
-      <h2>Which line size should I pick?</h2>
+      <h2>Name tracing for preschool, kindergarten and first grade</h2>
+      <p>Pick the line size that matches where your child is now, not their age on paper.</p>
       <ul>
         <li><strong>Large (ages 3 to 4):</strong> Big letters and wide lines for preschoolers who are still building control with a crayon or chunky pencil.</li>
         <li><strong>Medium (ages 5 to 6):</strong> A good fit for most kindergarten name tracing. Letters are still roomy but closer to the size kids use in class.</li>
         <li><strong>Small (ages 6 and up):</strong> For first graders and older kids who write comfortably and need practice with neatness and spacing.</li>
       </ul>
-      <p>Not sure? Start one size larger than you think. Moving down a size later feels like a win.</p>
+      <p>Not sure? Start one size larger than you think. Moving down a size later feels like a win. If you're wondering whether your preschooler is ready at all, read <a href="/learn/can-4-year-olds-write-their-name/">can 4 year olds write their name?</a></p>
+      <p>Older kids who already print their name well can try a <a href="/cursive-name-tracing/">cursive name tracing worksheet</a> next.</p>
 
       <h2>Frequently asked questions</h2>
       <div class="divide-y divide-hairline border-y border-hairline">
@@ -96,7 +104,7 @@ const schema = [
               {f.q}
               <span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span>
             </summary>
-            <p class="mt-3 mb-0!">{f.a}</p>
+            {f.html ? <p class="mt-3 mb-0!" set:html={f.html} /> : <p class="mt-3 mb-0!">{f.a}</p>}
           </details>
         ))}
       </div>

@@ -1,0 +1,103 @@
+---
+import Preview from '../../components/site/Preview.astro';
+import Base from '../../layouts/Base.astro';
+import FontTool from '../../components/FontTool.tsx';
+import { SITE } from '../../config';
+
+const title = `Cursive Name Tracing Worksheets: Free Generator | ${SITE.name}`;
+const description = 'Free cursive name tracing worksheets. Type any name to make an editable cursive name practice sheet to trace, then write. For kids and adults. Free PDF.';
+const url = new URL('/cursive-name-tracing/', SITE.url).href;
+
+const faqs: { q: string; a: string; html?: string }[] = [
+  { q: 'How do I write my name in cursive?', a: 'Type your name in the box above to see it in connected cursive. Trace the solid example with your finger first, then trace the gray rows with a pencil without lifting inside the word. Finish on the blank rows at the bottom. Most people feel comfortable after a week or two of a few minutes a day.' },
+  { q: 'Is this cursive name generator free?', a: 'Yes. Your first sheet downloads right away with nothing to fill in. After that we ask for your email once, and every sheet on that device stays free.' },
+  { q: 'Can I print cursive name sheets for the whole class?', a: 'Yes, with a membership. Members save a class list once and print a cursive name tracing sheet for every child in one PDF, with no footer line. Anyone can make one name at a time for free.', html: 'Yes, with a <a href="/membership/">membership</a>. Members save a class list once and print a cursive name tracing sheet for every child in one PDF, with no footer line. Anyone can make one name at a time for free.' },
+  { q: 'What cursive style is this?', a: 'It is a traditional looped cursive close to what most US schools teach, drawn from an open-licensed handwriting font designed for teaching. A few capitals, such as Q, Z and F, vary between handwriting programs, so if your child’s class uses a different form, follow the teacher.' },
+  { q: 'Is the name I type saved anywhere?', a: 'No. The worksheet is built in your browser and the name never leaves your device. We don’t save it, send it or see it.' },
+  { q: 'Can I practice a first and last name?', a: 'Yes. Type both with a space between them, up to 40 characters. Longer names shrink to fit on one row, so pick the large line size if you want bigger letters.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Cursive Name Tracing Worksheet Generator',
+    url,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Any (web browser)',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    audience: { '@type': 'Audience', audienceType: 'Parents, teachers, homeschool families and adults learning cursive' },
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Cursive Worksheets', item: SITE.url + '/cursive/' },
+      { '@type': 'ListItem', position: 3, name: 'Cursive Name Tracing', item: url },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/cursive/" class="hover:text-ink">Cursive</a> <span aria-hidden="true">/</span> <span aria-current="page">Cursive name tracing</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free cursive name tracing worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">Type a name and see it in connected cursive, ready to trace and then write on its own.</p>
+    </header>
+
+    <FontTool client:load kind="cursive" source="cursive-name-tracing" label="Name to write in cursive" placeholder="Type a name" />
+
+    <Preview k={'cursive-name'} />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free cursive name generator turns any name into a cursive name tracing worksheet. The first row shows the name in solid
+        cursive, the gray rows are for tracing, and the blank rows at the bottom are for writing it without help. Change the name as often
+        as you like, so it works as an editable cursive name tracing sheet for every child in the family.
+      </p>
+
+      <h2>How to teach writing your name in cursive</h2>
+      <ol>
+        <li><strong>Learn the capital first.</strong> The capital at the start of a name is usually the hardest letter in it. Practice it on its own on the <a href="/cursive-alphabet/">cursive alphabet</a> page before tackling the whole name.</li>
+        <li><strong>Trace with a finger.</strong> Run a finger along the solid example a few times to feel how the letters flow into each other.</li>
+        <li><strong>Trace without lifting.</strong> On the gray rows, keep the pencil on the paper from the first lowercase letter to the last. Go back to dot an i or cross a t at the end.</li>
+        <li><strong>Write it from memory.</strong> Use the blank rows last. When the name looks steady there, it is learned.</li>
+      </ol>
+
+      <h2>Cursive name practice tips</h2>
+      <p><strong>Slow is smooth.</strong> Cursive is about rhythm. Writing slowly and evenly builds better joins than racing through a row.</p>
+      <p><strong>Watch the tricky joins.</strong> Lowercase b, o, v and w end up high at the midline, not on the bottom line, so the next letter joins across the top. Names like Olivia, Bob or Owen have these joins, and they take a little extra practice.</p>
+      <p><strong>Some capitals stand alone.</strong> In many school styles, capitals like D, O, P, T, V and W don't connect to the next letter. Leave a small gap and start the lowercase letters fresh.</p>
+      <p><strong>Tilt the paper.</strong> Angle the page a little toward the writing hand. Cursive slants, and a tilted page makes the slant feel natural.</p>
+
+      <h2>Cursive name practice for adults and signatures</h2>
+      <p>
+        Plenty of adults use these cursive name practice sheets too, whether they want to relearn cursive, sign their name more neatly or
+        teach their kids alongside them. Type your full name, pick the small line size for writing closer to everyday size, and print a
+        few pages. Once your name feels natural in cursive, a personal signature is usually a shortened, faster version of it.
+      </p>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            {f.html ? <p class="mt-3 mb-0!" set:html={f.html} /> : <p class="mt-3 mb-0!">{f.a}</p>}
+          </details>
+        ))}
+      </div>
+
+      <h2>More cursive practice</h2>
+      <p>
+        Type any word or sentence in the <a href="/cursive/">cursive worksheet generator</a>, or work through every letter with the <a href="/cursive-alphabet/">cursive alphabet worksheets</a>. Still learning to print? Start with <a href="/name-tracing/">name tracing worksheets</a> in dotted print letters.
+      </p>
+    </article>
+  </div>
+</Base>

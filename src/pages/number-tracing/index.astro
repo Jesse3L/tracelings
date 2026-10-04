@@ -4,11 +4,21 @@ import Tracer from '../../components/Tracer.tsx';
 import { SITE } from '../../config';
 import numbers from '../../data/numbers.json';
 
-const title = `Free Number Tracing Worksheets 0 to 9 | ${SITE.name}`;
-const description = 'Free printable number tracing worksheets for 0 to 9. Starting dots, three line sizes and blank rows for writing. Prints on Letter or A4.';
+const title = `Number Tracing Worksheets 1-20 (Free Printable) | ${SITE.name}`;
+const description = 'Free number tracing worksheets for 0 to 20: single numbers, a 1-10 sheet and a 1-20 sheet. Starting dots, three line sizes, Letter or A4 PDF.';
 const url = new URL('/number-tracing/', SITE.url).href;
+const faqs = [
+  { q: 'Why does my child write numbers backwards?', a: 'Reversals are very common while kids are learning to write, especially with 2, 3, 5, 7 and 9, and they usually fade with practice. A few things help: always start at the green dot so the stroke goes the right way, say the movement out loud ("across and down" for 7), and keep a number line on the table to check against. If reversals continue well into second grade, mention it to your child’s teacher.' },
+  { q: 'Do you have a sheet with numbers 1 to 20?', a: 'Yes. The 1-20 sheet puts every number from 1 to 20 on one page to trace in order, and there is a shorter 1-10 sheet for beginners.' },
+  { q: 'Are these number tracing worksheets free?', a: 'Yes. Every number tracing worksheet is free to print for home and classroom use.' },
+];
 const schema = [
-  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Number tracing worksheets 0 to 9', url, description },
+  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Number tracing worksheets 1 to 20', url, description,
+    hasPart: [
+      { '@type': 'LearningResource', name: 'Number tracing 1-10', url: `${SITE.url}/number-tracing/1-10/` },
+      { '@type': 'LearningResource', name: 'Number tracing 1-20', url: `${SITE.url}/number-tracing/1-20/` },
+      ...numbers.map((n) => ({ '@type': 'LearningResource', name: `Number ${n.digit} tracing worksheet`, url: `${SITE.url}/number-tracing/${n.digit}/` })),
+    ] },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -17,6 +27,11 @@ const schema = [
       { '@type': 'ListItem', position: 2, name: 'Number Tracing', item: url },
     ],
   },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+const sets = [
+  { href: '/number-tracing/1-10/', name: 'Number tracing 1-10', p: 'Numbers 1 to 10 on one sheet. A good first page for preschool and early kindergarten.' },
+  { href: '/number-tracing/1-20/', name: 'Number tracing 1-20', p: 'Every number from 1 to 20 in order, for kindergarten and kids ready for teen numbers.' },
 ];
 ---
 <Base title={title} description={description} schema={schema}>
@@ -25,14 +40,26 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Number tracing</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free number tracing worksheets, 0 to 9</span></h1>
-      <p class="mt-4 text-lg text-muted">Pick a number, choose a line size and print.</p>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free number tracing worksheets, 1 to 20</span></h1>
+      <p class="mt-4 text-lg text-muted">Print a full 1-10 or 1-20 sheet, or pick a single number below, choose a line size and print.</p>
     </header>
+
+    <ul class="mb-10 grid gap-4 sm:grid-cols-2 max-w-4xl">
+      {sets.map((x) => (
+        <li>
+          <a href={x.href} class="block h-full rounded-xl border-2 border-rule bg-white p-5 hover:bg-[#f6f8fb]">
+            <span class="block text-xl font-bold text-ink">{x.name}</span>
+            <span class="block mt-1 text-muted leading-relaxed">{x.p}</span>
+            <span class="block mt-3 text-[15px] font-bold text-[#2f5fc4]">Open the worksheet →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
 
     <Tracer client:load mode="number" value="1" pick source="number-tracing" />
 
     <section class="mt-14" aria-labelledby="all-numbers">
-      <h2 id="all-numbers" class="text-[1.6rem] font-bold">A page for every number</h2>
+      <h2 id="all-numbers" class="text-[1.6rem] font-bold">A page for every number from 0 to 9</h2>
       <ul class="mt-6 grid grid-cols-5 sm:grid-cols-10 gap-2 max-w-3xl">
         {numbers.map((n) => (
           <li><a href={`/number-tracing/${n.digit}/`} class="block rounded-lg border border-hairline bg-white py-3 text-center text-2xl font-bold hover:border-rule">{n.digit}<span class="sr-only"> tracing worksheet</span></a></li>
@@ -42,15 +69,26 @@ const schema = [
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
-        These number tracing worksheets are free for home and classroom use. Each sheet shows a solid example, rows of dotted numbers with
-        green starting dots, and blank lines for writing without help.
+        These number tracing worksheets are free for home and classroom use. Each single-number sheet shows a solid example, rows of dotted
+        numbers with green starting dots, and blank lines for writing without help. When your child knows the digits, the 1-10 and 1-20
+        sheets put them together in counting order.
       </p>
       <h2>Tips for teaching numbers</h2>
       <ul>
         <li><strong>Count first, then write.</strong> Have your child count real objects, then trace the number that matches.</li>
         <li><strong>Watch for reversals.</strong> Backward 3, 7 and 9 are normal at this age. Starting at the green dot every time helps.</li>
+        <li><strong>Teen numbers come later.</strong> Move to the 1-20 sheet once 1 to 10 are steady. Point out that 13 is a 1 and a 3 side by side.</li>
         <li><strong>Keep it short.</strong> One number a day for a week beats the whole set in one sitting.</li>
       </ul>
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
       <p>Ready for letters? Try our <a href="/letter-tracing/">letter tracing worksheets</a> or make a <a href="/name-tracing/">name tracing worksheet</a>.</p>
     </article>
   </div>

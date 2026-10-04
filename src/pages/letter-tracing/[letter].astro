@@ -1,7 +1,9 @@
 ---
+import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
 import { SITE } from '../../config';
+import { fitTitle } from '../../lib/seo';
 import letters from '../../data/letters.json';
 
 export function getStaticPaths() {
@@ -13,7 +15,7 @@ const U = L.letter.toUpperCase();
 const prev = letters[(i + 25) % 26];
 const next = letters[(i + 1) % 26];
 const url = new URL(`/letter-tracing/${L.letter}/`, SITE.url).href;
-const title = `Letter ${U} Tracing Worksheet (Free Printable) | ${SITE.name}`;
+const title = fitTitle(`Letter ${U} Tracing Worksheets`, ['(Free Printable)', 'Free']);
 
 const schema = [
   {
@@ -42,16 +44,16 @@ const schema = [
 <Base title={title} description={L.metaDescription} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/letter-tracing/" class="hover:text-ink">Letter tracing</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">Letter {U}</span>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/letter-tracing/" class="hover:text-ink">Letter tracing</a> <span aria-hidden="true">/</span> <span aria-current="page">Letter {U}</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter {U} tracing worksheet</span></h1>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter {U} tracing worksheets</span></h1>
       <p class="mt-4 text-lg text-muted">Capital {U} and lowercase {L.letter} on handwriting lines, with green dots where each stroke starts.</p>
     </header>
 
     <Tracer client:load mode="letter" value={L.letter} source="letter-tracing" />
+
+    <Preview k={`letter-${L.letter}`} />
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
@@ -72,7 +74,12 @@ const schema = [
       <p>Say these out loud while your child traces, or have them draw one at the bottom of the page.</p>
       <ul class="columns-2 sm:columns-3">{L.words.map((w) => <li>{w}</li>)}</ul>
 
-      <h2>Keep going</h2>
+      <h2>More ways to practice {U}</h2>
+      <ul>
+        <li>Print a <a href={`/bubble-letters/${L.letter}/`}>bubble letter {U} to color</a>, then trace inside the outline with a finger.</li>
+        <li>Ready for joined-up writing? Try <a href={`/cursive-alphabet/${L.letter}/`}>cursive {U}</a>, capital and lowercase.</li>
+        <li>Want every letter at once? Print the <a href="/letter-tracing/#a-to-z">A to Z alphabet tracing worksheets</a> in one PDF.</li>
+      </ul>
       <p>
         Once {U} feels easy, try the letters in your child's name with our <a href="/name-tracing/">name tracing worksheet maker</a>.
         Kids practice harder when the word on the page is theirs.

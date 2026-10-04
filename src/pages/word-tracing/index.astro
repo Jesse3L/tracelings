@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import Seo2WordTracing from '../../components/seo/Seo2WordTracing.tsx';
+import { SITE } from '../../config';
+
+const title = `Word Tracing Worksheets: Free Generator | ${SITE.name}`;
+const description = 'Make free word and sentence tracing worksheets. Type spelling words or a sentence and get dotted letters on handwriting lines to trace. Free PDF.';
+const url = new URL('/word-tracing/', SITE.url).href;
+
+const faqs: { q: string; a: string; html?: string }[] = [
+  { q: 'How do I make a word tracing worksheet?', a: 'Type your words in the box, one per line. Each line becomes its own row of dotted letters. Pick a line size and practice style, check the preview, then download the PDF and print it.' },
+  { q: 'Can I make sentence tracing worksheets?', a: 'Yes. Type a sentence on one line. Capital letters and simple punctuation like periods, commas, question marks and exclamation points are kept, and long sentences wrap onto the next row instead of shrinking.' },
+  { q: 'Is this tracing worksheet generator free?', a: 'Yes. Your first sheet downloads right away. After that we ask for your email once, and every sheet stays free on that device for home and classroom use.' },
+  { q: 'How many words can I put on one sheet?', a: 'Up to 30 lines. When they don’t fit on one page, the PDF adds more pages, and the last page is filled out with empty handwriting lines for extra practice.' },
+  { q: 'Is what I type saved anywhere?', a: 'No. The worksheet is built in your browser and the words never leave your device.' },
+  { q: 'Can I make cursive word tracing sheets?', a: 'Yes. The cursive worksheet generator turns any word or short sentence into connected cursive to trace.', html: 'Yes. The <a href="/cursive/">cursive worksheet generator</a> turns any word or short sentence into connected cursive to trace.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Word and Sentence Tracing Worksheet Generator',
+    url,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Any (web browser)',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    audience: { '@type': 'Audience', audienceType: 'Parents, teachers and homeschool families' },
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Word Tracing', item: url },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Word tracing</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free word and sentence tracing worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">Type spelling words, a sentence or anything you like. Each line becomes a row of dotted letters to trace.</p>
+    </header>
+
+    <Seo2WordTracing client:load source="word-tracing" />
+
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free tracing worksheet generator turns your own words into word tracing worksheets and sentence tracing worksheets. Short
+        words repeat across the row with a solid example first, sentences wrap neatly onto the next line, and the letters keep the capitals
+        you typed. Green dots show where each stroke starts, and the trace-then-write option leaves room to write each word on their own.
+      </p>
+
+      <h2>What to put on a word tracing worksheet</h2>
+      <ul>
+        <li><strong>This week's spelling words.</strong> Paste the list from the school folder, one word per line, and your child traces each word a few times before writing it.</li>
+        <li><strong>A short sentence.</strong> Sentence tracing builds spacing between words and a capital at the start. Try a line from a favorite book or "I can read."</li>
+        <li><strong>Vocabulary and themes.</strong> Days of the week, months, colors, family names or the words for a science unit.</li>
+        <li><strong>Their address and phone number.</strong> A practical one for kindergarten and first grade.</li>
+      </ul>
+      <p>
+        Working on high-frequency words? The <a href="/sight-words/">sight word worksheets</a> have the Dolch lists ready to go, with
+        flash cards to match.
+      </p>
+
+      <h2>How to generate tracing worksheets that work</h2>
+      <ol>
+        <li><strong>Keep the list short.</strong> Five to eight words is plenty for one sitting. Make a second sheet for the rest of the week.</li>
+        <li><strong>Match the line size to the child.</strong> Large lines suit ages 3 to 4, medium fits most kindergartners, and small works for first grade and up.</li>
+        <li><strong>Read it, trace it, write it.</strong> Say the word out loud, trace it slowly, then cover the dotted copies and write it from memory.</li>
+        <li><strong>Mix in a sentence.</strong> Once single words are easy, a sentence with those words shows them in use.</li>
+      </ol>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            {f.html ? <p class="mt-3 mb-0!" set:html={f.html} /> : <p class="mt-3 mb-0!">{f.a}</p>}
+          </details>
+        ))}
+      </div>
+
+      <h2>More tracing worksheets</h2>
+      <p>
+        Make a <a href="/name-tracing/">name tracing worksheet</a>, practice single letters with <a href="/letter-tracing/">letter tracing</a>, or print <a href="/number-tracing/1-20/">number tracing 1-20</a>. For a quick
+        reference while they write, hang up a <a href="/alphabet-chart/">printable alphabet chart</a>.
+      </p>
+    </article>
+  </div>
+</Base>

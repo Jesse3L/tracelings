@@ -1,11 +1,18 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
+import SeoAlphabetSheet from '../../components/seo/SeoAlphabetSheet.tsx';
 import { SITE } from '../../config';
 import letters from '../../data/letters.json';
 
-const title = `Free Letter Tracing Worksheets A to Z | ${SITE.name}`;
-const description = 'Free printable letter tracing worksheets for every letter from A to Z. Capital and lowercase, three line sizes, starting dots. Prints on Letter or A4.';
+const title = `Free Letter Tracing Worksheets, A to Z | ${SITE.name}`;
+const description = 'Free letter tracing worksheets for the whole alphabet, A to Z. Capital and lowercase letters, starting dots and three line sizes. Print a free PDF.';
+const faqs: { q: string; a: string; html?: string }[] = [
+  { q: 'What age should kids start tracing letters?', a: 'Many kids start tracing letters somewhere between ages 3 and 5, often after they can hold a crayon with some control and draw lines and circles. Every child is different, so follow their interest and keep it short. Large lines suit most preschoolers.' },
+  { q: 'Can I print all the letters at once?', a: 'Yes. Use the A to Z tool on this page to download every letter in one PDF, with one letter per row. Pick capital, lowercase or both, and the line size you want.' },
+  { q: 'Are these ABC tracing worksheets free for classrooms?', a: 'Yes. Every letter tracing worksheet is free for personal and classroom use, so print as many copies as your students need.' },
+  { q: 'Should kids trace uppercase or lowercase first?', a: 'Many programs start with capital letters because they are made of simpler straight lines and curves, then move to lowercase, which kids see far more often in books. Teaching the letters in your child’s name first, with a capital at the front, works well too.', html: 'Many programs start with capital letters because they are made of simpler straight lines and curves, then move to lowercase, which kids see far more often in books. Teaching the letters in your child’s name first, with a capital at the front, works well too. More in <a href="/learn/should-you-teach-uppercase-or-lowercase-letters-first/">uppercase or lowercase first?</a>' },
+];
 const url = new URL('/letter-tracing/', SITE.url).href;
 const schema = [
   {
@@ -24,6 +31,11 @@ const schema = [
       { '@type': 'ListItem', position: 2, name: 'Letter Tracing', item: url },
     ],
   },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
 ];
 const groups = [
   { name: 'Straight lines first', letters: 'l t i L T I E F H', why: 'Down strokes and short crosses. The easiest place to start.' },
@@ -38,11 +50,17 @@ const groups = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Letter tracing</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free letter tracing worksheets, A to Z</span></h1>
-      <p class="mt-4 text-lg text-muted">Pick a letter, choose capital, lowercase or both, and print.</p>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free letter tracing worksheets for the whole alphabet</span></h1>
+      <p class="mt-4 text-lg text-muted">Pick a letter, choose capital, lowercase or both, and print dotted letters on handwriting lines. Or scroll down for alphabet tracing from A to Z in one PDF.</p>
     </header>
 
     <Tracer client:load mode="letter" value="a" pick source="letter-tracing" />
+
+    <section class="mt-14" aria-labelledby="a-to-z">
+      <h2 id="a-to-z" class="text-[1.6rem] font-bold">Alphabet tracing worksheets: print A to Z in one PDF</h2>
+      <p class="mt-2 mb-6 text-muted max-w-[68ch]">Every letter of the alphabet in order, one letter per row, with green dots where each stroke starts. Choose capital and lowercase pairs, capitals only or lowercase only.</p>
+      <SeoAlphabetSheet client:visible source="letter-tracing" />
+    </section>
 
     <section class="mt-14" aria-labelledby="all-letters">
       <h2 id="all-letters" class="text-[1.6rem] font-bold">Every letter has its own page</h2>
@@ -61,9 +79,10 @@ const groups = [
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
-        These letter tracing worksheets are free to print for home or the classroom. Every sheet uses simple ball-and-stick letters on
-        handwriting lines: a solid top line, a dashed middle line and a solid bottom line. Green dots show where each stroke begins, so kids
-        learn to start at the top instead of building letters from the bottom up.
+        These letter tracing worksheets are free to print for home or the classroom. Every sheet uses dotted letters in a simple
+        ball-and-stick style on handwriting lines: a solid top line, a dashed middle line and a solid bottom line. Green dots show where
+        each stroke begins, so kids learn to start at the top instead of building letters from the bottom up. Print one letter at a time,
+        or the whole alphabet tracing set at once.
       </p>
 
       <h2>What order should you teach letters in?</h2>
@@ -81,10 +100,28 @@ const groups = [
       </ol>
       <p>Slip a sheet into a page protector and use a dry-erase marker to practice the same page all week.</p>
 
+      <h2>Uppercase or lowercase first?</h2>
+      <p>
+        There's no single right answer. Capitals are usually easier to form, so many preschool programs start there, while lowercase
+        letters are the ones kids see most when they read. A common middle path is to teach the letters in your child's name first, with a
+        capital at the front and lowercase after. We walk through the trade-offs in <a href="/learn/should-you-teach-uppercase-or-lowercase-letters-first/">should you teach uppercase or lowercase letters first?</a>
+      </p>
+
       <h2>Which line size is right?</h2>
       <p>Large lines suit ages 3 to 4, medium fits most kindergartners, and small works for kids 6 and up who need neatness practice. When in doubt, go one size bigger.</p>
 
-      <p>Working on numbers too? Try our <a href="/number-tracing/">number tracing worksheets</a> for 0 to 9.</p>
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            {f.html ? <p class="mt-3 mb-0!" set:html={f.html} /> : <p class="mt-3 mb-0!">{f.a}</p>}
+          </details>
+        ))}
+      </div>
+
+      <h2>What comes after letters</h2>
+      <p>Once letters feel easy, move on to short words with our <a href="/sight-words/">sight words worksheets and flash cards</a>. Working on numbers too? Try our <a href="/number-tracing/">number tracing worksheets</a> from 1 to 20.</p>
     </article>
   </div>
 </Base>

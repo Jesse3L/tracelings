@@ -1,4 +1,5 @@
 ---
+import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import FontTool from '../../components/FontTool.tsx';
 import { SITE } from '../../config';
@@ -15,6 +16,31 @@ const next = letters[(i + 1) % 26];
 const url = new URL(`/bubble-letters/${L.letter}/`, SITE.url).href;
 const title = `Bubble Letter ${U} (Free Printable Coloring Page) | ${SITE.name}`;
 const description = `Free printable bubble letter ${U} in a big, bold outline. Color it, trace it, or cut it out for banners and bulletin boards. Letter or A4 PDF.`;
+// Tailored drawing notes: which corners to soften, and whether the capital or lowercase letter has a closed hole (counter).
+const corners: Record<string, string> = {
+  A: 'the point at the top and the two feet', B: 'the spots where the two bumps meet the straight back', C: 'the two open ends, so they finish as round tips',
+  D: 'the two spots where the curve meets the straight back', E: 'the ends of the three arms', F: 'the ends of the two arms',
+  G: 'the open end and the little shelf', H: 'the four ends and the spots where the crossbar meets the sides', I: 'the top and bottom of the line',
+  J: 'the top and the end of the hook', K: 'the spot where the two slanted lines meet the back', L: 'the corner at the bottom',
+  M: 'the two peaks and the V in the middle', N: 'the two sharp turns', O: 'nothing at all, since O is already round, so just keep the outline smooth',
+  P: 'the spots where the bump meets the straight back', Q: 'the little tail', R: 'the bump and the leg that kicks out',
+  S: 'the two ends of the curve', T: 'the ends of the top bar and the bottom of the stem', U: 'the two tops',
+  V: 'the point at the bottom', W: 'the three points', X: 'the four ends and the crossing in the middle',
+  Y: 'the spot where the two arms meet the stem', Z: 'the two sharp corners',
+};
+const upperHole = 'ABDOPQR'.includes(U);
+const lowerHole = 'abdegopq'.includes(L.letter);
+const lowerNote = `Lowercase ${L.letter} works the same way: write it small, outline it, round it off and erase.${lowerHole ? ` Lowercase ${L.letter} has a hole too, so remember to draw that small inside shape.` : ''} Thick markers make the outline easier to see, and a bigger gap makes a puffier letter.`;
+const drawSteps = [
+  `Lightly write a capital ${U} in pencil, a little smaller than you want the finished letter. This is your skeleton.`,
+  `Draw an outline around the whole ${U}, keeping the same gap, about a finger's width, on every side of each stroke.`,
+  `Round off the sharp bits. On ${U}, that means ${corners[U]}.`,
+  upperHole
+    ? (U === 'B'
+      ? 'B has two closed holes. Draw a small rounded shape inside each one so the holes stay open, then erase the pencil skeleton in the middle.'
+      : `${U} has a closed hole. Draw a small rounded shape inside it so the hole stays open, then erase the pencil skeleton in the middle.`)
+    : `Erase the pencil skeleton in the middle, and you're left with a puffy ${U} ready to color.`,
+];
 const schema = [
   { '@context': 'https://schema.org', '@type': 'LearningResource', name: `Bubble letter ${U} printable`, url, learningResourceType: 'Coloring page', educationalLevel: 'Preschool, Kindergarten', isAccessibleForFree: true, description },
   { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
@@ -27,9 +53,7 @@ const schema = [
 <Base title={title} description={description} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/bubble-letters/" class="hover:text-ink">Bubble letters</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">Letter {U}</span>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/bubble-letters/" class="hover:text-ink">Bubble letters</a> <span aria-hidden="true">/</span> <span aria-current="page">Letter {U}</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Bubble letter {U}</span></h1>
@@ -38,19 +62,22 @@ const schema = [
 
     <FontTool client:load kind="coloring" preset={U} source="name-coloring" />
 
+    <Preview k={`bubble-${L.letter}`} />
+
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
         This free bubble letter {U} printable fills the page with one bold, rounded {U} that's easy for small hands to color inside. It works as
         a coloring page, a letter-of-the-week craft, or a cut-out for classroom banners and bulletin boards.
       </p>
-      <h2>Ideas for bubble letter {U}</h2>
+      <h2>How to draw bubble letter {U}</h2>
+      <ol>{drawSteps.map((t) => <li>{t}</li>)}</ol>
+      <p>{lowerNote}</p>
+      <h2>Craft ideas for bubble letter {U}</h2>
       <ul>
-        <li><strong>Letter of the week:</strong> color the {U}, then draw or glue pictures of things that start with {U} around it.</li>
+        <li><strong>Letter of the week:</strong> color the {U}, then draw or glue pictures of things that start with {U} around it, like {L.words.slice(0, 3).join(', ').toLowerCase()}.</li>
         <li><strong>Collage:</strong> fill the letter with torn paper, stickers or dot markers instead of crayons.</li>
-        <li><strong>Banners:</strong> print each letter of a word, cut them out and string them up for a birthday or classroom door.</li>
+        <li><strong>Banners:</strong> print each letter of a word, cut them out and string them up for a birthday or classroom door. Or type the whole word into the <a href="/bubble-letters/">bubble letter generator</a>.</li>
       </ul>
-      <h2>Words that start with {U}</h2>
-      <ul class="columns-2 sm:columns-3">{L.words.map((w) => <li>{w}</li>)}</ul>
       <p>Ready to write it? Practice the same letter on our <a href={`/letter-tracing/${L.letter}/`}>letter {U} tracing worksheet</a>, or put a whole name in bubble letters with the <a href="/name-coloring-pages/">name coloring page maker</a>.</p>
     </article>
 

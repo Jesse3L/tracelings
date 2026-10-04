@@ -1,7 +1,9 @@
 ---
+import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
 import { SITE } from '../../config';
+import { fitTitle } from '../../lib/seo';
 import numbers from '../../data/numbers.json';
 
 export function getStaticPaths() {
@@ -12,7 +14,7 @@ const N = numbers[i];
 const prev = numbers[(i + 9) % 10];
 const next = numbers[(i + 1) % 10];
 const url = new URL(`/number-tracing/${N.digit}/`, SITE.url).href;
-const title = `Number ${N.digit} Tracing Worksheet (Free Printable) | ${SITE.name}`;
+const title = fitTitle(`Number ${N.digit} Tracing Worksheets`, ['(Free Printable)', 'Free']);
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -39,16 +41,16 @@ const schema = [
 <Base title={title} description={N.metaDescription} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/number-tracing/" class="hover:text-ink">Number tracing</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">Number {N.digit}</span>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/number-tracing/" class="hover:text-ink">Number tracing</a> <span aria-hidden="true">/</span> <span aria-current="page">Number {N.digit}</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Number {N.digit} tracing worksheet</span></h1>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Number {N.digit} tracing worksheets</span></h1>
       <p class="mt-4 text-lg text-muted">Rows of {N.digit} to trace and write, with green dots where each stroke starts.</p>
     </header>
 
     <Tracer client:load mode="number" value={N.digit} source="number-tracing" />
+
+    <Preview k={`number-${N.digit}`} />
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
@@ -62,6 +64,11 @@ const schema = [
       <h2>Count to {N.digit} with real things</h2>
       <ul>{N.countIdeas.map((c) => <li>{c}</li>)}</ul>
       <p>Writing a number sticks better when your child has just counted that many things with their hands.</p>
+      <h2>Keep practicing</h2>
+      <p>
+        When {N.digit} feels easy, print the <a href="/number-tracing/1-10/">number tracing 1-10 sheet</a> to practice it in counting order.
+        Mixing in letters? Try our <a href="/letter-tracing/">letter tracing worksheets</a>, or make a <a href="/name-tracing/">name tracing worksheet</a> with your child's name.
+      </p>
     </article>
 
     <nav aria-label="Other numbers" class="mt-12">

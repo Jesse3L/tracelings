@@ -3,7 +3,8 @@
     "slug": "pre-k",
     "dolch": "Pre-primer",
     "short": "Pre-K",
-    "title": "Sight words for preschool and pre-K",
+    "title": "Preschool sight words list (Dolch pre-primer)",
+    "seoTitle": "Preschool Sight Words List (Free Flash Cards) | Tracelings",
     "keyword": "sight words for preschool",
     "intro": "These 40 sight words for preschool come from the Dolch pre-primer list, the first set many classrooms use. Words like the, and, see and look show up in almost every early picture book, but several of them can't be sounded out easily. That's why kids learn them by sight. Start with three or four words at a time. Trace them, say them out loud, and point them out when you read together. A few minutes a day is plenty at this age.",
     "tips": [
@@ -11,14 +12,15 @@
       "Tape one word to the fridge each week and read it together every time someone opens the door.",
       "Trace each word with a finger on the large lines before picking up a crayon. Many 3 and 4 year olds are still building hand strength."
     ],
-    "metaDescription": "Free sight words for preschool: all 40 Dolch pre-primer words, with a printable word tracing worksheet and flash cards for home or class.",
+    "metaDescription": "A list of 40 preschool sight words from the Dolch pre-primer list, with a free tracing worksheet and printable flash cards for home or class.",
     "words": ["a", "and", "away", "big", "blue", "can", "come", "down", "find", "for", "funny", "go", "help", "here", "I", "in", "is", "it", "jump", "little", "look", "make", "me", "my", "not", "one", "play", "red", "run", "said", "see", "the", "three", "to", "two", "up", "we", "where", "yellow", "you"]
   },
   {
     "slug": "kindergarten",
     "dolch": "Primer",
     "short": "Kindergarten",
-    "title": "Kindergarten sight words",
+    "title": "Kindergarten sight words: the Dolch list with flash cards",
+    "seoTitle": "Kindergarten Sight Words (Dolch) + Flash Cards | Tracelings",
     "keyword": "sight words kindergarten",
     "intro": "The 52 words on the Dolch primer list are the kindergarten sight words many teachers send home during the year. They build on the pre-K list with everyday helpers like they, want, was, what and with. Once a child knows them, simple books start to open up, and a sentence like \"she saw what they ate\" becomes readable without help. Mix tracing, flash cards and short games so practice stays playful and quick.",
     "tips": [
@@ -26,7 +28,7 @@
       "Sort the cards into two piles: know it and still learning. Add new words only when the first pile grows.",
       "Pair tracing with a short sentence. Trace like, then read \"I like red\" together using words from the pre-K list."
     ],
-    "metaDescription": "Practice the sight words kindergarten kids see most: all 52 Dolch primer words, with a free tracing worksheet and printable flash cards.",
+    "metaDescription": "All 52 Dolch kindergarten sight words (primer list) with a free sight word worksheet and printable flash cards. Pick the words and print.",
     "words": ["all", "am", "are", "at", "ate", "be", "black", "brown", "but", "came", "did", "do", "eat", "four", "get", "good", "have", "he", "into", "like", "must", "new", "no", "now", "on", "our", "out", "please", "pretty", "ran", "ride", "saw", "say", "she", "so", "soon", "that", "there", "they", "this", "too", "under", "want", "was", "well", "went", "what", "white", "who", "will", "with", "yes"]
   },
   {
@@ -34,6 +36,7 @@
     "dolch": "First grade",
     "short": "1st grade",
     "title": "Sight words for 1st graders",
+    "seoTitle": "Sight Words for 1st Graders (Free Flash Cards) | Tracelings",
     "keyword": "sight words for 1st graders",
     "intro": "These sight words for 1st graders come from the Dolch first grade list: 41 words such as could, from, know, once and thank. Several break the usual spelling patterns, so sounding them out leads kids astray. Knowing them by sight frees up attention for the harder words in a sentence. Many first graders work through this list across the school year, often a few words a week. Tracing helps fix the spelling, and flash cards build speed.",
     "tips": [
@@ -48,30 +51,32 @@
     "slug": "second-grade",
     "dolch": "Second grade",
     "short": "2nd grade",
-    "title": "2nd grade sight words",
-    "keyword": "2nd grade sight words",
-    "intro": "This page has all 46 Dolch 2nd grade sight words, including because, does, their, which and would. They are longer than the earlier lists, and several are spelling traps. Second graders often read these words well before they can spell them, so writing practice matters at this level. Trace each word, cover it, then write it from memory on the blank lines. Add a few to weekly spelling and come back to the tricky ones often.",
+    "title": "Sight words for 2nd graders",
+    "seoTitle": "Sight Words for 2nd Graders (Free Flash Cards) | Tracelings",
+    "keyword": "sight words for 2nd graders",
+    "intro": "This page has all 46 Dolch sight words for 2nd graders, including because, does, their, which and would. They are longer than the earlier lists, and several are spelling traps. Second graders often read these words well before they can spell them, so writing practice matters at this level. Trace each word, cover it, then write it from memory on the blank lines. Add a few to weekly spelling and come back to the tricky ones often.",
     "tips": [
       "Focus on look-alike pairs such as their and there, or these and those. Trace both on the same sheet so the difference stands out.",
       "Use the words in a silly sentence. \"Why does the green frog sing?\" uses four words from this list.",
       "Keep a small envelope of tricky words and pull two cards from it during homework time, not just on spelling day."
     ],
-    "metaDescription": "All 46 Dolch 2nd grade sight words, with a free printable word tracing worksheet and flash cards. Pick the words, print on Letter or A4, practice.",
+    "metaDescription": "All 46 Dolch sight words for 2nd graders, with a free printable word tracing worksheet and flash cards. Pick the words, print on Letter or A4, practice.",
     "words": ["always", "around", "because", "been", "before", "best", "both", "buy", "call", "cold", "does", "don't", "fast", "first", "five", "found", "gave", "goes", "green", "its", "made", "many", "off", "or", "pull", "read", "right", "sing", "sit", "sleep", "tell", "their", "these", "those", "upon", "us", "use", "very", "wash", "which", "why", "wish", "work", "would", "write", "your"]
   },
   {
     "slug": "third-grade",
     "dolch": "Third grade",
     "short": "3rd grade",
-    "title": "3rd grade sight words",
-    "keyword": "3rd grade sight words",
-    "intro": "The Dolch 3rd grade sight words are the last 41 words on the graded lists, such as laugh, myself, together, eight and shall. Many third graders already read most of them, so the goal shifts to fast, automatic reading and correct spelling. Use the flash cards for a quick daily review and the tracing sheet for words a child still misspells. If earlier lists still need work, start there. Kids move through these lists at different speeds.",
+    "title": "Sight words for 3rd graders",
+    "seoTitle": "Sight Words for 3rd Graders (Free Flash Cards) | Tracelings",
+    "keyword": "sight words for 3rd graders",
+    "intro": "The Dolch sight words for 3rd graders are the last 41 words on the graded lists, such as laugh, myself, together, eight and shall. Many third graders already read most of them, so the goal shifts to fast, automatic reading and correct spelling. Use the flash cards for a quick daily review and the tracing sheet for words a child still misspells. If earlier lists still need work, start there. Kids move through these lists at different speeds.",
     "tips": [
       "Check reading speed first. Words a child reads right away can come out of the daily stack.",
       "Practice the number words (six, seven, eight, ten) with real objects or a short math problem.",
       "Print the tracing sheet on the small line size. It is closer to the writing size many third graders use in class."
     ],
-    "metaDescription": "All 41 Dolch 3rd grade sight words, with a free printable word tracing worksheet and flash cards. Choose the words, print, and build fast reading.",
+    "metaDescription": "All 41 Dolch sight words for 3rd graders, with a free printable word tracing worksheet and flash cards. Choose the words, print, and build fast reading.",
     "words": ["about", "better", "bring", "carry", "clean", "cut", "done", "draw", "drink", "eight", "fall", "far", "full", "got", "grow", "hold", "hot", "hurt", "if", "keep", "kind", "laugh", "light", "long", "much", "myself", "never", "only", "own", "pick", "seven", "shall", "show", "six", "small", "start", "ten", "today", "together", "try", "warm"]
   }
 ]

@@ -14,7 +14,18 @@ import { useRoster } from '../lib/roster';
 
 type Kind = 'cursive' | 'coloring';
 
-export default function FontTool(props: { kind: Kind; preset?: string; source?: string }) {
+export default function FontTool(props: {
+  kind: Kind;
+  preset?: string;
+  source?: string;
+  /** Coloring only: adds a "No shapes" choice (plain outline letters). */
+  plainOption?: boolean;
+  /** Coloring only: the theme selected on first load. */
+  defaultTheme?: Theme;
+  /** Overrides the text box label and placeholder. */
+  label?: string;
+  placeholder?: string;
+}) {
   const kind = props.kind;
   const [font, setFont] = useState<LoadedFont | null>(null);
   const [failed, setFailed] = useState(false);
@@ -23,7 +34,7 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
   const [practice, setPractice] = useState<Practice>('trace-write');
   const [modelRow, setModelRow] = useState(true);
   const [paper, setPaper] = useState<Paper>('letter');
-  const [theme, setTheme] = useState<Theme>('stars');
+  const [theme, setTheme] = useState<Theme>(props.defaultTheme ?? 'stars');
   const [caps, setCaps] = useState(true);
   const [busy, setBusy] = useState(false);
   const [gate, setGate] = useState(false);
@@ -78,7 +89,7 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
     <div class="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] items-start">
       <form class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6" onSubmit={(e) => { e.preventDefault(); !member.member && needsEmail() ? setGate(true) : save(); }}>
         <label class="block mb-5">
-          <span class="block text-[15px] font-bold mb-2">{kind === 'cursive' ? 'Name, word or short sentence' : 'Name or letter'}</span>
+          <span class="block text-[15px] font-bold mb-2">{props.label ?? (kind === 'cursive' ? 'Name, word or short sentence' : 'Name or letter')}</span>
           <input
             id={`${kind}-text`}
             type="text"
@@ -86,7 +97,7 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
             maxLength={kind === 'cursive' ? 40 : 16}
             autoComplete="off"
             spellcheck={false}
-            placeholder={kind === 'cursive' ? 'Type a name or word' : 'Type a name'}
+            placeholder={props.placeholder ?? (kind === 'cursive' ? 'Type a name or word' : 'Type a name')}
             onInput={(e) => setText((e.target as HTMLInputElement).value)}
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-2xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
           />
@@ -115,7 +126,8 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
           </>
         ) : (
           <>
-            <Segmented legend="Shapes around the name" name="theme" value={theme} onChange={setTheme} options={[
+            <Segmented legend={props.plainOption ? 'Shapes around the letters' : 'Shapes around the name'} name="theme" value={theme} onChange={setTheme} options={[
+              ...(props.plainOption ? [{ v: 'plain' as Theme, label: 'No shapes' }] : []),
               { v: 'stars', label: 'Stars' },
               { v: 'hearts', label: 'Hearts' },
               { v: 'flowers', label: 'Flowers' },
@@ -138,7 +150,7 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
           {member.member ? (
             <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets. <a href="/class-pack/" class="text-[#2f5fc4] underline underline-offset-2">Make a class pack</a> · <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
           ) : (
-            <><span class="font-bold text-ink">Members</span> get every printable with no footer line, plus class lists and new themes as they launch.{' '}
+            <><span class="font-bold text-ink">Members</span> get every printable with no footer line, plus class lists that print a page for every child in one PDF.{' '}
             <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">See membership</a></>
           )}
         </div>

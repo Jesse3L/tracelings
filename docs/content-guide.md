@@ -71,18 +71,33 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Name tracing | `/name-tracing/` | live |
 | Letter tracing (all) | `/letter-tracing/` | live |
 | Single letter | `/letter-tracing/a/` ... `/letter-tracing/z/` | live |
+| Alphabet chart | `/alphabet-chart/` | live |
 | Number tracing (all) | `/number-tracing/` | live |
 | Single number | `/number-tracing/0/` ... `/number-tracing/9/` | live |
-| Membership waitlist | `/membership/` | live |
-| Cursive | `/cursive/` | coming |
-| Name coloring pages | `/name-coloring-pages/` | coming |
-| Coloring pages | `/coloring-pages/` | coming |
+| Number ranges | `/number-tracing/1-10/`, `/number-tracing/1-20/` | live |
+| Word tracing | `/word-tracing/` | live |
+| Sight words (all) | `/sight-words/` | live |
+| Sight words by level | `/sight-words/pre-k/`, `/kindergarten/`, `/first-grade/`, `/second-grade/`, `/third-grade/` | live |
+| Cursive worksheets | `/cursive/` | live |
+| Cursive name tracing | `/cursive-name-tracing/` | live |
+| Cursive alphabet | `/cursive-alphabet/` | live |
+| Single cursive letter | `/cursive-alphabet/a/` ... `/cursive-alphabet/z/` | live |
+| Bubble letters | `/bubble-letters/`, `/bubble-letters/a/` ... `/bubble-letters/z/` | live |
+| Name coloring pages | `/name-coloring-pages/` | live |
+| Coloring pages | `/coloring-pages/` | live |
+| Coloring collections | `/coloring-pages/<collection>/` (see below) | live |
+| Membership | `/membership/` | live |
+| Class packs | `/class-pack/` | members only |
+
+Coloring collections: `thanksgiving-coloring-pages`, `christmas-coloring-pages`, `dinosaur-coloring-pages`, `unicorn-coloring-pages`, `winter-coloring-pages`, `hanukkah-coloring-pages`, `simple-coloring-pages`, `car-and-truck-coloring-pages`, `new-years-coloring-pages`, `valentines-day-coloring-pages`, `st-patricks-day-coloring-pages`, `easter-coloring-pages`. Link the collection that matches the article's season or theme (a Thanksgiving article links `/coloring-pages/thanksgiving-coloring-pages/`).
+
+Membership is live (Family covers up to 8 kids; Classroom and Founding cover up to 40 names). Members get sheets without the credit line, class lists that work in name tracing, cursive and name coloring pages, and class packs (tracing, cursive and coloring for every child in one PDF). `/class-pack/` is a members-only page: never link it as a free resource. When a teacher or homeschool article needs it, mention class lists and class packs once and link `/membership/`.
 
 - **Use descriptive anchor text** that includes a keyword: "a [free name tracing worksheet](/name-tracing/)" or "[letter B tracing page](/letter-tracing/b/)." Never use "click here."
 - **Link where the tool solves the problem being discussed,** not in a block at the end.
 - Link a **single letter or number page** when the article is about that character (b/d reversals → `/letter-tracing/b/` and `/letter-tracing/d/`).
-- **Check that "coming" tools are live before you publish.** If one isn't live yet, swap in the closest live tool and add `<!-- TODO: link /cursive/ when live -->`.
-- Mention `/membership/` at most once, and only where it fits (planning and schedule articles). It is never the main link.
+- **Check every link is live before you publish** (open it, or confirm the page exists under `src/pages/`). If one isn't live yet, swap in the closest live tool and add `<!-- TODO: link /path/ when live -->`.
+- Mention `/membership/` at most once, and only where it fits (planning, schedule and classroom articles, where class lists and class packs help). It is never the main link.
 - Linking to other articles under `/learn/` is welcome, but it doesn't count toward the 2 to 4 tool links.
 
 ## Keywords
@@ -125,7 +140,7 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 
 - [ ] 900 to 1,400 words. The opening is a 2 to 3 sentence direct answer.
 - [ ] H2s only. The final section is a concrete routine or activity, not a recap.
-- [ ] 2 to 4 tool links with descriptive anchors, all live (or swapped and flagged).
+- [ ] 2 to 4 tool links with descriptive anchors, all live (or swapped and flagged). No free links to `/class-pack/`.
 - [ ] No em dashes. Nothing from the banned list.
 - [ ] No invented stats, studies, quotes, or personal stories.
 - [ ] Milestones are given as ranges, with the "ask your child's teacher or pediatrician" line where relevant.
@@ -136,4 +151,4 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 
 ## Live pages you can link to (updated Oct 4, 2026)
 
-/name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /number-tracing/ and /0/ to /9/, /cursive/, /cursive-alphabet/, /name-coloring-pages/, /bubble-letters/ and /a/ to /z/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /coloring-pages/ and its collections (for example /coloring-pages/thanksgiving-coloring-pages/), /membership/, /learn/<existing-slug>/.
+/name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/.

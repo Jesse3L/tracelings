@@ -1,12 +1,15 @@
 ---
 import Base from '../../layouts/Base.astro';
+import FontTool from '../../components/FontTool.tsx';
 import { SITE } from '../../config';
 import letters from '../../data/letters.json';
 
-const title = `Bubble Letters A to Z (Free Printable) | ${SITE.name}`;
-const description = 'Free printable bubble letters for every letter from A to Z. Big outlined letters to color, cut out for banners, or use for letter of the week.';
+const title = `Printable Bubble Letters A-Z + Free Generator | ${SITE.name}`;
+const description = 'Free printable bubble letters A to Z, plus a bubble letter generator for any word or name. Big outlines to color, cut out or trace. Free PDF.';
 const url = new URL('/bubble-letters/', SITE.url).href;
 const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Bubble Letter Generator', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any (web browser)', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Type any word or name up to 16 characters and download it in big printable bubble letters, with or without shapes to color.' },
   { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Bubble letters A to Z', url, description,
     hasPart: letters.map((l) => ({ '@type': 'LearningResource', name: `Bubble letter ${l.letter.toUpperCase()}`, url: `${SITE.url}/bubble-letters/${l.letter}/` })) },
   { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
@@ -21,10 +24,18 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Bubble letters</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Bubble letters, A to Z</span></h1>
-      <p class="mt-4 text-lg text-muted">Pick a letter for a full-page bubble letter to color, cut out or decorate. Every page prints on Letter or A4.</p>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Printable bubble letters and a free bubble letter generator</span></h1>
+      <p class="mt-4 text-lg text-muted">Type any word or name to make it in bubble letters, or pick a single letter from A to Z below. Every page prints on Letter or A4.</p>
     </header>
 
+    <section aria-labelledby="generator">
+      <h2 id="generator" class="text-[1.6rem] font-bold">Bubble letter generator</h2>
+      <p class="mt-2 mb-6 text-muted max-w-[68ch]">Type a word or name, up to 16 letters. Keep the page plain for clean outlines, or add stars, hearts, flowers or bubbles around it.</p>
+      <FontTool client:visible kind="coloring" source="bubble-letters" plainOption defaultTheme="plain" label="Word or name" placeholder="Type a word or name" />
+    </section>
+
+    <h2 id="a-to-z" class="mt-14 text-[1.6rem] font-bold">Printable bubble letters A to Z</h2>
+    <p class="mt-2 mb-6 text-muted max-w-[68ch]">One big letter per page. Pick a letter to color, cut out or decorate.</p>
     <ul class="grid grid-cols-4 sm:grid-cols-7 lg:grid-cols-13 gap-2">
       {letters.map((l) => (
         <li><a href={`/bubble-letters/${l.letter}/`} class="block rounded-lg border border-hairline bg-white py-4 text-center text-3xl font-bold text-ink hover:border-rule">{l.letter.toUpperCase()}<span class="sr-only"> bubble letter</span></a></li>
@@ -44,6 +55,12 @@ const schema = [
         <li><strong>Fine motor practice:</strong> fill the letter with dot stickers, torn paper or pom-poms.</li>
         <li><strong>Cutting practice:</strong> the smooth, wide outline is a good first shape for safety scissors.</li>
       </ul>
+      <h2>Bubble letter tracing</h2>
+      <p>
+        Bubble letters make a gentle first step into letter tracing. Ask your child to run a finger around the inside of the outline in the
+        direction you would write the letter, then do the same with a crayon, staying between the lines. The wide outline gives little hands
+        room to wobble while they learn the shape. When that feels easy, move on to dotted <a href="/letter-tracing/">letter tracing worksheets</a> with starting dots and handwriting lines.
+      </p>
       <h2>Whole names in bubble letters</h2>
       <p>For a full name on one page, with stars, hearts or flowers around it, use the <a href="/name-coloring-pages/">name coloring page maker</a>. To practice writing the same letters, try our <a href="/letter-tracing/">letter tracing worksheets</a>.</p>
     </article>

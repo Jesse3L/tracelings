@@ -3,8 +3,8 @@ import Base from '../layouts/Base.astro';
 import HeroTracer from '../components/HeroTracer.tsx';
 import { SITE } from '../config';
 
-const title = `${SITE.name} | Free Name Tracing Worksheets & Kids' Printables`;
-const description = 'Make free name tracing worksheets and personalized printables for kids in seconds. No sign-up. Prints on Letter or A4. Made for parents and teachers.';
+const title = `Free Personalized Printables for Kids | ${SITE.name}`;
+const description = "Free printable worksheets made with your child's name: name tracing, cursive, name coloring pages, sight words and more. No sign-up. Letter or A4 PDF.";
 
 const why = [
   { h: 'Free to print', p: 'Open a tool, type a name, print. No account and no download limits.' },
@@ -13,17 +13,22 @@ const why = [
 ];
 
 const tools = [
-  { name: 'Name tracing', href: '/name-tracing/', p: 'Turn any name into a dotted tracing worksheet with the letter style, line size and rows you choose.', live: true },
-  { name: 'Letter tracing', href: '/letter-tracing/', p: 'Every letter from A to Z, capital and lowercase, with stroke order and practice words.', live: true },
-  { name: 'Number tracing', href: '/number-tracing/', p: 'Numbers 0 to 9 with starting dots and counting ideas for each one.', live: true },
-  { name: 'Name coloring pages', href: '/name-coloring-pages/', live: true, p: 'Big outlined letters of your child’s name, ready to color and hang on the fridge.' },
-  { name: 'Cursive practice', href: '/cursive/', live: true, p: 'Cursive handwriting worksheets for names, letters and words, for kids moving past print.' },
-  { name: 'Coloring pages', href: '/coloring-pages/', live: true, p: 'Close to 100 free pages for Thanksgiving, Christmas, dinosaurs, unicorns, trucks and more.' },
-  { name: 'Sight words', href: '/sight-words/', live: true, p: 'Dolch sight word lists from pre-K to third grade, with tracing worksheets and printable flash cards.' },
-  { name: 'Bubble letters', href: '/bubble-letters/', live: true, p: 'Every letter from A to Z in big outlined bubble letters to color, cut out or decorate.' },
-  { name: 'Spelling worksheets', p: 'Paste this week’s spelling list and print practice pages built from those exact words.' },
-  { name: 'Photo to coloring page', p: 'Upload a family photo and get a simple line drawing your child can color.' },
-  { name: 'Chore charts', p: 'Printable chore charts with your child’s name and the jobs that fit your house.' },
+  { name: 'Name tracing', href: '/name-tracing/', p: 'Turn any name into a dotted tracing worksheet with the letter style, line size and rows you choose.' },
+  { name: 'Cursive name tracing', href: '/cursive-name-tracing/', p: 'Your child’s name in joined cursive on guide lines, to trace first and then write alone.' },
+  { name: 'Letter tracing', href: '/letter-tracing/', p: 'Every letter from A to Z, capital and lowercase, with stroke order and practice words.' },
+  { name: 'Number tracing 1 to 20', href: '/number-tracing/1-20/', p: 'One sheet with every number from 1 to 20, or pick a single number from 0 to 9.' },
+  { name: 'Cursive alphabet', href: '/cursive-alphabet/', p: 'Cursive letters A to Z, capital and lowercase, for kids moving past print.' },
+  { name: 'Cursive worksheets', href: '/cursive/', p: 'Type any name, word or sentence and get connected cursive to trace and copy.' },
+  { name: 'Name coloring pages', href: '/name-coloring-pages/', p: 'Big outlined letters of your child’s name, ready to color and hang on the fridge.' },
+  { name: 'Sight words', href: '/sight-words/', p: 'Dolch sight word lists from pre-K to third grade, with tracing worksheets and printable flash cards.' },
+  { name: 'Bubble letters', href: '/bubble-letters/', p: 'Printable bubble letters A to Z, plus a generator for any word or name.' },
+  { name: 'Coloring pages', href: '/coloring-pages/', p: 'Close to 100 free pages for Thanksgiving, Christmas, dinosaurs, unicorns, trucks and more.' },
+];
+
+const seasonal = [
+  { name: 'Thanksgiving coloring pages', href: '/coloring-pages/thanksgiving-coloring-pages/', p: 'Turkeys, pumpkin pie and a big Happy Thanksgiving page for the kids’ table.', primary: true },
+  { name: 'Christmas coloring pages', href: '/coloring-pages/christmas-coloring-pages/', p: 'Santa, reindeer, gingerbread and trees to color.' },
+  { name: 'Hanukkah coloring pages', href: '/coloring-pages/hanukkah-coloring-pages/', p: 'Menorahs, dreidels and candles for the eight nights.' },
 ];
 
 const schema = [
@@ -34,9 +39,9 @@ const schema = [
 <Base title={title} description={description} schema={schema}>
   <section class="mx-auto max-w-6xl px-4 sm:px-6 pt-12 sm:pt-16 pb-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center">
     <div>
-      <h1 class="text-[2.3rem] sm:text-[3.1rem] font-bold"><span class="ruled">Printable worksheets made with your child's name</span></h1>
+      <h1 class="text-[2.3rem] sm:text-[3.1rem] font-bold"><span class="ruled">Free printable worksheets made with your child's name</span></h1>
       <p class="mt-6 text-lg sm:text-xl text-muted max-w-xl leading-relaxed">
-        Type a name and get a free name tracing sheet ready to print in seconds. Kids practice harder when the word on the page is theirs.
+        Type a name and get a <a href="/name-tracing/" class="text-ink underline decoration-rule decoration-2 underline-offset-4 hover:decoration-mid">free name tracing worksheet</a> ready to print in seconds, or pick a cursive sheet, name coloring page or sight word cards. Kids practice harder when the word on the page is theirs.
       </p>
     </div>
     <HeroTracer client:load href="/name-tracing/" />
@@ -53,24 +58,33 @@ const schema = [
     </div>
   </section>
 
-  <section id="tools" class="mx-auto max-w-6xl px-4 sm:px-6 pt-16">
-    <h2 class="text-[1.9rem] font-bold">Tools</h2>
-    <p class="mt-2 text-muted">Tracing tools are ready now. The rest are being built and will use the same name you type.</p>
-    <ul class="mt-8 grid gap-x-10 sm:grid-cols-2 border-t border-hairline">
-      {tools.map((t) => (
-        <li class="border-b border-hairline py-5 flex gap-4">
-          <div class="flex-1">
-            {t.live ? (
-              <a href={t.href} class="font-bold text-lg text-ink underline decoration-rule decoration-2 underline-offset-4 hover:decoration-mid">{t.name}</a>
-            ) : (
-              <span class="font-bold text-lg text-ink">{t.name}</span>
-            )}
-            <p class="mt-1 text-muted leading-relaxed">{t.p}</p>
-          </div>
-          <span class={`shrink-0 self-start mt-1 text-[13px] rounded-full px-2.5 py-0.5 ${t.live ? 'bg-[#e3f3ea] text-[#1f7a50]' : 'bg-[#eef2f8] text-muted'}`}>{t.live ? 'Ready' : 'Coming soon'}</span>
+  <section id="seasonal" class="mx-auto max-w-6xl px-4 sm:px-6 pt-16" aria-labelledby="seasonal-h">
+    <h2 id="seasonal-h" class="text-[1.9rem] font-bold">Seasonal</h2>
+    <p class="mt-2 text-muted">Free holiday coloring pages to print this month and next.</p>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-3">
+      {seasonal.map((t) => (
+        <li>
+          <a href={t.href} class={`block h-full rounded-xl border p-5 hover:border-rule ${t.primary ? 'border-rule bg-white' : 'border-hairline bg-white'}`}>
+            <span class="block font-bold text-lg text-ink">{t.name}</span>
+            <span class="block mt-1 text-muted leading-relaxed">{t.p}</span>
+          </a>
         </li>
       ))}
     </ul>
+  </section>
+
+  <section id="tools" class="mx-auto max-w-6xl px-4 sm:px-6 pt-16">
+    <h2 class="text-[1.9rem] font-bold">Free printable tools</h2>
+    <p class="mt-2 text-muted">Every tool is free to print, and the name you type stays on your device.</p>
+    <ul class="mt-8 grid gap-x-10 sm:grid-cols-2 border-t border-hairline">
+      {tools.map((t) => (
+        <li class="border-b border-hairline py-5">
+          <a href={t.href} class="font-bold text-lg text-ink underline decoration-rule decoration-2 underline-offset-4 hover:decoration-mid">{t.name}</a>
+          <p class="mt-1 text-muted leading-relaxed">{t.p}</p>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 text-muted">Printing for a whole class? <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-4">Members</a> save a class list once and print every child's sheet in one PDF.</p>
   </section>
 
   <section class="mx-auto max-w-6xl px-4 sm:px-6 pt-14">

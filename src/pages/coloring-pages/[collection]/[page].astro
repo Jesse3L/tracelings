@@ -12,6 +12,9 @@ export function getStaticPaths() {
 const { c, i } = Astro.props;
 const p = c.pages[i];
 const related = c.pages.filter((_, j) => j !== i).slice(0, 4);
+const all = getCollections();
+const ci = all.findIndex((o) => o.slug === c.slug);
+const other = all[(ci + 1) % all.length];
 const url = new URL(`/coloring-pages/${c.slug}/${p.slug}/`, SITE.url).href;
 const title = fitTitle(p.title);
 const x = (extra.pages as Record<string, { talkAbout: string; colorTips: string; learning: string }>)[p.slug];
@@ -30,9 +33,7 @@ const schema = [
 <Base title={title} description={description} schema={schema} ogImage={p.src}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/coloring-pages/" class="hover:text-ink">Coloring pages</a> <span aria-hidden="true">/</span>
-      <a href={`/coloring-pages/${c.slug}/`} class="hover:text-ink">{c.title}</a>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/coloring-pages/" class="hover:text-ink">Coloring pages</a> <span aria-hidden="true">/</span> <a href={`/coloring-pages/${c.slug}/`} class="hover:text-ink">{c.title}</a> <span aria-hidden="true">/</span> <span aria-current="page">{p.title}</span>
     </nav>
     <div class="pt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] items-start">
       <figure class="sheet-frame overflow-hidden max-w-[640px]">
@@ -69,6 +70,10 @@ const schema = [
           </li>
         ))}
       </ul>
+      <p class="mt-6 text-muted max-w-[68ch]">
+        Want a page with your child's name on it? Try the <a href="/name-coloring-pages/" class="text-[#2f5fc4] underline underline-offset-4">name coloring page maker</a>.
+        {other && other.slug !== c.slug && <> Or browse our <a href={`/coloring-pages/${other.slug}/`} class="text-[#2f5fc4] underline underline-offset-4">{other.title}</a>.</>}
+      </p>
     </section>
   </div>
 </Base>

@@ -1,0 +1,142 @@
+---
+import Preview from '../../components/site/Preview.astro';
+import Base from '../../layouts/Base.astro';
+import FontTool from '../../components/FontTool.tsx';
+import { SITE } from '../../config';
+import { fitTitle } from '../../lib/seo';
+import letters from '../../data/cursive-letters.json';
+import { loadFontFromDisk } from '../../lib/fontDisk';
+import { cursivePairSvg } from '../../lib/alphabetChart';
+
+export function getStaticPaths() {
+  return letters.map((l, i) => ({ params: { letter: l.letter }, props: { i } }));
+}
+const { i } = Astro.props as { i: number };
+const L = letters[i];
+const l = L.letter;
+const U = l.toUpperCase();
+const prev = letters[(i + 25) % 26];
+const next = letters[(i + 1) % 26];
+const url = new URL(`/cursive-alphabet/${l}/`, SITE.url).href;
+const title = fitTitle(`Cursive ${U}: Capital and Lowercase Worksheet`, []);
+const img = `/cursive-alphabet/cursive-${l}.svg`;
+const alt = `Cursive capital ${U} and lowercase ${l} on handwriting lines`;
+const preset = `${U}${l} ${l}${l}${l}`;
+// Same drawing as the image file, measured here so the img tag gets its real size.
+const pairSvg = cursivePairSvg(await loadFontFromDisk('cursive'), l, alt);
+const imgW = Number(pairSvg.match(/width="(\d+)"/)?.[1] ?? 480);
+const imgH = Number(pairSvg.match(/height="(\d+)"/)?.[1] ?? 300);
+
+const faqs = [
+  { q: `How do you write a cursive capital ${U}?`, a: L.upper },
+  { q: `How do you write a lowercase cursive ${l}?`, a: L.lower },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `Cursive ${U} worksheet: capital and lowercase`,
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Grades 2-4',
+    teaches: `Writing cursive capital ${U} and lowercase ${l}`,
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    image: SITE.url + img,
+    description: L.metaDescription,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Cursive Alphabet', item: SITE.url + '/cursive-alphabet/' },
+      { '@type': 'ListItem', position: 3, name: `Cursive ${U}`, item: url },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={L.metaDescription} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/cursive-alphabet/" class="hover:text-ink">Cursive alphabet</a> <span aria-hidden="true">/</span> <span aria-current="page">Cursive {U}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Cursive {U} and {l}</span></h1>
+      <p class="mt-4 text-lg text-muted">How to write a cursive {U}, capital and lowercase, plus a free worksheet to trace and then write.</p>
+    </header>
+
+    <figure class="mb-10 max-w-md">
+      <img src={img} alt={alt} width={imgW} height={imgH} class="sheet-frame w-full h-auto bg-white" decoding="async" fetchpriority="high" />
+      <figcaption class="mt-2 text-[14px] text-muted">Capital {U} and lowercase {l} in traditional cursive. The dashed line is the midline.</figcaption>
+    </figure>
+
+    <FontTool client:load kind="cursive" preset={preset} source="cursive-alphabet-letter" label="Letters or a word to practice" placeholder={`Try ${preset}`} />
+
+    <Preview k={`cursive-${L.letter}`} />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free cursive {U} worksheet starts with a solid capital {U} and lowercase {l}, then gives rows of gray letters to trace and blank
+        lines to write on. Swap in one of the practice words below to try {l} inside a real word.
+      </p>
+
+      <h2>How to write a cursive capital {U}</h2>
+      <p>{L.upper}</p>
+
+      <h2>How to write a lowercase cursive {l}</h2>
+      <p>{L.lower}</p>
+
+      <h2>Common mistakes with cursive {l}</h2>
+      <p>{L.mistakes}</p>
+
+      <h2>How {l} connects to other letters</h2>
+      <p>{L.joins}</p>
+
+      <h2>Teaching tip</h2>
+      <p>{L.tip}</p>
+
+      <h2>Practice words with {l}</h2>
+      <p>Type one of these into the worksheet box to practice {l} joined to other letters:</p>
+      <ul>{L.words.map((w) => <li>{w}</li>)}</ul>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>More ways to practice {U}</h2>
+      <ul>
+        <li>Still learning print letters? Try the <a href={`/letter-tracing/${l}/`}>letter {U} tracing worksheet</a>.</li>
+        <li>Color a <a href={`/bubble-letters/${l}/`}>bubble letter {U}</a> and trace the shape with a finger.</li>
+        <li>See every letter at once on the <a href="/cursive-alphabet/">cursive alphabet chart and worksheets</a>.</li>
+        <li>Make a <a href="/cursive-name-tracing/">cursive name tracing worksheet</a> or any word with the <a href="/cursive/">cursive worksheet generator</a>.</li>
+      </ul>
+    </article>
+
+    <nav aria-label="Other cursive letters" class="mt-12">
+      <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/cursive-alphabet/${prev.letter}/`}>Cursive {prev.letter.toUpperCase()}</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/cursive-alphabet/${next.letter}/`}>Cursive {next.letter.toUpperCase()}</a>
+      </div>
+      <ul class="mt-6 grid grid-cols-7 sm:grid-cols-13 gap-2 max-w-3xl">
+        {letters.map((x) => (
+          <li>
+            <a
+              href={`/cursive-alphabet/${x.letter}/`}
+              aria-current={x.letter === l ? 'page' : undefined}
+              class={`block text-center rounded-md border py-2 font-bold ${x.letter === l ? 'border-rule bg-white text-ink' : 'border-hairline text-muted hover:text-ink hover:bg-white'}`}
+            >{x.letter.toUpperCase()}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Base>

@@ -1,0 +1,115 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import Seo2NumberRange from '../../../components/seo/Seo2NumberRange.tsx';
+import { SITE } from '../../../config';
+import { fitTitle } from '../../../lib/seo';
+import numbers from '../../../data/numbers.json';
+
+const title = fitTitle('Number Tracing 1-10 Worksheets', ['(Free Printable)', 'Free']);
+const description = 'Free number tracing 1-10 worksheets. Trace numbers 1 to 10 on one page or in bigger rows, with green starting dots. Print a PDF on Letter or A4.';
+const url = new URL('/number-tracing/1-10/', SITE.url).href;
+
+const faqs = [
+  { q: 'What age are number tracing 1-10 worksheets for?', a: 'Most children are ready somewhere between ages 3 and 5, once they can hold a crayon or chunky pencil and count a few objects. Preschoolers often start with the bigger one-per-row layout, and kindergartners can usually manage all ten numbers on one page.' },
+  { q: 'Are these number tracing sheets free?', a: 'Yes. Your first PDF downloads right away. After that we ask for your email once, and every sheet stays free on that device for home or classroom use.' },
+  { q: 'Should my child learn to write 1 to 10 in order?', a: 'Counting order is the easiest way to practice once your child knows the digits, because it ties each number to counting. If a few numbers are hard, such as 2, 5 or 8, give those their own single-number sheet first and come back to 1 to 10 afterward.' },
+  { q: 'Why does my child write some numbers backwards?', a: 'Reversed numbers are very common while kids are learning, especially 2, 3, 7 and 9. Starting every number at the green dot helps, and so does saying the movement out loud. Most reversals fade with steady practice.' },
+  { q: 'What is the difference between the two layouts?', a: 'One page puts all ten numbers on a single sheet, one number per row, so it is quick to print and finish. Bigger numbers gives each number a full row at the line size you choose, which spreads 1 to 10 over two or more pages for younger kids.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Number tracing worksheets 1-10',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Kindergarten',
+    teaches: 'Writing the numbers 1 to 10 in counting order',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Number Tracing', item: SITE.url + '/number-tracing/' },
+      { '@type': 'ListItem', position: 3, name: '1-10', item: url },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/number-tracing/" class="hover:text-ink">Number tracing</a> <span aria-hidden="true">/</span> <span aria-current="page">1-10</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Number tracing 1-10 worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">Numbers 1 to 10 in counting order, each with a solid example and dotted copies to trace.</p>
+    </header>
+
+    <Seo2NumberRange client:load from={1} to={10} source="number-tracing-1-10" />
+
+    <Preview k={'number-1-10'} />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        These free number tracing 1-10 worksheets put every number from one to ten on handwriting lines, in the order your child counts
+        them. Each row starts with a solid number to look at, then dotted copies to trace, with green dots where every stroke begins.
+        Choose trace only, or leave space at the end of each row so they can write the number on their own.
+      </p>
+
+      <h2>How to use the 1-10 tracing sheet</h2>
+      <ol>
+        <li><strong>Count, then trace.</strong> Before each row, have your child count out that many small things, like buttons or cereal. Then trace the number that matches.</li>
+        <li><strong>Start at the green dot.</strong> Every number has a set starting point. Starting there each time is what stops 3, 7 and 9 from coming out backwards.</li>
+        <li><strong>Trace slowly, then write.</strong> On the trace-then-write sheet, the empty space at the end of each row is for writing the number without help.</li>
+        <li><strong>Reuse it.</strong> Slip the page into a sheet protector and trace with a dry-erase marker for a week of practice from one print.</li>
+      </ol>
+
+      <h2>Counting games to go with it</h2>
+      <ul>
+        <li><strong>Number hunt:</strong> Call out a number from the sheet and have your child find that many toys before tracing the row.</li>
+        <li><strong>Roll and trace:</strong> Roll a die (or two for 7 to 10), count the dots, then trace that row.</li>
+        <li><strong>Fingers up:</strong> Hold up fingers and let your child find and trace the matching number. Then swap roles.</li>
+      </ul>
+
+      <h2>Number formation tips</h2>
+      <p>
+        Most numbers start at the top line and move down. A few need extra help: 5 starts with the flat line across the top, then drops
+        down and curves around its belly; 8 is a small circle stacked on a bigger one; and 10 is the first two-digit number, so point out
+        that it is a 1 and a 0 side by side.
+        Short, daily practice works better than long sessions. Five minutes is plenty for a three or four year old.
+      </p>
+      <p>
+        Is one number giving your child trouble? Each digit has its own sheet with stroke-by-stroke steps:
+      </p>
+      <ul class="mt-2 grid grid-cols-5 sm:grid-cols-10 gap-2 max-w-xl list-none! pl-0!">
+        {numbers.map((n) => (
+          <li class="mb-0!"><a href={`/number-tracing/${n.digit}/`} class="block rounded-lg border border-hairline bg-white py-2 text-center text-xl font-bold no-underline! text-ink! hover:border-rule">{n.digit}<span class="sr-only"> tracing worksheet</span></a></li>
+        ))}
+      </ul>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>Keep going</h2>
+      <p>
+        When 1 to 10 feels easy, move on to the <a href="/number-tracing/1-20/">number tracing 1-20 worksheets</a> for the teen numbers.
+        You can also browse all the <a href="/number-tracing/">number tracing worksheets</a>, practice letters with <a href="/letter-tracing/">letter tracing</a>, or make a <a href="/name-tracing/">name tracing worksheet</a> with your child's name.
+      </p>
+    </article>
+  </div>
+</Base>

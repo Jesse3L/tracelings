@@ -3,11 +3,35 @@ import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../../config';
 const all = (await getCollection('articles')).sort((a, b) => +b.data.published - +a.data.published);
+const url = new URL('/learn/', SITE.url).href;
+const title = `Handwriting and Reading Help for Parents | ${SITE.name}`;
+const description = 'Practical guides on teaching kids to write their name, letters and numbers, with free printable practice sheets for home and class.';
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Handwriting and reading help for parents',
+    url,
+    description,
+    hasPart: all.map((a) => ({ '@type': 'Article', headline: a.data.title, url: `${SITE.url}/learn/${a.id}/` })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Learn', item: url },
+    ],
+  },
+];
 ---
-<Base title={`Handwriting Help for Parents and Teachers | ${SITE.name}`} description="Practical guides on teaching kids to write their name, letters and numbers, with free printable practice sheets.">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10">
-    <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Handwriting help</span></h1>
-    <p class="mt-4 text-lg text-muted max-w-2xl">Short, practical guides for parents, teachers and homeschool families.</p>
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Learn</span>
+    </nav>
+    <h1 class="pt-6 text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Handwriting help</span></h1>
+    <p class="mt-4 text-lg text-muted max-w-2xl">Short, practical guides for parents, teachers and homeschool families on handwriting and early reading.</p>
     <ul class="mt-10 max-w-3xl border-t border-hairline">
       {all.map((a) => (
         <li class="border-b border-hairline py-6">

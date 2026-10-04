@@ -1,5 +1,5 @@
 ---
-import { fitTitle } from '../../lib/seo';
+import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
 import FlashCards from '../../components/FlashCards.tsx';
@@ -14,7 +14,8 @@ const L = levels[i];
 const prev = i > 0 ? levels[i - 1] : null;
 const next = i < levels.length - 1 ? levels[i + 1] : null;
 const url = new URL(`/sight-words/${L.slug}/`, SITE.url).href;
-const title = fitTitle(L.title, ['(Free Worksheets and Flash Cards)', '+ Free Flash Cards', '(Free Printables)', 'Free Printable']);
+const title = L.seoTitle;
+const label = (l: typeof L) => `${l.short} sight words`;
 const shown = (w: string) => (w === 'I' ? w : w.toLowerCase());
 
 const schema = [
@@ -45,9 +46,7 @@ const schema = [
 <Base title={title} description={L.metaDescription} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/sight-words/" class="hover:text-ink">Sight words</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">{L.short}</span>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/sight-words/" class="hover:text-ink">Sight words</a> <span aria-hidden="true">/</span> <span aria-current="page">{L.short}</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{L.title}</span></h1>
@@ -69,9 +68,10 @@ const schema = [
     </section>
 
     <section class="mt-14" aria-labelledby="tracing">
-      <h2 id="tracing" class="text-[1.6rem] font-bold">Sight word tracing worksheet</h2>
+      <h2 id="tracing" class="text-[1.6rem] font-bold">{L.slug === 'kindergarten' ? 'Kindergarten sight word worksheets' : 'Sight word tracing worksheet'}</h2>
       <p class="mt-2 mb-6 text-muted max-w-[68ch]">Each row traces one word. Tap the words to choose what goes on the sheet. The first eight are picked to start.</p>
       <Tracer client:load mode="words" value={L.slug} words={L.words} source="sight-words" />
+      <Preview k={`sight-${L.slug}`} />
     </section>
 
     <section class="mt-14" aria-labelledby="cards">
@@ -101,8 +101,8 @@ const schema = [
 
     <nav aria-label="Other sight word levels" class="mt-12">
       <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
-        {prev ? <a class="text-[#2f5fc4] underline underline-offset-4" href={`/sight-words/${prev.slug}/`}>{prev.title}</a> : <span />}
-        {next ? <a class="text-[#2f5fc4] underline underline-offset-4" href={`/sight-words/${next.slug}/`}>{next.title}</a> : <a class="text-[#2f5fc4] underline underline-offset-4" href="/sight-words/">All sight word lists</a>}
+        {prev ? <a class="text-[#2f5fc4] underline underline-offset-4" href={`/sight-words/${prev.slug}/`}>{label(prev)}</a> : <span />}
+        {next ? <a class="text-[#2f5fc4] underline underline-offset-4" href={`/sight-words/${next.slug}/`}>{label(next)}</a> : <a class="text-[#2f5fc4] underline underline-offset-4" href="/sight-words/">All sight word lists</a>}
       </div>
       <ul class="mt-6 grid grid-cols-2 sm:grid-cols-5 gap-2 max-w-3xl">
         {levels.map((l) => (

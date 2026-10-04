@@ -1,17 +1,25 @@
 ---
+import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import FontTool from '../../components/FontTool.tsx';
 import { SITE } from '../../config';
 
-const title = `Name Coloring Pages Maker (Free Printable) | ${SITE.name}`;
-const description = "Turn your child's name into a free coloring page with big bubble letters and stars, hearts or flowers around it. Prints on Letter or A4.";
+const title = `Name Coloring Pages: Free Custom Name Maker | ${SITE.name}`;
+const description = 'Make free name coloring pages with any name in big bubble letters, with stars, hearts or flowers to color. Personalized, printable, no sign-up.';
 const url = new URL('/name-coloring-pages/', SITE.url).href;
+const faqs: { q: string; a: string; html?: string }[] = [
+  { q: 'Is it free?', a: 'Yes. Type a name and download the name coloring page as a PDF for free. Your first page needs nothing at all, and after that we ask for an email once per device.' },
+  { q: 'Can I add a last name?', a: 'Yes. You can type up to 16 characters, so a short first and last name fits. Longer names split onto two lines automatically so the letters stay big enough to color.' },
+  { q: 'Can I make name coloring pages for a whole class?', a: 'Yes. Members save a class list once and print a name coloring page for every child in one PDF. Anyone can make pages one name at a time for free.', html: 'Yes. <a href="/membership/">Members</a> save a class list once and print a name coloring page for every child in one PDF, or build a full <a href="/class-pack/">class pack</a>. Anyone can make pages one name at a time for free.' },
+  { q: 'Is my child’s name stored anywhere?', a: 'No. The page is built in your browser and the name never leaves your device.' },
+];
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Name Coloring Page Maker', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any (web browser)', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description },
   { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
     { '@type': 'ListItem', position: 2, name: 'Name Coloring Pages', item: url },
   ] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
 ---
 <Base title={title} description={description} schema={schema}>
@@ -20,16 +28,18 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Name coloring pages</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Name coloring pages</span></h1>
-      <p class="mt-4 text-lg text-muted">Big bubble letters of your child's name, with shapes to color all around it.</p>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free name coloring pages with your child's name</span></h1>
+      <p class="mt-4 text-lg text-muted">Type a name and get a personalized coloring page: big, round letters with shapes to color all around them.</p>
     </header>
 
     <FontTool client:load kind="coloring" source="name-coloring" />
+    <Preview k={'name-coloring'} caption="Example: a name coloring page for Emma." />
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
-        This free name coloring page maker puts your child's name in big outlined bubble letters, then fills the page with stars, hearts,
-        flowers or bubbles to color. Long names split onto two lines automatically, and every page prints on Letter or A4.
+        This free name coloring page maker puts your child's name in big outlined letters, then fills the page with stars, hearts,
+        flowers or bubbles to color. Each name coloring page is personalized and printable, long names split onto two lines automatically,
+        and every page prints on Letter or A4.
       </p>
       <h2>Ways to use a name coloring page</h2>
       <ul>
@@ -44,7 +54,16 @@ const schema = [
         <li>Ask your child to color each letter a different color, then name the letters together.</li>
         <li>Turn the sheet sideways if they want more room for the long letters.</li>
       </ul>
-      <p>Looking for more to color? Browse our free <a href="/coloring-pages/">coloring pages</a>, including <a href="/coloring-pages/thanksgiving-coloring-pages/">Thanksgiving</a> and <a href="/coloring-pages/christmas-coloring-pages/">Christmas</a>.</p>
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            {f.html ? <p class="mt-3 mb-0!" set:html={f.html} /> : <p class="mt-3 mb-0!">{f.a}</p>}
+          </details>
+        ))}
+      </div>
+      <p>Need single letters or a word with no shapes? Print <a href="/bubble-letters/">bubble letters A to Z</a>. Looking for more to color? Browse our free <a href="/coloring-pages/">coloring pages</a>, including <a href="/coloring-pages/thanksgiving-coloring-pages/">Thanksgiving</a> and <a href="/coloring-pages/christmas-coloring-pages/">Christmas</a>.</p>
     </article>
   </div>
 </Base>

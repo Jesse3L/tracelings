@@ -3,14 +3,18 @@ import Base from '../../layouts/Base.astro';
 import FontTool from '../../components/FontTool.tsx';
 import { SITE } from '../../config';
 
-const title = `Cursive Name & Word Worksheet Generator (Free) | ${SITE.name}`;
-const description = 'Make free cursive handwriting worksheets from any name, word or short sentence. Connected cursive on guide lines, trace then write. Prints on Letter or A4.';
+const title = `Free Cursive Worksheets: Name & Word Generator | ${SITE.name}`;
+const description = 'Make free cursive worksheets from any name, word or sentence. Connected cursive on guide lines to trace, then write. For kids and adults. Free PDF.';
 const url = new URL('/cursive/', SITE.url).href;
 const faqs = [
   { q: 'What style of cursive does this use?', a: 'A traditional looped cursive close to what most US schools teach, with connected letters. It comes from an open-licensed school handwriting font designed for teaching.' },
   { q: 'What age should kids start cursive?', a: 'Many schools introduce cursive somewhere between second and third grade, around ages 7 to 9, once print handwriting feels comfortable. Some families start earlier at home. Your child’s teacher can tell you what their school uses.' },
   { q: 'Can I make a cursive name worksheet?', a: 'Yes. Type your child’s name and the sheet shows it in connected cursive, with a solid example on the first row and gray letters to trace below.' },
   { q: 'Is the name I type stored?', a: 'No. The worksheet is built in your browser and the text never leaves your device.' },
+  { q: 'Is cursive still taught in schools?', a: 'It depends on the state and the school. Many schools cut back on cursive after the Common Core standards left it out, but several US states have since passed laws bringing cursive instruction back. If you want to know what your child will learn, ask their teacher or check your school district’s handwriting curriculum.' },
+  { q: 'How do I write my name in cursive?', a: 'Type your name in the box above and the sheet shows it in connected cursive. Trace the gray letters slowly without lifting your pencil inside the word, then write it on the blank lines. Most people get comfortable after a week or two of short daily practice.' },
+  { q: 'Can adults use these cursive worksheets?', a: 'Yes. The same tool works for adults who want to learn cursive, relearn it, or improve a signature. Choose the small line size for writing closer to everyday size, and type a sentence or quote instead of a single word.' },
+  { q: 'What’s the difference between D’Nealian and Zaner-Bloser cursive?', a: 'Both are common US handwriting programs taught in schools. They differ in small ways, such as the shape of a few capitals and how some letters begin and join. Our sheets use a traditional US school cursive that is close to what most schools teach, so it works well alongside either program. If your child’s class uses one style strictly, a few letters may look slightly different.' },
 ];
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Cursive Worksheet Generator', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any (web browser)', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, description },
@@ -27,7 +31,7 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Cursive worksheets</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Cursive worksheet generator</span></h1>
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free cursive worksheet generator</span></h1>
       <p class="mt-4 text-lg text-muted">Type a name, word or short sentence and get connected cursive to trace and copy.</p>
     </header>
 
@@ -44,13 +48,20 @@ const schema = [
         <li><strong>Trace slowly, without lifting.</strong> Cursive is about the flow from one letter into the next. Tracing the gray letters in one smooth motion builds that habit.</li>
         <li><strong>Move to short words.</strong> Try family names, pets or spelling words once the name feels easy.</li>
       </ol>
+      <h2>Cursive handwriting practice sheets for older kids and adults</h2>
+      <p>
+        Cursive isn't only for second graders. Older kids use these cursive handwriting practice sheets to tidy up their joins, and adults
+        use them to relearn cursive they haven't used since school, to practice a signature, or simply because writing by hand feels good.
+        Type a favorite quote or a short sentence, choose the small line size, and print a few pages. Start slowly and focus on even slant
+        and spacing before speed.
+      </p>
       <h2>Tips for learning cursive</h2>
       <ul>
         <li><strong>Learn letters in families.</strong> Letters that start the same way, like a, c, d, g and o, are easier to learn together.</li>
         <li><strong>Watch the joins.</strong> Most mistakes happen between letters, not in them. Point out where one letter hands off to the next.</li>
         <li><strong>Keep the paper tilted.</strong> A slight slant toward the writing hand makes cursive feel more natural.</li>
       </ul>
-      <p>Want every letter? Print the <a href="/cursive-alphabet/">cursive alphabet worksheets</a>. Still working on print? Try <a href="/name-tracing/">name tracing</a> or <a href="/letter-tracing/">letter tracing</a>.</p>
+      <p>Just want a name? Make a <a href="/cursive-name-tracing/">cursive name tracing worksheet</a>. Want every letter? Print the <a href="/cursive-alphabet/">cursive alphabet worksheets</a>. Still working on print? Try <a href="/name-tracing/">name tracing</a> or <a href="/letter-tracing/">letter tracing</a>.</p>
       <h2>Frequently asked questions</h2>
       <div class="divide-y divide-hairline border-y border-hairline">
         {faqs.map((f) => (

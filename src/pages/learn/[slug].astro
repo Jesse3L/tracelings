@@ -11,6 +11,25 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
 const url = new URL(`/learn/${entry.id}/`, SITE.url).href;
+// Tools that fit each article, shown under it. Articles not listed get the name tracing card only.
+const toolsFor: Record<string, { href: string; label: string }[]> = {
+  'should-you-teach-uppercase-or-lowercase-letters-first': [
+    { href: '/letter-tracing/', label: 'Letter tracing worksheets, A to Z' },
+    { href: '/letter-tracing/#a-to-z', label: 'Alphabet tracing: all 26 letters in one PDF' },
+    { href: '/name-tracing/', label: 'Name tracing worksheet maker' },
+  ],
+  'can-4-year-olds-write-their-name': [
+    { href: '/name-tracing/', label: 'Name tracing worksheet maker' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages' },
+    { href: '/letter-tracing/', label: 'Letter tracing worksheets' },
+  ],
+  'how-to-teach-a-preschooler-to-write-their-name': [
+    { href: '/name-tracing/', label: 'Name tracing worksheet maker' },
+    { href: '/name-coloring-pages/', label: 'Name coloring pages' },
+    { href: '/bubble-letters/', label: 'Bubble letters to color and trace' },
+  ],
+};
+const tools = toolsFor[entry.id] ?? [];
 const fmt = (date: Date) => date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const schema = [
   {
@@ -36,11 +55,10 @@ const schema = [
   },
 ];
 ---
-<Base title={d.seoTitle} description={d.description} schema={schema}>
+<Base title={d.seoTitle} description={d.description} schema={schema} ogType="article">
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
-      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
-      <a href="/learn/" class="hover:text-ink">Learn</a>
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/learn/" class="hover:text-ink">Learn</a> <span aria-hidden="true">/</span> <span aria-current="page">{d.title}</span>
     </nav>
     <article class="prose-tl max-w-[68ch] pt-6">
       <h1 class="text-[2rem] sm:text-[2.5rem] font-bold leading-tight text-balance">{d.title}</h1>
@@ -51,6 +69,14 @@ const schema = [
       <h2 class="font-bold text-lg">Print a practice sheet with your child's name</h2>
       <p class="mt-2 text-muted">Type a name, pick a line size and print. Free, and the name stays on your device.</p>
       <a href="/name-tracing/" class="btn-pencil inline-block mt-4 px-5 py-3">Make a name tracing sheet</a>
+      {tools.length > 0 && (
+        <>
+          <h3 class="mt-6 font-bold">Free printables for this guide</h3>
+          <ul class="mt-2 grid gap-1.5">
+            {tools.map((t) => <li><a href={t.href} class="text-[#2f5fc4] underline underline-offset-4">{t.label}</a></li>)}
+          </ul>
+        </>
+      )}
     </aside>
   </div>
 </Base>

@@ -1,0 +1,112 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import Seo2NumberRange from '../../../components/seo/Seo2NumberRange.tsx';
+import { SITE } from '../../../config';
+import { fitTitle } from '../../../lib/seo';
+import numbers from '../../../data/numbers.json';
+
+const title = fitTitle('Number Tracing 1-20 Worksheets', ['(Free Printable)', 'Free']);
+const description = 'Free number tracing worksheets 1-20. Trace every number from 1 to 20 on one page or in bigger rows, with green starting dots. Free printable PDF.';
+const url = new URL('/number-tracing/1-20/', SITE.url).href;
+
+const faqs = [
+  { q: 'Can I print numbers 1 to 20 on one page?', a: 'Yes. Choose the One page layout and all twenty numbers print on a single sheet in two columns, 1 to 10 on the left and 11 to 20 on the right. Pick Bigger numbers if your child needs larger rows, and the sheet spreads over a few pages instead.' },
+  { q: 'When should kids start tracing numbers 11 to 20?', a: 'Usually once they can write 1 to 10 without much help, which for many children is during the kindergarten year. Counting to 20 out loud comes first, so check that before adding the teen numbers.' },
+  { q: 'Why are the teen numbers hard?', a: 'The names don’t match the way they are written. We say “fourteen” with the four first, but write the 1 first. Pointing out that 14 is “ten and four” and that the 1 always comes first in the teens clears up a lot of confusion.' },
+  { q: 'Are these number tracing worksheets free?', a: 'Yes. Your first PDF downloads right away. After that we ask for your email once, and every sheet stays free on that device for home or classroom use.' },
+  { q: 'Can I use these sheets in my classroom?', a: 'Yes. Print as many copies as your students need. Members also get every sheet with no footer line and can print class sets of name worksheets in one PDF.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Number tracing worksheets 1-20',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Kindergarten, Grade 1',
+    teaches: 'Writing the numbers 1 to 20 in counting order',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Number Tracing', item: SITE.url + '/number-tracing/' },
+      { '@type': 'ListItem', position: 3, name: '1-20', item: url },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/number-tracing/" class="hover:text-ink">Number tracing</a> <span aria-hidden="true">/</span> <span aria-current="page">1-20</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Number tracing 1-20 worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">Every number from 1 to 20 on one printable page, or in bigger rows for little hands.</p>
+    </header>
+
+    <Seo2NumberRange client:load from={1} to={20} source="number-tracing-1-20" />
+
+    <Preview k={'number-1-20'} />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        These free number tracing worksheets for 1-20 give your child every number from one to twenty to trace in counting order. The
+        one-page sheet fits all twenty numbers in two columns, which makes it a handy morning warm-up or homework page. Each row starts
+        with a solid number, then dotted copies with green starting dots, and the trace-then-write option leaves room to write each number
+        on their own.
+      </p>
+
+      <h2>How to use these number tracing sheets 1-20</h2>
+      <ol>
+        <li><strong>Warm up with 1 to 10.</strong> If the first column is still tricky, print the <a href="/number-tracing/1-10/">1-10 sheet</a> for a few days before adding the teens.</li>
+        <li><strong>Work one column at a time.</strong> Ten rows is plenty for one sitting. Do 11 to 20 the next day.</li>
+        <li><strong>Say it as you write it.</strong> "Fifteen is a one and a five." Saying the parts out loud keeps the digits in the right order.</li>
+        <li><strong>Check with a number line.</strong> Keep a 1 to 20 number line on the table so your child can compare their writing.</li>
+      </ol>
+
+      <h2>Counting games for 11 to 20</h2>
+      <ul>
+        <li><strong>Ten and some more:</strong> Make a bundle of ten craft sticks with a rubber band. For 16, show the bundle plus six loose sticks, then trace 16.</li>
+        <li><strong>Egg carton count:</strong> Two egg cartons hold 24. Fill them with small toys up to the number on the row you are tracing.</li>
+        <li><strong>Step and count:</strong> Count steps across the room up to 20, then find and trace the last number you said.</li>
+      </ul>
+
+      <h2>Which age is it for?</h2>
+      <p>
+        Most preschoolers stay with 1 to 10, and many kindergarten classes work up to 20 over the year. First graders use the one-page
+        sheet for neat, quick handwriting practice. Choose the Bigger numbers layout with the large line size for ages 3 to 4, medium for
+        ages 5 to 6, and small for kids 6 and up.
+      </p>
+      <p>Need to slow down on one number? Every digit has its own practice page:</p>
+      <ul class="mt-2 grid grid-cols-5 sm:grid-cols-10 gap-2 max-w-xl list-none! pl-0!">
+        {numbers.map((n) => (
+          <li class="mb-0!"><a href={`/number-tracing/${n.digit}/`} class="block rounded-lg border border-hairline bg-white py-2 text-center text-xl font-bold no-underline! text-ink! hover:border-rule">{n.digit}<span class="sr-only"> tracing worksheet</span></a></li>
+        ))}
+      </ul>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>More free printables</h2>
+      <p>
+        Head back to all the <a href="/number-tracing/">number tracing worksheets</a>, start smaller with <a href="/number-tracing/1-10/">number tracing 1-10</a>, or switch to letters with the <a href="/letter-tracing/">letter tracing worksheets</a> and the <a href="/alphabet-chart/">printable alphabet chart</a>.
+      </p>
+    </article>
+  </div>
+</Base>
