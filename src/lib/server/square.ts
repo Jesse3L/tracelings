@@ -52,8 +52,6 @@ interface Variation { id: string; cents: number; cadence: string; name: string }
 let variationCache: { at: number; list: Variation[] } | null = null;
 
 /** Reads subscription plan variations from the Square catalog (created in the Square Dashboard) and matches them by price and cadence. */
-export function clearPlanCache() { variationCache = null; }
-
 export async function planVariations(): Promise<Variation[]> {
   if (variationCache && Date.now() - variationCache.at < 10 * 60_000) return variationCache.list;
   const list: Variation[] = [];
@@ -127,7 +125,31 @@ export async function foundingCount(): Promise<number> {
   return n;
 }
 
+// Square's checkout links need plans priced on the plan itself (STATIC). If a plan has no match, create it once
+// under a single "Tracelings Membership" plan. Only ever creates the exact prices in PLANS.
+let ensuring: Promise<void> | null = null;
+async function ensurePlans(): Promise<void> {
+  const missing = [] as PlanKey[];
+  for (const k of Object.keys(PLANS) as PlanKey[]) if (!(await variationFor(k))) missing.push(k);
+  if (!missing.length) return;
+  const plan = await sq<any>('/v2/catalog/object', { body: { idempotency_key: `tl-plan-${missing.join('-')}`, object: { type: 'SUBSCRIPTION_PLAN', id: '#tl-plan', subscription_plan_data: { name: 'Tracelings Membership' } } } });
+  const planId = plan.catalog_object.id;
+  for (const k of missing) {
+    const p = PLANS[k];
+    await sq('/v2/catalog/object', { body: { idempotency_key: `tl-var-${planId}-${k}`, object: {
+      type: 'SUBSCRIPTION_PLAN_VARIATION', id: `#tl-${k}`,
+      subscription_plan_variation_data: { name: `Tracelings ${p.label}`, subscription_plan_id: planId,
+        phases: [{ cadence: p.cadence, ordinal: 0, pricing: { type: 'STATIC', price_money: { amount: p.cents, currency: 'USD' } } }] },
+    } } });
+  }
+  variationCache = null;
+}
+
 export async function createCheckout(plan: PlanKey, email: string, redirectUrl: string): Promise<string> {
+  if (!(await variationFor(plan))) {
+    ensuring ??= ensurePlans().finally(() => { ensuring = null; });
+    await ensuring;
+  }
   const v = await variationFor(plan);
   if (!v) throw new Error(`No Square plan found for ${plan}`);
   const p = PLANS[plan];
