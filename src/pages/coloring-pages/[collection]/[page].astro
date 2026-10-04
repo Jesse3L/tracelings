@@ -3,6 +3,8 @@ import Base from '../../../layouts/Base.astro';
 import ColoringDownload from '../../../components/ColoringDownload.tsx';
 import { SITE } from '../../../config';
 import { getCollections } from '../../../lib/coloring-data';
+import { fitTitle } from '../../../lib/seo';
+import extra from '../../../data/coloring-extra.json';
 
 export function getStaticPaths() {
   return getCollections().flatMap((c) => c.pages.map((p, i) => ({ params: { collection: c.slug, page: p.slug }, props: { c, i } })));
@@ -11,7 +13,8 @@ const { c, i } = Astro.props;
 const p = c.pages[i];
 const related = c.pages.filter((_, j) => j !== i).slice(0, 4);
 const url = new URL(`/coloring-pages/${c.slug}/${p.slug}/`, SITE.url).href;
-const title = `${p.title} (Free Printable PDF) | ${SITE.name}`;
+const title = fitTitle(p.title);
+const x = (extra.pages as Record<string, { talkAbout: string; colorTips: string; learning: string }>)[p.slug];
 const description = p.description.length > 155 ? p.description.slice(0, 152).replace(/\s+\S*$/, '') + '…' : p.description;
 const schema = [
   { '@context': 'https://schema.org', '@type': 'ImageObject', name: p.title, description: p.description, contentUrl: SITE.url + p.src, thumbnailUrl: SITE.url + p.thumb,
@@ -24,7 +27,7 @@ const schema = [
   ] },
 ];
 ---
-<Base title={title} description={description} schema={schema}>
+<Base title={title} description={description} schema={schema} ogImage={p.src}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
@@ -42,6 +45,17 @@ const schema = [
         <p class="mt-4 text-[14px] text-muted">Free for personal and classroom use.</p>
       </div>
     </div>
+
+    {x && (
+      <article class="prose-tl max-w-[68ch] mt-12">
+        <h2>Things to talk about while coloring</h2>
+        <p>{x.talkAbout}</p>
+        <h2>Coloring ideas</h2>
+        <p>{x.colorTips}</p>
+        <h2>A little learning</h2>
+        <p>{x.learning}</p>
+      </article>
+    )}
 
     <section class="mt-14" aria-labelledby="related">
       <h2 id="related" class="text-[1.45rem] font-bold">More {c.title.toLowerCase()}</h2>

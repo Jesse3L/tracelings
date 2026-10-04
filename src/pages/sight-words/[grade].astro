@@ -1,0 +1,120 @@
+---
+import { fitTitle } from '../../lib/seo';
+import Base from '../../layouts/Base.astro';
+import Tracer from '../../components/Tracer.tsx';
+import FlashCards from '../../components/FlashCards.tsx';
+import { SITE } from '../../config';
+import levels from '../../data/sight-words.json';
+
+export function getStaticPaths() {
+  return levels.map((l, i) => ({ params: { grade: l.slug }, props: { i } }));
+}
+const { i } = Astro.props as { i: number };
+const L = levels[i];
+const prev = i > 0 ? levels[i - 1] : null;
+const next = i < levels.length - 1 ? levels[i + 1] : null;
+const url = new URL(`/sight-words/${L.slug}/`, SITE.url).href;
+const title = fitTitle(L.title, ['(Free Worksheets and Flash Cards)', '+ Free Flash Cards', '(Free Printables)', 'Free Printable']);
+const shown = (w: string) => (w === 'I' ? w : w.toLowerCase());
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `${L.title}: tracing worksheet and flash cards`,
+    url,
+    learningResourceType: ['Worksheet', 'Flash card'],
+    educationalLevel: L.short,
+    teaches: `Reading and writing the ${L.words.length} Dolch ${L.dolch.toLowerCase()} sight words`,
+    keywords: L.keyword,
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description: L.metaDescription,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Sight Words', item: SITE.url + '/sight-words/' },
+      { '@type': 'ListItem', position: 3, name: L.short, item: url },
+    ],
+  },
+];
+---
+<Base title={title} description={L.metaDescription} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/sight-words/" class="hover:text-ink">Sight words</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{L.short}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{L.title}</span></h1>
+      <p class="mt-4 text-lg text-muted">All {L.words.length} words from the Dolch {L.dolch.toLowerCase()} list, with a word tracing worksheet and printable flash cards.</p>
+    </header>
+
+    <article class="prose-tl max-w-[68ch]">
+      <p class="text-[1.15rem]!">{L.intro}</p>
+    </article>
+
+    <section class="mt-8" aria-labelledby="word-list">
+      <h2 id="word-list" class="text-[1.6rem] font-bold">The {L.words.length} {L.short === 'Pre-K' ? 'pre-K' : L.short} sight words</h2>
+      <p class="mt-2 text-muted max-w-[68ch]">This is the Dolch {L.dolch.toLowerCase()} list, a public-domain list of high-frequency words compiled by Edward William Dolch. Your child's school may use a different list or order, so check with the teacher if you want to match class work.</p>
+      <ul class="mt-5 grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-2">
+        {L.words.map((w) => (
+          <li class="rounded-lg border border-hairline bg-white py-2.5 text-center text-xl font-bold text-ink">{shown(w)}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-14" aria-labelledby="tracing">
+      <h2 id="tracing" class="text-[1.6rem] font-bold">Sight word tracing worksheet</h2>
+      <p class="mt-2 mb-6 text-muted max-w-[68ch]">Each row traces one word. Tap the words to choose what goes on the sheet. The first eight are picked to start.</p>
+      <Tracer client:load mode="words" value={L.slug} words={L.words} source="sight-words" />
+    </section>
+
+    <section class="mt-14" aria-labelledby="cards">
+      <h2 id="cards" class="text-[1.6rem] font-bold">Printable sight word flash cards</h2>
+      <p class="mt-2 mb-6 text-muted max-w-[68ch]">Big, clear letters in the same style as the worksheets. Print the whole list or only the words your child is working on.</p>
+      <FlashCards client:visible words={L.words} slug={L.slug} label={L.short} source="sight-words" />
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <h2>Tips for {L.short === 'Pre-K' ? 'pre-K' : L.short} sight words</h2>
+      <ul>{L.tips.map((t) => <li>{t}</li>)}</ul>
+
+      <h2>A simple 5-minute routine</h2>
+      <ol>
+        <li><strong>Read 3 cards</strong> together. Say each word and use it in a short sentence.</li>
+        <li><strong>Trace 2 rows</strong> on the worksheet, starting at the green dots.</li>
+        <li><strong>Find one word</strong> in a book you are already reading.</li>
+      </ol>
+      <p>Kids learn these words at different speeds. If you have concerns about reading, ask your child's teacher or pediatrician.</p>
+
+      <h2>More handwriting practice</h2>
+      <p>
+        If a letter inside a word keeps going wrong, practice it on its own with our <a href="/letter-tracing/">letter tracing worksheets</a>,
+        then come back to the word. For a word that matters even more to your child, make a <a href="/name-tracing/">name tracing worksheet</a>.
+      </p>
+    </article>
+
+    <nav aria-label="Other sight word levels" class="mt-12">
+      <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
+        {prev ? <a class="text-[#2f5fc4] underline underline-offset-4" href={`/sight-words/${prev.slug}/`}>{prev.title}</a> : <span />}
+        {next ? <a class="text-[#2f5fc4] underline underline-offset-4" href={`/sight-words/${next.slug}/`}>{next.title}</a> : <a class="text-[#2f5fc4] underline underline-offset-4" href="/sight-words/">All sight word lists</a>}
+      </div>
+      <ul class="mt-6 grid grid-cols-2 sm:grid-cols-5 gap-2 max-w-3xl">
+        {levels.map((l) => (
+          <li>
+            <a
+              href={`/sight-words/${l.slug}/`}
+              aria-current={l.slug === L.slug ? 'page' : undefined}
+              class={`block text-center rounded-md border py-2 font-bold ${l.slug === L.slug ? 'border-rule bg-white text-ink' : 'border-hairline text-muted hover:text-ink hover:bg-white'}`}
+            >{l.short}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Base>

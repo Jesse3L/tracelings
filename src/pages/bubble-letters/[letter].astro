@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import FontTool from '../../components/FontTool.tsx';
+import { SITE } from '../../config';
+import letters from '../../data/letters.json';
+
+export function getStaticPaths() {
+  return letters.map((l, i) => ({ params: { letter: l.letter }, props: { i } }));
+}
+const { i } = Astro.props as { i: number };
+const L = letters[i];
+const U = L.letter.toUpperCase();
+const prev = letters[(i + 25) % 26];
+const next = letters[(i + 1) % 26];
+const url = new URL(`/bubble-letters/${L.letter}/`, SITE.url).href;
+const title = `Bubble Letter ${U} (Free Printable Coloring Page) | ${SITE.name}`;
+const description = `Free printable bubble letter ${U} in a big, bold outline. Color it, trace it, or cut it out for banners and bulletin boards. Letter or A4 PDF.`;
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'LearningResource', name: `Bubble letter ${U} printable`, url, learningResourceType: 'Coloring page', educationalLevel: 'Preschool, Kindergarten', isAccessibleForFree: true, description },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Bubble Letters', item: SITE.url + '/bubble-letters/' },
+    { '@type': 'ListItem', position: 3, name: `Bubble Letter ${U}`, item: url },
+  ] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/bubble-letters/" class="hover:text-ink">Bubble letters</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">Letter {U}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Bubble letter {U}</span></h1>
+      <p class="mt-4 text-lg text-muted">A big outlined {U} to color, decorate or cut out. Switch to lowercase or add shapes around it.</p>
+    </header>
+
+    <FontTool client:load kind="coloring" preset={U} source="name-coloring" />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free bubble letter {U} printable fills the page with one bold, rounded {U} that's easy for small hands to color inside. It works as
+        a coloring page, a letter-of-the-week craft, or a cut-out for classroom banners and bulletin boards.
+      </p>
+      <h2>Ideas for bubble letter {U}</h2>
+      <ul>
+        <li><strong>Letter of the week:</strong> color the {U}, then draw or glue pictures of things that start with {U} around it.</li>
+        <li><strong>Collage:</strong> fill the letter with torn paper, stickers or dot markers instead of crayons.</li>
+        <li><strong>Banners:</strong> print each letter of a word, cut them out and string them up for a birthday or classroom door.</li>
+      </ul>
+      <h2>Words that start with {U}</h2>
+      <ul class="columns-2 sm:columns-3">{L.words.map((w) => <li>{w}</li>)}</ul>
+      <p>Ready to write it? Practice the same letter on our <a href={`/letter-tracing/${L.letter}/`}>letter {U} tracing worksheet</a>, or put a whole name in bubble letters with the <a href="/name-coloring-pages/">name coloring page maker</a>.</p>
+    </article>
+
+    <nav aria-label="Other letters" class="mt-12">
+      <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/bubble-letters/${prev.letter}/`}>Bubble letter {prev.letter.toUpperCase()}</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/bubble-letters/${next.letter}/`}>Bubble letter {next.letter.toUpperCase()}</a>
+      </div>
+      <ul class="mt-6 grid grid-cols-7 sm:grid-cols-13 gap-2 max-w-3xl">
+        {letters.map((l) => (
+          <li><a href={`/bubble-letters/${l.letter}/`} aria-current={l.letter === L.letter ? 'page' : undefined}
+            class={`block text-center rounded-md border py-2 font-bold ${l.letter === L.letter ? 'border-rule bg-white text-ink' : 'border-hairline text-muted hover:text-ink hover:bg-white'}`}>{l.letter.toUpperCase()}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Base>

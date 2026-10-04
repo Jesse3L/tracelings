@@ -19,6 +19,8 @@ const tools = [
   { name: 'Name coloring pages', href: '/name-coloring-pages/', live: true, p: 'Big outlined letters of your child’s name, ready to color and hang on the fridge.' },
   { name: 'Cursive practice', href: '/cursive/', live: true, p: 'Cursive handwriting worksheets for names, letters and words, for kids moving past print.' },
   { name: 'Coloring pages', href: '/coloring-pages/', live: true, p: 'Close to 100 free pages for Thanksgiving, Christmas, dinosaurs, unicorns, trucks and more.' },
+  { name: 'Sight words', href: '/sight-words/', live: true, p: 'Dolch sight word lists from pre-K to third grade, with tracing worksheets and printable flash cards.' },
+  { name: 'Bubble letters', href: '/bubble-letters/', live: true, p: 'Every letter from A to Z in big outlined bubble letters to color, cut out or decorate.' },
   { name: 'Spelling worksheets', p: 'Paste this week’s spelling list and print practice pages built from those exact words.' },
   { name: 'Photo to coloring page', p: 'Upload a family photo and get a simple line drawing your child can color.' },
   { name: 'Chore charts', p: 'Printable chore charts with your child’s name and the jobs that fit your house.' },
@@ -26,7 +28,7 @@ const tools = [
 
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url + '/' },
-  { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url + '/', logo: SITE.url + '/favicon.svg', email: SITE.email },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url + '/', logo: SITE.url + '/logo.png', email: SITE.email },
 ];
 ---
 <Base title={title} description={description} schema={schema}>

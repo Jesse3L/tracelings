@@ -2,11 +2,12 @@
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../config';
 import { getCollections } from '../../lib/coloring-data';
+import { fitTitle } from '../../lib/seo';
 
 const collections = getCollections();
 const total = collections.reduce((n, c) => n + c.pages.length, 0);
-const title = `Free Coloring Pages for Kids (${total} Printable PDFs) | ${SITE.name}`;
-const description = 'Free printable coloring pages for kids: Thanksgiving, Christmas, dinosaurs, unicorns, trucks and more. Simple bold lines for little hands. Letter or A4 PDF.';
+const title = fitTitle('Free Coloring Pages for Kids', [`(${total} Printable PDFs)`, `(${total} Free Printables)`, '']);
+const description = 'Free printable coloring pages for kids: Thanksgiving, Christmas, dinosaurs, unicorns, trucks and more. Bold lines for little hands.';
 const url = new URL('/coloring-pages/', SITE.url).href;
 const schema = [
   { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Free coloring pages for kids', url, description,

@@ -2,13 +2,16 @@
 import Base from '../../../layouts/Base.astro';
 import { SITE } from '../../../config';
 import { getCollections } from '../../../lib/coloring-data';
+import { fitTitle } from '../../../lib/seo';
+import extra from '../../../data/coloring-extra.json';
 
 export function getStaticPaths() {
   return getCollections().map((c) => ({ params: { collection: c.slug }, props: { c } }));
 }
 const { c } = Astro.props;
 const n = c.pages.length;
-const title = `${n} ${c.title} (Free Printable PDFs) | ${SITE.name}`;
+const title = fitTitle(`${n} ${c.title}`, ['(Free Printable PDFs)', '(Free Printables)', 'Free']);
+const x = (extra.collections as Record<string, { skills: string[]; ideas: string[]; faq: { q: string; a: string }[] }>)[c.slug];
 const description = `${n} free printable ${c.title.toLowerCase()} for kids with bold, simple lines. Download any page as a full-size PDF for Letter or A4 paper.`;
 const url = new URL(`/coloring-pages/${c.slug}/`, SITE.url).href;
 const others = getCollections().filter((o) => o.slug !== c.slug);
@@ -46,6 +49,24 @@ const schema = [
         </li>
       ))}
     </ul>
+
+    {x && (
+      <article class="prose-tl max-w-[68ch] mt-12">
+        <h2>What kids practice</h2>
+        <ul>{x.skills.map((s) => <li>{s}</li>)}</ul>
+        <h2>Ways to use these pages</h2>
+        <ul>{x.ideas.map((s) => <li>{s}</li>)}</ul>
+        <h2>Questions</h2>
+        <div class="divide-y divide-hairline border-y border-hairline">
+          {x.faq.map((f) => (
+            <details class="group py-4">
+              <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+              <p class="mt-3 mb-0!">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </article>
+    )}
 
     <section class="mt-14" aria-labelledby="more">
       <h2 id="more" class="text-[1.45rem] font-bold">More coloring pages</h2>

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { buildSheet, styleName, type LetterStyle, type LineSize, type Paper, type Practice } from '../lib/sheet';
+import { buildSheet, rowKinds, styleName, type LetterStyle, type LineSize, type Page, type Paper, type Practice } from '../lib/sheet';
 import { pageToSvg, pagesToPdf } from '../lib/render';
 import { needsEmail, countDownload } from '../lib/gate';
 import EmailGate from './EmailGate';
+import WordChips from './WordChips';
 
-type Mode = 'name' | 'letter' | 'number';
+type Mode = 'name' | 'letter' | 'number' | 'words';
 type Case = 'both' | 'upper' | 'lower';
 
 const SIZES: { v: LineSize; label: string; age: string }[] = [
@@ -14,6 +15,9 @@ const SIZES: { v: LineSize; label: string; age: string }[] = [
 ];
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const DIGITS = '0123456789'.split('');
+
+/** Sight words print in lowercase, except the pronoun I. */
+export const wordCase = (w: string) => (w === 'I' ? w : w.toLowerCase());
 
 export function Segmented<T extends string>(props: {
   legend: string;
@@ -45,7 +49,7 @@ export function Segmented<T extends string>(props: {
   );
 }
 
-export default function Tracer(props: { mode?: Mode; value?: string; pick?: boolean; source?: string }) {
+export default function Tracer(props: { mode?: Mode; value?: string; pick?: boolean; source?: string; words?: string[] }) {
   const mode = props.mode ?? 'name';
   const [name, setName] = useState('');
   const [value, setValue] = useState(props.value ?? (mode === 'number' ? '1' : 'a'));
@@ -59,6 +63,8 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   const [busy, setBusy] = useState(false);
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState(false);
+  const allWords = props.words ?? [];
+  const [chosen, setChosen] = useState<string[]>(() => allWords.slice(0, 8));
   const source = props.source ?? `${mode}-tracing`;
 
   // A name typed on the homepage is handed over in this tab only, never through the URL.
@@ -79,10 +85,26 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
     return undefined;
   }, [mode, value, letterCase]);
 
+  // Word sheets: one word per practice row. When the chosen words don't fit on one page, the PDF gets more pages.
+  const wordPages = useMemo(() => {
+    if (mode !== 'words') return null;
+    const list = (chosen.length ? chosen : allWords.slice(0, 1)).map(wordCase);
+    const perPage = Math.max(1, rowKinds({ size, paper, practice, modelRow }).filter((k) => k === 'trace').length);
+    const out: Page[] = [];
+    for (let i = 0; i < list.length; i += perPage) {
+      const chunk = list.slice(i, i + perPage);
+      // Row 0 is the solid example (the page's first word); trace rows then cycle through the chunk.
+      out.push(buildSheet({ name, style, size, paper, practice, startDots, modelRow, credit: true, rowTexts: [chunk[0], ...chunk] }));
+    }
+    return out;
+  }, [mode, chosen, size, paper, practice, startDots, modelRow]);
+
   const page = useMemo(
-    () => buildSheet({ name, style, size, paper, practice, startDots, modelRow, credit: true, rowTexts }),
-    [name, style, size, paper, practice, startDots, modelRow, rowTexts],
+    () => wordPages?.[0] ?? buildSheet({ name, style, size, paper, practice, startDots, modelRow, credit: true, rowTexts }),
+    [wordPages, name, style, size, paper, practice, startDots, modelRow, rowTexts],
   );
+  const pages = wordPages ?? [page];
+  const noWords = mode === 'words' && chosen.length === 0;
   const svg = useMemo(() => pageToSvg(page), [page]);
   const strip = useMemo(
     () => svg.replace(/viewBox="[^"]+"/, `viewBox="30 80 ${page.w - 60} ${size === 'large' ? 236 : size === 'medium' ? 172 : 124}"`),
@@ -92,12 +114,13 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   const fileBase =
     mode === 'name' ? `${styleName(name, 'lower').replace(/\s+/g, '-') || 'name'}-tracing-worksheet`
     : mode === 'letter' ? `letter-${value.toLowerCase()}-tracing-worksheet`
+    : mode === 'words' ? `${props.value ? `${props.value}-` : ''}sight-words-tracing-worksheet`
     : `number-${value}-tracing-worksheet`;
 
   async function save() {
     setBusy(true);
     try {
-      const bytes = await pagesToPdf([page]);
+      const bytes = mode === 'words' ? await pagesToPdf(pages, 'Sight word tracing worksheet') : await pagesToPdf([page]);
       const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
       const a = document.createElement('a');
       a.href = url;
@@ -115,6 +138,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
 
   function requestDownload(e: Event) {
     e.preventDefault();
+    if (noWords) return;
     if (needsEmail()) setGate(true);
     else save();
   }
@@ -154,6 +178,16 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
               ))}
             </select>
           </label>
+        )}
+
+        {mode === 'words' && (
+          <WordChips
+            legend="Words on the sheet"
+            words={allWords}
+            selected={chosen}
+            onChange={(next) => { setChosen(next); setDone(false); }}
+            hint="One word per row. Extra words go on extra pages."
+          />
         )}
 
         <div class="lg:hidden -mt-1 mb-5 sheet-frame overflow-hidden" aria-hidden="true" dangerouslySetInnerHTML={{ __html: strip }} />
@@ -209,7 +243,8 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
 
         <Segmented legend="Paper" name="paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
-        <button type="submit" disabled={busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+        {noWords && <p class="mb-3 text-[14px] text-[#b4232c]" role="alert">Choose at least one word to make a sheet.</p>}
+        <button type="submit" disabled={busy || noWords} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
           {busy ? 'Making your PDF…' : 'Download PDF'}
         </button>
         {done ? (
@@ -223,7 +258,9 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
 
       <figure class="lg:sticky lg:top-6">
         <div class="sheet-frame overflow-hidden" dangerouslySetInnerHTML={{ __html: svg }} />
-        <figcaption class="mt-3 text-[13px] text-muted">Live preview. The PDF prints at full size on {paper === 'letter' ? 'US Letter' : 'A4'} paper.</figcaption>
+        <figcaption class="mt-3 text-[13px] text-muted">
+          Live preview{pages.length > 1 ? ` of page 1 of ${pages.length}` : ''}. The PDF prints at full size on {paper === 'letter' ? 'US Letter' : 'A4'} paper.
+        </figcaption>
       </figure>
 
       <EmailGate open={gate} source={source} onClose={() => setGate(false)} onDone={() => { setGate(false); save(); }} />

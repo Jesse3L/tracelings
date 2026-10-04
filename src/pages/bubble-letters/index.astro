@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config';
+import letters from '../../data/letters.json';
+
+const title = `Bubble Letters A to Z (Free Printable) | ${SITE.name}`;
+const description = 'Free printable bubble letters for every letter from A to Z. Big outlined letters to color, cut out for banners, or use for letter of the week.';
+const url = new URL('/bubble-letters/', SITE.url).href;
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Bubble letters A to Z', url, description,
+    hasPart: letters.map((l) => ({ '@type': 'LearningResource', name: `Bubble letter ${l.letter.toUpperCase()}`, url: `${SITE.url}/bubble-letters/${l.letter}/` })) },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Bubble Letters', item: url },
+  ] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Bubble letters</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Bubble letters, A to Z</span></h1>
+      <p class="mt-4 text-lg text-muted">Pick a letter for a full-page bubble letter to color, cut out or decorate. Every page prints on Letter or A4.</p>
+    </header>
+
+    <ul class="grid grid-cols-4 sm:grid-cols-7 lg:grid-cols-13 gap-2">
+      {letters.map((l) => (
+        <li><a href={`/bubble-letters/${l.letter}/`} class="block rounded-lg border border-hairline bg-white py-4 text-center text-3xl font-bold text-ink hover:border-rule">{l.letter.toUpperCase()}<span class="sr-only"> bubble letter</span></a></li>
+      ))}
+    </ul>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        These free printable bubble letters give you one big, rounded letter per page, with thick outlines that are easy for young kids to
+        color inside. Teachers use them for letter-of-the-week crafts and bulletin board titles, and parents use them for birthday banners
+        and bedroom door signs.
+      </p>
+      <h2>How to use bubble letters</h2>
+      <ul>
+        <li><strong>Letter of the week:</strong> color the letter, then glue or draw pictures of things that start with its sound.</li>
+        <li><strong>Banners and signs:</strong> print each letter of a name or word, cut them out and hang them on a string.</li>
+        <li><strong>Fine motor practice:</strong> fill the letter with dot stickers, torn paper or pom-poms.</li>
+        <li><strong>Cutting practice:</strong> the smooth, wide outline is a good first shape for safety scissors.</li>
+      </ul>
+      <h2>Whole names in bubble letters</h2>
+      <p>For a full name on one page, with stars, hearts or flowers around it, use the <a href="/name-coloring-pages/">name coloring page maker</a>. To practice writing the same letters, try our <a href="/letter-tracing/">letter tracing worksheets</a>.</p>
+    </article>
+  </div>
+</Base>

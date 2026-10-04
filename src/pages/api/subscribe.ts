@@ -6,7 +6,7 @@ export const prerender = false;
 // Optional: KIT_FORM_ID (starts the welcome sequence) and KIT_TAG_WAITLIST (tags membership waitlist signups).
 // We only ever receive an email address and where it came from, never a child's name.
 const KIT = 'https://api.kit.com/v4';
-const SOURCES = new Set(['name-tracing', 'letter-tracing', 'number-tracing', 'cursive', 'name-coloring', 'coloring-pages', 'waitlist', 'homepage']);
+const SOURCES = new Set(['name-tracing', 'letter-tracing', 'number-tracing', 'cursive', 'name-coloring', 'coloring-pages', 'sight-words', 'waitlist', 'homepage']);
 const ROLES = new Set(['own-kids', 'classroom', 'homeschool', 'other']);
 
 const json = (status: number, body: Record<string, unknown>) =>

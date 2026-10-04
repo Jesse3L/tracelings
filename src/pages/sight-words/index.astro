@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config';
+import levels from '../../data/sight-words.json';
+
+const title = `Free Sight Words Lists, Tracing and Flash Cards | ${SITE.name}`;
+const description = 'Free Dolch sight words lists for pre-K to 3rd grade, with a printable word tracing worksheet and flash cards for every level. Prints on Letter or A4.';
+const url = new URL('/sight-words/', SITE.url).href;
+const total = levels.reduce((n, l) => n + l.words.length, 0);
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Sight words lists by grade',
+    url,
+    description,
+    hasPart: levels.map((l) => ({ '@type': 'LearningResource', name: l.title, url: `${SITE.url}/sight-words/${l.slug}/` })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Sight Words', item: url },
+    ],
+  },
+];
+const shown = (w: string) => (w === 'I' ? w : w.toLowerCase());
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Sight words</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Sight words by grade, free to print</span></h1>
+      <p class="mt-4 text-lg text-muted">Pick a level for the full word list, a word tracing worksheet and printable flash cards.</p>
+    </header>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {levels.map((l) => (
+        <li>
+          <a href={`/sight-words/${l.slug}/`} class="block h-full rounded-xl border border-hairline bg-white p-5 hover:border-rule">
+            <span class="block text-xl font-bold text-ink">{l.title}</span>
+            <span class="block mt-1 text-[14px] text-muted">Dolch {l.dolch.toLowerCase()} list, {l.words.length} words</span>
+            <span class="block mt-3 text-lg text-ink">{l.words.slice(0, 6).map(shown).join(', ')}…</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        Sight words are the short, common words kids meet on almost every page, like the, said and was. Many don't follow the usual
+        phonics rules, so children learn to read them at a glance. These pages use the Dolch lists, a public-domain set of {total} words
+        sorted into five levels from pre-K to 3rd grade.
+      </p>
+
+      <h2>What are the Dolch sight words?</h2>
+      <p>
+        Edward William Dolch compiled the lists in the 1930s and 1940s from words that come up again and again in children's books. They are
+        still common in classrooms today. Some schools use a different list, such as Fry, or their own order. If you want to match class work,
+        ask your child's teacher which words they are on.
+      </p>
+
+      <h2>How to practice sight words at home</h2>
+      <ol>
+        <li><strong>Start small.</strong> Pick 3 to 5 words, not the whole list.</li>
+        <li><strong>Trace, then write.</strong> Each level has a word tracing worksheet with one word per row and blank rows to finish.</li>
+        <li><strong>Flash cards for speed.</strong> Print the cards, cut on the dashed lines, and read a few each day.</li>
+        <li><strong>Find them in books.</strong> Spotting a word in a real story is what makes it stick.</li>
+        <li><strong>Keep it short.</strong> Five minutes a day beats a long session once a week.</li>
+      </ol>
+      <p>Kids learn to read at different speeds. If you have concerns, ask your child's teacher or pediatrician.</p>
+
+      <h2>Still working on letters?</h2>
+      <p>
+        If letters are still new, start with our <a href="/letter-tracing/">letter tracing worksheets</a>, or make a
+        <a href="/name-tracing/">name tracing worksheet</a> so the first word your child writes is their own.
+      </p>
+    </article>
+  </div>
+</Base>

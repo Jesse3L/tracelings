@@ -59,7 +59,7 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
     <div class="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] items-start">
       <form class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6" onSubmit={(e) => { e.preventDefault(); needsEmail() ? setGate(true) : save(); }}>
         <label class="block mb-5">
-          <span class="block text-[15px] font-bold mb-2">{kind === 'cursive' ? 'Name, word or short sentence' : "Child's name"}</span>
+          <span class="block text-[15px] font-bold mb-2">{kind === 'cursive' ? 'Name, word or short sentence' : 'Name or letter'}</span>
           <input
             id={`${kind}-text`}
             type="text"

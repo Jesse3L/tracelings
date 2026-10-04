@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const schema = { '@context': 'https://schema.org', '@type': 'AboutPage', name: `About ${SITE.name}`, url: SITE.url + '/about/',
+  mainEntity: { '@type': 'Organization', name: SITE.name, url: SITE.url + '/', logo: SITE.url + '/logo.png', email: SITE.email } };
+---
+<Base title={`About ${SITE.name}: Free Handwriting Printables`} description={`Who makes ${SITE.name}, how our worksheets are designed, and how we keep your child's information private.`} schema={schema}>
+  <article class="prose-tl mx-auto max-w-[68ch] px-4 sm:px-6 pt-12">
+    <h1 class="text-[2.2rem] sm:text-[2.6rem] font-bold"><span class="ruled">About {SITE.name}</span></h1>
+    <p class="mt-6">{SITE.name} makes free printable worksheets for parents, teachers and homeschool families: name tracing, letters and numbers, cursive, sight words and coloring pages. Most of them start with one thing, your child's name, because kids practice harder when the word on the page is theirs.</p>
+
+    <h2>How the worksheets are made</h2>
+    <p>Our print letters are drawn as simple ball-and-stick strokes, the style most US schools teach first. Each letter sits exactly on a top line, a dashed middle line and a bottom line, and green dots mark where every stroke begins so kids learn to start at the top.</p>
+    <p>Cursive sheets use a traditional looped school cursive with connected letters. Bubble letters and name coloring pages use bold, rounded outlines that are easy for small hands to color. Coloring page pictures are drawn with the help of AI image tools, then checked one by one and cleaned up into crisp black and white lines before they're published.</p>
+
+    <h2>Privacy comes first</h2>
+    <p>Every worksheet is built right in your web browser. The names you type are never sent to us or stored anywhere. If you choose to share your email, we use it only to send new printables and membership news, and you can unsubscribe at any time. Read the full <a href="/privacy/">privacy policy</a>.</p>
+
+    <h2>Free for home and classroom</h2>
+    <p>Everything on the site is free to print for personal and classroom use. A membership is on the way for families and teachers who print a lot, with class lists, saved settings and seasonal themes. <a href="/membership/">Join the waitlist</a> for the founding price.</p>
+
+    <h2>Contact</h2>
+    <p>Questions, ideas for a worksheet, or something that didn't print right? Email <strong>{SITE.email}</strong>. We read every message.</p>
+  </article>
+</Base>

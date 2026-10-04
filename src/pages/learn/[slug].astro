@@ -21,7 +21,8 @@ const schema = [
     datePublished: d.published.toISOString().slice(0, 10),
     dateModified: (d.updated ?? d.published).toISOString().slice(0, 10),
     author: { '@type': 'Organization', name: SITE.name, url: SITE.url + '/' },
-    publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: SITE.url + '/favicon.svg' } },
+    publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: SITE.url + '/logo.png' } },
+    image: SITE.url + '/og-default.png',
     mainEntityOfPage: url,
   },
   {

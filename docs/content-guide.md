@@ -132,3 +132,8 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 - [ ] Nothing speaks to the child directly.
 - [ ] Frontmatter fields exactly as above. `seoTitle` is 60 characters or fewer.
 - [ ] The backlog item's `status` is set to `done`.
+
+
+## Live pages you can link to (updated Oct 4, 2026)
+
+/name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /number-tracing/ and /0/ to /9/, /cursive/, /cursive-alphabet/, /name-coloring-pages/, /bubble-letters/ and /a/ to /z/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /coloring-pages/ and its collections (for example /coloring-pages/thanksgiving-coloring-pages/), /membership/, /learn/<existing-slug>/.

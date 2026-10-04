@@ -1,6 +1,6 @@
 // One page model drives both the on-screen preview (SVG) and the PDF, so they always match.
 // All coordinates are PDF points with the origin at the top-left of the page (y grows downward).
-import { GLYPHS, LETTER_GAP, SPACE_W, type Stroke } from './glyphs';
+import { GLYPHS, LETTER_GAP, SPACE_W, type Glyph, type Stroke } from './glyphs';
 import { SITE } from '../config';
 
 export type LetterStyle = 'capital' | 'caps' | 'lower';
@@ -58,14 +58,21 @@ export function styleName(raw: string, style: LetterStyle): string {
     .join(' ');
 }
 
-interface Placed { ch: string; x: number }
+// Punctuation that sight words need (don't). Kept here so the letter set in glyphs.ts stays A–Z, a–z, 0–9.
+const EXTRA_GLYPHS: Record<string, Glyph> = {
+  "'": { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
+  '’': { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
+};
+export const glyphFor = (ch: string): Glyph | undefined => GLYPHS[ch] ?? EXTRA_GLYPHS[ch];
 
-function layoutWord(text: string): { placed: Placed[]; width: number } {
+export interface Placed { ch: string; x: number }
+
+export function layoutWord(text: string): { placed: Placed[]; width: number } {
   const placed: Placed[] = [];
   let x = 0;
   for (const ch of text) {
     if (ch === ' ') { x += SPACE_W; continue; }
-    const g = GLYPHS[ch];
+    const g = glyphFor(ch);
     if (!g) continue;
     placed.push({ ch, x });
     x += g.w + LETTER_GAP;
@@ -75,7 +82,7 @@ function layoutWord(text: string): { placed: Placed[]; width: number } {
 
 const f = (n: number) => (Math.round(n * 100) / 100).toString();
 
-function strokeToPath(s: Stroke, ox: number, base: number, cap: number): string {
+export function strokeToPath(s: Stroke, ox: number, base: number, cap: number): string {
   return s
     .map((c) => {
       if (c[0] === 'M' || c[0] === 'L') return `${c[0]}${f(ox + c[1] * cap)} ${f(base + c[2] * cap)}`;
@@ -84,7 +91,25 @@ function strokeToPath(s: Stroke, ox: number, base: number, cap: number): string 
     .join(' ');
 }
 
-type RowKind = 'model' | 'trace' | 'blank';
+export type RowKind = 'model' | 'trace' | 'blank';
+
+/** Which rows a sheet gets for a given letter height. Word sheets use it to know how many words fit on a page. */
+export function rowKinds(o: Pick<SheetOptions, 'size' | 'paper' | 'practice' | 'modelRow'>, cap = CAP[o.size]): RowKind[] {
+  const { h } = PAPER[o.paper];
+  const m = 40;
+  const pitch = cap * 1.5 + Math.max(16, cap * 0.42);
+  const top0 = 92;
+  const bottom = h - m - 22;
+  const rowCount = Math.max(1, Math.floor((bottom - top0 - cap * 1.5) / pitch) + 1);
+  const kinds: RowKind[] = [];
+  for (let i = 0; i < rowCount; i++) kinds.push('trace');
+  if (o.modelRow) kinds[0] = 'model';
+  if (o.practice === 'trace-write' && rowCount >= 3) {
+    const blanks = rowCount >= 6 ? 2 : 1;
+    for (let i = rowCount - blanks; i < rowCount; i++) kinds[i] = 'blank';
+  }
+  return kinds;
+}
 
 export function buildSheet(o: SheetOptions): Page {
   const { w, h } = PAPER[o.paper];
@@ -118,16 +143,7 @@ export function buildSheet(o: SheetOptions): Page {
 
   const pitch = cap * 1.5 + Math.max(16, cap * 0.42);
   const top0 = 92;
-  const bottom = h - m - 22;
-  const rowCount = Math.max(1, Math.floor((bottom - top0 - cap * 1.5) / pitch) + 1);
-
-  const kinds: RowKind[] = [];
-  for (let i = 0; i < rowCount; i++) kinds.push('trace');
-  if (o.modelRow) kinds[0] = 'model';
-  if (o.practice === 'trace-write' && rowCount >= 3) {
-    const blanks = rowCount >= 6 ? 2 : 1;
-    for (let i = rowCount - blanks; i < rowCount; i++) kinds[i] = 'blank';
-  }
+  const kinds = rowKinds(o, cap);
 
   const strokeW = { model: Math.max(2, cap * 0.055), trace: Math.max(1.4, cap * 0.042) };
   const dash = [Math.max(2.2, cap * 0.075), Math.max(1.8, cap * 0.06)];
@@ -154,7 +170,7 @@ export function buildSheet(o: SheetOptions): Page {
     for (let r = 0; r < reps; r++) {
       const ox0 = startX + r * (oneW + repeatGap);
       for (const p of placed) {
-        const g = GLYPHS[p.ch];
+        const g = glyphFor(p.ch)!;
         const ox = ox0 + p.x * cap;
         for (const s of g.strokes) {
           items.push({ kind: 'path', d: strokeToPath(s, ox, yBase, cap), color, width: sw, dash: d });
