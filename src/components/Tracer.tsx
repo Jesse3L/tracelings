@@ -3,6 +3,7 @@ import { buildSheet, rowKinds, styleName, type LetterStyle, type LineSize, type 
 import { pageToSvg, pagesToPdf } from '../lib/render';
 import { needsEmail, countDownload } from '../lib/gate';
 import EmailGate from './EmailGate';
+import { useMember } from '../lib/member';
 import WordChips from './WordChips';
 
 type Mode = 'name' | 'letter' | 'number' | 'words';
@@ -66,6 +67,13 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   const allWords = props.words ?? [];
   const [chosen, setChosen] = useState<string[]>(() => allWords.slice(0, 8));
   const source = props.source ?? `${mode}-tracing`;
+  const member = useMember();
+  const credit = !member.member;
+  const [classList, setClassList] = useState('');
+  const listNames = useMemo(
+    () => (member.member && mode === 'name' ? classList.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean).slice(0, member.maxNames ?? 8) : []),
+    [classList, member.member, member.maxNames, mode],
+  );
 
   // A name typed on the homepage is handed over in this tab only, never through the URL.
   useEffect(() => {
@@ -94,14 +102,14 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
     for (let i = 0; i < list.length; i += perPage) {
       const chunk = list.slice(i, i + perPage);
       // Row 0 is the solid example (the page's first word); trace rows then cycle through the chunk.
-      out.push(buildSheet({ name, style, size, paper, practice, startDots, modelRow, credit: true, rowTexts: [chunk[0], ...chunk] }));
+      out.push(buildSheet({ name, style, size, paper, practice, startDots, modelRow, credit, rowTexts: [chunk[0], ...chunk] }));
     }
     return out;
-  }, [mode, chosen, size, paper, practice, startDots, modelRow]);
+  }, [mode, chosen, size, paper, practice, startDots, modelRow, credit]);
 
   const page = useMemo(
-    () => wordPages?.[0] ?? buildSheet({ name, style, size, paper, practice, startDots, modelRow, credit: true, rowTexts }),
-    [wordPages, name, style, size, paper, practice, startDots, modelRow, rowTexts],
+    () => wordPages?.[0] ?? buildSheet({ name: listNames[0] ?? name, style, size, paper, practice, startDots, modelRow, credit, rowTexts }),
+    [wordPages, name, listNames, style, size, paper, practice, startDots, modelRow, rowTexts, credit],
   );
   const pages = wordPages ?? [page];
   const noWords = mode === 'words' && chosen.length === 0;
@@ -120,11 +128,14 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   async function save() {
     setBusy(true);
     try {
-      const bytes = mode === 'words' ? await pagesToPdf(pages, 'Sight word tracing worksheet') : await pagesToPdf([page]);
+      const listPages = listNames.map((n) => buildSheet({ name: n, style, size, paper, practice, startDots, modelRow, credit, rowTexts }));
+      const bytes = mode === 'words' ? await pagesToPdf(pages, 'Sight word tracing worksheet')
+        : listPages.length ? await pagesToPdf(listPages, 'Class name tracing worksheets')
+        : await pagesToPdf([page]);
       const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${fileBase}.pdf`;
+      a.download = listNames.length ? 'class-name-tracing-worksheets.pdf' : `${fileBase}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -139,7 +150,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   function requestDownload(e: Event) {
     e.preventDefault();
     if (noWords) return;
-    if (needsEmail()) setGate(true);
+    if (!member.member && needsEmail()) setGate(true);
     else save();
   }
 
@@ -161,6 +172,20 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
               class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-2xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
             />
             <span class="block text-[13px] text-muted mt-2">Stays on this device. Letters, numbers and spaces only.</span>
+          </label>
+        )}
+        {mode === 'name' && member.member && (
+          <label class="block mb-5">
+            <span class="block text-[15px] font-bold mb-2">Class list <span class="font-normal text-muted">(members, up to {member.maxNames ?? 8} names)</span></span>
+            <textarea
+              id="tracer-class-list"
+              rows={4}
+              value={classList}
+              onInput={(e) => setClassList((e.target as HTMLTextAreaElement).value)}
+              placeholder={'One name per line\nAva\nLiam\nNoah'}
+              class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
+            />
+            <span class="block text-[13px] text-muted mt-2">{listNames.length ? `${listNames.length} sheets in one PDF. The preview shows the first name.` : 'Leave empty to print the single name above.'}</span>
           </label>
         )}
 
@@ -251,8 +276,12 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
           <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>
         ) : null}
         <div class="mt-4 rounded-lg border border-dashed border-rule/60 bg-white/70 p-3 text-[14px] leading-snug text-muted">
-          <span class="font-bold text-ink">Members</span> will print a whole class list in one PDF, save each child's settings and drop the footer line.{' '}
-          <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">Join the founding waitlist</a>
+          {member.member ? (
+            <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets{mode === 'name' ? ', and class lists print in one PDF' : ''}. <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
+          ) : (
+            <><span class="font-bold text-ink">Members</span> print a whole class list in one PDF, with no footer line on any sheet.{' '}
+            <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">See membership</a></>
+          )}
         </div>
       </form>
 

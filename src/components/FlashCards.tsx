@@ -7,6 +7,7 @@ import type { Paper } from '../lib/sheet';
 import EmailGate from './EmailGate';
 import WordChips from './WordChips';
 import { Segmented, wordCase } from './Tracer';
+import { useMember } from '../lib/member';
 
 // Printable sight word flash cards: 8 per page, cut along the dashed lines.
 export default function FlashCards(props: { words: string[]; slug: string; label: string; source?: string }) {
@@ -17,19 +18,21 @@ export default function FlashCards(props: { words: string[]; slug: string; label
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState(false);
+  const member = useMember();
+  const credit = !member.member;
 
   const list = (which === 'all' ? props.words : chosen).map(wordCase);
   const pageCount = Math.max(1, Math.ceil(list.length / CARDS_PER_PAGE));
   const preview = useMemo(
-    () => pageToSvg(buildFlashCards({ words: list.slice(0, CARDS_PER_PAGE), paper, label: props.label })[0]).replace('aria-label="Worksheet preview"', 'aria-label="Flash card preview"'),
-    [list.join('|'), paper, props.label],
+    () => pageToSvg(buildFlashCards({ words: list.slice(0, CARDS_PER_PAGE), paper, label: props.label, credit })[0]).replace('aria-label="Worksheet preview"', 'aria-label="Flash card preview"'),
+    [list.join('|'), paper, props.label, credit],
   );
 
   async function save() {
     setBusy(true);
     setError(false);
     try {
-      await savePdf(buildFlashCards({ words: list, paper, label: props.label }), `${props.slug}-sight-word-flash-cards.pdf`, `${props.label} sight word flash cards`);
+      await savePdf(buildFlashCards({ words: list, paper, label: props.label, credit }), `${props.slug}-sight-word-flash-cards.pdf`, `${props.label} sight word flash cards`);
       setDone(true);
     } catch {
       setError(true);
@@ -41,7 +44,7 @@ export default function FlashCards(props: { words: string[]; slug: string; label
   function requestDownload(e: Event) {
     e.preventDefault();
     if (!list.length) return;
-    if (needsEmail()) setGate(true);
+    if (!member.member && needsEmail()) setGate(true);
     else save();
   }
 

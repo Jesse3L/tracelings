@@ -8,6 +8,7 @@ import { needsEmail } from '../lib/gate';
 import { savePdf } from '../lib/download';
 import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
+import { useMember } from '../lib/member';
 
 type Kind = 'cursive' | 'coloring';
 
@@ -25,6 +26,8 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
   const [busy, setBusy] = useState(false);
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState(false);
+  const member = useMember();
+  const credit = !member.member;
   const source = props.source ?? (kind === 'cursive' ? 'cursive' : 'name-coloring');
 
   useEffect(() => {
@@ -40,9 +43,9 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
   const page: Page | null = useMemo(() => {
     if (!font) return null;
     return kind === 'cursive'
-      ? buildCursiveSheet(font, { text, size, paper, practice, modelRow, credit: true })
-      : buildColoringPage(font, { name: text, theme, paper, caps, credit: true });
-  }, [font, text, size, paper, practice, modelRow, theme, caps]);
+      ? buildCursiveSheet(font, { text, size, paper, practice, modelRow, credit })
+      : buildColoringPage(font, { name: text, theme, paper, caps, credit });
+  }, [font, text, size, paper, practice, modelRow, theme, caps, credit]);
   const svg = useMemo(() => (page ? pageToSvg(page) : ''), [page]);
 
   const slug = cleanCursiveText(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || (kind === 'cursive' ? 'cursive' : 'name');
@@ -57,7 +60,7 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
 
   return (
     <div class="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] items-start">
-      <form class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6" onSubmit={(e) => { e.preventDefault(); needsEmail() ? setGate(true) : save(); }}>
+      <form class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6" onSubmit={(e) => { e.preventDefault(); !member.member && needsEmail() ? setGate(true) : save(); }}>
         <label class="block mb-5">
           <span class="block text-[15px] font-bold mb-2">{kind === 'cursive' ? 'Name, word or short sentence' : 'Name or letter'}</span>
           <input
@@ -112,8 +115,12 @@ export default function FontTool(props: { kind: Kind; preset?: string; source?: 
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}
         <div class="mt-4 rounded-lg border border-dashed border-rule/60 bg-white/70 p-3 text-[14px] leading-snug text-muted">
-          <span class="font-bold text-ink">Members</span> will get seasonal themes, a whole class set in one PDF and no footer line.{' '}
-          <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">Join the founding waitlist</a>
+          {member.member ? (
+            <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets. <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
+          ) : (
+            <><span class="font-bold text-ink">Members</span> get every printable with no footer line, plus class lists and new themes as they launch.{' '}
+            <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">See membership</a></>
+          )}
         </div>
       </form>
 

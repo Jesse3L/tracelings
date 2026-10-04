@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import AccountPanel from '../../components/AccountPanel.tsx';
+import { SITE } from '../../config';
+---
+<Base title={`Your Account | ${SITE.name}`} description={`Sign in to your ${SITE.name} membership, see your plan and manage billing.`} noindex>
+  <div class="mx-auto max-w-xl px-4 sm:px-6 pt-12">
+    <h1 class="text-[2.1rem] font-bold"><span class="ruled">Your account</span></h1>
+    <div class="mt-8"><AccountPanel client:load /></div>
+  </div>
+</Base>
