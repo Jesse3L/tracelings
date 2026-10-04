@@ -14,6 +14,7 @@ const ogImage = new URL('/og-default.png', SITE.url).href;
 const nav = [
   { href: '/name-tracing/', label: 'Name tracing' },
   { href: '/letter-tracing/', label: 'Letters' },
+  { href: '/coloring-pages/', label: 'Coloring' },
   { href: '/learn/', label: 'Learn' },
   { href: '/membership/', label: 'Membership' },
 ];
@@ -49,7 +50,7 @@ const year = new Date().getFullYear();
         </a>
         <nav aria-label="Main">
           <ul class="flex items-center gap-4 sm:gap-5 text-[15px]">
-            {nav.map((n, i) => <li class={i === 1 || i === 2 ? 'hidden sm:block' : ''}><a href={n.href} class="text-muted hover:text-ink">{n.label}</a></li>)}
+            {nav.map((n, i) => <li class={i === 1 || i === 3 ? 'hidden sm:block' : ''}><a href={n.href} class="text-muted hover:text-ink">{n.label}</a></li>)}
           </ul>
         </nav>
       </div>
@@ -64,6 +65,7 @@ const year = new Date().getFullYear();
           <li><a class="hover:text-ink" href="/number-tracing/">Number tracing</a></li>
           <li><a class="hover:text-ink" href="/cursive/">Cursive worksheets</a></li>
           <li><a class="hover:text-ink" href="/name-coloring-pages/">Name coloring pages</a></li>
+          <li><a class="hover:text-ink" href="/coloring-pages/">Coloring pages</a></li>
           <li><a class="hover:text-ink" href="/learn/">Learn</a></li>
           <li><a class="hover:text-ink" href="/membership/">Membership</a></li>
           <li><a class="hover:text-ink" href="/privacy/">Privacy</a></li>

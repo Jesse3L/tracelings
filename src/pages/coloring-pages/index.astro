@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config';
+import { getCollections } from '../../lib/coloring-data';
+
+const collections = getCollections();
+const total = collections.reduce((n, c) => n + c.pages.length, 0);
+const title = `Free Coloring Pages for Kids (${total} Printable PDFs) | ${SITE.name}`;
+const description = 'Free printable coloring pages for kids: Thanksgiving, Christmas, dinosaurs, unicorns, trucks and more. Simple bold lines for little hands. Letter or A4 PDF.';
+const url = new URL('/coloring-pages/', SITE.url).href;
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Free coloring pages for kids', url, description,
+    hasPart: collections.map((c) => ({ '@type': 'CollectionPage', name: c.title, url: `${SITE.url}/coloring-pages/${c.slug}/` })) },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Coloring Pages', item: url },
+  ] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Coloring pages</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free coloring pages for kids</span></h1>
+      <p class="mt-4 text-lg text-muted">{total} printable pages with bold, simple lines that are easy for little hands to color. Every page downloads as a full-size PDF.</p>
+    </header>
+
+    <div class="grid gap-10">
+      {collections.map((c) => (
+        <section aria-labelledby={`c-${c.slug}`}>
+          <div class="flex items-baseline justify-between gap-4">
+            <h2 id={`c-${c.slug}`} class="text-[1.45rem] font-bold">
+              <a href={`/coloring-pages/${c.slug}/`} class="hover:underline decoration-rule decoration-2 underline-offset-4">{c.title}</a>
+            </h2>
+            <a href={`/coloring-pages/${c.slug}/`} class="shrink-0 text-[15px] text-[#2f5fc4] underline underline-offset-4">See all {c.pages.length}</a>
+          </div>
+          <ul class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {c.pages.slice(0, 4).map((p) => (
+              <li>
+                <a href={`/coloring-pages/${c.slug}/${p.slug}/`} class="block sheet-frame overflow-hidden hover:border-rule">
+                  <img src={p.thumb} alt={p.alt} width="440" height="584" loading="lazy" decoding="async" class="w-full h-auto" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <h2>Printing tips</h2>
+      <ul>
+        <li>Print at 100% (actual size) so the picture fills the page.</li>
+        <li>Thicker paper or cardstock holds up better to markers and paint.</li>
+        <li>For toddlers, start with the simple coloring pages: fewer, bigger spaces are easier to fill.</li>
+      </ul>
+      <p>Want a page with your child's own name on it? Try our <a href="/name-coloring-pages/">name coloring page maker</a>.</p>
+    </article>
+  </div>
+</Base>

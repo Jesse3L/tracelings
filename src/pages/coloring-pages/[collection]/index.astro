@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../config';
+import { getCollections } from '../../../lib/coloring-data';
+
+export function getStaticPaths() {
+  return getCollections().map((c) => ({ params: { collection: c.slug }, props: { c } }));
+}
+const { c } = Astro.props;
+const n = c.pages.length;
+const title = `${n} ${c.title} (Free Printable PDFs) | ${SITE.name}`;
+const description = `${n} free printable ${c.title.toLowerCase()} for kids with bold, simple lines. Download any page as a full-size PDF for Letter or A4 paper.`;
+const url = new URL(`/coloring-pages/${c.slug}/`, SITE.url).href;
+const others = getCollections().filter((o) => o.slug !== c.slug);
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: c.title, url, description,
+    hasPart: c.pages.map((p) => ({ '@type': 'ImageObject', name: p.title, contentUrl: SITE.url + p.src, thumbnailUrl: SITE.url + p.thumb, url: `${url}${p.slug}/`, creditText: SITE.name, acquireLicensePage: `${url}${p.slug}/` })) },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Coloring Pages', item: SITE.url + '/coloring-pages/' },
+    { '@type': 'ListItem', position: 3, name: c.title, item: url },
+  ] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/coloring-pages/" class="hover:text-ink">Coloring pages</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{c.title}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{c.title}</span></h1>
+      <p class="mt-4 text-lg text-muted leading-relaxed">{c.intro}</p>
+    </header>
+
+    <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+      {c.pages.map((p, i) => (
+        <li>
+          <a href={`/coloring-pages/${c.slug}/${p.slug}/`} class="group block">
+            <span class="block sheet-frame overflow-hidden group-hover:border-rule">
+              <img src={p.thumb} alt={p.alt} width="440" height="584" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" class="w-full h-auto" />
+            </span>
+            <span class="mt-2 block font-bold text-ink group-hover:underline decoration-rule underline-offset-4">{p.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <section class="mt-14" aria-labelledby="more">
+      <h2 id="more" class="text-[1.45rem] font-bold">More coloring pages</h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {others.map((o) => <li><a href={`/coloring-pages/${o.slug}/`} class="inline-block rounded-full border border-hairline bg-white px-4 py-2 text-[15px] hover:border-rule">{o.title}</a></li>)}
+      </ul>
+      <p class="mt-6 text-muted">Make one with your child's name: <a href="/name-coloring-pages/" class="text-[#2f5fc4] underline underline-offset-4">name coloring pages</a>.</p>
+    </section>
+  </div>
+</Base>

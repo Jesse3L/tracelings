@@ -1,0 +1,60 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ColoringDownload from '../../../components/ColoringDownload.tsx';
+import { SITE } from '../../../config';
+import { getCollections } from '../../../lib/coloring-data';
+
+export function getStaticPaths() {
+  return getCollections().flatMap((c) => c.pages.map((p, i) => ({ params: { collection: c.slug, page: p.slug }, props: { c, i } })));
+}
+const { c, i } = Astro.props;
+const p = c.pages[i];
+const related = c.pages.filter((_, j) => j !== i).slice(0, 4);
+const url = new URL(`/coloring-pages/${c.slug}/${p.slug}/`, SITE.url).href;
+const title = `${p.title} (Free Printable PDF) | ${SITE.name}`;
+const description = p.description.length > 155 ? p.description.slice(0, 152).replace(/\s+\S*$/, '') + '…' : p.description;
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'ImageObject', name: p.title, description: p.description, contentUrl: SITE.url + p.src, thumbnailUrl: SITE.url + p.thumb,
+    width: 1760, height: 2336, encodingFormat: 'image/png', creditText: SITE.name, copyrightNotice: `Free for personal and classroom use. ${SITE.name}`, acquireLicensePage: url, isAccessibleForFree: true },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Coloring Pages', item: SITE.url + '/coloring-pages/' },
+    { '@type': 'ListItem', position: 3, name: c.title, item: `${SITE.url}/coloring-pages/${c.slug}/` },
+    { '@type': 'ListItem', position: 4, name: p.title, item: url },
+  ] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/coloring-pages/" class="hover:text-ink">Coloring pages</a> <span aria-hidden="true">/</span>
+      <a href={`/coloring-pages/${c.slug}/`} class="hover:text-ink">{c.title}</a>
+    </nav>
+    <div class="pt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] items-start">
+      <figure class="sheet-frame overflow-hidden max-w-[640px]">
+        <img src={p.src} alt={p.alt} width="880" height="1168" loading="eager" decoding="async" class="w-full h-auto" />
+      </figure>
+      <div class="lg:sticky lg:top-6">
+        <h1 class="text-[1.9rem] sm:text-[2.3rem] font-bold leading-tight text-balance">{p.title}</h1>
+        <p class="mt-4 text-[1.075rem] leading-relaxed text-[#2c3954]">{p.description}</p>
+        <div class="mt-6"><ColoringDownload client:visible src={p.src} slug={p.slug} title={p.title} /></div>
+        <p class="mt-4 text-[14px] text-muted">Free for personal and classroom use.</p>
+      </div>
+    </div>
+
+    <section class="mt-14" aria-labelledby="related">
+      <h2 id="related" class="text-[1.45rem] font-bold">More {c.title.toLowerCase()}</h2>
+      <ul class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {related.map((r) => (
+          <li>
+            <a href={`/coloring-pages/${c.slug}/${r.slug}/`} class="group block">
+              <span class="block sheet-frame overflow-hidden group-hover:border-rule"><img src={r.thumb} alt={r.alt} width="440" height="584" loading="lazy" decoding="async" class="w-full h-auto" /></span>
+              <span class="mt-2 block text-[15px] font-bold text-ink">{r.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</Base>
