@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  const all = await getCollection('articles');
+  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const url = new URL(`/learn/${entry.id}/`, SITE.url).href;
+const fmt = (date: Date) => date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: d.title,
+    description: d.description,
+    datePublished: d.published.toISOString().slice(0, 10),
+    dateModified: (d.updated ?? d.published).toISOString().slice(0, 10),
+    author: { '@type': 'Organization', name: SITE.name, url: SITE.url + '/' },
+    publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: SITE.url + '/favicon.svg' } },
+    mainEntityOfPage: url,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Learn', item: SITE.url + '/learn/' },
+      { '@type': 'ListItem', position: 3, name: d.title, item: url },
+    ],
+  },
+];
+---
+<Base title={d.seoTitle} description={d.description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/learn/" class="hover:text-ink">Learn</a>
+    </nav>
+    <article class="prose-tl max-w-[68ch] pt-6">
+      <h1 class="text-[2rem] sm:text-[2.5rem] font-bold leading-tight text-balance">{d.title}</h1>
+      <p class="mt-4 text-[15px]! text-muted!">{SITE.name} · {fmt(d.published)} · {d.readingMinutes} min read</p>
+      <div class="mt-8"><Content /></div>
+    </article>
+    <aside class="mt-12 max-w-[68ch] rounded-xl border border-hairline bg-white p-6">
+      <h2 class="font-bold text-lg">Print a practice sheet with your child's name</h2>
+      <p class="mt-2 text-muted">Type a name, pick a line size and print. Free, and the name stays on your device.</p>
+      <a href="/name-tracing/" class="btn-pencil inline-block mt-4 px-5 py-3">Make a name tracing sheet</a>
+    </aside>
+  </div>
+</Base>

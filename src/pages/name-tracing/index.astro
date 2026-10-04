@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import NameTracer from '../../components/NameTracer.tsx';
+import Tracer from '../../components/Tracer.tsx';
 import { SITE } from '../../config';
 
 const title = `Free Name Tracing Worksheet Generator | ${SITE.name}`;
@@ -8,7 +8,7 @@ const description = 'Type your child’s name and print free name tracing worksh
 const url = new URL('/name-tracing/', SITE.url).href;
 
 const faqs = [
-  { q: 'Are these name tracing worksheets really free?', a: 'Yes. You can make and print as many name tracing sheets as you like. There’s no sign-up and no download limit.' },
+  { q: 'Are these name tracing worksheets really free?', a: 'Yes. Your first sheet downloads right away with nothing to fill in. After that we ask for your email once, and every sheet on that device stays free with no limit.' },
   { q: 'What paper size do the worksheets print on?', a: 'Choose US Letter or A4 before you download. The PDF is sized for that paper, so it prints at full size without cropping or shrinking.' },
   { q: 'Can I make worksheets for several names or a whole class?', a: 'You can make a sheet for any name, one at a time, for free. Printing a full class set from one list is part of the membership, which is coming soon.' },
   { q: 'Why are the letters dotted?', a: 'Dotted letters show the shape while leaving the work to your child. Their pencil follows the path, and each row builds the muscle memory needed to write the name without a guide. The green dots mark where each stroke begins.' },
@@ -55,7 +55,7 @@ const schema = [
       <p class="mt-4 text-lg text-muted">Type a name, pick a style, print. Your sheet is ready in seconds.</p>
     </header>
 
-    <NameTracer client:load />
+    <Tracer client:load mode="name" source="name-tracing" />
 
     <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
@@ -102,7 +102,7 @@ const schema = [
       </div>
 
       <h2>More ways to practice</h2>
-      <p>Name coloring pages, letter tracing and cursive worksheets are on the way. They'll use the same name you type here.</p>
+      <p>Practice single letters with our <a href="/letter-tracing/">letter tracing worksheets</a>, or numbers with <a href="/number-tracing/">number tracing</a>. New to this? Read <a href="/learn/how-to-teach-a-preschooler-to-write-their-name/">how to teach a preschooler to write their name</a>.</p>
     </article>
   </div>
 </Base>

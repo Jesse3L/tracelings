@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tracer from '../../components/Tracer.tsx';
+import { SITE } from '../../config';
+import numbers from '../../data/numbers.json';
+
+export function getStaticPaths() {
+  return numbers.map((n, i) => ({ params: { digit: n.digit }, props: { i } }));
+}
+const { i } = Astro.props as { i: number };
+const N = numbers[i];
+const prev = numbers[(i + 9) % 10];
+const next = numbers[(i + 1) % 10];
+const url = new URL(`/number-tracing/${N.digit}/`, SITE.url).href;
+const title = `Number ${N.digit} Tracing Worksheet (Free Printable) | ${SITE.name}`;
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `Number ${N.digit} tracing worksheet`,
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Kindergarten',
+    teaches: `Writing the number ${N.digit} (${N.word})`,
+    isAccessibleForFree: true,
+    description: N.metaDescription,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Number Tracing', item: SITE.url + '/number-tracing/' },
+      { '@type': 'ListItem', position: 3, name: `Number ${N.digit}`, item: url },
+    ],
+  },
+];
+---
+<Base title={title} description={N.metaDescription} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/number-tracing/" class="hover:text-ink">Number tracing</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">Number {N.digit}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Number {N.digit} tracing worksheet</span></h1>
+      <p class="mt-4 text-lg text-muted">Rows of {N.digit} to trace and write, with green dots where each stroke starts.</p>
+    </header>
+
+    <Tracer client:load mode="number" value={N.digit} source="number-tracing" />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free number {N.digit} tracing worksheet helps kids learn to write {N.word} the same way every time. Trace the dotted rows, then try
+        the blank lines. Pick a line size, print on Letter or A4, and pair it with a quick counting game.
+      </p>
+      <h2>How to write the number {N.digit}</h2>
+      <ol>{N.steps.map((s) => <li>{s}</li>)}</ol>
+      <h2>Teaching tip for {N.digit}</h2>
+      <p>{N.tip}</p>
+      <h2>Count to {N.digit} with real things</h2>
+      <ul>{N.countIdeas.map((c) => <li>{c}</li>)}</ul>
+      <p>Writing a number sticks better when your child has just counted that many things with their hands.</p>
+    </article>
+
+    <nav aria-label="Other numbers" class="mt-12">
+      <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/number-tracing/${prev.digit}/`}>Number {prev.digit}</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/number-tracing/${next.digit}/`}>Number {next.digit}</a>
+      </div>
+      <ul class="mt-6 grid grid-cols-5 sm:grid-cols-10 gap-2 max-w-xl">
+        {numbers.map((n) => (
+          <li>
+            <a href={`/number-tracing/${n.digit}/`} aria-current={n.digit === N.digit ? 'page' : undefined}
+              class={`block text-center rounded-md border py-2 font-bold ${n.digit === N.digit ? 'border-rule bg-white text-ink' : 'border-hairline text-muted hover:text-ink hover:bg-white'}`}>{n.digit}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Base>

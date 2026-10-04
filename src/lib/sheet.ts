@@ -17,6 +17,8 @@ export interface SheetOptions {
   startDots: boolean;
   modelRow: boolean;
   credit: boolean;
+  /** Fixed row texts (letter and number sheets). Row 0 is the model row; trace rows cycle through the rest. */
+  rowTexts?: string[];
 }
 
 export type Item =
@@ -88,8 +90,10 @@ export function buildSheet(o: SheetOptions): Page {
   const { w, h } = PAPER[o.paper];
   const m = 40;
   const items: Item[] = [];
-  const text = styleName(o.name, o.style) || (o.style === 'caps' ? 'NAME' : o.style === 'lower' ? 'name' : 'Name');
-  const { placed, width: unitsW } = layoutWord(text);
+  const name = styleName(o.name, o.style) || (o.style === 'caps' ? 'NAME' : o.style === 'lower' ? 'name' : 'Name');
+  const texts = o.rowTexts?.length ? o.rowTexts : [name];
+  const layouts = texts.map((t) => layoutWord(t));
+  const unitsW = Math.max(...layouts.map((l) => l.width), 0.1);
 
   // Header: name and date lines for the child's work.
   items.push({ kind: 'text', x: m, y: 56, size: 11, text: 'Name', color: COLORS.ink, align: 'left' });
@@ -102,10 +106,15 @@ export function buildSheet(o: SheetOptions): Page {
   let cap = CAP[o.size];
   if (unitsW * cap > avail) cap = avail / unitsW; // long names shrink to fit one row
 
-  // Short names repeat across the row for more practice.
+  // Short texts repeat across the row for more practice.
   const repeatGap = 0.9 * cap;
-  const oneW = unitsW * cap;
-  const reps = Math.max(1, Math.floor((avail + repeatGap) / (oneW + repeatGap)));
+  const rowLayout = (i: number, kind: RowKind) => {
+    const idx = texts.length === 1 ? 0 : kind === 'model' ? 0 : 1 + ((i - (o.modelRow ? 1 : 0)) % (texts.length - 1));
+    const lay = layouts[idx];
+    const oneW = lay.width * cap;
+    const reps = Math.max(1, Math.floor((avail + repeatGap) / (oneW + repeatGap)));
+    return { placed: lay.placed, oneW, reps };
+  };
 
   const pitch = cap * 1.5 + Math.max(16, cap * 0.42);
   const top0 = 92;
@@ -138,6 +147,7 @@ export function buildSheet(o: SheetOptions): Page {
     const color = kind === 'model' ? COLORS.model : COLORS.trace;
     const sw = kind === 'model' ? strokeW.model : strokeW.trace;
     const d = kind === 'trace' ? dash : undefined;
+    const { placed, oneW, reps } = rowLayout(i, kind);
     const totalW = reps * oneW + (reps - 1) * repeatGap;
     const startX = m + inset + (reps === 1 ? 0 : (avail - totalW) / 2);
 

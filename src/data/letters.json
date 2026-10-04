@@ -1,0 +1,573 @@
+[
+  {
+    "letter": "a",
+    "upperSteps": [
+      "Start at the top line and slant down to the left to the bottom line.",
+      "Go back to the same point on the top line and slant down to the right.",
+      "Cross the middle with a short line from left to right, just below the middle dashed line."
+    ],
+    "lowerSteps": [
+      "Start just under the middle dashed line on the right side.",
+      "Curve up and around to the left, down to the bottom line, and back up to close a small circle.",
+      "Pull a straight line down the right side from the middle dashed line to the bottom line."
+    ],
+    "words": [
+      "apple",
+      "ant",
+      "alligator",
+      "astronaut",
+      "acorn",
+      "arm"
+    ],
+    "tip": "Lowercase a is a circle first and a short line second, so kids who can draw a round ball are already halfway there. Watch for a line drawn on the left, which turns it into a backward a.",
+    "metaDescription": "Free letter A tracing worksheet with uppercase A, lowercase a, and stroke order help. Pair it with apple, ant, and acorn words. Print in seconds."
+  },
+  {
+    "letter": "b",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top, curve out to the right, and come back in to touch the line at the middle dashed line.",
+      "From the middle, curve out to the right again and come back in at the bottom line. The bottom bump is a little bigger."
+    ],
+    "lowerSteps": [
+      "Pull a tall straight line down from the top line to the bottom line.",
+      "Make a small round ball on the right side of the line, between the middle dashed line and the bottom line."
+    ],
+    "words": [
+      "ball",
+      "bear",
+      "banana",
+      "bus",
+      "boat",
+      "bee"
+    ],
+    "tip": "b and d are the most common reversal. Teach \"bat before ball\": the tall line comes first for b, then the ball sits on its right side.",
+    "metaDescription": "Print a free letter B tracing worksheet for capital B and lowercase b. Clear stroke order helps stop b and d mix-ups. Practice with ball, bear, and bus."
+  },
+  {
+    "letter": "c",
+    "upperSteps": [
+      "Start just below the top line on the right side.",
+      "Curve up and around to the left, down to the bottom line, and stop on the right before you close it."
+    ],
+    "lowerSteps": [
+      "Start just below the middle dashed line on the right side.",
+      "Curve up and around to the left, down to the bottom line, and stop on the right."
+    ],
+    "words": [
+      "cat",
+      "car",
+      "cake",
+      "cow",
+      "cup",
+      "carrot"
+    ],
+    "tip": "Capital C and lowercase c are the same shape in two sizes, so practice them side by side. The open side always faces right, like a mouth taking a bite.",
+    "metaDescription": "Free letter C tracing worksheet for big C and small c. Same curved shape in two sizes, with stroke order tips and cat, car, and cake words to practice."
+  },
+  {
+    "letter": "d",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top, make one big curve out to the right, and come back in at the bottom line."
+    ],
+    "lowerSteps": [
+      "Start just under the middle dashed line and make a small circle, curving up and around to the left first.",
+      "Pull a tall line down the right side of the circle, starting at the top line and stopping at the bottom line."
+    ],
+    "words": [
+      "dog",
+      "duck",
+      "drum",
+      "door",
+      "dinosaur",
+      "donut"
+    ],
+    "tip": "Lowercase d starts with a c shape, then gets its tall line. If a child starts d with the line, they usually end up with a b.",
+    "metaDescription": "Print a free letter D tracing worksheet with uppercase D and lowercase d. Start d with a curve to avoid b reversals. Includes dog, duck, and drum words."
+  },
+  {
+    "letter": "e",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top and make a line across to the right.",
+      "Make a shorter line across at the middle dashed line.",
+      "Finish with a line across the bottom line, as long as the top one."
+    ],
+    "lowerSteps": [
+      "Start halfway between the middle dashed line and the bottom line, on the left.",
+      "Make a straight line across to the right.",
+      "Without lifting, curve up over the top, around to the left, and along the bottom, stopping on the right."
+    ],
+    "words": [
+      "egg",
+      "elephant",
+      "elf",
+      "envelope",
+      "engine",
+      "eagle"
+    ],
+    "tip": "Capital E has four lines, so count them out loud as you go. Lowercase e begins with the straight line across, not the curve, which keeps its little window open.",
+    "metaDescription": "Free letter E tracing worksheet for capital E and lowercase e. Count the four lines of E and practice egg, elephant, and elf. Ready to print."
+  },
+  {
+    "letter": "f",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top and make a line across to the right.",
+      "Make a shorter line across at the middle dashed line."
+    ],
+    "lowerSteps": [
+      "Start just below the top line, a little to the right.",
+      "Curve up and over to the left, then pull straight down to the bottom line.",
+      "Cross it with a short line along the middle dashed line."
+    ],
+    "words": [
+      "fish",
+      "frog",
+      "fox",
+      "flower",
+      "feather",
+      "fire truck"
+    ],
+    "tip": "Capital F is a capital E without the bottom line, so teach them as a pair. For lowercase f, the hook at the top bends like a cane, and the cross sits right on the middle dashed line.",
+    "metaDescription": "Print a free letter F tracing worksheet for capital F and lowercase f. Learn the hook and crossbar, then practice fish, frog, and flower words."
+  },
+  {
+    "letter": "g",
+    "upperSteps": [
+      "Start just below the top line on the right side.",
+      "Curve up and around to the left, down along the bottom line, and up the right side to just below the middle.",
+      "Without lifting, pull a short line straight in toward the center."
+    ],
+    "lowerSteps": [
+      "Start just under the middle dashed line and make a small circle, curving up and around to the left first.",
+      "Start at the middle dashed line on the right side of the circle and pull straight down below the bottom line.",
+      "Hook to the left at the bottom like a fishhook."
+    ],
+    "words": [
+      "goat",
+      "grapes",
+      "gift",
+      "guitar",
+      "gorilla",
+      "glove"
+    ],
+    "tip": "Capital G is a C with a shelf. Lowercase g drops below the bottom line, so point out that its tail hangs down and hooks left, while q has a straight tail that kicks right.",
+    "metaDescription": "Free letter G tracing worksheet with capital G, lowercase g, and its tail below the line. Practice goat, grapes, and gift. Printable in seconds."
+  },
+  {
+    "letter": "h",
+    "upperSteps": [
+      "Pull a straight line down on the left from the top line to the bottom line.",
+      "Pull a second straight line down on the right, the same height.",
+      "Join them with a line across the middle dashed line."
+    ],
+    "lowerSteps": [
+      "Pull a tall straight line down from the top line to the bottom line.",
+      "Start partway up that line, make a hump over to the right, and pull straight down to the bottom line."
+    ],
+    "words": [
+      "hat",
+      "horse",
+      "house",
+      "heart",
+      "hen",
+      "hand"
+    ],
+    "tip": "Lowercase h is a tall line plus the same hump used in n. A good cue is \"down, back up, and over the hill.\" Watch that the hump does not float away from the tall line.",
+    "metaDescription": "Print a free letter H tracing worksheet with capital H and lowercase h. Practice the down, up, and over hump, plus hat, horse, and house words."
+  },
+  {
+    "letter": "i",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Make a short line across the top line.",
+      "Make a short line across the bottom line."
+    ],
+    "lowerSteps": [
+      "Pull a short line down from the middle dashed line to the bottom line.",
+      "Lift your pencil and add a dot above it, between the top line and the middle dashed line."
+    ],
+    "words": [
+      "igloo",
+      "insect",
+      "iguana",
+      "ink",
+      "inchworm",
+      "ice cream"
+    ],
+    "tip": "Lowercase i is only one short line, so the dot is the part kids forget. Have them say \"line, then dot\" each time, and keep the dot small and right above the line.",
+    "metaDescription": "Free letter I tracing worksheet for capital I with its top and bottom lines and lowercase i with its dot. Includes igloo, insect, and ink words."
+  },
+  {
+    "letter": "j",
+    "upperSteps": [
+      "Start at the top line on the right.",
+      "Pull straight down, then curve to the left along the bottom line and up a little to finish the hook."
+    ],
+    "lowerSteps": [
+      "Start at the middle dashed line and pull straight down below the bottom line.",
+      "Curve to the left at the bottom to make a hook.",
+      "Lift your pencil and add a dot above, between the top line and the middle dashed line."
+    ],
+    "words": [
+      "jam",
+      "jet",
+      "juice",
+      "jellyfish",
+      "jar",
+      "jump rope"
+    ],
+    "tip": "Both J and j hook to the left. If the hook turns right, the letter is backward. Lowercase j also hangs below the bottom line, so give it room on the page.",
+    "metaDescription": "Print a free letter J tracing worksheet with capital J, lowercase j, and a left-facing hook. Practice jam, jet, and juice words."
+  },
+  {
+    "letter": "k",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Start at the top line on the right and slant in to touch the line near the middle.",
+      "Start on that slanted line and slant down and out to the right to the bottom line."
+    ],
+    "lowerSteps": [
+      "Pull a tall straight line down from the top line to the bottom line.",
+      "Start at the middle dashed line on the right and slant in to touch the tall line.",
+      "Start on that slanted line and slant out to the right to the bottom line."
+    ],
+    "words": [
+      "kite",
+      "key",
+      "king",
+      "kangaroo",
+      "koala",
+      "kitten"
+    ],
+    "tip": "The two slanted lines of k look like an arm and a leg kicking out from the tall line. Lowercase k is the same idea, but its arm only reaches the middle dashed line.",
+    "metaDescription": "Free letter K tracing worksheet for capital K and lowercase k. Learn the arm and leg slants and practice kite, key, and king. Print and trace."
+  },
+  {
+    "letter": "l",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Without lifting, go straight across the bottom line to the right."
+    ],
+    "lowerSteps": [
+      "Start at the top line.",
+      "Pull one tall straight line down and stop right on the bottom line."
+    ],
+    "words": [
+      "lion",
+      "leaf",
+      "lemon",
+      "ladder",
+      "lamp",
+      "ladybug"
+    ],
+    "tip": "Lowercase l is a single tall line, so it can look like capital I or the number 1. Point out that it has no lines across and no flag at the top.",
+    "metaDescription": "Print a free letter L tracing worksheet for capital L and lowercase l. Simple straight lines plus lion, leaf, and lemon words for practice."
+  },
+  {
+    "letter": "m",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top and slant down to a point just below the middle.",
+      "Slant back up to the top line on the right, then pull straight down to the bottom line."
+    ],
+    "lowerSteps": [
+      "Pull a short line down from the middle dashed line to the bottom line.",
+      "Start partway up that line, make a hump over to the right, and pull down to the bottom line.",
+      "Start at the top of that line and make a second hump, the same size, down to the bottom line."
+    ],
+    "words": [
+      "moon",
+      "monkey",
+      "mouse",
+      "mitten",
+      "milk",
+      "map"
+    ],
+    "tip": "Lowercase m has two humps and n has one. Counting the humps out loud helps kids who rush and add a third.",
+    "metaDescription": "Free letter M tracing worksheet with capital M and lowercase m. Practice the two humps with moon, monkey, and mouse words. Ready to print."
+  },
+  {
+    "letter": "n",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top and slant down to the right to the bottom line.",
+      "Pull straight back up to the top line."
+    ],
+    "lowerSteps": [
+      "Pull a short line down from the middle dashed line to the bottom line.",
+      "Start partway up that line, make one hump over to the right, and pull down to the bottom line."
+    ],
+    "words": [
+      "nest",
+      "nose",
+      "nut",
+      "net",
+      "nine",
+      "nurse"
+    ],
+    "tip": "Capital N goes down, slants down, then climbs back up, so the slant always runs from top left to bottom right. Lowercase n is one hump, like a small bridge.",
+    "metaDescription": "Print a free letter N tracing worksheet for capital N and lowercase n. Get the diagonal going the right way and practice nest, nose, and nut."
+  },
+  {
+    "letter": "o",
+    "upperSteps": [
+      "Start at the top line.",
+      "Curve to the left, down around the bottom line, and back up to close a big circle."
+    ],
+    "lowerSteps": [
+      "Start just under the middle dashed line on the right side.",
+      "Curve up and around to the left, down to the bottom line, and back up to close a small circle."
+    ],
+    "words": [
+      "octopus",
+      "owl",
+      "orange",
+      "otter",
+      "ostrich",
+      "ox"
+    ],
+    "tip": "Both O shapes go to the left first, the same way as a, d, and g. Building that habit here makes those letters easier later.",
+    "metaDescription": "Free letter O tracing worksheet for big O and small o. Circle practice that sets up a, d, and g, with octopus, owl, and orange words."
+  },
+  {
+    "letter": "p",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top, curve out to the right, and come back in to touch the line at the middle dashed line."
+    ],
+    "lowerSteps": [
+      "Pull a straight line down from the middle dashed line to below the bottom line.",
+      "Make a small round ball on the right side of the line, between the middle dashed line and the bottom line."
+    ],
+    "words": [
+      "pig",
+      "pizza",
+      "pumpkin",
+      "penguin",
+      "pear",
+      "pencil"
+    ],
+    "tip": "Lowercase p and q are mirror images. p starts with its line, like b, and the ball sits on the right. Its line hangs below the bottom line.",
+    "metaDescription": "Print a free letter P tracing worksheet for capital P and lowercase p. Clear steps help with p and q mix-ups. Practice pig, pizza, and pumpkin."
+  },
+  {
+    "letter": "q",
+    "upperSteps": [
+      "Start at the top line and curve to the left, around the bottom, and back up to close a big circle.",
+      "Add a short slanted tail that crosses the bottom right of the circle and pokes past the bottom line."
+    ],
+    "lowerSteps": [
+      "Start just under the middle dashed line and make a small circle, curving up and around to the left first.",
+      "Start at the middle dashed line on the right and pull straight down below the bottom line.",
+      "Finish with a tiny kick up to the right."
+    ],
+    "words": [
+      "queen",
+      "quilt",
+      "quail",
+      "quarter",
+      "quill",
+      "quack"
+    ],
+    "tip": "Lowercase q starts with a circle like a, d, and g, and its tail kicks right. In English words, q is almost always followed by u, so trace \"qu\" together.",
+    "metaDescription": "Free letter Q tracing worksheet for capital Q and lowercase q with its kick. Practice queen, quilt, and quail, and why q pairs with u."
+  },
+  {
+    "letter": "r",
+    "upperSteps": [
+      "Pull a straight line down from the top line to the bottom line.",
+      "Go back to the top, curve out to the right, and come back in to touch the line at the middle dashed line.",
+      "Start where the curve meets the middle and slant down to the right to the bottom line."
+    ],
+    "lowerSteps": [
+      "Pull a short line down from the middle dashed line to the bottom line.",
+      "Start partway up that line and curve up and over to the right, stopping just past the top of the curve."
+    ],
+    "words": [
+      "rabbit",
+      "rainbow",
+      "robot",
+      "rocket",
+      "ring",
+      "rose"
+    ],
+    "tip": "Capital R is a P with a leg kicking out. Lowercase r is the start of an n that stops early, so remind kids not to pull the curve all the way down.",
+    "metaDescription": "Print a free letter R tracing worksheet for capital R and lowercase r. Learn the leg on R and the short arch on r, with rabbit and rocket words."
+  },
+  {
+    "letter": "s",
+    "upperSteps": [
+      "Start just below the top line on the right side.",
+      "Curve up and to the left, then swing back across to the right at the middle dashed line.",
+      "Curve around the bottom and finish on the left, just above the bottom line."
+    ],
+    "lowerSteps": [
+      "Start just below the middle dashed line on the right side.",
+      "Curve up and to the left, then swing back across to the right halfway down.",
+      "Curve around the bottom and finish on the left."
+    ],
+    "words": [
+      "sun",
+      "snake",
+      "star",
+      "sock",
+      "seal",
+      "spoon"
+    ],
+    "tip": "S is one smooth stroke, so it is easy to reverse. Start with a little c at the top, then curve back the other way. \"Slither like a snake\" is a cue many kids remember.",
+    "metaDescription": "Free letter S tracing worksheet for capital S and lowercase s. One smooth curving stroke, with sun, snake, and star words to practice."
+  },
+  {
+    "letter": "t",
+    "upperSteps": [
+      "Make a straight line across the top line from left to right.",
+      "Start in the middle of that line and pull straight down to the bottom line."
+    ],
+    "lowerSteps": [
+      "Start a little below the top line and pull straight down to the bottom line.",
+      "Cross it with a short line along the middle dashed line."
+    ],
+    "words": [
+      "turtle",
+      "tiger",
+      "tree",
+      "train",
+      "tent",
+      "toothbrush"
+    ],
+    "tip": "Capital T starts with the line across, but lowercase t starts with the line down. Lowercase t is also a bit shorter than tall letters like l and h.",
+    "metaDescription": "Print a free letter T tracing worksheet for capital T and lowercase t. Note which line comes first, then practice turtle, tiger, and tree."
+  },
+  {
+    "letter": "u",
+    "upperSteps": [
+      "Start at the top line on the left and pull down.",
+      "Curve around along the bottom line and go back up the right side to the top line."
+    ],
+    "lowerSteps": [
+      "Start at the middle dashed line and pull down, curving around along the bottom line and up the right side.",
+      "Lift your pencil and pull a short straight line down the right side, from the middle dashed line to the bottom line."
+    ],
+    "words": [
+      "umbrella",
+      "unicorn",
+      "up",
+      "under",
+      "ukulele",
+      "uniform"
+    ],
+    "tip": "Lowercase u has a little tail line on its right side that capital U does not. Without it, u can look like a small v or an upside-down n.",
+    "metaDescription": "Free letter U tracing worksheet for capital U and lowercase u with its tail. Practice umbrella, unicorn, and up words. Print and trace."
+  },
+  {
+    "letter": "v",
+    "upperSteps": [
+      "Start at the top line on the left and slant down to a point on the bottom line.",
+      "Without lifting, slant back up to the top line on the right."
+    ],
+    "lowerSteps": [
+      "Start at the middle dashed line and slant down to a point on the bottom line.",
+      "Without lifting, slant back up to the middle dashed line."
+    ],
+    "words": [
+      "van",
+      "vase",
+      "violin",
+      "volcano",
+      "vest",
+      "vegetables"
+    ],
+    "tip": "V is one stroke: down into the valley and back up. Keep the bottom pointed. A round bottom turns it into a u.",
+    "metaDescription": "Print a free letter V tracing worksheet for capital V and lowercase v. One stroke with a sharp point, plus van, vase, and violin words."
+  },
+  {
+    "letter": "w",
+    "upperSteps": [
+      "Start at the top line and slant down to the bottom line.",
+      "Slant up to the top line, down to the bottom line again, and up to the top line to finish."
+    ],
+    "lowerSteps": [
+      "Start at the middle dashed line and slant down to the bottom line.",
+      "Slant up to the middle dashed line, down again, and back up to finish."
+    ],
+    "words": [
+      "whale",
+      "worm",
+      "wagon",
+      "watermelon",
+      "web",
+      "window"
+    ],
+    "tip": "W is two v shapes joined together, made in one stroke. Saying \"down, up, down, up\" keeps kids from adding extra points.",
+    "metaDescription": "Free letter W tracing worksheet with capital W and lowercase w. Down, up, down, up in one stroke, with whale, worm, and wagon words."
+  },
+  {
+    "letter": "x",
+    "upperSteps": [
+      "Start at the top line on the left and slant down to the bottom line on the right.",
+      "Start at the top line on the right and slant down to the bottom line on the left, crossing in the middle."
+    ],
+    "lowerSteps": [
+      "Start at the middle dashed line on the left and slant down to the bottom line on the right.",
+      "Start at the middle dashed line on the right and slant down to the left, crossing in the middle."
+    ],
+    "words": [
+      "x-ray",
+      "xylophone",
+      "box",
+      "fox",
+      "six",
+      "ax"
+    ],
+    "tip": "Few picture words start with x, so we include words that end in x, like box, fox, and six, where kids hear the \"ks\" sound. Both slants start at the top so the lines cross right in the middle.",
+    "metaDescription": "Print a free letter X tracing worksheet for capital X and lowercase x. Practice x-ray and xylophone, plus box, fox, and six that end in x."
+  },
+  {
+    "letter": "y",
+    "upperSteps": [
+      "Start at the top line on the left and slant down to the middle dashed line.",
+      "Start at the top line on the right and slant down to meet it.",
+      "Pull a straight line down from where they meet to the bottom line."
+    ],
+    "lowerSteps": [
+      "Start at the middle dashed line on the left and slant down to the bottom line.",
+      "Start at the middle dashed line on the right and make a long slant down to the left, below the bottom line."
+    ],
+    "words": [
+      "yo-yo",
+      "yak",
+      "yarn",
+      "yogurt",
+      "yellow",
+      "yawn"
+    ],
+    "tip": "Capital Y stays above the bottom line, but lowercase y has a long tail that drops below it. The second slant is the long one, so start it at the right.",
+    "metaDescription": "Free letter Y tracing worksheet for capital Y and lowercase y with its long tail. Practice yo-yo, yak, and yarn words. Ready to print."
+  },
+  {
+    "letter": "z",
+    "upperSteps": [
+      "Make a line across the top line from left to right.",
+      "Without lifting, slant down to the bottom line on the left.",
+      "Finish with a line across the bottom line to the right."
+    ],
+    "lowerSteps": [
+      "Make a line across the middle dashed line from left to right.",
+      "Without lifting, slant down to the bottom line on the left.",
+      "Finish with a line across the bottom line to the right."
+    ],
+    "words": [
+      "zebra",
+      "zoo",
+      "zipper",
+      "zero",
+      "zigzag",
+      "zucchini"
+    ],
+    "tip": "Z is \"across, slant back, across\" in one stroke. If the slant goes from top left to bottom right, it turns into a backward z, so trace the slant slowly at first.",
+    "metaDescription": "Print a free letter Z tracing worksheet for capital Z and lowercase z. One zigzag stroke to stop reversals, with zebra, zoo, and zipper words."
+  }
+]

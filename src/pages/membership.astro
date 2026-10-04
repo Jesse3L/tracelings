@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import WaitlistForm from '../components/WaitlistForm.tsx';
+import { SITE } from '../config';
+
+const rows = [
+  ['Price', '$0', '$5.99/month or $39/year', '$79/year'],
+  ['Single tracing sheets for any name', 'Yes', 'Yes', 'Yes'],
+  ['Letter and number tracing pages', 'Yes', 'Yes', 'Yes'],
+  ['Several names in one PDF', 'One name per sheet', 'Several kids at once', 'Class lists up to 35 names'],
+  ['Saved child profiles', 'No', 'Yes', 'Yes'],
+  ['Credit line on printables', 'Small footer line', 'None', 'None'],
+  ['Premium fonts and seasonal themes', 'Basic', 'All of them', 'All of them'],
+  ['Photo to coloring pages', 'No', 'About 100 a month', 'About 100 a month'],
+  ['Weekly themed packs', 'No', 'Yes', 'Yes'],
+];
+const faqs = [
+  { q: 'When does membership launch?', a: 'Later this school year. Waitlist members hear about it first, and that’s when the 200 founding spots open.' },
+  { q: 'Can I cancel anytime?', a: 'Yes. You’ll be able to cancel from your account page in a couple of clicks, with no phone call. You keep membership until the end of the period you paid for.' },
+  { q: 'Does the free version stay free?', a: 'Yes. Single tracing sheets for any name, plus letter and number tracing, stay free. Membership adds class lists, saved profiles and extras on top. Nothing that’s free today is moving behind the paywall.' },
+  { q: 'Is my child’s information private?', a: 'Yes. Worksheets are built in your browser, so the names you type stay on your device. When membership launches, our privacy page will explain exactly how saved child profiles are kept.' },
+  { q: 'Do you offer school pricing?', a: `The Classroom plan covers one teacher and class lists of up to 35 names. For several teachers or a whole school, email ${SITE.email} and we’ll put together a quote.` },
+];
+---
+<Base title={`${SITE.name} Membership for Families and Classrooms`} description="Print name tracing worksheets for a whole class in one PDF, save your kids' names, and get themed packs. Join the waitlist for the founding price.">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] items-start">
+      <div class="prose-tl">
+        <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Membership for families and classrooms</span></h1>
+        <p class="mt-6">{SITE.name} is free, and it's staying that way. Type any name, print a tracing sheet, done.</p>
+        <p>Membership is for the people printing a lot: the parent with three kids at the kitchen table, the homeschooler planning a whole week, the kindergarten teacher with 22 names to trace before the first day.</p>
+        <p class="rounded-xl bg-[#fff4d6] p-4 text-ink!"><strong>Founding offer:</strong> join the waitlist now and lock in $29/year for life when membership opens. Limited to the first 200 members.</p>
+      </div>
+      <WaitlistForm client:load />
+    </div>
+
+    <section class="mt-14" aria-labelledby="plans">
+      <h2 id="plans" class="text-[1.6rem] font-bold">Plans at a glance</h2>
+      <div class="mt-5 overflow-x-auto rounded-xl border border-hairline bg-white">
+        <table class="w-full min-w-[620px] text-left text-[15px]">
+          <thead>
+            <tr class="border-b border-hairline">
+              <th class="p-4 font-bold"><span class="sr-only">Feature</span></th>
+              <th class="p-4 font-bold">Free</th>
+              <th class="p-4 font-bold">Family</th>
+              <th class="p-4 font-bold">Classroom</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr class="border-b border-hairline last:border-0">
+                <th scope="row" class="p-4 font-normal text-ink">{r[0]}</th>
+                <td class="p-4 text-muted">{r[1]}</td>
+                <td class="p-4 text-muted">{r[2]}</td>
+                <td class="p-4 text-muted">{r[3]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq">
+      <h2 id="faq">Questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>

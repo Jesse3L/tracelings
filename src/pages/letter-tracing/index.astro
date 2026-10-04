@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tracer from '../../components/Tracer.tsx';
+import { SITE } from '../../config';
+import letters from '../../data/letters.json';
+
+const title = `Free Letter Tracing Worksheets A to Z | ${SITE.name}`;
+const description = 'Free printable letter tracing worksheets for every letter from A to Z. Capital and lowercase, three line sizes, starting dots. Prints on Letter or A4.';
+const url = new URL('/letter-tracing/', SITE.url).href;
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Letter tracing worksheets A to Z',
+    url,
+    description,
+    hasPart: letters.map((l) => ({ '@type': 'LearningResource', name: `Letter ${l.letter.toUpperCase()} tracing worksheet`, url: `${SITE.url}/letter-tracing/${l.letter}/` })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Letter Tracing', item: url },
+    ],
+  },
+];
+const groups = [
+  { name: 'Straight lines first', letters: 'l t i L T I E F H', why: 'Down strokes and short crosses. The easiest place to start.' },
+  { name: 'Circle letters', letters: 'c o a d g q', why: 'All start the same way, curving left from the top of the circle.' },
+  { name: 'Humps and hooks', letters: 'n m h r b p', why: 'A straight line, then a curve over the top.' },
+  { name: 'Slants', letters: 'v w x y k z A V W X Y', why: 'Diagonals take more control, so save them for after the basics.' },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Letter tracing</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free letter tracing worksheets, A to Z</span></h1>
+      <p class="mt-4 text-lg text-muted">Pick a letter, choose capital, lowercase or both, and print.</p>
+    </header>
+
+    <Tracer client:load mode="letter" value="a" pick source="letter-tracing" />
+
+    <section class="mt-14" aria-labelledby="all-letters">
+      <h2 id="all-letters" class="text-[1.6rem] font-bold">Every letter has its own page</h2>
+      <p class="mt-2 text-muted max-w-[68ch]">Each page shows the stroke order for the capital and lowercase letter, words to practice with, and a tip for the mistakes kids make most with that letter.</p>
+      <ul class="mt-6 grid grid-cols-4 sm:grid-cols-7 lg:grid-cols-13 gap-2">
+        {letters.map((l) => (
+          <li>
+            <a href={`/letter-tracing/${l.letter}/`} class="block rounded-lg border border-hairline bg-white py-3 text-center hover:border-rule">
+              <span class="block text-2xl font-bold text-ink">{l.letter.toUpperCase()}{l.letter}</span>
+              <span class="sr-only">Letter {l.letter.toUpperCase()} tracing worksheet</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        These letter tracing worksheets are free to print for home or the classroom. Every sheet uses simple ball-and-stick letters on
+        handwriting lines: a solid top line, a dashed middle line and a solid bottom line. Green dots show where each stroke begins, so kids
+        learn to start at the top instead of building letters from the bottom up.
+      </p>
+
+      <h2>What order should you teach letters in?</h2>
+      <p>Alphabetical order is fine, but grouping letters by how they are made is easier on little hands. Many teachers use groups like these:</p>
+      <ul>
+        {groups.map((g) => (<li><strong>{g.name}:</strong> {g.letters}. {g.why}</li>))}
+      </ul>
+      <p>Mix in the letters from your child's name early. They'll care about those most, and our <a href="/name-tracing/">name tracing worksheet maker</a> builds a sheet from any name.</p>
+
+      <h2>How to use the worksheets</h2>
+      <ol>
+        <li><strong>Trace the solid example first</strong> with a finger, saying the strokes out loud.</li>
+        <li><strong>Trace the dotted rows</strong> with a crayon or chunky pencil, starting at each green dot.</li>
+        <li><strong>Write on the blank rows</strong> without a guide. Praise the best one on the line.</li>
+      </ol>
+      <p>Slip a sheet into a page protector and use a dry-erase marker to practice the same page all week.</p>
+
+      <h2>Which line size is right?</h2>
+      <p>Large lines suit ages 3 to 4, medium fits most kindergartners, and small works for kids 6 and up who need neatness practice. When in doubt, go one size bigger.</p>
+
+      <p>Working on numbers too? Try our <a href="/number-tracing/">number tracing worksheets</a> for 0 to 9.</p>
+    </article>
+  </div>
+</Base>

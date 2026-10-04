@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tracer from '../../components/Tracer.tsx';
+import { SITE } from '../../config';
+import letters from '../../data/letters.json';
+
+export function getStaticPaths() {
+  return letters.map((l, i) => ({ params: { letter: l.letter }, props: { i } }));
+}
+const { i } = Astro.props as { i: number };
+const L = letters[i];
+const U = L.letter.toUpperCase();
+const prev = letters[(i + 25) % 26];
+const next = letters[(i + 1) % 26];
+const url = new URL(`/letter-tracing/${L.letter}/`, SITE.url).href;
+const title = `Letter ${U} Tracing Worksheet (Free Printable) | ${SITE.name}`;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `Letter ${U} tracing worksheet`,
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Kindergarten',
+    teaches: `Writing uppercase ${U} and lowercase ${L.letter}`,
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description: L.metaDescription,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Letter Tracing', item: SITE.url + '/letter-tracing/' },
+      { '@type': 'ListItem', position: 3, name: `Letter ${U}`, item: url },
+    ],
+  },
+];
+---
+<Base title={title} description={L.metaDescription} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span>
+      <a href="/letter-tracing/" class="hover:text-ink">Letter tracing</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">Letter {U}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter {U} tracing worksheet</span></h1>
+      <p class="mt-4 text-lg text-muted">Capital {U} and lowercase {L.letter} on handwriting lines, with green dots where each stroke starts.</p>
+    </header>
+
+    <Tracer client:load mode="letter" value={L.letter} source="letter-tracing" />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        This free letter {U} tracing worksheet gives your child rows of capital {U} and lowercase {L.letter} to trace, then blank lines to try on
+        their own. Pick a line size for their age, print it on Letter or A4, and practice for five minutes a day.
+      </p>
+
+      <h2>How to write a capital {U}</h2>
+      <ol>{L.upperSteps.map((s) => <li>{s}</li>)}</ol>
+
+      <h2>How to write a lowercase {L.letter}</h2>
+      <ol>{L.lowerSteps.map((s) => <li>{s}</li>)}</ol>
+
+      <h2>Teaching tip for {U}</h2>
+      <p>{L.tip}</p>
+
+      <h2>Words that start with {U}</h2>
+      <p>Say these out loud while your child traces, or have them draw one at the bottom of the page.</p>
+      <ul class="columns-2 sm:columns-3">{L.words.map((w) => <li>{w}</li>)}</ul>
+
+      <h2>Keep going</h2>
+      <p>
+        Once {U} feels easy, try the letters in your child's name with our <a href="/name-tracing/">name tracing worksheet maker</a>.
+        Kids practice harder when the word on the page is theirs.
+      </p>
+    </article>
+
+    <nav aria-label="Other letters" class="mt-12">
+      <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/letter-tracing/${prev.letter}/`}>Letter {prev.letter.toUpperCase()}</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/letter-tracing/${next.letter}/`}>Letter {next.letter.toUpperCase()}</a>
+      </div>
+      <ul class="mt-6 grid grid-cols-7 sm:grid-cols-13 gap-2 max-w-3xl">
+        {letters.map((l) => (
+          <li>
+            <a
+              href={`/letter-tracing/${l.letter}/`}
+              aria-current={l.letter === L.letter ? 'page' : undefined}
+              class={`block text-center rounded-md border py-2 font-bold ${l.letter === L.letter ? 'border-rule bg-white text-ink' : 'border-hairline text-muted hover:text-ink hover:bg-white'}`}
+            >{l.letter.toUpperCase()}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Base>

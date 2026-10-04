@@ -13,7 +13,9 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL('/og-default.png', SITE.url).href;
 const nav = [
   { href: '/name-tracing/', label: 'Name tracing' },
-  { href: '/#tools', label: 'All tools' },
+  { href: '/letter-tracing/', label: 'Letters' },
+  { href: '/learn/', label: 'Learn' },
+  { href: '/membership/', label: 'Membership' },
 ];
 const year = new Date().getFullYear();
 ---
@@ -46,8 +48,8 @@ const year = new Date().getFullYear();
           {SITE.name}
         </a>
         <nav aria-label="Main">
-          <ul class="flex items-center gap-5 text-[15px]">
-            {nav.map((n) => <li><a href={n.href} class="text-muted hover:text-ink">{n.label}</a></li>)}
+          <ul class="flex items-center gap-4 sm:gap-5 text-[15px]">
+            {nav.map((n, i) => <li class={i === 1 || i === 2 ? 'hidden sm:block' : ''}><a href={n.href} class="text-muted hover:text-ink">{n.label}</a></li>)}
           </ul>
         </nav>
       </div>
@@ -58,6 +60,10 @@ const year = new Date().getFullYear();
         <p class="max-w-md">Free printable worksheets for parents, teachers and homeschool families. Names you type stay on your device.</p>
         <ul class="flex flex-wrap gap-x-5 gap-y-2">
           <li><a class="hover:text-ink" href="/name-tracing/">Name tracing worksheets</a></li>
+          <li><a class="hover:text-ink" href="/letter-tracing/">Letter tracing</a></li>
+          <li><a class="hover:text-ink" href="/number-tracing/">Number tracing</a></li>
+          <li><a class="hover:text-ink" href="/learn/">Learn</a></li>
+          <li><a class="hover:text-ink" href="/membership/">Membership</a></li>
           <li><a class="hover:text-ink" href="/privacy/">Privacy</a></li>
           <li><a class="hover:text-ink" href={`mailto:${SITE.email}`}>Contact</a></li>
         </ul>
