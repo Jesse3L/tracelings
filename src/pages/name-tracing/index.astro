@@ -1,0 +1,108 @@
+---
+import Base from '../../layouts/Base.astro';
+import NameTracer from '../../components/NameTracer.tsx';
+import { SITE } from '../../config';
+
+const title = `Free Name Tracing Worksheet Generator | ${SITE.name}`;
+const description = 'Type your child’s name and print free name tracing worksheets in seconds. Pick letter style, line size and practice rows. PDF on Letter or A4.';
+const url = new URL('/name-tracing/', SITE.url).href;
+
+const faqs = [
+  { q: 'Are these name tracing worksheets really free?', a: 'Yes. You can make and print as many name tracing sheets as you like. There’s no sign-up and no download limit.' },
+  { q: 'What paper size do the worksheets print on?', a: 'Choose US Letter or A4 before you download. The PDF is sized for that paper, so it prints at full size without cropping or shrinking.' },
+  { q: 'Can I make worksheets for several names or a whole class?', a: 'You can make a sheet for any name, one at a time, for free. Printing a full class set from one list is part of the membership, which is coming soon.' },
+  { q: 'Why are the letters dotted?', a: 'Dotted letters show the shape while leaving the work to your child. Their pencil follows the path, and each row builds the muscle memory needed to write the name without a guide. The green dots mark where each stroke begins.' },
+  { q: 'Should my child learn lowercase or capital letters first?', a: 'Most teachers start with a capital first letter followed by lowercase, because that’s how names are written in school. ALL CAPS can be easier for very young kids. If your preschool uses one style, match it at home.' },
+  { q: 'Is my child’s name stored anywhere?', a: 'No. The worksheet is built right in your browser, and the name never leaves your device. We don’t save it, send it or see it.' },
+  { q: 'Can I use these name tracing sheets in my classroom?', a: 'Yes. The worksheets are free for personal and classroom use, so print as many copies as your students need.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Name Tracing Worksheet Generator',
+    url,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Any (web browser)',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    audience: { '@type': 'Audience', audienceType: 'Parents, teachers and homeschool families' },
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Name Tracing', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Name tracing</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free name tracing worksheet generator</span></h1>
+      <p class="mt-4 text-lg text-muted">Type a name, pick a style, print. Your sheet is ready in seconds.</p>
+    </header>
+
+    <NameTracer client:load />
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <p class="text-[1.15rem]!">
+        {SITE.name} is a free name tracing generator that turns any name into a printable handwriting worksheet. Type your child's name,
+        choose capital first letter, all caps or lowercase, and pick a line size for their age. The PDF downloads in seconds, prints on
+        Letter or A4, and needs no account.
+      </p>
+
+      <h2>How to make a name tracing worksheet</h2>
+      <ol>
+        <li><strong>Type the name.</strong> Enter your child's first name, or a full name if they're ready for it.</li>
+        <li><strong>Choose a letter style.</strong> Pick Capital first letter (Emma), ALL CAPS (EMMA), or lowercase (emma).</li>
+        <li><strong>Set the line size and rows.</strong> Large lines suit ages 3 to 4, medium fits ages 5 to 6, and small works for kids 6 and up. Then choose trace-only rows, or tracing followed by blank rows for writing on their own.</li>
+        <li><strong>Download and print.</strong> Save the PDF and print it on regular paper. That's it.</li>
+      </ol>
+
+      <h2>Tips for teaching your child to write their name</h2>
+      <p><strong>Start with the capital letter.</strong> A name has one capital at the front, and it's usually the letter kids recognize first. Let them master that one, then add the lowercase letters that follow.</p>
+      <p><strong>Teach strokes from top to bottom.</strong> Most letters start at the top line and move down. Saying it out loud helps: "Start at the top, pull down." The green dots on each sheet show where every stroke begins.</p>
+      <p><strong>Give little hands something chunky.</strong> Crayons, short fat pencils and triangle grips are easier to hold than a standard pencil. Snapping a crayon in half nudges kids toward a better grip on its own.</p>
+      <p><strong>Keep sessions short.</strong> Five or ten minutes a day beats a long session once a week. Stop while it's still fun, and save the sheet so they can see their progress tomorrow.</p>
+      <p><strong>Trace, then copy, then write on their own.</strong> Begin with the dotted letters. Once tracing feels easy, have them copy the name on the blank rows at the bottom. The last step is writing it from memory with no model at all.</p>
+      <p><strong>Praise the effort, not the perfection.</strong> Wobbly letters are normal for a long time. Point out the letter they got right and let the rest go for today.</p>
+
+      <h2>Which line size should I pick?</h2>
+      <ul>
+        <li><strong>Large (ages 3 to 4):</strong> Big letters and wide lines for preschoolers who are still building control with a crayon or chunky pencil.</li>
+        <li><strong>Medium (ages 5 to 6):</strong> A good fit for most kindergarten name tracing. Letters are still roomy but closer to the size kids use in class.</li>
+        <li><strong>Small (ages 6 and up):</strong> For first graders and older kids who write comfortably and need practice with neatness and spacing.</li>
+      </ul>
+      <p>Not sure? Start one size larger than you think. Moving down a size later feels like a win.</p>
+
+      <h2>Frequently asked questions</h2>
+      <div class="divide-y divide-hairline border-y border-hairline">
+        {faqs.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">
+              {f.q}
+              <span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="mt-3 mb-0!">{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2>More ways to practice</h2>
+      <p>Name coloring pages, letter tracing and cursive worksheets are on the way. They'll use the same name you type here.</p>
+    </article>
+  </div>
+</Base>

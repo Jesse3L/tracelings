@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroTracer from '../components/HeroTracer.tsx';
+import { SITE } from '../config';
+
+const title = `${SITE.name} | Free Name Tracing Worksheets & Kids' Printables`;
+const description = 'Make free name tracing worksheets and personalized printables for kids in seconds. No sign-up. Prints on Letter or A4. Made for parents and teachers.';
+
+const why = [
+  { h: 'Free, with no sign-up', p: 'Open a tool, type a name, print. No account, no email, no download limits.' },
+  { h: 'Built around one name', p: 'Kids practice harder when the word on the page is theirs. Every sheet starts with the name you type.' },
+  { h: 'Prints right on Letter or A4', p: 'Every worksheet downloads as a clean PDF sized for the paper in your printer.' },
+];
+
+const tools = [
+  { name: 'Name tracing', href: '/name-tracing/', p: 'Turn any name into a dotted tracing worksheet with the letter style, line size and rows you choose.', live: true },
+  { name: 'Name coloring pages', p: 'Big outlined letters of your child’s name, ready to color and hang on the fridge.' },
+  { name: 'Cursive practice', p: 'Cursive handwriting worksheets for names, letters and words, for kids moving past print.' },
+  { name: 'Spelling worksheets', p: 'Paste this week’s spelling list and print practice pages built from those exact words.' },
+  { name: 'Photo to coloring page', p: 'Upload a family photo and get a simple line drawing your child can color.' },
+  { name: 'Chore charts', p: 'Printable chore charts with your child’s name and the jobs that fit your house.' },
+];
+
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url + '/' },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url + '/', logo: SITE.url + '/favicon.svg', email: SITE.email },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <section class="mx-auto max-w-6xl px-4 sm:px-6 pt-12 sm:pt-16 pb-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center">
+    <div>
+      <h1 class="text-[2.3rem] sm:text-[3.1rem] font-bold"><span class="ruled">Printable worksheets made with your child's name</span></h1>
+      <p class="mt-6 text-lg sm:text-xl text-muted max-w-xl leading-relaxed">
+        Type a name and get a free name tracing sheet ready to print in seconds. Kids practice harder when the word on the page is theirs.
+      </p>
+    </div>
+    <HeroTracer client:load href="/name-tracing/" />
+  </section>
+
+  <section class="border-y border-hairline bg-white">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-8 sm:grid-cols-3">
+      {why.map((w) => (
+        <div class="border-t-2 border-rule pt-4">
+          <h2 class="font-bold text-lg">{w.h}</h2>
+          <p class="mt-2 text-muted leading-relaxed">{w.p}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="tools" class="mx-auto max-w-6xl px-4 sm:px-6 pt-16">
+    <h2 class="text-[1.9rem] font-bold">Tools</h2>
+    <p class="mt-2 text-muted">Name tracing is ready now. The rest are being built and will use the same name you type.</p>
+    <ul class="mt-8 grid gap-x-10 sm:grid-cols-2 border-t border-hairline">
+      {tools.map((t) => (
+        <li class="border-b border-hairline py-5 flex gap-4">
+          <div class="flex-1">
+            {t.live ? (
+              <a href={t.href} class="font-bold text-lg text-ink underline decoration-rule decoration-2 underline-offset-4 hover:decoration-mid">{t.name}</a>
+            ) : (
+              <span class="font-bold text-lg text-ink">{t.name}</span>
+            )}
+            <p class="mt-1 text-muted leading-relaxed">{t.p}</p>
+          </div>
+          <span class={`shrink-0 self-start mt-1 text-[13px] rounded-full px-2.5 py-0.5 ${t.live ? 'bg-[#e3f3ea] text-[#1f7a50]' : 'bg-[#eef2f8] text-muted'}`}>{t.live ? 'Ready' : 'Coming soon'}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 sm:px-6 pt-14">
+    <div class="max-w-2xl rounded-xl bg-[#eef2f8] p-6">
+      <h2 class="font-bold text-lg">Names stay on your device</h2>
+      <p class="mt-2 text-muted leading-relaxed">Our worksheets are built right in your browser, so the names you type are never sent to us or stored anywhere.</p>
+    </div>
+  </section>
+</Base>

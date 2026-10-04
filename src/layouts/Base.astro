@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+import { SITE } from '../config';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+const { title, description, schema, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL('/og-default.png', SITE.url).href;
+const nav = [
+  { href: '/name-tracing/', label: 'Name tracing' },
+  { href: '/#tools', label: 'All tools' },
+];
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f6f8fb" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-white px-3 py-2 rounded">Skip to content</a>
+    <header class="border-b border-hairline bg-paper/90">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-bold text-xl text-ink" aria-label={`${SITE.name} home`}>
+          <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><line x1="2" y1="7" x2="28" y2="7" stroke="#5b86d9" stroke-width="2"/><line x1="2" y1="15" x2="28" y2="15" stroke="#e46a72" stroke-width="1.6" stroke-dasharray="3 2.4"/><line x1="2" y1="23" x2="28" y2="23" stroke="#5b86d9" stroke-width="2"/><path d="M9 7 V23 M9 23 H18" fill="none" stroke="#1e2a44" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="3.2 2.6"/><circle cx="9" cy="7" r="2.4" fill="#2f9e6b"/></svg>
+          {SITE.name}
+        </a>
+        <nav aria-label="Main">
+          <ul class="flex items-center gap-5 text-[15px]">
+            {nav.map((n) => <li><a href={n.href} class="text-muted hover:text-ink">{n.label}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="flex-1"><slot /></main>
+    <footer class="border-t border-hairline mt-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-6 sm:grid-cols-[1fr_auto] text-[15px] text-muted">
+        <p class="max-w-md">Free printable worksheets for parents, teachers and homeschool families. Names you type stay on your device.</p>
+        <ul class="flex flex-wrap gap-x-5 gap-y-2">
+          <li><a class="hover:text-ink" href="/name-tracing/">Name tracing worksheets</a></li>
+          <li><a class="hover:text-ink" href="/privacy/">Privacy</a></li>
+          <li><a class="hover:text-ink" href={`mailto:${SITE.email}`}>Contact</a></li>
+        </ul>
+        <p class="text-sm">&copy; {year} {SITE.name}. Free for personal and classroom use.</p>
+      </div>
+    </footer>
+  </body>
+</html>
