@@ -3,7 +3,7 @@
   "items": [
     {
       "id": 2,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-10-06",
       "primaryKeyword": "thanksgiving crafts for preschoolers",
       "volume": 5400,
@@ -15,7 +15,9 @@
         "/coloring-pages/thanksgiving-coloring-pages/",
         "/name-tracing/"
       ],
-      "season": "thanksgiving"
+      "season": "thanksgiving",
+      "slug": "thanksgiving-crafts-for-preschoolers",
+      "publishedOn": "2026-10-06"
     },
     {
       "id": 1,
