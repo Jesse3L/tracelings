@@ -12,5 +12,5 @@ export async function savePdf(pages: Page[], filename: string, title?: string) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 4000);
-  countDownload();
+  countDownload(pages.length);
 }

@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { notify, placeFrom } from '../../lib/server/notify';
 
 export const prerender = false;
 
@@ -19,6 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
   const email = typeof data.email === 'string' ? data.email.trim().toLowerCase() : '';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) return json(400, { error: 'invalid_email' });
   const source = typeof data.source === 'string' && SOURCES.has(data.source) ? data.source : 'other';
+  await notify(source === 'waitlist' ? 'New waitlist sign-up' : 'New email sign-up', `${email}\nFrom the ${source} page${placeFrom(request) ? `\nPlace: ${placeFrom(request)}` : ''}`, 'email');
   const role = typeof data.role === 'string' && ROLES.has(data.role) ? data.role : '';
 
   const key = import.meta.env.KIT_API_KEY ?? process.env.KIT_API_KEY;

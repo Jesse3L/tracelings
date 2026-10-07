@@ -144,7 +144,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      countDownload();
+      countDownload(mode === 'words' ? pages.length : listPages.length || 1);
       setDone(true);
     } finally {
       setBusy(false);

@@ -19,6 +19,7 @@ export function fetchMember(force = false): Promise<MemberState> {
   if (!cached || force) {
     cached = fetch('/api/member/me/', { credentials: 'same-origin' })
       .then((r) => (r.ok ? r.json() : { member: false, available: false }))
+      .then((m) => { try { (window as any).__tlMember = m.member === true; } catch { /* ignore */ } return m; })
       .catch(() => ({ member: false, available: false }));
   }
   return cached;

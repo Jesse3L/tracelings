@@ -44,7 +44,7 @@ export default function ColoringDownload(props: { src: string; slug: string; tit
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      countDownload();
+      countDownload(1);
       setDone(true);
     } catch {
       setError(true);
