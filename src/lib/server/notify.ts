@@ -2,7 +2,7 @@
 // or any URL that accepts JSON. Never include anything a visitor typed (child names stay in the browser).
 const env = (k: string): string | undefined => (import.meta.env as Record<string, string | undefined>)[k] ?? process.env[k];
 
-export async function notify(title: string, body: string, tags = ''): Promise<void> {
+export async function notify(title: string, body: string, tags = '', fields: Record<string, string | number | boolean | null> = {}): Promise<void> {
   const url = env('NOTIFY_WEBHOOK_URL');
   if (!url) return;
   const text = `${title}\n${body}`;
@@ -14,7 +14,7 @@ export async function notify(title: string, body: string, tags = ''): Promise<vo
   } else if (/hooks\.slack\.com/.test(url)) {
     init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: `*${title}*\n${body}` }) };
   } else {
-    init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, body, text }) };
+    init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, body, text, site: 'tracelings.com', time: new Date().toISOString(), ...fields }) };
   }
   try {
     await fetch(url, { ...init, signal: AbortSignal.timeout(3000) });

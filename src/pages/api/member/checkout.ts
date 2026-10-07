@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     if (plan === 'founding' && (await foundingCount()) >= FOUNDING_LIMIT) return json(409, { error: 'founding_full' });
     const checkoutUrl = await createCheckout(plan, email, `${url.origin}/account/?welcome=1`);
     setPending(cookies, email);
-    await notify('Checkout started', `Someone opened Square checkout for ${PLANS[plan].label}.${placeFrom(request) ? `\nFrom: ${placeFrom(request)}` : ''}\nSquare emails you when a payment goes through.`, 'credit_card');
+    await notify('Checkout started', `Someone opened Square checkout for ${PLANS[plan].label}.${placeFrom(request) ? `\nFrom: ${placeFrom(request)}` : ''}\nSquare emails you when a payment goes through.`, 'credit_card', { event: 'checkout_started', plan: PLANS[plan].label, place: placeFrom(request) || null });
     return json(200, { url: checkoutUrl });
   } catch (e) {
     console.error('checkout failed', (e as Error).message);

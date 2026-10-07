@@ -27,6 +27,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     'New Tracelings download',
     `${who} downloaded a PDF${pages ? ` (${pages} page${pages === 1 ? '' : 's'})` : ''}\nPage: tracelings.com${path}${place ? `\nFrom: ${place}` : ''}`,
     'page_facing_up',
+    { event: 'download', page: `https://tracelings.com${path}`, pages, member: data.member === true, place: place || null },
   );
   return new Response(null, { status: 204 });
 };
