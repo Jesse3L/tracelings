@@ -14,7 +14,7 @@ export async function notify(title: string, body: string, tags = '', fields: Rec
   } else if (/hooks\.slack\.com/.test(url)) {
     init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: `*${title}*\n${body}` }) };
   } else {
-    init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, body, text, site: 'tracelings.com', time: new Date().toISOString(), ...fields }) };
+    init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, body, text, site: 'tracelings.com', time: new Date().toISOString(), time_local: new Date().toLocaleString('en-US', { timeZone: 'America/Chicago', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' CT', ...fields }) };
   }
   try {
     await fetch(url, { ...init, signal: AbortSignal.timeout(3000) });
