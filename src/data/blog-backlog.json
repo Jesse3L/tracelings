@@ -21,7 +21,7 @@
     },
     {
       "id": 1,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-10-09",
       "primaryKeyword": "thanksgiving activities for preschoolers",
       "volume": 1900,
@@ -33,7 +33,9 @@
         "/number-tracing/",
         "/name-tracing/"
       ],
-      "season": "thanksgiving"
+      "season": "thanksgiving",
+      "slug": "thanksgiving-activities-for-preschoolers",
+      "publishedOn": "2026-10-09"
     },
     {
       "id": 6,
