@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { SITE } from '../config';
 import LogoMark from '../components/site/LogoMark.astro';
 import DownloadNudge from '../components/site/DownloadNudge.tsx';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -79,7 +80,7 @@ const year = new Date().getFullYear();
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
-    <script defer src="/_vercel/insights/script.js"></script>
+    <Analytics />
     <!-- Google Analytics 4: page analytics only. Advertising features and Google signals are off. -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-NK4ZVDMCWC"></script>
     <script is:inline>
