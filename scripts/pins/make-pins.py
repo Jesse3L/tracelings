@@ -20,7 +20,7 @@ body {{ width: 1000px; height: 1500px; font-family: Andika, sans-serif; color: #
 h1 {{ margin-top: 26px; font-size: 76px; line-height: 1.32; font-weight: 700; letter-spacing: -.01em; }}
 h1 span {{ padding: 0 .06em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
   background-image: linear-gradient(#5b86d9,#5b86d9), repeating-linear-gradient(90deg,#e46a72 0 10px,transparent 10px 18px), linear-gradient(#5b86d9,#5b86d9);
-  background-size: 100% 3px, 100% 2.5px, 100% 3px; background-position: 0 .3em, 0 .56em, 0 1.06em; background-repeat: no-repeat; }}
+  background-size: 100% 3px, 100% 2.5px, 100% 3px; background-position: 0 calc(.48em - 1.5px), 0 calc(.72em - 1px), 0 calc(1.22em + 1.5px); background-repeat: no-repeat; }}
 .sub {{ margin-top: 14px; font-size: 36px; color: #5f6b82; }}
 .stage {{ position: absolute; left: 70px; right: 70px; top: var(--top); bottom: 170px; display: flex; align-items: center; justify-content: center; }}
 .card {{ background: #fff; border: 2px solid #dce3ee; border-radius: 18px; box-shadow: 0 30px 60px -30px rgba(30,42,68,.45); padding: 18px; }}
