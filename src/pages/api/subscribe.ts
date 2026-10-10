@@ -3,11 +3,12 @@ import { notify, placeFrom } from '../../lib/server/notify';
 
 export const prerender = false;
 
-// Adds an email to Kit (kit.com). Needs KIT_API_KEY in Vercel's environment variables.
+// Saves an email sign-up: always sent to the owner's webhook (NOTIFY_WEBHOOK_URL, e.g. Zapier → Google Sheets),
+// and also added to Kit (kit.com) if KIT_API_KEY is set.
 // Optional: KIT_FORM_ID (starts the welcome sequence) and KIT_TAG_WAITLIST (tags membership waitlist signups).
 // We only ever receive an email address and where it came from, never a child's name.
 const KIT = 'https://api.kit.com/v4';
-const SOURCES = new Set(['name-tracing', 'letter-tracing', 'number-tracing', 'cursive', 'name-coloring', 'coloring-pages', 'sight-words', 'waitlist', 'homepage']);
+const SOURCES = { has: (v: string) => /^[a-z0-9-]{2,40}$/.test(v) }; // any tool slug, e.g. 'name-tracing'
 const ROLES = new Set(['own-kids', 'classroom', 'homeschool', 'other']);
 
 const json = (status: number, body: Record<string, unknown>) =>
@@ -20,11 +21,18 @@ export const POST: APIRoute = async ({ request }) => {
   const email = typeof data.email === 'string' ? data.email.trim().toLowerCase() : '';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) return json(400, { error: 'invalid_email' });
   const source = typeof data.source === 'string' && SOURCES.has(data.source) ? data.source : 'other';
-  await notify(source === 'waitlist' ? 'New waitlist sign-up' : 'New email sign-up', `${email}\nFrom the ${source} page${placeFrom(request) ? `\nPlace: ${placeFrom(request)}` : ''}`, 'email', { event: source === 'waitlist' ? 'waitlist_signup' : 'email_signup', email, source, place: placeFrom(request) || null });
   const role = typeof data.role === 'string' && ROLES.has(data.role) ? data.role : '';
+  const place = placeFrom(request);
+  // The webhook (Zapier → Google Sheet) is the email list until an email service is connected.
+  const saved = await notify(
+    source === 'waitlist' ? 'New waitlist sign-up' : 'New email sign-up',
+    `${email}\nFrom the ${source} page${role ? ` (${role})` : ''}${place ? `\nPlace: ${place}` : ''}`,
+    'email',
+    { event: source === 'waitlist' ? 'waitlist_signup' : 'email_signup', email, source, role: role || null, place: place || null },
+  );
 
   const key = import.meta.env.KIT_API_KEY ?? process.env.KIT_API_KEY;
-  if (!key) return json(503, { error: 'not_configured' });
+  if (!key) return saved ? json(200, { ok: true }) : json(503, { error: 'not_configured' });
   const headers = { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Kit-Api-Key': key };
 
   try {

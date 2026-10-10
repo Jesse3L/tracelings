@@ -34,7 +34,7 @@ export default function EmailGate(props: { open: boolean; source: string; onDone
       <form onSubmit={submit} class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
         <h2 id="gate-title" class="text-xl font-bold text-ink">Keep printing for free</h2>
         <p class="mt-2 text-muted leading-relaxed">
-          Add your email once and every worksheet on this device stays free. We'll send a new printable now and then, and you'll hear first when membership opens.
+          Add your email once and every worksheet on this device stays free. We'll send a new printable now and then, plus the occasional member offer.
         </p>
         <label class="block mt-5">
           <span class="block text-[15px] font-bold mb-2">Your email</span>

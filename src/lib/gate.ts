@@ -25,6 +25,7 @@ export function countDownload(pages?: number) {
     if (!navigator.sendBeacon?.('/api/event/', new Blob([payload], { type: 'application/json' }))) {
       fetch('/api/event/', { method: 'POST', body: payload, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
     }
+    window.dispatchEvent(new Event('tl-downloaded'));
     (window as any).gtag?.('event', 'pdf_download', { tool_page: location.pathname, page_count: pages ?? 1, member });
   } catch { /* never block a download */ }
 }

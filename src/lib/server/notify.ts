@@ -2,9 +2,9 @@
 // or any URL that accepts JSON. Never include anything a visitor typed (child names stay in the browser).
 const env = (k: string): string | undefined => (import.meta.env as Record<string, string | undefined>)[k] ?? process.env[k];
 
-export async function notify(title: string, body: string, tags = '', fields: Record<string, string | number | boolean | null> = {}): Promise<void> {
+export async function notify(title: string, body: string, tags = '', fields: Record<string, string | number | boolean | null> = {}): Promise<boolean> {
   const url = env('NOTIFY_WEBHOOK_URL');
-  if (!url) return;
+  if (!url) return false;
   const text = `${title}\n${body}`;
   let init: RequestInit;
   if (/^https:\/\/(ntfy\.sh|[^/]*ntfy[^/]*)\//.test(url)) {
@@ -17,9 +17,12 @@ export async function notify(title: string, body: string, tags = '', fields: Rec
     init = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, body, text, site: 'tracelings.com', time: new Date().toISOString(), time_local: new Date().toLocaleString('en-US', { timeZone: 'America/Chicago', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' CT', ...fields }) };
   }
   try {
-    await fetch(url, { ...init, signal: AbortSignal.timeout(3000) });
+    const res = await fetch(url, { ...init, signal: AbortSignal.timeout(4000) });
+    if (!res.ok) console.error('notify failed', res.status);
+    return res.ok;
   } catch (e) {
     console.error('notify failed', (e as Error).message);
+    return false;
   }
 }
 

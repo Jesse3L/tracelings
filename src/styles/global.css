@@ -79,3 +79,6 @@ body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
   linear-gradient(var(--color-rule), var(--color-rule)) 0 3px / 100% 2px no-repeat,
   repeating-linear-gradient(90deg, var(--color-mid) 0 8px, transparent 8px 14px) 0 10px / 100% 1.5px no-repeat,
   linear-gradient(var(--color-rule), var(--color-rule)) 0 17px / 100% 2px no-repeat; opacity: .9; }
+
+.nudge-in { animation: nudge-in .35s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes nudge-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
