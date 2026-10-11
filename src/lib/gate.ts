@@ -1,3 +1,5 @@
+import { track } from '@vercel/analytics';
+
 // Free downloads: the first one needs nothing; after that we ask for an email once per device.
 const COUNT_KEY = 'tl-downloads';
 const OK_KEY = 'tl-email-ok';
@@ -27,6 +29,8 @@ export function countDownload(pages?: number) {
     }
     window.dispatchEvent(new Event('tl-downloaded'));
     (window as any).gtag?.('event', 'pdf_download', { tool_page: location.pathname, page_count: pages ?? 1, member });
+    // Vercel Web Analytics custom event (recorded on paid Vercel plans; ignored on Hobby).
+    track('pdf_download', { page: location.pathname, pages: pages ?? 1, member });
   } catch { /* never block a download */ }
 }
 export function markEmailOk() {
