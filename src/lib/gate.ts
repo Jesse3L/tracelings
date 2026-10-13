@@ -1,6 +1,6 @@
 import { track } from '@vercel/analytics';
 
-// Free downloads: the first one needs nothing; after that we ask for an email once per device.
+// Free downloads need an email once per device, before the first download. Members never see the prompt.
 const COUNT_KEY = 'tl-downloads';
 const OK_KEY = 'tl-email-ok';
 
@@ -11,7 +11,7 @@ function write(key: string, v: string) {
   try { localStorage.setItem(key, v); } catch { /* storage unavailable */ }
 }
 
-export const FREE_DOWNLOADS = 1;
+export const FREE_DOWNLOADS = 0;
 
 // Bot filter for download alerts: a real person taps, clicks or types before downloading.
 // Scripted clicks don't produce trusted input events, so pings without one are marked as non-human.

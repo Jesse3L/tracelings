@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { subscribe, markEmailOk } from '../lib/gate';
 
-// Shown before the second download on a device. The download goes ahead once an email is given.
+// Shown before the first download on a device. The download goes ahead once an email is given.
 export default function EmailGate(props: { open: boolean; source: string; onDone: () => void; onClose: () => void }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -32,9 +32,9 @@ export default function EmailGate(props: { open: boolean; source: string; onDone
   return (
     <div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#1e2a44]/45 p-4" role="dialog" aria-modal="true" aria-labelledby="gate-title" onClick={(e) => { if (e.target === e.currentTarget) props.onClose(); }}>
       <form onSubmit={submit} class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-        <h2 id="gate-title" class="text-xl font-bold text-ink">Keep printing for free</h2>
+        <h2 id="gate-title" class="text-xl font-bold text-ink">Get your free printable</h2>
         <p class="mt-2 text-muted leading-relaxed">
-          Add your email once and every worksheet on this device stays free. We'll send a new printable now and then, plus the occasional member offer.
+          Add your email once and every worksheet on this device is free to print, with no password and no limit. We'll send a new printable now and then, plus the occasional member offer.
         </p>
         <label class="block mt-5">
           <span class="block text-[15px] font-bold mb-2">Your email</span>
@@ -52,10 +52,11 @@ export default function EmailGate(props: { open: boolean; source: string; onDone
         </label>
         {error && <p class="mt-2 text-[14px] text-[#b4232c]" role="alert">{error}</p>}
         <button type="submit" disabled={sending} class="btn-pencil mt-5 w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {sending ? 'One moment…' : 'Download my worksheet'}
+          {sending ? 'One moment…' : 'Download my free printable'}
         </button>
         <p class="mt-3 text-[13px] text-muted">We'll email you about new printables and membership. Unsubscribe anytime. We never ask for your child's information.</p>
-        <button type="button" onClick={props.onClose} class="mt-3 text-[14px] text-muted underline underline-offset-2">Not now</button>
+        <p class="mt-3 text-[13px] text-muted">Already a member? <a href="/account/" class="underline underline-offset-2">Sign in</a></p>
+        <button type="button" onClick={props.onClose} class="mt-2 text-[14px] text-muted underline underline-offset-2">Cancel</button>
       </form>
     </div>
   );
