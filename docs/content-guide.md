@@ -89,7 +89,7 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Homeschool hub | `/homeschool/` | live |
 | Pre-K homeschool plan (36 weeks) | `/homeschool/preschool/` | live |
 | Kindergarten homeschool plan (36 weeks) | `/homeschool/kindergarten/` | live |
-| Christian homeschool (faith track, KJV verses) | `/homeschool/christian/` | live |
+| Christian homeschool (faith track, BSB verses) | `/homeschool/christian/` | live |
 | Pre-K math worksheets | `/math-worksheets/pre-k/` | live |
 | Letter of the week | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
 | Membership | `/membership/` | live |

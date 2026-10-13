@@ -126,7 +126,7 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
             setFaith(on);
             try { localStorage.setItem(FAITH_KEY, on ? '1' : '0'); } catch { /* storage unavailable */ }
           }} />
-          <span><span class="font-bold text-ink">Faith track</span> <span class="text-muted">(optional)</span><span class="block text-[13px] text-muted">Adds a Bible verse of the week (KJV) to the plan and a verse copywork page.</span></span>
+          <span><span class="font-bold text-ink">Faith track</span> <span class="text-muted">(optional)</span><span class="block text-[13px] text-muted">Adds a Bible verse of the week (BSB) to the plan and a verse copywork page.</span></span>
         </label>
 
         <Segmented legend="Paper" name="pack-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
