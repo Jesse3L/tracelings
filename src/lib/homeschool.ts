@@ -219,7 +219,7 @@ export interface PackOptions {
   paper: Paper;
   credit: boolean;
   bubble: LoadedFont | null; // bubble letter font for coloring pages; skipped while it loads
-  faith?: boolean; // faith track: adds the week's Bible verse (KJV) to the plan and a verse copywork page
+  faith?: boolean; // faith track: adds the week's Bible verse (BSB) to the plan and a verse copywork page
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -246,7 +246,7 @@ function planPage(o: PackOptions, plan: Planned[], label: string): Page {
     const v = verseFor(o.week.n);
     y += 6;
     items.push({ kind: 'line', x1: M, y1: y - 8, x2: w - M, y2: y - 8, color: COLORS.desc, width: 1 });
-    items.push({ kind: 'text', x: M, y: y + 12, size: 13, text: `Verse of the week (${v.ref}, KJV)`, color: INK, align: 'left' });
+    items.push({ kind: 'text', x: M, y: y + 12, size: 13, text: `Verse of the week (${v.ref}, BSB)`, color: INK, align: 'left' });
     y = para(items, `"${v.text}"`, M, y + 32, 12, w - 2 * M) + 2;
     y = para(items, 'Read it together each morning. Trace it on the verse page any day this week, and say it once more at bedtime.', M, y, 11, w - 2 * M, COLORS.quiet) + 8;
   }
@@ -547,7 +547,7 @@ function planFor(level: Level, w: Week): Planned[] {
 // ---------- Faith track ----------
 
 export interface Verse { ref: string; text: string; short: string }
-/** The week's Bible verse (King James Version, public domain). One per week, the same for both levels. */
+/** The week's Bible verse (Berean Standard Bible, public domain since 2023; some verses are shortened to the part kids learn). One per week, the same for both levels. */
 export const verseFor = (n: number): Verse => (versesData as Verse[])[(n - 1) % (versesData as Verse[]).length];
 export const VERSES = versesData as Verse[];
 
@@ -569,7 +569,7 @@ export function versePage(o: PackOptions, label: string): Page {
   }
   let ty = boxTop + 30;
   for (const line of lines) { items.push({ kind: 'text', x: w / 2, y: ty, size: 15, text: line, color: INK, align: 'center' }); ty += 20; }
-  items.push({ kind: 'text', x: w / 2, y: ty + 4, size: 11, text: `${v.ref} (KJV)`, color: COLORS.quiet, align: 'center' });
+  items.push({ kind: 'text', x: w / 2, y: ty + 4, size: 11, text: `${v.ref} (BSB)`, color: COLORS.quiet, align: 'center' });
 
   let y = boxTop + boxH + 18;
   items.push({ kind: 'text', x: M, y, size: 11, text: pre ? 'Trace the words. Say them out loud together as you go.' : 'Trace the verse, then copy it on your own on the empty lines.', color: COLORS.quiet, align: 'left' });

@@ -217,7 +217,7 @@
     {
       "id": "faith-track",
       "status": "done",
-      "title": "Optional faith track: a KJV Bible verse each week on the plan page plus a verse copywork page (Pre-K traces a short phrase, K copies the full verse); /homeschool/christian/ page",
+      "title": "Optional faith track: a Bible verse each week (Berean Standard Bible) on the plan page plus a verse copywork page (Pre-K traces a short phrase, K copies the full verse); /homeschool/christian/ page",
       "keywords": {
         "homeschool preschool curriculum christian": [
           590,
@@ -251,14 +251,14 @@
       "needs": [
         "first-grade-plan"
       ],
-      "title": "Extend the faith track to the first grade plan: 36 longer KJV verses for copywork",
-      "buildOn": "Add verses to src/data/verses.json keyed by level, or a second list. KJV only (public domain)."
+      "title": "Extend the faith track to the first grade plan: 36 longer BSB verses for copywork",
+      "buildOn": "Add verses to src/data/verses.json keyed by level, or a second list. Berean Standard Bible only (public domain, easy modern English). Do not use NIV, ESV or other copyrighted translations."
     },
     {
       "id": "bible-verse-copywork-page",
       "status": "todo",
       "needs": [],
-      "title": "Bible verse copywork worksheet maker: pick or paste any KJV verse, trace then copy, print or cursive",
+      "title": "Bible verse copywork worksheet maker: pick any BSB verse, trace then copy, print or cursive",
       "suggestedUrl": "/bible-verse-copywork/",
       "keywords": {
         "bible verse copywork": [
