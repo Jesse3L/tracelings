@@ -144,7 +144,7 @@ export function buildRangePages(o: RangeOptions): Page[] {
 
 /** Characters the tracing letters can draw: A-Z, a-z, 0-9, spaces and simple punctuation. */
 export function cleanTraceText(raw: string): string {
-  return raw.replace(/[‘’`]/g, "'").replace(/[^A-Za-z0-9 '.,?!-]/g, '').replace(/\s+/g, ' ').trim();
+  return raw.replace(/[‘’`]/g, "'").replace(/[^A-Za-z0-9 '.,?!:;-]/g, '').replace(/\s+/g, ' ').trim();
 }
 
 /** Splits text into lines that fit `maxUnits` (in letter-height units), breaking between words. */

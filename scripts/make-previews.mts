@@ -120,6 +120,9 @@ jobs.push(render('homeschool-prek', 'homeschool-preschool-week-2', pack('pre-k',
   'Homeschool preschool weekly plan page for letter S, with a Monday to Friday checklist and ideas away from the paper'));
 jobs.push(render('homeschool-k', 'homeschool-kindergarten-word-family', pack('kindergarten', 15)[2],
   'Kindergarten word family worksheet: circle the -at words like cat, hat and mat'));
+jobs.push(render('homeschool-faith', 'christian-homeschool-verse-page',
+  buildWeekPack({ level: 'pre-k', week: PLANS['pre-k'].weeks[3], name: '', paper: 'letter', credit: true, bubble: bubbleFont, faith: true })[1],
+  'Christian homeschool preschool verse page: Psalm 23:1 in a starred box with The LORD is my shepherd to trace on handwriting lines'));
 for (const l of 'abcdefghijklmnopqrstuvwxyz') {
   const U = l.toUpperCase();
   jobs.push(render(`lotw-${l}`, `letter-of-the-week-${l}`, pack('pre-k', preKWeekForLetter(l).n)[2],

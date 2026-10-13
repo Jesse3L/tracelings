@@ -7,89 +7,274 @@
       "status": "done",
       "done": "2026-10-13",
       "title": "Homeschool hub, Pre-K and Kindergarten 36-week plans, weekly pack maker, letter of the week pages, kindergarten curriculum guide",
-      "urls": ["/homeschool/", "/homeschool/preschool/", "/homeschool/kindergarten/", "/letter-of-the-week/", "/letter-of-the-week/a/ to /z/", "/learn/best-kindergarten-homeschool-curriculum/"],
-      "keywords": { "homeschool preschool curriculum": [6600, 31], "kindergarten homeschool curriculum": [6600, 18], "pre kindergarten homeschool curriculum": [2400, 26], "letter of the week": [590, 27], "best kindergarten homeschool curriculum": [720, 18] }
+      "urls": [
+        "/homeschool/",
+        "/homeschool/preschool/",
+        "/homeschool/kindergarten/",
+        "/letter-of-the-week/",
+        "/letter-of-the-week/a/ to /z/",
+        "/learn/best-kindergarten-homeschool-curriculum/"
+      ],
+      "keywords": {
+        "homeschool preschool curriculum": [
+          6600,
+          31
+        ],
+        "kindergarten homeschool curriculum": [
+          6600,
+          18
+        ],
+        "pre kindergarten homeschool curriculum": [
+          2400,
+          26
+        ],
+        "letter of the week": [
+          590,
+          27
+        ],
+        "best kindergarten homeschool curriculum": [
+          720,
+          18
+        ]
+      }
     },
     {
       "id": "prek-math-worksheets",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Pre-K math worksheets page with a generator: count and color, ten frames, more or less, numbers 1 to 20",
       "suggestedUrl": "/math-worksheets/pre-k/",
-      "keywords": { "pre kindergarten math worksheets": [2900, 28], "free pre kindergarten math worksheets": [390, 32], "counting kindergarten math worksheets": [590, 26] },
+      "keywords": {
+        "pre kindergarten math worksheets": [
+          2900,
+          28
+        ],
+        "free pre kindergarten math worksheets": [
+          390,
+          32
+        ],
+        "counting kindergarten math worksheets": [
+          590,
+          26
+        ]
+      },
       "buildOn": "countPage() in src/lib/homeschool.ts. Link it from the Pre-K plan Thursday pages."
     },
     {
       "id": "k-addition-worksheets",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Kindergarten addition worksheet maker (within 5, 10, 20, with dots or a number line)",
       "suggestedUrl": "/math-worksheets/kindergarten-addition/",
-      "keywords": { "addition kindergarten math worksheets": [1000, 24], "kindergarten math worksheets subtraction": [260, 22] },
+      "keywords": {
+        "addition kindergarten math worksheets": [
+          1000,
+          24
+        ],
+        "kindergarten math worksheets subtraction": [
+          260,
+          22
+        ]
+      },
       "buildOn": "additionPage() in src/lib/homeschool.ts. Add subtraction as a second option."
     },
     {
       "id": "k-math-hub",
       "status": "todo",
-      "needs": ["prek-math-worksheets", "k-addition-worksheets"],
+      "needs": [
+        "prek-math-worksheets",
+        "k-addition-worksheets"
+      ],
       "title": "Kindergarten math worksheets hub linking every math generator, with a free printable sampler",
       "suggestedUrl": "/math-worksheets/kindergarten/",
-      "keywords": { "kindergarten math worksheets": [22200, 47], "kindergarten math worksheets free": [4400, 27], "free printable kindergarten math worksheets": [1300, 25] }
+      "keywords": {
+        "kindergarten math worksheets": [
+          22200,
+          47
+        ],
+        "kindergarten math worksheets free": [
+          4400,
+          27
+        ],
+        "free printable kindergarten math worksheets": [
+          1300,
+          25
+        ]
+      }
     },
     {
       "id": "word-family-pages",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Word family pages (-at, -an, -ig ...) with a word hunt and tracing generator for each family, linked from the Kindergarten plan",
       "suggestedUrl": "/word-families/ and /word-families/at/ ...",
-      "keywords": { "phonics worksheets for kg": [1900, 22], "phonics worksheets": [3600, 26] },
+      "keywords": {
+        "phonics worksheets for kg": [
+          1900,
+          22
+        ],
+        "phonics worksheets": [
+          3600,
+          26
+        ]
+      },
       "buildOn": "FAMILIES and huntPage() in src/lib/homeschool.ts. Check volume for 'at word family worksheets' style terms first."
     },
     {
       "id": "phonics-hub",
       "status": "todo",
-      "needs": ["word-family-pages"],
+      "needs": [
+        "word-family-pages"
+      ],
       "title": "Phonics worksheets hub by level (Pre-K, K, 1st, 2nd, 3rd), linking word families, letter of the week and sight words",
       "suggestedUrl": "/phonics-worksheets/",
-      "keywords": { "phonics worksheets": [3600, 26], "phonics worksheets for first graders": [1600, 24], "phonics worksheets for 2nd graders": [880, 31], "phonics worksheets for preschool": [480, 22] }
+      "keywords": {
+        "phonics worksheets": [
+          3600,
+          26
+        ],
+        "phonics worksheets for first graders": [
+          1600,
+          24
+        ],
+        "phonics worksheets for 2nd graders": [
+          880,
+          31
+        ],
+        "phonics worksheets for preschool": [
+          480,
+          22
+        ]
+      }
     },
     {
       "id": "guide-homeschool-preschool",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Learn article: how to homeschool preschool (schedule, what to cover, free plan)",
-      "keywords": { "homeschool preschool curriculum free": [1000, 35], "free homeschool preschool curriculum": [880, 19] },
+      "keywords": {
+        "homeschool preschool curriculum free": [
+          1000,
+          35
+        ],
+        "free homeschool preschool curriculum": [
+          880,
+          19
+        ]
+      },
       "buildOn": "Follow docs/content-guide.md. Link /homeschool/preschool/, /letter-of-the-week/, /name-tracing/."
     },
     {
       "id": "thanksgiving-homeschool-week",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Seasonal bonus week: a Thanksgiving homeschool pack (Pre-K and K) using the existing coloring pages and seasonal counting",
-      "keywords": { "thanksgiving kindergarten math worksheets": [110, 21], "thanksgiving activities for preschoolers": [1900, 19] },
+      "keywords": {
+        "thanksgiving kindergarten math worksheets": [
+          110,
+          21
+        ],
+        "thanksgiving activities for preschoolers": [
+          1900,
+          19
+        ]
+      },
       "buildOn": "Ship before mid-November. Add as an extra week, not one of the 36."
     },
     {
       "id": "first-grade-plan",
       "status": "todo",
-      "needs": ["word-family-pages", "k-addition-worksheets"],
+      "needs": [
+        "word-family-pages",
+        "k-addition-worksheets"
+      ],
       "title": "First grade at home: a 36-week plan (blends, digraphs, first grade sight words, addition and subtraction within 20, sentence writing)",
       "suggestedUrl": "/homeschool/first-grade/",
-      "keywords": { "phonics worksheets for first graders": [1600, 24] },
+      "keywords": {
+        "phonics worksheets for first graders": [
+          1600,
+          24
+        ]
+      },
       "buildOn": "Add a 'first-grade' level to PLANS in src/lib/homeschool.ts and the WeekPack level picker."
     },
     {
       "id": "reading-stories",
       "status": "needs-approval",
       "title": "Personalized decodable reading stories starring the child (member feature). Name swapped in on the device; AI writes stories with a {NAME} placeholder.",
-      "buildOn": "Needs an AI provider decision and cost check from Jesse before building."
+      "buildOn": "On hold: Jesse said to hold off on AI reading stories for now (2026-10-13). Do not build."
     },
     {
       "id": "faith-track",
-      "status": "needs-approval",
-      "title": "Optional faith-friendly track: verse copywork pages alongside the regular plan",
-      "keywords": { "homeschool preschool curriculum christian": [590, 49] },
-      "buildOn": "Jesse decides whether to offer it. Keep it optional and separate from the core plan."
+      "status": "done",
+      "title": "Optional faith track: a KJV Bible verse each week on the plan page plus a verse copywork page (Pre-K traces a short phrase, K copies the full verse); /homeschool/christian/ page",
+      "keywords": {
+        "homeschool preschool curriculum christian": [
+          590,
+          49
+        ],
+        "preschool christian homeschool curriculum": [
+          590,
+          52
+        ],
+        "kindergarten christian homeschool curriculum": [
+          260,
+          27
+        ],
+        "christian homeschool curriculum kindergarten": [
+          210,
+          21
+        ],
+        "christian homeschool curriculum free": [
+          590,
+          45
+        ]
+      },
+      "done": "2026-10-13",
+      "urls": [
+        "/homeschool/christian/"
+      ]
+    },
+    {
+      "id": "faith-first-grade-verses",
+      "status": "todo",
+      "needs": [
+        "first-grade-plan"
+      ],
+      "title": "Extend the faith track to the first grade plan: 36 longer KJV verses for copywork",
+      "buildOn": "Add verses to src/data/verses.json keyed by level, or a second list. KJV only (public domain)."
+    },
+    {
+      "id": "bible-verse-copywork-page",
+      "status": "todo",
+      "needs": [],
+      "title": "Bible verse copywork worksheet maker: pick or paste any KJV verse, trace then copy, print or cursive",
+      "suggestedUrl": "/bible-verse-copywork/",
+      "keywords": {
+        "bible verse copywork": [
+          50,
+          28
+        ],
+        "bible verse copywork printable": [
+          30,
+          19
+        ],
+        "bible verse tracing worksheets": [
+          40,
+          18
+        ]
+      },
+      "buildOn": "Small volume but buyer-friendly audience; reuse versePage() and the cursive tool. Check volume again before building."
     }
   ]
 }

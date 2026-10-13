@@ -11,17 +11,19 @@ import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
 
 const link = 'text-[#2f5fc4] underline underline-offset-2';
+const FAITH_KEY = 'tl-faith-track';
 
 /**
  * A personalized weekly homeschool pack: a plan page for the grown-up, then one printable for each day.
  * Free for one child, one week at a time. Members can print every child on their saved list, or four weeks at once.
  */
-export default function WeekPack(props: { level?: Level; week?: number; fixedLevel?: boolean; source?: string; heading?: string }) {
+export default function WeekPack(props: { level?: Level; week?: number; fixedLevel?: boolean; source?: string; heading?: string; faith?: boolean }) {
   const [level, setLevel] = useState<Level>(props.level ?? 'pre-k');
   const [weekN, setWeekN] = useState(props.week ?? 1);
   const [name, setName] = useState('');
   const [paper, setPaper] = useState<Paper>('letter');
   const [font, setFont] = useState<LoadedFont | null>(null);
+  const [faith, setFaith] = useState(props.faith ?? false);
   const [shown, setShown] = useState(0);
   const [busy, setBusy] = useState(false);
   const [gate, setGate] = useState<null | 'week' | 'list' | 'month'>(null);
@@ -43,12 +45,14 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
       if (!props.fixedLevel && (lv === 'pre-k' || lv === 'kindergarten')) setLevel(lv);
       const n = sessionStorage.getItem('tl-name');
       if (n) setName(n);
+      const f = localStorage.getItem(FAITH_KEY);
+      if (props.faith === undefined && (f === '1' || f === '0')) setFaith(f === '1');
     } catch { /* storage or URL unavailable */ }
   }, []);
   // Keep the typed name for the other tools in this tab (never in the URL, never sent anywhere).
   useEffect(() => { try { if (name) sessionStorage.setItem('tl-name', name); } catch { /* ignore */ } }, [name]);
 
-  const pages = useMemo(() => buildWeekPack({ level, week, name, paper, credit, bubble: font }), [level, week, name, paper, credit, font]);
+  const pages = useMemo(() => buildWeekPack({ level, week, name, paper, credit, bubble: font, faith }), [level, week, name, paper, credit, font, faith]);
   useEffect(() => { setShown(0); setDone(''); }, [level, weekN]);
   const svgs = useMemo(() => pages.map(pageToSvg), [pages]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
@@ -58,12 +62,12 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
     setBusy(true);
     try {
       if (kind === 'list') {
-        const all: Page[] = listNames.flatMap((n) => buildWeekPack({ level, week, name: n, paper, credit, bubble: font }));
+        const all: Page[] = listNames.flatMap((n) => buildWeekPack({ level, week, name: n, paper, credit, bubble: font, faith }));
         await savePdf(all, `${slug(plan.label)}-week-${week.n}-${listNames.length}-kids.pdf`, `${plan.label} at home, week ${week.n}`);
         setDone(`Downloaded week ${week.n} for ${listNames.length} kids.`);
       } else if (kind === 'month') {
         const weeks = plan.weeks.slice(week.n - 1, week.n + 3);
-        const all: Page[] = weeks.flatMap((w) => buildWeekPack({ level, week: w, name, paper, credit, bubble: font }));
+        const all: Page[] = weeks.flatMap((w) => buildWeekPack({ level, week: w, name, paper, credit, bubble: font, faith }));
         await savePdf(all, `${slug(plan.label)}-weeks-${weeks[0].n}-to-${weeks[weeks.length - 1].n}.pdf`, `${plan.label} at home, weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}`);
         setDone(`Downloaded weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}.`);
       } else {
@@ -114,6 +118,15 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
           >
             {plan.weeks.map((w) => <option value={String(w.n)}>Week {w.n}: {w.title}</option>)}
           </select>
+        </label>
+
+        <label class="mb-5 flex items-start gap-3 cursor-pointer rounded-lg border border-hairline bg-white px-3 py-3 text-[15px]">
+          <input id="pack-faith" type="checkbox" class="mt-1 size-4 accent-[#5b86d9]" checked={faith} onChange={(e) => {
+            const on = (e.target as HTMLInputElement).checked;
+            setFaith(on);
+            try { localStorage.setItem(FAITH_KEY, on ? '1' : '0'); } catch { /* storage unavailable */ }
+          }} />
+          <span><span class="font-bold text-ink">Faith track</span> <span class="text-muted">(optional)</span><span class="block text-[13px] text-muted">Adds a Bible verse of the week (KJV) to the plan and a verse copywork page.</span></span>
         </label>
 
         <Segmented legend="Paper" name="pack-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />

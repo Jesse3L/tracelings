@@ -2,12 +2,13 @@
 // Plans are plain data so the static pages can list every week. Pages are built with the same glyphs as the
 // tracing tools, so everything runs in the browser and the child's name never leaves the device.
 import { PAPER, COLORS, buildSheet, styleName, layoutWord, type Item, type Page, type Paper } from './sheet';
-import { drawText, drawCell, buildWordPages } from './rowSheet';
+import { drawText, drawCell, buildWordPages, wrapToWidth, cleanTraceText } from './rowSheet';
 import { buildColoringPage } from './coloring';
 import type { LoadedFont } from './fontshape';
 import { SITE } from '../config';
 import lettersData from '../data/letters.json';
 import sightData from '../data/sight-words.json';
+import versesData from '../data/verses.json';
 
 export type Level = 'pre-k' | 'kindergarten';
 export type WeekKind = 'name' | 'letter' | 'review' | 'family' | 'vowel-review';
@@ -218,6 +219,7 @@ export interface PackOptions {
   paper: Paper;
   credit: boolean;
   bubble: LoadedFont | null; // bubble letter font for coloring pages; skipped while it loads
+  faith?: boolean; // faith track: adds the week's Bible verse (KJV) to the plan and a verse copywork page
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -238,6 +240,15 @@ function planPage(o: PackOptions, plan: Planned[], label: string): Page {
     items.push({ kind: 'path', d: box(M, y - 14, 16, 16, 3), color: INK, width: 1.2 });
     items.push({ kind: 'text', x: M + 26, y, size: 13, text: `${DAYS[d.day]}: ${d.title}`, color: INK, align: 'left' });
     y = para(items, d.how, M + 26, y + 17, 11, w - 2 * M - 26, COLORS.quiet) + 12;
+  }
+
+  if (o.faith) {
+    const v = verseFor(o.week.n);
+    y += 6;
+    items.push({ kind: 'line', x1: M, y1: y - 8, x2: w - M, y2: y - 8, color: COLORS.desc, width: 1 });
+    items.push({ kind: 'text', x: M, y: y + 12, size: 13, text: `Verse of the week (${v.ref}, KJV)`, color: INK, align: 'left' });
+    y = para(items, `"${v.text}"`, M, y + 32, 12, w - 2 * M) + 2;
+    y = para(items, 'Read it together each morning. Trace it on the verse page any day this week, and say it once more at bedtime.', M, y, 11, w - 2 * M, COLORS.quiet) + 8;
   }
 
   const ideas = offPageIdeas(o.week);
@@ -532,11 +543,65 @@ function planFor(level: Level, w: Week): Planned[] {
   ];
 }
 
+
+// ---------- Faith track ----------
+
+export interface Verse { ref: string; text: string; short: string }
+/** The week's Bible verse (King James Version, public domain). One per week, the same for both levels. */
+export const verseFor = (n: number): Verse => (versesData as Verse[])[(n - 1) % (versesData as Verse[]).length];
+export const VERSES = versesData as Verse[];
+
+/** Verse copywork: the verse to read together, then traced on handwriting lines. Pre-K traces a short phrase; Kindergarten copies the whole verse. */
+export function versePage(o: PackOptions, label: string): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  header(items, w);
+  const v = verseFor(o.week.n);
+  const pre = o.level === 'pre-k';
+  items.push({ kind: 'text', x: M, y: 96, size: 20, text: 'Verse of the week', color: INK, align: 'left' });
+  // The verse in a soft box, with a small star in each corner to color.
+  const boxTop = 112;
+  const lines = wrap(`"${v.text}"`, 15, w - 2 * M - 110);
+  const boxH = 26 + lines.length * 20 + 22;
+  items.push({ kind: 'path', d: box(M, boxTop, w - 2 * M, boxH, 12), color: INK, width: 1.4 });
+  for (const [sx, sy] of [[M + 16, boxTop + 16], [w - M - 16, boxTop + 16], [M + 16, boxTop + boxH - 16], [w - M - 16, boxTop + boxH - 16]]) {
+    items.push({ kind: 'path', d: starPath(sx, sy, 9), color: INK, width: 1.1, fill: '#ffffff' });
+  }
+  let ty = boxTop + 30;
+  for (const line of lines) { items.push({ kind: 'text', x: w / 2, y: ty, size: 15, text: line, color: INK, align: 'center' }); ty += 20; }
+  items.push({ kind: 'text', x: w / 2, y: ty + 4, size: 11, text: `${v.ref} (KJV)`, color: COLORS.quiet, align: 'center' });
+
+  let y = boxTop + boxH + 18;
+  items.push({ kind: 'text', x: M, y, size: 11, text: pre ? 'Trace the words. Say them out loud together as you go.' : 'Trace the verse, then copy it on your own on the empty lines.', color: COLORS.quiet, align: 'left' });
+  y += 14;
+
+  const avail = w - 2 * M - 24;
+  const text = cleanTraceText(pre ? v.short : v.text);
+  // Pre-K: the short phrase on one line (shrunk to fit if needed), once per row. Kindergarten: the verse wrapped, traced once, then copied.
+  const cap = pre ? Math.max(28, Math.min(46, avail / Math.max(0.1, layoutWord(text).width))) : 30;
+  const rows = pre ? [text] : wrapToWidth(text, avail / cap);
+  const pitch = cap * 1.5 + Math.max(16, cap * 0.42);
+  const bottom = h - M - 22;
+  const guideOnly = { practice: 'trace' as const, startDots: false, model: false };
+  const plan: { t: string; kind: 'model' | 'trace' | 'blank' }[] = pre
+    ? Array.from({ length: 8 }, (_, i) => ({ t: text, kind: i === 0 ? 'model' as const : 'trace' as const }))
+    : [...rows.map((t) => ({ t, kind: 'trace' as const })), ...rows.map(() => ({ t: '', kind: 'blank' as const })), ...rows.map(() => ({ t: '', kind: 'blank' as const }))];
+  for (const r of plan) {
+    if (y + cap * 1.5 > bottom) break;
+    drawCell(items, '', M, w - M, y, cap, guideOnly);
+    if (r.kind !== 'blank') drawText(items, r.t, M + 12, y + cap, cap, r.kind, r.kind === 'trace');
+    y += pitch;
+  }
+  footer(items, w, h, o.credit, label);
+  return { w, h, items };
+}
+
 /** Every page of a week's pack, plan page first. Coloring pages are left out until the bubble font loads. */
 export function buildWeekPack(o: PackOptions): Page[] {
   const plan = planFor(o.level, o.week);
   const label = `Week ${o.week.n}: ${o.week.title}`;
   const pages: Page[] = [planPage(o, plan, label)];
+  if (o.faith) pages.push(versePage(o, label));
   for (const d of plan) {
     const p = d.page(o);
     if (!p) continue;
