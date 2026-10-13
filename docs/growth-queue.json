@@ -40,27 +40,108 @@
     },
     {
       "id": "prek-math-worksheets",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "month1-homeschool-foundation"
       ],
       "title": "Pre-K math worksheets page with a generator: count and color, ten frames, more or less, numbers 1 to 20",
-      "suggestedUrl": "/math-worksheets/pre-k/",
       "keywords": {
+        "preschool math worksheets": [
+          3600,
+          27
+        ],
+        "pre k math worksheets": [
+          2900,
+          25
+        ],
         "pre kindergarten math worksheets": [
           2900,
           28
         ],
-        "free pre kindergarten math worksheets": [
-          390,
-          32
+        "counting worksheets for preschool": [
+          1000,
+          28
         ],
-        "counting kindergarten math worksheets": [
-          590,
-          26
+        "ten frame worksheets": [
+          720,
+          20
+        ],
+        "free preschool math worksheets": [
+          480,
+          28
+        ],
+        "pre k math worksheets free": [
+          390,
+          27
         ]
       },
-      "buildOn": "countPage() in src/lib/homeschool.ts. Link it from the Pre-K plan Thursday pages."
+      "buildOn": "countPage() in src/lib/homeschool.ts. Link it from the Pre-K plan Thursday pages.",
+      "done": "2026-10-13",
+      "urls": [
+        "/math-worksheets/pre-k/"
+      ],
+      "notes": "Generator with 5 page types (count and color, ten frames, count and circle, more or fewer, missing numbers), ranges 1-5/1-10/1-20, name on the Name line. Members: 5-page set or one page per kid. Linked from /homeschool/, /homeschool/preschool/ and every letter-of-the-week page (?number=N)."
+    },
+    {
+      "id": "ten-frame-worksheets",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Ten frame worksheets page: the ten frame maker on its own URL, adding make-ten and double ten frame (11 to 20) pages, linked from the Pre-K and K plans",
+      "suggestedUrl": "/math-worksheets/ten-frames/",
+      "keywords": {
+        "ten frame worksheets": [
+          720,
+          20
+        ],
+        "addition ten frame worksheets": [
+          210,
+          23
+        ],
+        "ten frame worksheets for kindergarten": [
+          140,
+          21
+        ],
+        "ten frame worksheets 11 20": [
+          90,
+          20
+        ]
+      },
+      "buildOn": "tenFramePage() in src/lib/mathSheets.ts. Add a 'make 10' type (how many more to make 10) so the page is more than a copy of the Pre-K one."
+    },
+    {
+      "id": "more-or-less-worksheets",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Kindergarten more or less worksheets: compare groups and compare numbers with pictures, as a type in the math maker plus its own page",
+      "suggestedUrl": "/math-worksheets/more-or-less/",
+      "keywords": {
+        "kindergarten more or less worksheets": [
+          390,
+          22
+        ],
+        "preschool more or less worksheets": [
+          70,
+          22
+        ],
+        "more or less worksheets for kindergarten pdf": [
+          70,
+          21
+        ]
+      },
+      "buildOn": "moreLessPage() in src/lib/mathSheets.ts. Add a numbers-only compare page for K."
+    },
+    {
+      "id": "prek-math-in-pack",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Optional extra math page in the Pre-K weekly pack (a ten frame or count and circle page for that week's number), a checkbox in the pack maker for everyone",
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage(). Keep it free; nothing existing moves behind the paywall."
     },
     {
       "id": "k-addition-worksheets",
@@ -210,9 +291,10 @@
     },
     {
       "id": "reading-stories",
-      "status": "needs-approval",
+      "status": "on-hold",
       "title": "Personalized decodable reading stories starring the child (member feature). Name swapped in on the device; AI writes stories with a {NAME} placeholder.",
-      "buildOn": "On hold: Jesse said to hold off on AI reading stories for now (2026-10-13). Do not build."
+      "buildOn": "On hold: Jesse said to hold off on AI reading stories for now (2026-10-13). Do not build.",
+      "hold": "On hold per Jesse (2026-10-13): no AI features for now. Concern: bots hitting an AI endpoint and running up cost. Before this comes back it needs a plan for bot protection, per-member rate limits and a hard monthly spend cap, and Jesse's go-ahead."
     },
     {
       "id": "faith-track",

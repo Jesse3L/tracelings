@@ -133,11 +133,11 @@ export function weekSummary(w: Week): string {
 
 // ---------- Page helpers ----------
 
-const M = 40;
+export const M = 40;
 const INK = COLORS.ink;
 const f2 = (n: number) => Math.round(n * 100) / 100;
 
-function rng(seed: string) {
+export function rng(seed: string) {
   let h = 2166136261;
   for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
   return () => { h = Math.imul(h ^ (h >>> 15), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); return ((h ^= h >>> 16) >>> 0) / 4294967296; };
@@ -160,7 +160,7 @@ function wrap(t: string, size: number, maxW: number): string[] {
   return out;
 }
 /** Draws wrapped text and returns the y below it. */
-function para(items: Item[], t: string, x: number, y: number, size: number, maxW: number, color = INK): number {
+export function para(items: Item[], t: string, x: number, y: number, size: number, maxW: number, color = INK): number {
   for (const line of wrap(t, size, maxW)) {
     items.push({ kind: 'text', x, y, size, text: line, color, align: 'left' });
     y += size * 1.35;
@@ -168,27 +168,27 @@ function para(items: Item[], t: string, x: number, y: number, size: number, maxW
   return y;
 }
 
-function header(items: Item[], w: number) {
+export function header(items: Item[], w: number) {
   items.push({ kind: 'text', x: M, y: 56, size: 11, text: 'Name', color: INK, align: 'left' });
   items.push({ kind: 'line', x1: M + 36, y1: 58, x2: M + 250, y2: 58, color: COLORS.quiet, width: 0.75 });
   items.push({ kind: 'text', x: w - M - 168, y: 56, size: 11, text: 'Date', color: INK, align: 'left' });
   items.push({ kind: 'line', x1: w - M - 136, y1: 58, x2: w - M, y2: 58, color: COLORS.quiet, width: 0.75 });
 }
-function footer(items: Item[], w: number, h: number, credit: boolean, label: string) {
+export function footer(items: Item[], w: number, h: number, credit: boolean, label: string) {
   items.push({ kind: 'text', x: w - M, y: h - M + 14, size: 8, text: label, color: COLORS.quiet, align: 'right' });
   if (credit) items.push({ kind: 'text', x: M, y: h - M + 14, size: 8, text: `Free printable from ${SITE.domain}`, color: COLORS.quiet, align: 'left' });
 }
 /** A short instruction line for the grown-up, under the Name/Date header. */
-function instruction(items: Item[], w: number, title: string, note?: string): number {
+export function instruction(items: Item[], w: number, title: string, note?: string): number {
   items.push({ kind: 'text', x: M, y: 96, size: 20, text: title, color: INK, align: 'left' });
   return note ? para(items, note, M, 118, 11, w - 2 * M, COLORS.quiet) + 6 : 116;
 }
 
-function circlePath(cx: number, cy: number, r: number) {
+export function circlePath(cx: number, cy: number, r: number) {
   const k = 0.5523 * r;
   return `M${f2(cx + r)} ${f2(cy)} C${f2(cx + r)} ${f2(cy + k)} ${f2(cx + k)} ${f2(cy + r)} ${f2(cx)} ${f2(cy + r)} C${f2(cx - k)} ${f2(cy + r)} ${f2(cx - r)} ${f2(cy + k)} ${f2(cx - r)} ${f2(cy)} C${f2(cx - r)} ${f2(cy - k)} ${f2(cx - k)} ${f2(cy - r)} ${f2(cx)} ${f2(cy - r)} C${f2(cx + k)} ${f2(cy - r)} ${f2(cx + r)} ${f2(cy - k)} ${f2(cx + r)} ${f2(cy)} Z`;
 }
-function starPath(cx: number, cy: number, r: number) {
+export function starPath(cx: number, cy: number, r: number) {
   const pts: string[] = [];
   for (let i = 0; i < 10; i++) {
     const a = (Math.PI / 5) * i - Math.PI / 2;
@@ -197,15 +197,15 @@ function starPath(cx: number, cy: number, r: number) {
   }
   return `M${pts.join(' L')} Z`;
 }
-function heartPath(cx: number, cy: number, r: number) {
+export function heartPath(cx: number, cy: number, r: number) {
   const t = cy - r * 0.35;
   return `M${f2(cx)} ${f2(cy + r * 0.9)} C${f2(cx - r * 1.3)} ${f2(cy + r * 0.1)} ${f2(cx - r * 0.9)} ${f2(t - r * 0.75)} ${f2(cx)} ${f2(t)} C${f2(cx + r * 0.9)} ${f2(t - r * 0.75)} ${f2(cx + r * 1.3)} ${f2(cy + r * 0.1)} ${f2(cx)} ${f2(cy + r * 0.9)} Z`;
 }
-const box = (x: number, y: number, w: number, h: number, r = 6) =>
+export const box = (x: number, y: number, w: number, h: number, r = 6) =>
   `M${f2(x + r)} ${f2(y)} H${f2(x + w - r)} Q${f2(x + w)} ${f2(y)} ${f2(x + w)} ${f2(y + r)} V${f2(y + h - r)} Q${f2(x + w)} ${f2(y + h)} ${f2(x + w - r)} ${f2(y + h)} H${f2(x + r)} Q${f2(x)} ${f2(y + h)} ${f2(x)} ${f2(y + h - r)} V${f2(y + r)} Q${f2(x)} ${f2(y)} ${f2(x + r)} ${f2(y)} Z`;
 
 /** Solid letters (or short words) centered in a cell, for hunt grids. */
-function centered(items: Item[], text: string, cx: number, yBase: number, cap: number) {
+export function centered(items: Item[], text: string, cx: number, yBase: number, cap: number) {
   const wdt = layoutWord(text).width * cap;
   drawText(items, text, cx - wdt / 2, yBase, cap, 'model', false);
 }
