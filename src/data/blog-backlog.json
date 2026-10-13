@@ -39,7 +39,7 @@
     },
     {
       "id": 6,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-10-13",
       "primaryKeyword": "fine motor activities preschool",
       "volume": 2900,
@@ -52,7 +52,9 @@
         "/number-tracing/",
         "/coloring-pages/simple-coloring-pages/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "fine-motor-activities-preschool",
+      "publishedOn": "2026-10-13"
     },
     {
       "id": 30,
