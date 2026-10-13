@@ -7,6 +7,20 @@ export const prerender = false;
 // filenames are never sent because they can contain a child's name.
 const hits = new Map<string, { n: number; at: number }>();
 
+const BOT_UA = /bot|crawl|spider|slurp|headless|phantom|puppeteer|playwright|selenium|lighthouse|python|curl|wget|httpclient|go-http|java\/|node-fetch|axios|scrapy|okhttp|preview|scan/i;
+const OUR_SITE = /^https:\/\/(www\.)?tracelings\.com(\/|$)|^https:\/\/tracelings-[a-z0-9-]+\.vercel\.app(\/|$)|^http:\/\/localhost(:\d+)?(\/|$)/;
+
+/** Why a download ping looks automated, or '' if it looks like a real visitor. */
+function botReason(request: Request, data: any): string {
+  const ua = request.headers.get('user-agent') || '';
+  if (!ua || BOT_UA.test(ua)) return 'bot user agent';
+  const from = request.headers.get('origin') || request.headers.get('referer') || '';
+  if (!OUR_SITE.test(from)) return 'not sent from tracelings.com';
+  if (data.human !== true) return 'no human tap or click';
+  if (typeof data.secs === 'number' && data.secs < 2) return 'downloaded under 2s after load';
+  return '';
+}
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
   const now = Date.now();
@@ -19,6 +33,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   try { data = JSON.parse(await request.text()); } catch { return new Response(null, { status: 400 }); }
   const path = typeof data.path === 'string' && /^\/[a-z0-9\-/]{0,100}$/.test(data.path) ? data.path : null;
   if (data.type !== 'download' || !path) return new Response(null, { status: 400 });
+
+  // Bot filter: skip the alert (but answer 204 so bots learn nothing) when it doesn't look like a person.
+  const reason = botReason(request, data);
+  if (reason) {
+    console.log(`download alert skipped: ${reason} | ${path} | ${placeFrom(request) || '?'} | ${(request.headers.get('user-agent') || '').slice(0, 120)}`);
+    return new Response(null, { status: 204 });
+  }
   const pages = Number.isInteger(data.pages) && data.pages > 0 && data.pages < 1000 ? data.pages : null;
   const who = data.member === true ? 'Member' : 'Free visitor';
   const place = placeFrom(request);

@@ -13,6 +13,15 @@ function write(key: string, v: string) {
 
 export const FREE_DOWNLOADS = 1;
 
+// Bot filter for download alerts: a real person taps, clicks or types before downloading.
+// Scripted clicks don't produce trusted input events, so pings without one are marked as non-human.
+let humanAt = 0;
+const loadedAt = typeof performance !== 'undefined' ? performance.now() : 0;
+if (typeof window !== 'undefined') {
+  const mark = (e: Event) => { if (e.isTrusted) humanAt = Date.now(); };
+  for (const t of ['pointerdown', 'touchstart', 'keydown']) window.addEventListener(t, mark, { capture: true, passive: true });
+}
+
 export function needsEmail(): boolean {
   if (read(OK_KEY)) return false;
   return Number(read(COUNT_KEY) || '0') >= FREE_DOWNLOADS;
@@ -23,7 +32,9 @@ export function countDownload(pages?: number) {
   write(COUNT_KEY, String(Number(read(COUNT_KEY) || '0') + 1));
   try {
     const member = (window as any).__tlMember === true;
-    const payload = JSON.stringify({ type: 'download', path: location.pathname, pages, member });
+    const human = humanAt > 0 && !(navigator as any).webdriver;
+    const secs = Math.round((performance.now() - loadedAt) / 1000);
+    const payload = JSON.stringify({ type: 'download', path: location.pathname, pages, member, human, secs });
     if (!navigator.sendBeacon?.('/api/event/', new Blob([payload], { type: 'application/json' }))) {
       fetch('/api/event/', { method: 'POST', body: payload, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
     }
