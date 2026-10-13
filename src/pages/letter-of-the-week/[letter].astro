@@ -1,0 +1,108 @@
+---
+import Preview from '../../components/site/Preview.astro';
+import Base from '../../layouts/Base.astro';
+import WeekPack from '../../components/WeekPack.tsx';
+import { SITE } from '../../config';
+import letters from '../../data/letters.json';
+import { LETTER_ORDER, preKWeekForLetter, dayPlan } from '../../lib/homeschool';
+
+export function getStaticPaths() {
+  return letters.map((l) => ({ params: { letter: l.letter }, props: { letter: l.letter } }));
+}
+const { letter } = Astro.props as { letter: string };
+const L = letters.find((x) => x.letter === letter)!;
+const U = letter.toUpperCase();
+const week = preKWeekForLetter(letter);
+const days = dayPlan('pre-k', week);
+const at = LETTER_ORDER.indexOf(letter);
+const prev = LETTER_ORDER[(at + 25) % 26];
+const next = LETTER_ORDER[(at + 1) % 26];
+const url = new URL(`/letter-of-the-week/${letter}/`, SITE.url).href;
+const title = `Letter ${U} of the Week: Free Printable Pack | ${SITE.name}`;
+const description = `A letter ${U} of the week plan for preschool: trace ${U} and ${letter}, a letter hunt, a bubble ${U} to color and ${L.words.slice(0, 2).join(' and ')} activities. Free printable pack.`;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `Letter ${U} of the week printable pack`,
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Kindergarten',
+    teaches: `Recognizing, writing and saying the sound of ${U} and ${letter}`,
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Letter of the Week', item: SITE.url + '/letter-of-the-week/' },
+      { '@type': 'ListItem', position: 3, name: `Letter ${U}`, item: url },
+    ],
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/letter-of-the-week/" class="hover:text-ink">Letter of the week</a> <span aria-hidden="true">/</span> <span aria-current="page">Letter {U}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter {U} of the week</span></h1>
+      <p class="mt-4 text-lg text-muted">Five short days of {U} {letter} activities, printed as one pack with your child's name on it.</p>
+    </header>
+
+    <div id="pack" class="scroll-mt-24">
+      <WeekPack client:load level="pre-k" week={week.n} fixedLevel source="letter-of-the-week" />
+    </div>
+    <Preview k={`lotw-${letter}`} caption={`Example: the letter ${U} hunt page from this week's pack.`} />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        This letter {U} of the week pack gives your preschooler one short activity a day: tracing capital {U} and lowercase {letter}, a letter
+        hunt, a bubble {U} to color, a counting page and their own name to trace. Print it once on Sunday and the week is planned. It's
+        week {week.n} of our free <a href="/homeschool/preschool/">homeschool preschool curriculum</a>.
+      </p>
+
+      <h2>Letter {U} week at a glance</h2>
+      <ul>{days.map((d) => <li><strong>{d.day}, {d.title.toLowerCase()}:</strong> {d.how}</li>)}</ul>
+
+      <h2>Words that start with {U}</h2>
+      <p>Say these while your child colors or traces, and ask them to find one more around the house.</p>
+      <ul class="columns-2 sm:columns-3">{L.words.map((w) => <li>{w}</li>)}</ul>
+
+      <h2>How to write {U} and {letter}</h2>
+      <p><strong>Capital {U}:</strong></p>
+      <ol>{L.upperSteps.map((s) => <li>{s}</li>)}</ol>
+      <p><strong>Lowercase {letter}:</strong></p>
+      <ol>{L.lowerSteps.map((s) => <li>{s}</li>)}</ol>
+      <p>{L.tip}</p>
+
+      <h2>More letter {U} activities</h2>
+      <ul>
+        <li>Need more tracing? Print a <a href={`/letter-tracing/${letter}/`}>letter {U} tracing worksheet</a> with bigger or smaller lines.</li>
+        <li>Color a <a href={`/bubble-letters/${letter}/`}>bubble letter {U}</a> on its own, or cut it out for a letter wall.</li>
+        <li>Make a sensory bin with things that start with {U}, like {L.words.slice(0, 3).join(', ')} (toys or pictures work fine).</li>
+        <li>Read a picture book and stop each time you see a {U} or {letter}. Let your child keep count on their fingers.</li>
+      </ul>
+    </article>
+
+    <nav aria-label="Other letters" class="mt-12">
+      <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/letter-of-the-week/${prev}/`}>Previous in the plan: {prev.toUpperCase()}</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/letter-of-the-week/${next}/`}>Next in the plan: {next.toUpperCase()}</a>
+      </div>
+      <ul class="mt-6 grid grid-cols-7 sm:grid-cols-13 gap-2 max-w-3xl">
+        {letters.map((l) => (
+          <li>
+            <a href={`/letter-of-the-week/${l.letter}/`} aria-current={l.letter === letter ? 'page' : undefined}
+              class={`block text-center rounded-md border py-2 font-bold ${l.letter === letter ? 'border-rule bg-white text-ink' : 'border-hairline text-muted hover:text-ink hover:bg-white'}`}>{l.letter.toUpperCase()}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Base>

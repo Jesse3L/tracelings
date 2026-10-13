@@ -86,6 +86,10 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Name coloring pages | `/name-coloring-pages/` | live |
 | Coloring pages | `/coloring-pages/` | live |
 | Coloring collections | `/coloring-pages/<collection>/` (see below) | live |
+| Homeschool hub | `/homeschool/` | live |
+| Pre-K homeschool plan (36 weeks) | `/homeschool/preschool/` | live |
+| Kindergarten homeschool plan (36 weeks) | `/homeschool/kindergarten/` | live |
+| Letter of the week | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
 | Membership | `/membership/` | live |
 | Class packs | `/class-pack/` | members only |
 
@@ -149,6 +153,6 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 - [ ] The backlog item's `status` is set to `done`.
 
 
-## Live pages you can link to (updated Oct 4, 2026)
+## Live pages you can link to (updated Oct 13, 2026)
 
-/name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/.
+/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /letter-of-the-week/ and /a/ to /z/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/.

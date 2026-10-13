@@ -9,6 +9,7 @@ const rows = [
   ['Letters, numbers, cursive, sight words, coloring pages', 'Yes', 'Yes', 'Yes'],
   ['Saved class list for every name tool', 'No', 'Up to 8 kids', 'Up to 40 names'],
   ['Class pack: tracing, cursive and coloring for each child in one PDF', 'No', 'Yes', 'Yes'],
+  ['Homeschool weekly packs (Pre-K and Kindergarten)', 'One child, one week at a time', 'Every kid at once, or 4 weeks in one PDF', 'Every name at once, or 4 weeks in one PDF'],
   ['Footer line on printables', 'Small credit line', 'None', 'None'],
   ['Email prompt on downloads', 'Once', 'Never', 'Never'],
   ['New member features as they launch', 'No', 'Included', 'Included'],
@@ -16,7 +17,8 @@ const rows = [
 const coming = [
   'Seasonal and holiday name tracing themes',
   'Turn a photo into a coloring page',
-  'A weekly themed printable pack by email',
+  'More homeschool weeks: first grade, then second and third',
+  'Personalized reading stories starring your child',
 ];
 const faqs = [
   { q: 'What do I get today?', a: 'Every printable with no footer line and no email prompts. Save your class list once and it works in name tracing, cursive and name coloring pages, or print a class pack with all three for every child in one PDF. Family covers up to 8 kids; Classroom and Founding cover up to 40 names. New member features are added at no extra cost.' },
@@ -36,6 +38,7 @@ const faqs = [
         <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Membership for families and classrooms</span></h1>
         <p class="mt-6">{SITE.name} is free, and it's staying that way. Type any name, print a tracing sheet, done.</p>
         <p>Membership is for the people printing a lot: the parent with three kids at the kitchen table, the homeschooler planning a whole week, the kindergarten teacher with 22 names to trace before the first day.</p>
+        <p>Homeschooling more than one child? Members print each week of our free <a href="/homeschool/">Pre-K and kindergarten homeschool plans</a> for every kid in one PDF, or a month of weeks at once.</p>
         <p class="rounded-xl bg-[#fff4d6] p-4 text-ink!"><strong>Founding offer:</strong> the first 200 members get everything for $29/year, locked in for as long as they stay members.</p>
         <h2 class="text-[1.3rem]! mt-8!">Coming soon for members</h2>
         <ul>{coming.map((c) => <li>{c}</li>)}</ul>

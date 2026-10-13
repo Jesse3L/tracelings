@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeekPack from '../../components/WeekPack.tsx';
+import Faqs from '../../components/homeschool/Faqs.astro';
+import { SITE } from '../../config';
+import letters from '../../data/letters.json';
+import { LETTER_ORDER, preKWeekForLetter } from '../../lib/homeschool';
+
+const url = new URL('/letter-of-the-week/', SITE.url).href;
+const title = `Letter of the Week: Free Preschool Printables | ${SITE.name}`;
+const description = 'Free letter of the week printables for every letter A to Z: tracing, a letter hunt, a bubble letter to color and counting, in one pack with your child’s name.';
+const wordsFor = (l: string) => letters.find((x) => x.letter === l)!.words.slice(0, 2).join(', ');
+
+const faqs = [
+  { q: 'What is letter of the week?', a: 'A simple way to teach the alphabet: you spend a week on one letter, with a few short activities each day for its shape, its sound and words that start with it. It suits many preschoolers ages 3 to 5.' },
+  { q: 'What order should I teach the letters in?', a: 'A to Z works, but many teachers start with letters that make lots of short words, like s, a, t, i, p and n. Our plan uses that phonics order. You can open any letter in any order.' },
+  { q: 'Is one letter a week too slow?', a: 'For many 3 and 4 year olds it is a comfortable pace, and it leaves time to play with each sound. Kids who already know their letters often move faster, and two letters a week is common in kindergarten.', html: 'For many 3 and 4 year olds it is a comfortable pace, and it leaves time to play with each sound. Kids who already know their letters often move faster, and two letters a week is common in our <a href="/homeschool/kindergarten/">kindergarten homeschool plan</a>.' },
+  { q: 'Are the printables free?', a: 'Yes. Every letter of the week pack is free to print. Your first one downloads right away, and after that we ask for your email once.' },
+];
+
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Letter of the week printables', url, description,
+    hasPart: letters.map((l) => ({ '@type': 'LearningResource', name: `Letter ${l.letter.toUpperCase()} of the week`, url: `${SITE.url}/letter-of-the-week/${l.letter}/` })) },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Letter of the Week', item: url },
+  ] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Letter of the week</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter of the week printables</span></h1>
+      <p class="mt-4 text-lg text-muted">Pick a letter, type your child's name, and print a whole week of short activities in one PDF.</p>
+    </header>
+
+    <section aria-labelledby="letters-h">
+      <h2 id="letters-h" class="text-[1.4rem] font-bold">Choose a letter</h2>
+      <ul class="mt-4 grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 gap-3">
+        {letters.map((l) => (
+          <li>
+            <a href={`/letter-of-the-week/${l.letter}/`} class="block rounded-xl border border-hairline bg-white p-3 hover:border-rule">
+              <span class="block text-2xl font-bold text-ink">{l.letter.toUpperCase()} {l.letter}</span>
+              <span class="block text-[13px] text-muted">{wordsFor(l.letter)}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div id="pack" class="scroll-mt-24 mt-12">
+      <WeekPack client:visible level="pre-k" week={2} fixedLevel source="letter-of-the-week" heading="Or pick any week of the plan here" />
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        These free letter of the week printables turn the alphabet into 26 small, doable weeks. Each pack has a plan page for you, then one
+        page a day: trace the letter, hunt for it, color a big bubble letter, count to the number of the week, and trace your child's name.
+        Everything prints in one PDF with your child's name on it.
+      </p>
+
+      <h2>Letter of the week in phonics order</h2>
+      <p>
+        Our <a href="/homeschool/preschool/">homeschool preschool curriculum</a> teaches one letter a week in this order, with a review week after
+        every three letters:
+      </p>
+      <ol class="columns-2 sm:columns-3">
+        {LETTER_ORDER.map((l) => <li><a href={`/letter-of-the-week/${l}/`}>Letter {l.toUpperCase()}</a> (week {preKWeekForLetter(l).n})</li>)}
+      </ol>
+      <p>
+        Starting with s, a, t, i, p and n means kids can read and build real words like sat and pin within a few weeks. If you prefer A to Z,
+        just open the letters in alphabet order.
+      </p>
+
+      <h2>Keep each day short</h2>
+      <p>
+        Five to fifteen minutes is plenty for most preschoolers. Do the page together, then move on to play. Repeat a letter whenever it
+        needs more time. For extra practice on any letter, use the <a href="/letter-tracing/">letter tracing worksheets</a> or print the
+        <a href="/alphabet-chart/">alphabet chart</a> for the wall.
+      </p>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-12" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

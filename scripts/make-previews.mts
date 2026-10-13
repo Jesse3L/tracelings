@@ -13,6 +13,7 @@ import { pageToSvg } from '../src/lib/render';
 import { buildCursiveSheet } from '../src/lib/cursive';
 import { buildColoringPage } from '../src/lib/coloring';
 import { loadFont } from '../src/lib/fontshape';
+import { PLANS, buildWeekPack, preKWeekForLetter } from '../src/lib/homeschool';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'public/previews');
@@ -112,6 +113,18 @@ jobs.push(render('cursive-name', 'cursive-name-sample',
   'Cursive name tracing worksheet for the name Emma, with joined cursive letters to trace on handwriting lines'));
 jobs.push(render('name-coloring', 'name-coloring-sample', buildColoringPage(bubbleFont, { name: 'Emma', theme: 'stars', paper: 'letter', caps: true, credit: true }),
   'Name coloring page with EMMA in big bubble letters surrounded by stars to color'));
+
+// Homeschool weekly packs: the plan page and a hunt page, as the pack maker shows them with no name typed.
+const pack = (level: 'pre-k' | 'kindergarten', n: number) => buildWeekPack({ level, week: PLANS[level].weeks[n - 1], name: '', paper: 'letter', credit: true, bubble: bubbleFont });
+jobs.push(render('homeschool-prek', 'homeschool-preschool-week-2', pack('pre-k', 2)[0],
+  'Homeschool preschool weekly plan page for letter S, with a Monday to Friday checklist and ideas away from the paper'));
+jobs.push(render('homeschool-k', 'homeschool-kindergarten-word-family', pack('kindergarten', 15)[2],
+  'Kindergarten word family worksheet: circle the -at words like cat, hat and mat'));
+for (const l of 'abcdefghijklmnopqrstuvwxyz') {
+  const U = l.toUpperCase();
+  jobs.push(render(`lotw-${l}`, `letter-of-the-week-${l}`, pack('pre-k', preKWeekForLetter(l).n)[2],
+    `Letter ${U} of the week letter hunt worksheet: find and circle every capital ${U} and lowercase ${l}`));
+}
 
 const sizes = await Promise.all(jobs);
 const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true })));

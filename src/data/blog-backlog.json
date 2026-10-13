@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04",
+  "updated": "2026-10-13",
   "items": [
     {
       "id": 2,
@@ -814,6 +814,24 @@
         "/word-tracing/"
       ],
       "season": "summer"
+    },
+    {
+      "id": 54,
+      "status": "published",
+      "publishAfter": "2026-10-13",
+      "primaryKeyword": "best kindergarten homeschool curriculum",
+      "volume": 720,
+      "sd": 18,
+      "workingTitle": "Best Kindergarten Homeschool Curriculum: How to Choose",
+      "angle": "What a kindergarten curriculum should cover, phonics order, all-in-one vs mix-and-match, what to skip, state rules vary, and a 20-minute starter routine using the free Tracelings at Home plan.",
+      "linkTo": [
+        "/homeschool/kindergarten/",
+        "/sight-words/kindergarten/",
+        "/number-tracing/1-20/",
+        "/homeschool/preschool/"
+      ],
+      "slug": "best-kindergarten-homeschool-curriculum",
+      "publishedOn": "2026-10-13"
     }
   ]
 }

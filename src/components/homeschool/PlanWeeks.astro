@@ -1,0 +1,26 @@
+---
+// The full 36-week plan as a table. Each row opens that week in the pack maker above (#pack).
+import { PLANS, weekSummary, type Level } from '../../lib/homeschool';
+interface Props { level: Level }
+const plan = PLANS[Astro.props.level];
+---
+<div class="mt-5 overflow-x-auto rounded-xl border border-hairline bg-white">
+  <table class="w-full min-w-[560px] text-left text-[15px]">
+    <thead>
+      <tr class="border-b border-hairline">
+        <th scope="col" class="p-3 font-bold w-20">Week</th>
+        <th scope="col" class="p-3 font-bold">Focus</th>
+        <th scope="col" class="p-3 font-bold">What's in the pack</th>
+      </tr>
+    </thead>
+    <tbody>
+      {plan.weeks.map((w) => (
+        <tr class="border-b border-hairline last:border-0 align-top">
+          <td class="p-3 text-muted">{w.n}</td>
+          <td class="p-3"><a href={`?week=${w.n}#pack`} class="font-bold text-[#2f5fc4] underline underline-offset-2">{w.title}</a></td>
+          <td class="p-3 text-muted">{weekSummary(w)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

@@ -30,6 +30,7 @@ const menus = [
       { href: '/cursive-name-tracing/', label: 'Cursive name tracing', sub: 'Their name in cursive' },
       { href: '/cursive-alphabet/', label: 'Cursive alphabet', sub: 'Every letter, A to Z' },
       { href: '/alphabet-chart/', label: 'Alphabet charts', sub: 'Print and cursive' },
+      { href: '/letter-of-the-week/', label: 'Letter of the week', sub: 'A week of activities per letter' },
     ],
   },
   {
@@ -49,6 +50,9 @@ const footerCols = [
   { title: 'Worksheets', links: menus[0].items.map(({ href, label }) => ({ href, label })) },
   { title: 'Coloring', links: [...menus[1].items.slice(0, 3).map(({ href, label }) => ({ href, label })), { href: '/coloring-pages/thanksgiving-coloring-pages/', label: 'Thanksgiving coloring pages' }, { href: '/coloring-pages/dinosaur-coloring-pages/', label: 'Dinosaur coloring pages' }] },
   { title: 'Tracelings', links: [
+    { href: '/homeschool/', label: 'Homeschool curriculum' },
+    { href: '/homeschool/preschool/', label: 'Preschool at home' },
+    { href: '/homeschool/kindergarten/', label: 'Kindergarten at home' },
     { href: '/learn/', label: 'Learn: guides for parents' },
     { href: '/membership/', label: 'Membership' },
     { href: '/class-pack/', label: 'Class pack' },
@@ -121,6 +125,7 @@ const year = new Date().getFullYear();
                 </div>
               </li>
             ))}
+            <li><a href="/homeschool/" class={`nav-link ${isOn('/homeschool/') ? 'is-on' : ''}`}>Homeschool</a></li>
             <li><a href="/class-pack/" class={`nav-link ${isOn('/class-pack/') ? 'is-on' : ''}`}>Class pack</a></li>
             <li><a href="/learn/" class={`nav-link ${isOn('/learn/') ? 'is-on' : ''}`}>Learn</a></li>
           </ul>
@@ -150,6 +155,7 @@ const year = new Date().getFullYear();
             </div>
           ))}
           <div class="sm:col-span-2 grid grid-cols-2 gap-2 pt-1">
+            <a href="/homeschool/" class="col-span-2 rounded-lg border border-rule bg-[#eef4ff] px-4 py-3 text-center font-bold text-ink">Homeschool: free Pre-K and K plans</a>
             <a href="/class-pack/" class="rounded-lg border border-hairline px-4 py-3 text-center font-bold text-ink">Class pack</a>
             <a href="/learn/" class="rounded-lg border border-hairline px-4 py-3 text-center font-bold text-ink">Learn</a>
             <a href="/account/" class="rounded-lg border border-hairline px-4 py-3 text-center font-bold text-ink">Sign in</a>

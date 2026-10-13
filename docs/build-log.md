@@ -1,0 +1,9 @@
+# Build Log
+
+One entry per growth run, newest last. Keep each entry to a few lines.
+
+## 2026-10-13: Month 1 homeschool foundation
+- Built `/homeschool/`, `/homeschool/preschool/`, `/homeschool/kindergarten/` with a weekly pack maker (plan page plus Monday to Friday pages, personalized with the child's name, built in the browser).
+- Added 36-week Pre-K and Kindergarten plans in `src/lib/homeschool.ts` (letters in phonics order, review weeks, word families, Dolch sight words, ten frames, addition within 5 and 10).
+- Added `/letter-of-the-week/` and 26 letter pages, a kindergarten curriculum guide in `/learn/`, previews, nav and footer links, membership rows (members print every kid or 4 weeks at once).
+- Next in queue: Pre-K math worksheets page.

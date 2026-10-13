@@ -1,0 +1,124 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
+import PlanWeeks from '../../../components/homeschool/PlanWeeks.astro';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+import { FAMILIES } from '../../../lib/homeschool';
+
+const url = new URL('/homeschool/kindergarten/', SITE.url).href;
+const title = `Free Kindergarten Homeschool Curriculum | ${SITE.name}`;
+const description = 'A free kindergarten homeschool curriculum: letters, word families, Dolch sight words and adding within 10, with weekly packs made with your child’s name.';
+const families = Object.keys(FAMILIES).map((f) => `-${f}`);
+
+const faqs = [
+  { q: 'Is this kindergarten homeschool curriculum really free?', a: 'Yes. All 36 weeks are free to print for one child, one week at a time. Your first pack downloads right away, and after that we ask for your email once.' },
+  { q: 'What does a kindergarten week include?', a: 'A plan page for you and one page per day: letter or word family tracing, a letter or word hunt, sight words, a math page and name tracing. Most days take about 15 minutes.' },
+  { q: 'Which sight words are used?', a: 'The plan works through the Dolch pre-primer and primer lists, two or three words a week, starting with words like a, and, can and see.' },
+  { q: 'What if my child is already reading?', a: 'Jump to the word family weeks (from week 15) or the short vowel reviews to see what they know. You can also add the first grade sight words list.', html: 'Jump to the word family weeks (from week 15) or the short vowel reviews to see what they know. You can also add the <a href="/sight-words/first-grade/">first grade sight words</a> list.' },
+  { q: 'Does this cover everything my state requires?', a: 'It covers reading readiness, handwriting and early math. Homeschool rules vary by state, and some states require other subjects or records. Check your state education department or a statewide homeschool group for the rules where you live.' },
+  { q: 'Can I use it for two kids at different levels?', a: 'Yes. Print the Pre-K pack for one child and the Kindergarten pack for the other. Members can print a week for every child on their saved list in one PDF.', html: 'Yes. Print the <a href="/homeschool/preschool/">Pre-K pack</a> for one child and the Kindergarten pack for the other. <a href="/membership/">Members</a> can print a week for every child on their saved list in one PDF.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Free kindergarten homeschool curriculum (36 weeks)',
+    url,
+    learningResourceType: 'Curriculum',
+    educationalLevel: 'Kindergarten',
+    teaches: 'Letter sounds, word families, Dolch sight words, handwriting, numbers 0 to 20, addition within 10',
+    timeRequired: 'P36W',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Kindergarten', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Kindergarten</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free kindergarten homeschool curriculum: a 36-week plan</span></h1>
+      <p class="mt-4 text-lg text-muted">Letters, word families, sight words and early math, about 15 minutes a day. Type your child's name and print the week.</p>
+    </header>
+
+    <div id="pack" class="scroll-mt-24">
+      <WeekPack client:load level="kindergarten" fixedLevel source="homeschool-k" />
+    </div>
+    <Preview k={'homeschool-k'} caption={'Example: a word family hunt from week 15.'} />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        This free kindergarten homeschool curriculum takes your child from letter sounds to reading simple words in 36 weeks. Every week is a
+        printable pack made with your child's name: a plan page for you, then a page for each day covering phonics, sight words, handwriting
+        and math. It's open and go, so you can print Sunday night and start Monday morning.
+      </p>
+
+      <h2>What the kindergarten plan covers</h2>
+      <ul>
+        <li><strong>Week 1, their name:</strong> name tracing, a coloring page of their name and a hunt for its letters.</li>
+        <li><strong>Weeks 2 to 14, letters and sounds:</strong> two letters a week, with words that start with each sound.</li>
+        <li><strong>Weeks 15 to 36, word families:</strong> {families.join(', ')}, with a short vowel review after each vowel.</li>
+        <li><strong>Sight words:</strong> two or three Dolch words a week, from the pre-primer and primer lists.</li>
+        <li><strong>Math:</strong> numbers 0 to 20 with ten frames through week 21, then adding within 5 and within 10 with dot pictures.</li>
+      </ul>
+
+      <h2>Why word families work for new readers</h2>
+      <p>
+        A word family is a group of words that share an ending, like cat, hat and mat. Once a child can read -at, changing the first letter
+        gives them a whole set of new words. That quick win builds confidence. Each word family week has a reading page, a word hunt where kids
+        circle the words in the family, and sight words to trace.
+      </p>
+
+      <h2>A sample kindergarten day</h2>
+      <ol>
+        <li><strong>3 minutes:</strong> read the week's words or sight words out loud together.</li>
+        <li><strong>10 minutes:</strong> the day's page. Let them read each word before they trace or circle it.</li>
+        <li><strong>5 minutes:</strong> one idea from the plan page, like a rhyming game or acting out an addition problem with snacks.</li>
+      </ol>
+      <p>
+        Many kindergartners are ready for this pace, and some need a slower one. Repeat a week whenever you like. If you have concerns about
+        your child's reading or writing, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>More free practice</h2>
+      <p>
+        The full Dolch primer list is on the <a href="/sight-words/kindergarten/">kindergarten sight words</a> page, with flash cards. The
+        <a href="/word-tracing/">word tracing worksheet maker</a> turns any word or short sentence into a tracing sheet, and the
+        <a href="/number-tracing/1-20/">number tracing 1 to 20</a> sheet is handy for extra counting practice.
+      </p>
+
+      <h2>All 36 weeks</h2>
+      <p>Tap any week to open its pack above.</p>
+    </article>
+    <div class="max-w-4xl"><PlanWeeks level="kindergarten" /></div>
+
+    <section class="mt-12 max-w-xl">
+      <WeeklyEmail client:visible level="kindergarten" />
+    </section>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about the kindergarten plan</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

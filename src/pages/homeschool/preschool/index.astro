@@ -1,0 +1,117 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
+import PlanWeeks from '../../../components/homeschool/PlanWeeks.astro';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+import { LETTER_ORDER } from '../../../lib/homeschool';
+
+const url = new URL('/homeschool/preschool/', SITE.url).href;
+const title = `Free Homeschool Preschool Curriculum (36 Weeks) | ${SITE.name}`;
+const description = 'A free homeschool preschool curriculum: 36 weeks of letters, numbers and name practice, with a printable weekly pack made with your child’s name.';
+
+const faqs = [
+  { q: 'What age is this preschool curriculum for?', a: 'It suits many kids ages 3 to 5, including the pre-kindergarten year. Three year olds often do best with the coloring and hunt pages and lots of help with tracing. Four and five year olds usually trace more on their own.' },
+  { q: 'How long does each day take?', a: 'About 10 to 15 minutes for the page, plus whatever you do away from the paper. Short and regular beats long and rare at this age. Stop while it is still fun.' },
+  { q: 'Do I need to buy anything?', a: 'No. The weekly packs are free to print. You only need paper, crayons, a pencil and a few small things to count.' },
+  { q: 'What if my child already knows some letters?', a: 'Start at any week. Many families skip ahead to the first letter their child doesn’t know yet, or use the review weeks to check what has stuck.' },
+  { q: 'What if my child can’t trace yet?', a: 'That’s common at 3. Let them trace with a finger, color the bubble letters, and do the hunt by pointing. Pencil control often comes somewhere between 3 and 5. If you have concerns, ask your child’s pediatrician.' },
+  { q: 'Is there a plan for kindergarten too?', a: 'Yes. The free kindergarten plan picks up with two letters a week, then word families, sight words and early addition.', html: 'Yes. The free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> picks up with two letters a week, then word families, sight words and early addition.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Free homeschool preschool curriculum (36 weeks)',
+    url,
+    learningResourceType: 'Curriculum',
+    educationalLevel: 'Preschool, Pre-kindergarten',
+    teaches: 'Letter recognition, letter sounds, handwriting, counting to 20',
+    timeRequired: 'P36W',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Preschool', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Preschool</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free homeschool preschool curriculum: a 36-week plan</span></h1>
+      <p class="mt-4 text-lg text-muted">One letter a week, one number a week, and their own name all year. Type your child's name and print the week.</p>
+    </header>
+
+    <div id="pack" class="scroll-mt-24">
+      <WeekPack client:load level="pre-k" fixedLevel source="homeschool-prek" />
+    </div>
+    <Preview k={'homeschool-prek'} caption={'Example: the plan page from week 2, letter S.'} />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        This free homeschool preschool curriculum gives you 36 weeks of short, playful lessons for ages 3 to 5. Each week has a printable
+        pack with your child's name on it: a plan page for you, then a letter page, a letter hunt, a bubble letter to color, a counting page
+        and a name tracing page. It works well as a pre-kindergarten homeschool curriculum, or as a gentle start for younger preschoolers.
+      </p>
+
+      <h2>What the preschool plan covers</h2>
+      <ul>
+        <li><strong>Week 1, their name:</strong> name tracing, a coloring page of their name, and a hunt for the letters in it.</li>
+        <li><strong>Weeks 2 to 36, letters:</strong> one letter a week in this order: {LETTER_ORDER.map((l) => l.toUpperCase()).join(', ')}. A review week follows every three letters.</li>
+        <li><strong>Numbers:</strong> numbers 1 to 10 in the first 20 weeks, then 11 to 20. Kids trace the number, count dots in a ten frame and color that many stars.</li>
+        <li><strong>Fine motor work:</strong> coloring, circling and tracing every day, which builds the hand strength writing needs.</li>
+      </ul>
+
+      <h2>A sample day</h2>
+      <ol>
+        <li><strong>2 minutes:</strong> say the letter's sound and name three things that start with it.</li>
+        <li><strong>10 minutes:</strong> do the day's page together. Sit beside them and trace the first row with your finger before they use a pencil.</li>
+        <li><strong>3 minutes:</strong> one idea from the "away from the paper" list on the plan page, like a sound hunt or a letter drawn in salt.</li>
+      </ol>
+      <p>Pair it with a picture book at bedtime and you've covered the core of a preschool day.</p>
+
+      <h2>Homeschool preschool for 3 year olds and 4 year olds</h2>
+      <p>
+        Three year olds often love the hunt and coloring pages and may only trace a row or two. That's fine. Large handwriting lines and green
+        starting dots make tracing easier. Four year olds usually move to tracing whole rows and start writing a few letters on their own.
+        Kids develop at different speeds, so use the plan as a menu, not a checklist.
+      </p>
+      <p>
+        Want extra practice on one letter? Every letter has its own <a href="/letter-tracing/">letter tracing worksheet</a> and a
+        <a href="/bubble-letters/">bubble letter</a> to color. For name practice beyond Fridays, the
+        <a href="/name-tracing/">name tracing worksheet maker</a> lets you change the letter style and line size.
+      </p>
+
+      <h2>All 36 weeks</h2>
+      <p>Tap any week to open its pack above.</p>
+    </article>
+    <div class="max-w-4xl"><PlanWeeks level="pre-k" /></div>
+
+    <section class="mt-12 max-w-xl">
+      <WeeklyEmail client:visible level="pre-k" />
+    </section>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about the preschool plan</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>
