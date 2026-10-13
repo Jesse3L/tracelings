@@ -1,0 +1,132 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import MathSheets from '../../../components/MathSheets.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/math-worksheets/pre-k/', SITE.url).href;
+const title = `Pre-K Math Worksheets: Free Preschool Math Printables | ${SITE.name}`;
+const description = 'Free pre-k math worksheets you make yourself: count and color, ten frames, more or fewer, and missing numbers 1 to 20. New problems every time you print.';
+
+const faqs = [
+  { q: 'What math should a pre-K child learn?', a: 'Most pre-K math is about counting objects one at a time, knowing that the last number you say tells how many, recognizing numbers, and comparing groups (more, fewer, the same). Many kids count to 10 with objects somewhere between 3 and 5, and to 20 a little later. Kids develop at different speeds. If you have concerns, ask your child’s teacher or pediatrician.' },
+  { q: 'Which worksheet should we start with?', a: 'Start with count and color for numbers 1 to 5. Then try ten frames 1 to 5, then count and circle. More or fewer and missing numbers usually come after a child can count a small group without help.' },
+  { q: 'Are these preschool math worksheets free?', a: 'Yes. Every worksheet type, every number range and the New problems button are free. Members can also print five different pages in one PDF, or one page for every child on their list.' },
+  { q: 'My child counts but skips objects. What helps?', a: 'That is very common. Have them touch or color each shape as they count it, or put a small cracker on each one. Moving an object while saying a number helps kids match one number to one thing.' },
+  { q: 'How many worksheets a day?', a: 'One page is plenty for most 3 and 4 year olds. A page takes about 5 to 10 minutes. Stop while it is still fun and do the rest with real objects.' },
+  { q: 'Do these fit the free preschool plan?', a: 'Yes. Thursdays in the 36-week preschool plan are math days, and the count and color page here is the same page the plan uses. Use the other worksheet types for extra practice on the same number.', html: 'Yes. Thursdays in the <a href="/homeschool/preschool/">36-week homeschool preschool curriculum</a> are math days, and the count and color page here is the same page the plan uses. Use the other worksheet types for extra practice on the same number.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Pre-K math worksheets (free printable generator)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Pre-kindergarten',
+    teaches: 'Counting objects, number recognition 1 to 20, ten frames, comparing groups, number order',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Pre-K math worksheets', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Pre-K math worksheets</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Pre-K math worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">Free preschool math pages for counting, ten frames, more or fewer and numbers 1 to 20. Pick a page, tap New problems as often as you like, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <MathSheets client:load source="prek-math" />
+    </div>
+    <Preview k="prek-math" caption="Example: a ten frames page, numbers 1 to 10." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        These pre-K math worksheets cover the counting skills most preschool programs work on: counting a group of things, matching a
+        number to a group, comparing groups and putting numbers in order. Each page is made fresh in your browser, so you can print a new
+        set of problems whenever your child is ready for another round.
+      </p>
+
+      <h2>Five kinds of preschool math worksheets</h2>
+      <ul>
+        <li><strong>Count and color:</strong> trace one number, count the dots in a ten frame, then color that many stars. Pick any number from 1 to 20.</li>
+        <li><strong>Ten frames:</strong> count the dots and write how many. For 1 to 20 the page uses two frames side by side, so kids see 10 and some more.</li>
+        <li><strong>Count and circle:</strong> count a row of shapes and circle the matching number from three choices. Shapes sit in groups of five, which makes them easier to count.</li>
+        <li><strong>More or fewer:</strong> two boxes of shapes on each row. Circle the box with more, or switch the page to fewer.</li>
+        <li><strong>Missing numbers:</strong> rows of five numbers in order with a blank box or two. Read the row out loud and write the number that fits.</li>
+      </ul>
+
+      <h2>Which numbers to start with</h2>
+      <p>
+        Start with <strong>1 to 5</strong> if your child is still learning to count a small group. Move to <strong>1 to 10</strong> when they can
+        count five things without skipping or counting one twice. Save <strong>1 to 20</strong> for kids who count to 10 easily and are curious
+        about bigger numbers.
+      </p>
+      <p>
+        Many kids count to 10 with objects somewhere between 3 and 5, and the teen numbers often take longer. Some kids recite numbers well
+        before they can count objects, and that is normal. If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>Why ten frames work so well in pre-K</h2>
+      <p>
+        A ten frame is two rows of five boxes. Kids quickly learn that a full top row is 5 and a full frame is 10, so they start to see
+        amounts without counting every dot. That habit makes adding and taking away much easier in kindergarten. If your child counts
+        each dot one by one at first, that's fine. Point to the full row and say "that's five" each time.
+      </p>
+
+      <h2>Make it hands-on first</h2>
+      <ul>
+        <li>Put a small cracker, a button or a coin on each shape before counting. Count as each one goes on.</li>
+        <li>Draw a ten frame on paper and fill it with toy cars or blocks. Ask how many, then how many more to make 10.</li>
+        <li>For more or fewer, make two piles of grapes and let your child eat the extra ones to make the piles match.</li>
+        <li>For number order, count steps on the stairs, then start from a number other than 1.</li>
+      </ul>
+      <p>
+        Writing numbers is a separate skill from counting. If writing the answer is hard, let your child say it and you write it, or try a
+        <a href="/number-tracing/1-10/">number tracing worksheet for 1 to 10</a> on another day. For teen numbers, the
+        <a href="/number-tracing/1-20/">number tracing 1 to 20</a> page has every number in order.
+      </p>
+
+      <h2>How these fit the preschool plan</h2>
+      <p>
+        Thursday is math day in our free <a href="/homeschool/preschool/">homeschool preschool curriculum</a>. Each week has a number of the
+        week, and that day's page is the count and color page you can make here. The first 20 weeks work through 1 to 10, and later weeks
+        move on to 11 to 20. When your child wants more math that week, add a ten frames or count and circle page for the same range.
+      </p>
+
+      <h2>A simple 10-minute math routine</h2>
+      <ol>
+        <li><strong>2 minutes:</strong> count something real together, like spoons at dinner or socks in the basket.</li>
+        <li><strong>5 minutes:</strong> do one worksheet side by side. Count the first row out loud together, then let them try the next one.</li>
+        <li><strong>3 minutes:</strong> one hands-on idea from the list above, using the same numbers as the page.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about pre-K math</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

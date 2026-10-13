@@ -7,75 +7,286 @@
       "status": "done",
       "done": "2026-10-13",
       "title": "Homeschool hub, Pre-K and Kindergarten 36-week plans, weekly pack maker, letter of the week pages, kindergarten curriculum guide",
-      "urls": ["/homeschool/", "/homeschool/preschool/", "/homeschool/kindergarten/", "/letter-of-the-week/", "/letter-of-the-week/a/ to /z/", "/learn/best-kindergarten-homeschool-curriculum/"],
-      "keywords": { "homeschool preschool curriculum": [6600, 31], "kindergarten homeschool curriculum": [6600, 18], "pre kindergarten homeschool curriculum": [2400, 26], "letter of the week": [590, 27], "best kindergarten homeschool curriculum": [720, 18] }
+      "urls": [
+        "/homeschool/",
+        "/homeschool/preschool/",
+        "/homeschool/kindergarten/",
+        "/letter-of-the-week/",
+        "/letter-of-the-week/a/ to /z/",
+        "/learn/best-kindergarten-homeschool-curriculum/"
+      ],
+      "keywords": {
+        "homeschool preschool curriculum": [
+          6600,
+          31
+        ],
+        "kindergarten homeschool curriculum": [
+          6600,
+          18
+        ],
+        "pre kindergarten homeschool curriculum": [
+          2400,
+          26
+        ],
+        "letter of the week": [
+          590,
+          27
+        ],
+        "best kindergarten homeschool curriculum": [
+          720,
+          18
+        ]
+      }
     },
     {
       "id": "prek-math-worksheets",
-      "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "status": "done",
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Pre-K math worksheets page with a generator: count and color, ten frames, more or less, numbers 1 to 20",
-      "suggestedUrl": "/math-worksheets/pre-k/",
-      "keywords": { "pre kindergarten math worksheets": [2900, 28], "free pre kindergarten math worksheets": [390, 32], "counting kindergarten math worksheets": [590, 26] },
-      "buildOn": "countPage() in src/lib/homeschool.ts. Link it from the Pre-K plan Thursday pages."
+      "keywords": {
+        "preschool math worksheets": [
+          3600,
+          27
+        ],
+        "pre k math worksheets": [
+          2900,
+          25
+        ],
+        "pre kindergarten math worksheets": [
+          2900,
+          28
+        ],
+        "counting worksheets for preschool": [
+          1000,
+          28
+        ],
+        "ten frame worksheets": [
+          720,
+          20
+        ],
+        "free preschool math worksheets": [
+          480,
+          28
+        ],
+        "pre k math worksheets free": [
+          390,
+          27
+        ]
+      },
+      "buildOn": "countPage() in src/lib/homeschool.ts. Link it from the Pre-K plan Thursday pages.",
+      "done": "2026-10-13",
+      "urls": [
+        "/math-worksheets/pre-k/"
+      ],
+      "notes": "Generator with 5 page types (count and color, ten frames, count and circle, more or fewer, missing numbers), ranges 1-5/1-10/1-20, name on the Name line. Members: 5-page set or one page per kid. Linked from /homeschool/, /homeschool/preschool/ and every letter-of-the-week page (?number=N)."
+    },
+    {
+      "id": "ten-frame-worksheets",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Ten frame worksheets page: the ten frame maker on its own URL, adding make-ten and double ten frame (11 to 20) pages, linked from the Pre-K and K plans",
+      "suggestedUrl": "/math-worksheets/ten-frames/",
+      "keywords": {
+        "ten frame worksheets": [
+          720,
+          20
+        ],
+        "addition ten frame worksheets": [
+          210,
+          23
+        ],
+        "ten frame worksheets for kindergarten": [
+          140,
+          21
+        ],
+        "ten frame worksheets 11 20": [
+          90,
+          20
+        ]
+      },
+      "buildOn": "tenFramePage() in src/lib/mathSheets.ts. Add a 'make 10' type (how many more to make 10) so the page is more than a copy of the Pre-K one."
+    },
+    {
+      "id": "more-or-less-worksheets",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Kindergarten more or less worksheets: compare groups and compare numbers with pictures, as a type in the math maker plus its own page",
+      "suggestedUrl": "/math-worksheets/more-or-less/",
+      "keywords": {
+        "kindergarten more or less worksheets": [
+          390,
+          22
+        ],
+        "preschool more or less worksheets": [
+          70,
+          22
+        ],
+        "more or less worksheets for kindergarten pdf": [
+          70,
+          21
+        ]
+      },
+      "buildOn": "moreLessPage() in src/lib/mathSheets.ts. Add a numbers-only compare page for K."
+    },
+    {
+      "id": "prek-math-in-pack",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Optional extra math page in the Pre-K weekly pack (a ten frame or count and circle page for that week's number), a checkbox in the pack maker for everyone",
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage(). Keep it free; nothing existing moves behind the paywall."
     },
     {
       "id": "k-addition-worksheets",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Kindergarten addition worksheet maker (within 5, 10, 20, with dots or a number line)",
       "suggestedUrl": "/math-worksheets/kindergarten-addition/",
-      "keywords": { "addition kindergarten math worksheets": [1000, 24], "kindergarten math worksheets subtraction": [260, 22] },
+      "keywords": {
+        "addition kindergarten math worksheets": [
+          1000,
+          24
+        ],
+        "kindergarten math worksheets subtraction": [
+          260,
+          22
+        ]
+      },
       "buildOn": "additionPage() in src/lib/homeschool.ts. Add subtraction as a second option."
     },
     {
       "id": "k-math-hub",
       "status": "todo",
-      "needs": ["prek-math-worksheets", "k-addition-worksheets"],
+      "needs": [
+        "prek-math-worksheets",
+        "k-addition-worksheets"
+      ],
       "title": "Kindergarten math worksheets hub linking every math generator, with a free printable sampler",
       "suggestedUrl": "/math-worksheets/kindergarten/",
-      "keywords": { "kindergarten math worksheets": [22200, 47], "kindergarten math worksheets free": [4400, 27], "free printable kindergarten math worksheets": [1300, 25] }
+      "keywords": {
+        "kindergarten math worksheets": [
+          22200,
+          47
+        ],
+        "kindergarten math worksheets free": [
+          4400,
+          27
+        ],
+        "free printable kindergarten math worksheets": [
+          1300,
+          25
+        ]
+      }
     },
     {
       "id": "word-family-pages",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Word family pages (-at, -an, -ig ...) with a word hunt and tracing generator for each family, linked from the Kindergarten plan",
       "suggestedUrl": "/word-families/ and /word-families/at/ ...",
-      "keywords": { "phonics worksheets for kg": [1900, 22], "phonics worksheets": [3600, 26] },
+      "keywords": {
+        "phonics worksheets for kg": [
+          1900,
+          22
+        ],
+        "phonics worksheets": [
+          3600,
+          26
+        ]
+      },
       "buildOn": "FAMILIES and huntPage() in src/lib/homeschool.ts. Check volume for 'at word family worksheets' style terms first."
     },
     {
       "id": "phonics-hub",
       "status": "todo",
-      "needs": ["word-family-pages"],
+      "needs": [
+        "word-family-pages"
+      ],
       "title": "Phonics worksheets hub by level (Pre-K, K, 1st, 2nd, 3rd), linking word families, letter of the week and sight words",
       "suggestedUrl": "/phonics-worksheets/",
-      "keywords": { "phonics worksheets": [3600, 26], "phonics worksheets for first graders": [1600, 24], "phonics worksheets for 2nd graders": [880, 31], "phonics worksheets for preschool": [480, 22] }
+      "keywords": {
+        "phonics worksheets": [
+          3600,
+          26
+        ],
+        "phonics worksheets for first graders": [
+          1600,
+          24
+        ],
+        "phonics worksheets for 2nd graders": [
+          880,
+          31
+        ],
+        "phonics worksheets for preschool": [
+          480,
+          22
+        ]
+      }
     },
     {
       "id": "guide-homeschool-preschool",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Learn article: how to homeschool preschool (schedule, what to cover, free plan)",
-      "keywords": { "homeschool preschool curriculum free": [1000, 35], "free homeschool preschool curriculum": [880, 19] },
+      "keywords": {
+        "homeschool preschool curriculum free": [
+          1000,
+          35
+        ],
+        "free homeschool preschool curriculum": [
+          880,
+          19
+        ]
+      },
       "buildOn": "Follow docs/content-guide.md. Link /homeschool/preschool/, /letter-of-the-week/, /name-tracing/."
     },
     {
       "id": "thanksgiving-homeschool-week",
       "status": "todo",
-      "needs": ["month1-homeschool-foundation"],
+      "needs": [
+        "month1-homeschool-foundation"
+      ],
       "title": "Seasonal bonus week: a Thanksgiving homeschool pack (Pre-K and K) using the existing coloring pages and seasonal counting",
-      "keywords": { "thanksgiving kindergarten math worksheets": [110, 21], "thanksgiving activities for preschoolers": [1900, 19] },
+      "keywords": {
+        "thanksgiving kindergarten math worksheets": [
+          110,
+          21
+        ],
+        "thanksgiving activities for preschoolers": [
+          1900,
+          19
+        ]
+      },
       "buildOn": "Ship before mid-November. Add as an extra week, not one of the 36."
     },
     {
       "id": "first-grade-plan",
       "status": "todo",
-      "needs": ["word-family-pages", "k-addition-worksheets"],
+      "needs": [
+        "word-family-pages",
+        "k-addition-worksheets"
+      ],
       "title": "First grade at home: a 36-week plan (blends, digraphs, first grade sight words, addition and subtraction within 20, sentence writing)",
       "suggestedUrl": "/homeschool/first-grade/",
-      "keywords": { "phonics worksheets for first graders": [1600, 24] },
+      "keywords": {
+        "phonics worksheets for first graders": [
+          1600,
+          24
+        ]
+      },
       "buildOn": "Add a 'first-grade' level to PLANS in src/lib/homeschool.ts and the WeekPack level picker."
     },
     {
@@ -88,7 +299,12 @@
       "id": "faith-track",
       "status": "needs-approval",
       "title": "Optional faith-friendly track: verse copywork pages alongside the regular plan",
-      "keywords": { "homeschool preschool curriculum christian": [590, 49] },
+      "keywords": {
+        "homeschool preschool curriculum christian": [
+          590,
+          49
+        ]
+      },
       "buildOn": "Jesse decides whether to offer it. Keep it optional and separate from the core plan."
     }
   ]
