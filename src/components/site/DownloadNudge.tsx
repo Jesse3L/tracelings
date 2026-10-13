@@ -53,6 +53,7 @@ export default function DownloadNudge() {
             <p class="mt-1.5 text-[15px] leading-relaxed text-muted">Every printable with no footer line, no email prompts, and a saved class list that prints a page for every child at once.</p>
           </>
         )}
+        <p class="mt-3 text-[14px] font-bold leading-snug text-[#1f7a50]">Members keep Tracelings free for every family.</p>
         <div class="mt-4 flex items-center gap-3">
           <a href="/membership/" onClick={() => { snooze(7); track('member_nudge_clicked'); }} class="btn-pencil px-4 py-2.5 text-[15px]">See membership</a>
           <span class="text-[13px] text-muted">From $29 a year</span>
