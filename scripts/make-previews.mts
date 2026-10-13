@@ -121,6 +121,9 @@ jobs.push(render('homeschool-prek', 'homeschool-preschool-week-2', pack('pre-k',
   'Homeschool preschool weekly plan page for letter S, with a Monday to Friday checklist and ideas away from the paper'));
 jobs.push(render('homeschool-k', 'homeschool-kindergarten-word-family', pack('kindergarten', 15)[2],
   'Kindergarten word family worksheet: circle the -at words like cat, hat and mat'));
+jobs.push(render('homeschool-faith', 'christian-homeschool-verse-page',
+  buildWeekPack({ level: 'pre-k', week: PLANS['pre-k'].weeks[3], name: '', paper: 'letter', credit: true, bubble: bubbleFont, faith: true })[1],
+  'Christian homeschool preschool verse page: Psalm 23:1 in a starred box with The LORD is my shepherd to trace on handwriting lines'));
 // Pre-K math worksheets: the maker's default page (ten frames, 1 to 10).
 jobs.push(render('prek-math', 'pre-k-math-ten-frames', buildMathPage({ kind: 'ten-frame', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Pre-K math worksheet with six ten frames: count the dots in each frame and write how many in the box'));

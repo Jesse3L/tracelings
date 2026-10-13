@@ -17,6 +17,7 @@ This is **build on what we have**, not "find random new keywords." Keyword data 
 - **No thin pages.** A new page needs a working tool or printable plus real, specific help for a parent. Never publish a page that only swaps a keyword.
 - **One item per run.** Small and finished beats big and half done. At most 3 new URLs in one run (a template that creates 26 letter pages counts as one item, but needs real content per page).
 - **Don't change** pricing, Square checkout, sign-in, the membership plans, analytics IDs, or `src/lib/server/` unless an item says so and Jesse approved it.
+- **No AI features for now.** Jesse put AI on hold (Oct 13, 2026): no AI APIs and no server endpoints that cost money per request, because bots could run up the bill. Don't queue new AI items; `reading-stories` stays `on-hold` until he says otherwise.
 - **Never merge or push to `main`.** Work on a branch named `grow/<date>-<slug>` and open a pull request.
 
 ## Each run, step by step

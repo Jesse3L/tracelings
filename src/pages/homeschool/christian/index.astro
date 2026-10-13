@@ -1,0 +1,140 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Preview from '../../../components/site/Preview.astro';
+import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+import { PLANS, VERSES } from '../../../lib/homeschool';
+
+const url = new URL('/homeschool/christian/', SITE.url).href;
+const title = `Free Christian Homeschool Curriculum: Pre-K and K | ${SITE.name}`;
+const description = 'A free Christian homeschool curriculum for preschool and kindergarten: 36 weeks of letters, numbers and phonics, with a KJV Bible verse each week to read and copy.';
+
+const faqs = [
+  { q: 'Is this Christian homeschool curriculum free?', a: 'Yes. Every week of the Pre-K and Kindergarten plans, with or without the verse page, is free to print for one child, one week at a time.' },
+  { q: 'Which Bible translation do you use?', a: 'The King James Version. It is in the public domain in the United States, so every verse can be printed and shared freely. Some words, like thee and hath, are old-fashioned, and they make a nice moment to talk about how language changes.' },
+  { q: 'What does the faith track add?', a: 'A verse of the week on the plan page, and one extra verse page. Preschoolers trace a short phrase from the verse. Kindergartners trace the whole verse and then copy it on their own. The rest of the week is the same as the regular plan.' },
+  { q: 'Is it tied to one church or denomination?', a: 'No. The verses are well-known passages many Christian families use with young children, like Psalm 23:1, Psalm 118:24 and John 3:16. There are no lessons on doctrine, so you can add your own church’s teaching around them.' },
+  { q: 'Can I use the verse page without the rest of the plan?', a: 'Yes. Pick any week, switch on the faith track, and print just the verse page from the PDF. For any other verse, the word tracing tool turns any short passage into a tracing sheet.', html: 'Yes. Pick any week, switch on the faith track, and print just the verse page from the PDF. For any other verse, the <a href="/word-tracing/">word tracing tool</a> turns any short passage into a tracing sheet.' },
+  { q: 'Can I turn the faith track off later?', a: 'Yes. It is one checkbox in the pack maker, on every homeschool page. Your choice is remembered on this device.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Free Christian homeschool curriculum for preschool and kindergarten',
+    url,
+    learningResourceType: 'Curriculum',
+    educationalLevel: 'Preschool, Kindergarten',
+    teaches: 'Letters and sounds, handwriting, early math, Bible verse memory and copywork',
+    timeRequired: 'P36W',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Christian homeschool', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+const pk = PLANS['pre-k'].weeks;
+const k = PLANS.kindergarten.weeks;
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Christian homeschool</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free Christian homeschool curriculum for preschool and kindergarten</span></h1>
+      <p class="mt-4 text-lg text-muted">The full 36-week plan, plus a Bible verse each week to read together, trace and copy. Type your child's name and print the week.</p>
+    </header>
+
+    <div id="pack" class="scroll-mt-24">
+      <WeekPack client:load faith source="homeschool-christian" />
+    </div>
+    <Preview k={'homeschool-faith'} caption={'Example: the verse page from week 4, Psalm 23:1.'} />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        This free Christian homeschool curriculum is our <a href="/homeschool/preschool/">preschool</a> and
+        <a href="/homeschool/kindergarten/">kindergarten</a> homeschool plans with a faith track added. Each week keeps the same short daily pages
+        for letters, phonics, handwriting and math, and adds one Bible verse from the King James Version. The verse goes on the plan page so you
+        can read it together each morning, and on a copywork page your child can trace.
+      </p>
+
+      <h2>How the verse of the week works</h2>
+      <ul>
+        <li><strong>Read it together.</strong> The plan page shows the verse and its reference. Read it at breakfast and again at bedtime.</li>
+        <li><strong>Pre-K traces a short phrase.</strong> Three to five year olds trace a few words from the verse, like "The LORD is my shepherd" or "Be still," with a solid example on the first line.</li>
+        <li><strong>Kindergarten copies the verse.</strong> Kindergartners trace the whole verse once, then copy it on their own on the empty lines below. This kind of copywork builds handwriting and reading at the same time.</li>
+        <li><strong>Color the stars.</strong> Each verse sits in a box with a star in every corner to color when the week is done.</li>
+      </ul>
+
+      <h2>Christian preschool and kindergarten curriculum, one checkbox</h2>
+      <p>
+        The faith track is a checkbox in the pack maker, so you can switch it on for one child and off for another. Everything else stays the
+        same: letters in phonics order, word families, Dolch sight words, ten frames and adding within 10. Your child's name goes on the plan,
+        the tracing pages and the coloring pages, and it never leaves your device.
+      </p>
+
+      <h2>All 36 verses</h2>
+      <p>Each verse lines up with the same week number in both plans. Tap a week to open its pack above.</p>
+    </article>
+
+    <div class="mt-5 max-w-4xl overflow-x-auto rounded-xl border border-hairline bg-white">
+      <table class="w-full min-w-[620px] text-left text-[15px]">
+        <thead>
+          <tr class="border-b border-hairline">
+            <th scope="col" class="p-3 font-bold w-16">Week</th>
+            <th scope="col" class="p-3 font-bold">Verse (KJV)</th>
+            <th scope="col" class="p-3 font-bold">Pre-K / Kindergarten focus</th>
+          </tr>
+        </thead>
+        <tbody>
+          {VERSES.map((v, i) => (
+            <tr class="border-b border-hairline last:border-0 align-top">
+              <td class="p-3 text-muted"><a href={`?week=${i + 1}#pack`} class="font-bold text-[#2f5fc4] underline underline-offset-2">{i + 1}</a></td>
+              <td class="p-3"><span class="text-ink">"{v.text}"</span> <span class="block text-[13px] text-muted">{v.ref}</span></td>
+              <td class="p-3 text-muted">{pk[i].title} / {k[i].title}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <h2>Simple ways to bring the verse into the day</h2>
+      <ol>
+        <li><strong>Morning (2 minutes):</strong> read the verse out loud and have your child repeat it after you, a few words at a time.</li>
+        <li><strong>Page time (5 minutes):</strong> trace the verse page on whichever day suits your week. Many families pick Monday to start fresh.</li>
+        <li><strong>Mealtime:</strong> ask who can say the verse. Let a sibling or grandparent join in.</li>
+        <li><strong>Bedtime:</strong> say it together one last time, then pray in your own words.</li>
+      </ol>
+      <p>
+        Want more copywork? Type any verse into the <a href="/word-tracing/">word tracing worksheet maker</a>, or try
+        <a href="/cursive/">cursive copywork</a> for older kids.
+      </p>
+    </article>
+
+    <section class="mt-12 max-w-xl">
+      <WeeklyEmail client:visible />
+    </section>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about the Christian homeschool track</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

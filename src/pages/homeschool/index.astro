@@ -24,6 +24,7 @@ const faqs = [
   { q: 'Is this a complete curriculum?', a: 'It covers letters, early phonics, handwriting, sight words and early math, about 15 minutes a day. Most families add read-aloud time, play, art and time outside. It is a free plan to build on, not an accredited program.' },
   { q: 'Does it meet my state’s homeschool rules?', a: 'Homeschool laws vary a lot from state to state, and some states ask for records or specific subjects. Check your state education department or a statewide homeschool group for the rules where you live. The weekly plan pages can be kept as a simple record of what you covered.' },
   { q: 'Why does my child’s name go on the pages?', a: 'Kids tend to try harder when the word on the page is theirs. The name goes on the plan page, the name tracing page and, in week 1, a coloring page. It is built in your browser and never leaves your device.' },
+  { q: 'Is there a Christian version?', a: 'Yes. Tick the faith track box in the pack maker to add a King James Version Bible verse each week, on the plan page and on a verse copywork page. It is optional and off by default.', html: 'Yes. Tick the faith track box in the pack maker to add a King James Version Bible verse each week, on the plan page and on a verse copywork page. It is optional and off by default. See the <a href="/homeschool/christian/">Christian homeschool curriculum</a> page for all 36 verses.' },
   { q: 'Can I print for more than one child?', a: 'Anyone can print one child at a time for free. Members can print a week for every child on their saved list in one PDF, or four weeks at once, with no footer line.', html: 'Anyone can print one child at a time for free. <a href="/membership/">Members</a> can print a week for every child on their saved list in one PDF, or four weeks at once, with no footer line.' },
 ];
 
@@ -72,7 +73,7 @@ const schema = [
 
     <section class="mt-14" aria-labelledby="plans-h">
       <h2 id="plans-h" class="text-[1.6rem] font-bold">Pick a plan</h2>
-      <ul class="mt-5 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <li>
           <a href="/homeschool/preschool/" class="block h-full rounded-xl border border-hairline bg-white p-6 hover:border-rule">
             <span class="block text-[13px] font-bold uppercase tracking-wider text-muted">{PLANS['pre-k'].ages}</span>
@@ -87,6 +88,14 @@ const schema = [
             <span class="mt-1 block text-xl font-bold text-ink">Kindergarten at home</span>
             <span class="mt-2 block text-muted leading-relaxed">Two letters a week, then word families like -at and -ig, Dolch sight words, numbers 0 to 20 and adding within 10.</span>
             <span class="mt-3 block font-bold text-[#2f5fc4]">See all 36 weeks</span>
+          </a>
+        </li>
+        <li>
+          <a href="/homeschool/christian/" class="block h-full rounded-xl border border-hairline bg-white p-6 hover:border-rule">
+            <span class="block text-[13px] font-bold uppercase tracking-wider text-muted">Optional faith track</span>
+            <span class="mt-1 block text-xl font-bold text-ink">Christian homeschool</span>
+            <span class="mt-2 block text-muted leading-relaxed">The same Pre-K and Kindergarten plans with a KJV Bible verse each week to read together, trace and copy.</span>
+            <span class="mt-3 block font-bold text-[#2f5fc4]">See all 36 verses</span>
           </a>
         </li>
       </ul>
