@@ -1,8 +1,24 @@
 import { useEffect, useState } from 'preact/hooks';
+import CoffeeButtons from '../CoffeeButtons';
 
 // A small, dismissible card shown after a successful download, inviting free visitors to membership.
 // Never shown to members, never blocks anything, and stays quiet for a day after being closed.
 const SNOOZE_KEY = 'tl-nudge-snooze';
+// "Buy us a coffee" card: shows from the 4th download on a device, then rests for 3 weeks after it's closed.
+// Never shown again once someone has tipped (the thank-you page sets COFFEE_DONE).
+const COFFEE_AFTER = 4;
+const COFFEE_SNOOZE = 'tl-coffee-snooze';
+export const COFFEE_DONE = 'tl-coffee-done';
+function coffeeDue(): boolean {
+  try {
+    if (localStorage.getItem(COFFEE_DONE)) return false;
+    if (Number(localStorage.getItem(COFFEE_SNOOZE) || 0) > Date.now()) return false;
+    return Number(localStorage.getItem('tl-downloads') || 0) >= COFFEE_AFTER;
+  } catch { return false; }
+}
+function snoozeCoffee(days: number) {
+  try { localStorage.setItem(COFFEE_SNOOZE, String(Date.now() + days * 86_400_000)); } catch { /* ignore */ }
+}
 const NAME_TOOLS = /^\/(name-tracing|cursive|cursive-name-tracing|name-coloring-pages|class-pack|$)/;
 
 function snoozed(): boolean {
@@ -16,13 +32,18 @@ const track = (name: string) => { try { (window as any).gtag?.('event', name, { 
 export default function DownloadNudge() {
   const [show, setShow] = useState(false);
   const [names, setNames] = useState(false);
+  const [coffee, setCoffee] = useState(false);
 
   useEffect(() => {
     let t: number | undefined;
     const onDownload = () => {
-      if ((window as any).__tlMember === true || snoozed()) return;
+      if ((window as any).__tlMember === true) return;
+      const wantCoffee = coffeeDue();
+      if (!wantCoffee && snoozed()) return;
       clearTimeout(t);
       t = window.setTimeout(() => {
+        setCoffee(wantCoffee);
+        if (wantCoffee) { snoozeCoffee(21); setShow(true); track('coffee_prompt_shown'); return; }
         setNames(NAME_TOOLS.test(location.pathname));
         setShow(true);
         track('member_nudge_shown');
@@ -33,6 +54,23 @@ export default function DownloadNudge() {
   }, []);
 
   if (!show) return null;
+  if (coffee) {
+    const closeCoffee = () => { setShow(false); track('coffee_prompt_closed'); };
+    return (
+      <div class="fixed inset-x-3 bottom-3 z-50 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[380px] nudge-in" role="status" aria-live="polite">
+        <div class="relative rounded-2xl border border-hairline bg-white p-5 shadow-[0_20px_50px_-20px_rgba(30,42,68,.55)]">
+          <button type="button" onClick={closeCoffee} class="absolute right-2.5 top-2.5 inline-flex size-9 items-center justify-center rounded-lg text-muted hover:bg-[#eef2f8] hover:text-ink" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+          </button>
+          <p class="pr-8 text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Your PDF is downloading</p>
+          <p class="mt-2 text-[17px] font-bold leading-snug text-ink">Enjoying the free printables?</p>
+          <p class="mt-1.5 text-[15px] leading-relaxed text-muted">Tracelings is free for every family, and we want to keep it that way while we build more homeschool weeks and worksheets. If it's helped you, you can buy us a coffee.</p>
+          <div class="mt-4"><CoffeeButtons source="download-card" /></div>
+          <button type="button" onClick={closeCoffee} class="mt-2 text-[13px] text-muted underline underline-offset-2">Maybe later</button>
+        </div>
+      </div>
+    );
+  }
   const close = () => { setShow(false); snooze(1); track('member_nudge_closed'); };
 
   return (

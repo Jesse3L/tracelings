@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config';
+---
+<Base title={`Thank You | ${SITE.name}`} description="Thank you for the coffee. It helps keep Tracelings free." noindex>
+  <div class="mx-auto max-w-2xl px-4 sm:px-6 pt-16 text-center">
+    <h1 class="text-[2.1rem] sm:text-[2.6rem] font-bold"><span class="ruled">Thank you so much</span></h1>
+    <p class="mt-6 text-lg text-muted leading-relaxed">Your coffee helps keep every Tracelings printable free for families and teachers. Square will email you a receipt.</p>
+    <p class="mt-8"><a href="/homeschool/" class="btn-pencil inline-flex px-5 py-3 text-lg">Back to the printables</a></p>
+  </div>
+  <script is:inline>try { localStorage.setItem('tl-coffee-done', String(Date.now())); } catch (e) {}</script>
+</Base>

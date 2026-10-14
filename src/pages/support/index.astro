@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import CoffeeButtons from '../../components/CoffeeButtons.tsx';
+import { SITE } from '../../config';
+const title = `Buy Us a Coffee | ${SITE.name}`;
+const description = 'Tracelings printables are free for every family. If they have helped you, a one-time coffee tip helps us keep them free and build more homeschool weeks.';
+---
+<Base title={title} description={description}>
+  <div class="mx-auto max-w-3xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Buy us a coffee</span>
+    </nav>
+    <header class="pt-6 pb-6">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Help keep Tracelings free</span></h1>
+    </header>
+    <div class="prose-tl">
+      <p class="text-[1.15rem]!">
+        Every worksheet, coloring page and homeschool week on {SITE.name} is free to print. We love making them, and we want them to stay
+        free for every parent, teacher and homeschool family.
+      </p>
+      <p>
+        If our printables have saved you time or helped your child, you can buy us a coffee. Tips go toward hosting the site and building
+        what's next: more homeschool weeks, first through third grade plans, and new worksheets every week.
+      </p>
+    </div>
+    <div class="mt-8 max-w-md rounded-xl border border-hairline bg-white p-6">
+      <p class="text-lg font-bold text-ink">Buy us a coffee</p>
+      <p class="mt-1 mb-4 text-[15px] text-muted">Pick an amount. You'll finish on Square's secure checkout.</p>
+      <CoffeeButtons client:load source="support-page" />
+    </div>
+    <div class="prose-tl mt-10">
+      <h2>Other ways to help</h2>
+      <ul>
+        <li><strong>Share us.</strong> Send a printable to another parent, or pin it on Pinterest. Word of mouth is how most families find us.</li>
+        <li><strong>Print for a whole class or family?</strong> A <a href="/membership/">membership</a> prints every child's sheet in one PDF, with no footer line.</li>
+        <li><strong>Tell us what to make next.</strong> Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with the worksheet you wish existed.</li>
+      </ul>
+      <p class="text-[15px]">Tips are one-time payments to {SITE.name} (Veridian Ventures LLC). They aren't charitable donations and aren't tax-deductible.</p>
+    </div>
+  </div>
+</Base>

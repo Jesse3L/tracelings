@@ -40,7 +40,7 @@ export default defineConfig({
   integrations: [
     preact(),
     sitemap({
-      filter: (page) => !page.includes('/api/') && !page.includes('/404') && !page.includes('/account/') && !page.includes('/class-pack/'),
+      filter: (page) => !page.includes('/api/') && !page.includes('/404') && !page.includes('/account/') && !page.includes('/class-pack/') && !page.includes('/support/thank-you'),
       serialize: (item) => ({ ...item, lastmod: lastmodFor(item.url) }),
     }),
   ],
