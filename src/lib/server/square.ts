@@ -170,16 +170,18 @@ export async function cancelSubscription(id: string): Promise<Sub> {
 }
 
 // ---------- Coffee tips ----------
-/** Fixed tip amounts. Only these can be charged, so the endpoint can't be used to make arbitrary payment links. */
-export const TIPS = { 3: 300, 5: 500, 10: 1000 } as const;
-export type TipKey = keyof typeof TIPS;
+/** Tips are whole dollars between these limits. The cap keeps the link from being used for large charges. */
+export const TIP_MIN = 1;
+export const TIP_MAX = 200;
+export const validTip = (dollars: unknown): dollars is number =>
+  typeof dollars === 'number' && Number.isInteger(dollars) && dollars >= TIP_MIN && dollars <= TIP_MAX;
 
 /** A one-time Square checkout link for a "buy us a coffee" tip. */
-export async function createTipCheckout(dollars: TipKey, redirectUrl: string): Promise<string> {
+export async function createTipCheckout(dollars: number, redirectUrl: string): Promise<string> {
   const r = await sq<any>('/v2/online-checkout/payment-links', {
     body: {
       idempotency_key: crypto.randomUUID(),
-      quick_pay: { name: `Coffee for Tracelings ($${dollars})`, price_money: { amount: TIPS[dollars], currency: 'USD' }, location_id: await locationId() },
+      quick_pay: { name: `Coffee for Tracelings ($${dollars})`, price_money: { amount: dollars * 100, currency: 'USD' }, location_id: await locationId() },
       checkout_options: { redirect_url: redirectUrl, ask_for_shipping_address: false },
       payment_note: 'Tracelings coffee tip: thank you for keeping the printables free',
     },
