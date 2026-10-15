@@ -144,49 +144,6 @@
       "notes": "Renamed around 'ten frame printables' (2,900/SD 28 vs 720 for 'ten frame worksheets'), so the page leads with blank and double ten frames and keeps the worksheets. Same maker as Pre-K math (series 'ten-frames' in MathSheets.tsx and mathSheets.ts). Free: every type and range, one page at a time. Members: 5 different pages in one PDF (not for blank frames) or one page per kid. Supports ?type= and ?range= in the URL. Linked from /math-worksheets/pre-k/, /homeschool/, /homeschool/preschool/, /homeschool/kindergarten/. Preview ten-frame-worksheet-make-10.webp."
     },
     {
-      "id": "ten-frame-subtraction",
-      "status": "todo",
-      "needs": [
-        "ten-frame-worksheets"
-      ],
-      "title": "Ten frame subtraction page type: a filled frame, cross out some dots, write what is left (within 5 and 10), added to the ten frame maker for the kindergarten plan's later weeks",
-      "keywords": {
-        "using a ten frame to subtract": [
-          260,
-          13
-        ]
-      },
-      "buildOn": "tfAddPage() and tenFrame() in src/lib/mathSheets.ts (TEN_FRAME_KINDS). No new URL needed; add a section to /math-worksheets/ten-frames/."
-    },
-    {
-      "id": "ten-frame-cards",
-      "status": "todo",
-      "needs": [
-        "ten-frame-worksheets"
-      ],
-      "title": "Ten frame cards 0 to 20: printable cut-apart cards (dots on one side, the number on the other) with games for parents, as a page type or a small page linked from the ten frame printables",
-      "keywords": {
-        "ten frame cards": [
-          210,
-          27
-        ],
-        "ten frame flash cards": [
-          90,
-          34
-        ]
-      },
-      "buildOn": "src/lib/flashcards.ts layout and tenFrame() in mathSheets.ts. Check volume again before building; may fit as a section of /math-worksheets/ten-frames/ rather than a new URL."
-    },
-    {
-      "id": "ten-frames-in-k-pack",
-      "status": "todo",
-      "needs": [
-        "ten-frame-worksheets"
-      ],
-      "title": "Kindergarten weekly pack: optional make 10 or ten frame addition page for the week's number or sum (checkbox in the pack maker, free for everyone)",
-      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'ten-frames' }). Pairs with prek-math-in-pack; keep it free."
-    },
-    {
       "id": "more-or-less-worksheets",
       "status": "todo",
       "needs": [
@@ -262,6 +219,49 @@
           25
         ]
       }
+    },
+    {
+      "id": "ten-frame-subtraction",
+      "status": "todo",
+      "needs": [
+        "ten-frame-worksheets"
+      ],
+      "title": "Ten frame subtraction page type: a filled frame, cross out some dots, write what is left (within 5 and 10), added to the ten frame maker for the kindergarten plan's later weeks",
+      "keywords": {
+        "using a ten frame to subtract": [
+          260,
+          13
+        ]
+      },
+      "buildOn": "tfAddPage() and tenFrame() in src/lib/mathSheets.ts (TEN_FRAME_KINDS). No new URL needed; add a section to /math-worksheets/ten-frames/."
+    },
+    {
+      "id": "ten-frame-cards",
+      "status": "todo",
+      "needs": [
+        "ten-frame-worksheets"
+      ],
+      "title": "Ten frame cards 0 to 20: printable cut-apart cards (dots on one side, the number on the other) with games for parents, as a page type or a small page linked from the ten frame printables",
+      "keywords": {
+        "ten frame cards": [
+          210,
+          27
+        ],
+        "ten frame flash cards": [
+          90,
+          34
+        ]
+      },
+      "buildOn": "src/lib/flashcards.ts layout and tenFrame() in mathSheets.ts. Check volume again before building; may fit as a section of /math-worksheets/ten-frames/ rather than a new URL."
+    },
+    {
+      "id": "ten-frames-in-k-pack",
+      "status": "todo",
+      "needs": [
+        "ten-frame-worksheets"
+      ],
+      "title": "Kindergarten weekly pack: optional make 10 or ten frame addition page for the week's number or sum (checkbox in the pack maker, free for everyone)",
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'ten-frames' }). Pairs with prek-math-in-pack; keep it free."
     },
     {
       "id": "word-family-pages",
