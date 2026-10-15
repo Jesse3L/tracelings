@@ -27,3 +27,4 @@ One entry per growth run, newest last. Keep each entry to a few lines.
 - Keywords (Ubersuggest US): ten frame printable 2,900 / SD 28, printable ten frame 1,600 / 26, double ten frame 1,300 / 17, blank ten frame 1,300 / 26, ten frame worksheets 720 / 20. Named the page around "ten frame printables" since it beats "ten frame worksheets" by 4x.
 - Linked from `/math-worksheets/pre-k/`, `/homeschool/`, `/homeschool/preschool/`, `/homeschool/kindergarten/`. Added preview `ten-frame-worksheet-make-10.webp`.
 - Next in queue: Kindergarten more or less worksheets.
+- Before publishing: phone and desktop screenshots of the new page, and a site-wide scan of the built HTML found 8 links missing a space ("see the<a>", "preschool</a>and"), 6 of them already live on older pages. Fixed all of them. Jesse okayed publishing growth builds directly once they render correctly; the playbook now says to merge after the checks.
