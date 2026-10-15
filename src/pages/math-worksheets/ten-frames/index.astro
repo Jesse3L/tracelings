@@ -1,0 +1,132 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import MathSheets from '../../../components/MathSheets.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/math-worksheets/ten-frames/', SITE.url).href;
+const title = `Free Ten Frame Printables and Worksheets | ${SITE.name}`;
+const description = 'Free ten frame printables: blank and double ten frames, plus ten frame worksheets for counting, show the number, make 10 and addition to 20.';
+
+const faqs = [
+  { q: 'What is a ten frame?', a: 'A ten frame is a box split into two rows of five squares. Each square holds one counter or one dot. Because the rows are always five, kids learn to see 5 and 10 at a glance instead of counting every dot.' },
+  { q: 'What is a double ten frame?', a: 'Two ten frames used together, one above the other or side by side. Kids fill the first frame, then keep going in the second, so 14 looks like one full ten and four more. It is the usual next step after numbers 1 to 10.' },
+  { q: 'Which ten frame worksheet should we start with?', a: 'Start with the blank ten frame and real counters. Then try How many? for 1 to 5 or 1 to 10, then Show the number. Make 10 and ten frame addition usually come in kindergarten, once a child can count a small group without help.' },
+  { q: 'Are these ten frame printables free?', a: 'Yes. Every page type, every number range and the New problems button are free, one page at a time. Members can also print five different pages in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'Should kids fill a ten frame in a certain order?', a: 'Most programs fill the top row left to right, then the bottom row. A steady order makes it easier to see 5 and 10. If your child fills it another way and counts correctly, that is fine. Show the top row first next time.' },
+  { q: 'Do these fit the free homeschool plans?', a: 'Yes. The Pre-K plan uses ten frames on its Thursday math pages, and the kindergarten plan uses them through week 21 before moving to adding within 5 and 10.', html: 'Yes. The <a href="/homeschool/preschool/">Pre-K plan</a> uses ten frames on its Thursday math pages, and the <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> uses them through week 21 before moving to adding within 5 and 10.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Ten frame printables and worksheets (free generator)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Preschool, Kindergarten',
+    teaches: 'Counting with ten frames, numbers 1 to 20, making 10, addition within 5, 10 and 20',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Ten frame printables', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Ten frame printables</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Ten frame printables and worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">Blank ten frames, a double ten frame for 11 to 20, and ten frame worksheets for counting, making 10 and adding. Pick a page, tap New problems as often as you like, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <MathSheets client:load source="ten-frames" series="ten-frames" />
+    </div>
+    <Preview k="ten-frames" caption="Example: a Make 10 ten frame worksheet." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        A ten frame printable is the simplest math tool you can keep at home: two rows of five boxes. Kids put one counter or one dot in
+        each box, and the shape does the rest. A full top row is 5, a full frame is 10, and a double ten frame shows the teen numbers as
+        ten and some more. Everything here is made in your browser, so the child's name on the page never leaves your device.
+      </p>
+
+      <h2>Five kinds of ten frame pages</h2>
+      <ul>
+        <li><strong>Blank ten frames:</strong> one big frame to use as a counting mat, a double ten frame for 11 to 20, or six small empty frames to draw in.</li>
+        <li><strong>How many?:</strong> count the dots in each frame and write the number. Choose 1 to 5, 1 to 10, or 11 to 20 with two frames per problem.</li>
+        <li><strong>Show the number:</strong> the reverse. Read a number and draw that many dots in an empty frame.</li>
+        <li><strong>Make 10:</strong> each frame has some dots. Draw the rest, then write how many more make 10 (5 + 5 = 10, 7 + 3 = 10).</li>
+        <li><strong>Ten frame addition:</strong> blue dots plus orange dots in one frame, then write the sum. Pick within 5, within 10, or sums from 11 to 20.</li>
+      </ul>
+
+      <h2>Using a blank ten frame as a counting mat</h2>
+      <p>
+        Print the one big frame on card stock if you have it. The boxes are large enough for buttons, coins, small blocks or cereal. Say a
+        number and have your child build it, filling the top row from left to right first. Then ask two questions: "How many?" and "How
+        many empty boxes?" The second question is the start of making 10.
+      </p>
+      <p>
+        Slide the mat into a sheet protector and it becomes a dry erase ten frame. Six small frames on one page work well for dice games:
+        roll, draw that many dots, and see who fills a frame first.
+      </p>
+
+      <h2>The double ten frame and numbers 11 to 20</h2>
+      <p>
+        Teen numbers are tricky because "fourteen" doesn't sound like "ten and four." A double ten frame shows it. Fill the top frame all
+        the way, then put four in the bottom frame. After a few days many kids stop counting the full frame and say "ten, eleven,
+        twelve..." from there. For writing practice on the same numbers, add a <a href="/number-tracing/1-20/">number tracing 1 to 20</a> page.
+      </p>
+
+      <h2>Make 10 and ten frame addition in kindergarten</h2>
+      <p>
+        Knowing the pairs that make 10 (1 and 9, 2 and 8, and so on) helps with almost every addition and subtraction problem that comes
+        later. On the Make 10 page, have your child point to each empty box while counting up. On the addition page, the two colors show
+        both numbers at once, and in the 11 to 20 version the orange dots finish the first frame before spilling into the second. That is
+        the same "make a ten" idea in picture form.
+      </p>
+      <p>
+        Many kids work on numbers to 10 somewhere between ages 4 and 6, and adding within 10 usually comes in kindergarten. Kids develop
+        at different speeds. If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>How these fit our homeschool plans</h2>
+      <p>
+        The free <a href="/homeschool/preschool/">homeschool preschool curriculum</a> has a ten frame on every Thursday count and color page,
+        and the <a href="/homeschool/kindergarten/">kindergarten plan</a> uses ten frames through week 21, then moves to adding within 5 and 10.
+        Use these pages for extra practice on the same numbers. For count and color, count and circle, and more or fewer pages,
+        see the <a href="/math-worksheets/pre-k/">pre-K math worksheets</a>.
+      </p>
+
+      <h2>A 10-minute ten frame routine</h2>
+      <ol>
+        <li><strong>3 minutes:</strong> on the big blank frame, build three numbers with counters. Ask "how many?" and "how many more to make 10?" each time.</li>
+        <li><strong>5 minutes:</strong> one worksheet side by side. Do the first problem together out loud, then let your child do the next one.</li>
+        <li><strong>2 minutes:</strong> a quick flash game. Fill a frame, cover it, show it for two seconds, and ask how many they saw.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about ten frames</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

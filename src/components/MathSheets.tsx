@@ -5,7 +5,7 @@ import { savePdf } from '../lib/download';
 import { needsEmail } from '../lib/gate';
 import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
-import { MATH_KINDS, buildMathPage, buildMathSet, type MathKind, type MathRange, type Compare } from '../lib/mathSheets';
+import { MATH_KINDS, TEN_FRAME_KINDS, BLANK_LAYOUTS, buildMathPage, buildMathSet, type MathKind, type MathRange, type Compare, type BlankLayout, type MathSeries } from '../lib/mathSheets';
 import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
 
@@ -13,11 +13,16 @@ const link = 'text-[#2f5fc4] underline underline-offset-2';
 const SET = 5;
 
 /**
- * Pre-K math worksheet maker. Free: any worksheet type, one page at a time, with fresh problems whenever you like.
+ * Math worksheet maker, used on /math-worksheets/pre-k/ (series 'pre-k') and /math-worksheets/ten-frames/ (series 'ten-frames'). Free: any worksheet type, one page at a time, with fresh problems whenever you like.
  * Members also print a set of five different pages at once, or one page for every kid on their saved list.
  */
-export default function MathSheets(props: { kind?: MathKind; source?: string }) {
-  const [kind, setKind] = useState<MathKind>(props.kind ?? 'ten-frame');
+export default function MathSheets(props: { kind?: MathKind; source?: string; series?: MathSeries }) {
+  const series: MathSeries = props.series ?? 'pre-k';
+  const KINDS = series === 'ten-frames' ? TEN_FRAME_KINDS : MATH_KINDS;
+  const prefix = series === 'ten-frames' ? 'Ten frames' : 'Pre-K math';
+  const filePrefix = series === 'ten-frames' ? 'ten-frame' : 'pre-k-math';
+  const [kind, setKind] = useState<MathKind>(props.kind ?? (series === 'ten-frames' ? 'blank-frame' : 'ten-frame'));
+  const [blank, setBlank] = useState<BlankLayout>('one');
   const [range, setRange] = useState<MathRange>(10);
   const [number, setNumber] = useState(5);
   const [compare, setCompare] = useState<Compare>('more');
@@ -36,24 +41,30 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
     try {
       const q = new URLSearchParams(location.search);
       const k = q.get('type') as MathKind | null;
-      if (k && MATH_KINDS.some((x) => x.v === k)) setKind(k);
+      if (k && KINDS.some((x) => x.v === k)) setKind(k);
+      const r = Number(q.get('range'));
+      if (r === 5 || r === 10 || r === 20) setRange(r);
       const n = Number(q.get('number'));
-      if (n >= 1 && n <= 20) { setNumber(n); setKind('count-color'); }
+      if (series === 'pre-k' && n >= 1 && n <= 20) { setNumber(n); setKind('count-color'); }
       const nm = sessionStorage.getItem('tl-name');
       if (nm) setName(nm);
     } catch { /* storage or URL unavailable */ }
   }, []);
   // Keep the typed name for the other tools in this tab (never in the URL, never sent anywhere).
   useEffect(() => { try { if (name) sessionStorage.setItem('tl-name', name); } catch { /* ignore */ } }, [name]);
-  useEffect(() => setDone(''), [kind, range, number, compare]);
+  useEffect(() => setDone(''), [kind, range, number, compare, blank]);
 
-  const opts = { kind, range, number, compare, name, paper, credit, seed };
-  const page = useMemo(() => buildMathPage(opts), [kind, range, number, compare, name, paper, credit, seed]);
+  const opts = { kind, range, number, compare, name, paper, credit, seed, blank, series };
+  const page = useMemo(() => buildMathPage(opts), [kind, range, number, compare, name, paper, credit, seed, blank]);
   const svg = useMemo(() => pageToSvg(page), [page]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
-  const kindLabel = MATH_KINDS.find((x) => x.v === kind)!.label;
+  const kindLabel = KINDS.find((x) => x.v === kind)!.label;
+  const noRange = kind === 'count-color' || kind === 'make-ten' || kind === 'blank-frame';
+  const fixed = kind === 'count-color' || kind === 'blank-frame'; // nothing random on the page
+  const blankLabel = BLANK_LAYOUTS.find((x) => x.v === blank)!.label;
   const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const what = kind === 'count-color' ? `number-${number}` : `1-to-${range}`;
+  const what = kind === 'count-color' ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : `1-to-${range}`;
+  const fileKind = kind === 'blank-frame' ? 'blank' : slug(kindLabel);
 
   async function save(k: 'one' | 'set' | 'list') {
     setBusy(true);
@@ -62,17 +73,17 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
       let file: string;
       if (k === 'list') {
         pages = listNames.map((n) => buildMathPage({ ...opts, name: n }));
-        file = `pre-k-math-${slug(kindLabel)}-${what}-${listNames.length}-kids.pdf`;
+        file = `${filePrefix}-${fileKind}-${what}-${listNames.length}-kids.pdf`;
       } else if (k === 'set') {
         pages = buildMathSet(opts, SET);
-        file = `pre-k-math-${slug(kindLabel)}-${what}-${SET}-pages.pdf`;
+        file = `${filePrefix}-${fileKind}-${what}-${SET}-pages.pdf`;
       } else {
         pages = [page];
         const who = slug(name);
-        file = `${who ? `${who}-` : ''}pre-k-math-${slug(kindLabel)}-${what}.pdf`;
+        file = `${who ? `${who}-` : ''}${filePrefix}-${fileKind}-${what}.pdf`;
       }
-      await savePdf(pages, file, `Pre-K math: ${kindLabel}`);
-      setDone(k === 'one' ? 'Downloaded. Print at 100% size. Tap "New problems" any time for a fresh page.' : `Downloaded ${pages.length} pages.`);
+      await savePdf(pages, file, `${prefix}: ${kindLabel}`);
+      setDone(k === 'one' ? (fixed ? 'Downloaded. Print at 100% size.' : 'Downloaded. Print at 100% size. Tap "New problems" any time for a fresh page.') : `Downloaded ${pages.length} pages.`);
     } finally {
       setBusy(false);
     }
@@ -85,7 +96,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
         <fieldset class="mb-5">
           <legend class="text-[15px] font-bold mb-2">Worksheet</legend>
           <div class="grid gap-2">
-            {MATH_KINDS.map((o) => {
+            {KINDS.map((o) => {
               const on = o.v === kind;
               return (
                 <label class={`cursor-pointer rounded-lg border px-3 py-2 text-[15px] leading-tight transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-rule ${on ? 'border-rule bg-white text-ink shadow-[inset_0_0_0_1px_var(--color-rule)]' : 'border-hairline bg-white/60 text-muted hover:text-ink'}`}>
@@ -106,11 +117,19 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
               {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => <option value={String(n)}>{n}</option>)}
             </select>
           </label>
+        ) : kind === 'blank-frame' ? (
+          <Segmented legend="Layout" name="math-blank" value={blank} onChange={setBlank} options={BLANK_LAYOUTS} />
+        ) : noRange ? null : kind === 'tf-add' ? (
+          <Segmented legend="Add" name="math-range" value={String(range) as '5' | '10' | '20'} onChange={(v) => setRange(Number(v) as MathRange)} options={[
+            { v: '5', label: 'Within 5', sub: 'one row' },
+            { v: '10', label: 'Within 10', sub: 'one frame' },
+            { v: '20', label: '11 to 20', sub: 'two frames' },
+          ]} />
         ) : (
           <Segmented legend="Numbers" name="math-range" value={String(range) as '5' | '10' | '20'} onChange={(v) => setRange(Number(v) as MathRange)} options={[
             { v: '5', label: '1 to 5', sub: 'just starting' },
-            { v: '10', label: '1 to 10', sub: 'most Pre-K' },
-            { v: '20', label: '1 to 20', sub: 'ready for more' },
+            { v: '10', label: '1 to 10', sub: series === 'pre-k' ? 'most Pre-K' : 'one frame' },
+            { v: '20', label: series === 'pre-k' ? '1 to 20' : '11 to 20', sub: series === 'pre-k' ? 'ready for more' : 'two frames' },
           ]} />
         )}
 
@@ -128,7 +147,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
 
         <Segmented legend="Paper" name="math-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
-        {kind !== 'count-color' && (
+        {!fixed && (
           <button type="button" onClick={() => setSeed((s) => s + 1)} class="mb-3 w-full rounded-lg border border-rule bg-white px-5 py-2.5 text-[16px] font-bold text-ink">
             New problems
           </button>
@@ -143,9 +162,11 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
             <>
               <p class="font-bold text-ink">Member printing</p>
               <div class="mt-3 grid gap-2">
-                <button type="button" disabled={busy} onClick={() => save('set')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
-                  {kind === 'count-color' ? `Numbers ${number} to ${((number + SET - 2) % 20) + 1} in one PDF` : `${SET} different pages in one PDF`}
-                </button>
+                {kind !== 'blank-frame' && (
+                  <button type="button" disabled={busy} onClick={() => save('set')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
+                    {kind === 'count-color' ? `Numbers ${number} to ${((number + SET - 2) % 20) + 1} in one PDF` : `${SET} different pages in one PDF`}
+                  </button>
+                )}
                 <button type="button" disabled={busy || listNames.length === 0} onClick={() => save('list')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
                   {listNames.length ? `This page for all ${listNames.length} kids` : 'This page for every kid on your list'}
                 </button>
@@ -163,7 +184,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string }) 
 
       <figure class="lg:sticky lg:top-20">
         <div class="sheet-frame overflow-hidden" dangerouslySetInnerHTML={{ __html: svg }} />
-        <figcaption class="mt-3 text-[13px] text-muted">{kindLabel}{kind === 'count-color' ? `, number ${number}` : `, numbers 1 to ${range}`}. This is exactly what prints.</figcaption>
+        <figcaption class="mt-3 text-[13px] text-muted">{kindLabel}{kind === 'count-color' ? `, number ${number}` : kind === 'blank-frame' ? `, ${blankLabel.toLowerCase()}` : kind === 'make-ten' ? '' : kind === 'tf-add' ? (range === 20 ? ', sums 11 to 20' : `, within ${range}`) : series === 'ten-frames' && range === 20 ? ', numbers 11 to 20' : `, numbers 1 to ${range}`}. This is exactly what prints.</figcaption>
       </figure>
 
       <EmailGate open={gate !== null} source={source} onClose={() => setGate(null)} onDone={() => { const k = gate ?? 'one'; setGate(null); save(k); }} />

@@ -1,6 +1,6 @@
 # Tracelings Growth Playbook
 
-How the every-other-day build sessions grow Tracelings. A scheduled task opens a fresh session, reads this file, does **one build item**, and opens a pull request for Jesse to review and merge.
+How the every-other-day build sessions grow Tracelings. A scheduled task opens a fresh session, reads this file, does **one build item**, checks that it renders correctly, and publishes it to the live site (pull request, then merge). Jesse gets a summary afterward.
 
 ## The goal
 
@@ -19,7 +19,8 @@ This is **build on what we have**, not "find random new keywords." Keyword data 
 - **Don't change** pricing, Square checkout, sign-in, the membership plans, analytics IDs, or `src/lib/server/` unless an item says so and Jesse approved it.
 - **No AI features for now.** Jesse put AI on hold (Oct 13, 2026): no AI APIs and no server endpoints that cost money per request, because bots could run up the bill. Don't queue new AI items; `reading-stories` stays `on-hold` until he says otherwise.
 - **Bible verses use the Berean Standard Bible only** (public domain, easy modern English, official text at bereanbible.com). Never NIV, ESV, NLT or other copyrighted translations. Check every verse word for word against the official text.
-- **Never merge or push to `main`.** Work on a branch named `grow/<date>-<slug>` and open a pull request.
+- **Publish when it checks out (Jesse, Oct 15, 2026).** Work on a branch named `grow/<date>-<slug>`, open a pull request, and once every check below passes, squash-merge it into `main` yourself so the page goes live and starts ranking. Never push commits straight to `main`, never force-push, and never merge anything that touches a `needs-approval` area (pricing, Square, sign-in, membership plans, analytics IDs, `src/lib/server/`, AI, payments). Those PRs stay open for Jesse.
+- **Rendering must be right before you merge.** Jesse's one ask: nothing ships with text that overlaps, runs off the page, or looks wrong. See step 7.
 
 ## Each run, step by step
 
@@ -29,10 +30,17 @@ This is **build on what we have**, not "find random new keywords." Keyword data 
 4. Check its keywords in Ubersuggest (US). Note volume and SD for the main keyword and 3 to 5 close variants. If the item's main keyword turns out to be near zero, pick a better phrasing that keeps the same build, and note it.
 5. Look at what's already there (`src/pages/`, `src/lib/homeschool.ts`, existing tools) and build on it. Reuse the page model in `src/lib/sheet.ts`, `rowSheet.ts` and `homeschool.ts`. Match the look of existing pages.
 6. Wire it in: link from the related hub or plan pages, add it to nav or footer only if it's a hub, add previews to `scripts/make-previews.mts` when a page has a printable, update the "Live pages" list in `docs/content-guide.md`.
-7. Check your work: `npm run build` must pass. Render a sample of every new printable to PNG and look at it. Read every new paragraph against the content guide checklist.
+7. Check your work before merging:
+   - `npm run build` must pass.
+   - Render every new printable type (US Letter and A4, with a long name) to PNG and look at it: no text over lines or shapes, nothing clipped at the edges, numbers and labels where they belong.
+   - Screenshot every new or changed page at phone width (390px) and desktop width (1280px) from the built site, full page, and look at it: no horizontal scroll, no overlapping text, headings and buttons readable.
+   - Scan the built HTML for missing spaces around links (`grep -roE '[A-Za-z,.:]<a href|</a>[A-Za-z]' dist/client --include=index.html` must print nothing). Astro drops the space when a line ends in a word and the next line starts with `<a`, so keep the word that comes before a link on the link's line.
+   - Read every new paragraph against the content guide checklist.
+   If anything fails, fix it and check again. If you can't fix it, leave the PR open and tell Jesse what is wrong.
 8. Update `docs/growth-queue.json` (status `done`, date, final URLs, keyword numbers) and add 1 to 3 new `todo` items you discovered that build on this one. Append an entry to `docs/build-log.md`.
-9. Commit, push the branch and open a pull request titled `Grow: <what was built>`. The description says what was built, the keyword numbers, which URLs are new, and anything Jesse should decide.
-10. Send Jesse a short summary: what was built, the PR link, and what's next in the queue.
+9. Commit, push the branch and open a pull request titled `Grow: <what was built>`. The description says what was built, the keyword numbers, which URLs are new, and the checks you ran.
+10. Wait for the Vercel preview on the PR to be Ready, then squash-merge the PR into `main` (unless it touches a needs-approval area). After the production deployment is Ready, open the new URL on tracelings.com and confirm it loads.
+11. Send Jesse a short summary: what was built and why, the live URL, the PR link, and what's next in the queue.
 
 ## How to choose new queue items
 
