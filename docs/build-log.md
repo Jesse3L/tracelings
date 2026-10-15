@@ -20,3 +20,10 @@ One entry per growth run, newest last. Keep each entry to a few lines.
 - Keywords (Ubersuggest US): preschool math worksheets 3,600 / SD 27, pre k math worksheets 2,900 / 25, counting worksheets for preschool 1,000 / 28, ten frame worksheets 720 / 20.
 - Linked from `/homeschool/`, `/homeschool/preschool/` and every letter of the week page (opens the count and color page for that week's number). Exported the page helpers in `homeschool.ts` for reuse. Added preview `pre-k-math-ten-frames.webp`.
 - Next in queue: kindergarten addition worksheet maker.
+
+## 2026-10-15: Ten frame printables and worksheets
+- Built `/math-worksheets/ten-frames/` on the same maker as Pre-K math (`series: 'ten-frames'`): blank ten frames (one big counting mat, a double ten frame, six small frames), How many? (1 to 5, 1 to 10, 11 to 20 with two frames), Show the number, Make 10, and ten frame addition (within 5, within 10, sums 11 to 20 in two colors so the make-a-ten step shows).
+- Free: every type and range, one page at a time. Members: five different pages in one PDF or one page per kid, no footer line. Names stay in the browser.
+- Keywords (Ubersuggest US): ten frame printable 2,900 / SD 28, printable ten frame 1,600 / 26, double ten frame 1,300 / 17, blank ten frame 1,300 / 26, ten frame worksheets 720 / 20. Named the page around "ten frame printables" since it beats "ten frame worksheets" by 4x.
+- Linked from `/math-worksheets/pre-k/`, `/homeschool/`, `/homeschool/preschool/`, `/homeschool/kindergarten/`. Added preview `ten-frame-worksheet-make-10.webp`.
+- Next in queue: Kindergarten more or less worksheets.

@@ -766,5 +766,11 @@
     "width": 800,
     "height": 1035,
     "alt": "3rd grade sight words tracing worksheet with Dolch third grade words like about, better, bring to trace on handwriting lines"
+  },
+  "ten-frames": {
+    "src": "/previews/ten-frame-worksheet-make-10.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Make 10 ten frame worksheet: six ten frames with some dots, draw the rest and write how many more make 10"
   }
 }

@@ -4,7 +4,10 @@
 import { PAPER, COLORS, styleName, type Item, type Page, type Paper } from './sheet';
 import { M, rng, header, footer, instruction, circlePath, starPath, heartPath, box, centered, countPage, PLANS } from './homeschool';
 
-export type MathKind = 'count-color' | 'ten-frame' | 'count-circle' | 'more-less' | 'missing';
+export type MathKind = 'count-color' | 'ten-frame' | 'count-circle' | 'more-less' | 'missing'
+  | 'make-ten' | 'tf-add' | 'show-number' | 'blank-frame';
+export type BlankLayout = 'one' | 'double' | 'six';
+export type MathSeries = 'pre-k' | 'ten-frames';
 export type MathRange = 5 | 10 | 20;
 export type Compare = 'more' | 'fewer';
 
@@ -17,6 +20,8 @@ export interface MathOptions {
   paper: Paper;
   credit: boolean;
   seed: number; // "New problems" bumps this
+  blank?: BlankLayout; // blank ten frame printable: one big mat, a double ten frame, or six small frames
+  series?: MathSeries; // which page the sheet was made on (sets the footer label); default 'pre-k'
 }
 
 export const MATH_KINDS: { v: MathKind; label: string; sub: string }[] = [
@@ -27,7 +32,22 @@ export const MATH_KINDS: { v: MathKind; label: string; sub: string }[] = [
   { v: 'missing', label: 'Missing numbers', sub: 'Fill in the number that comes next' },
 ];
 
+/** The ten frame worksheets page (/math-worksheets/ten-frames/). */
+export const TEN_FRAME_KINDS: { v: MathKind; label: string; sub: string }[] = [
+  { v: 'blank-frame', label: 'Blank ten frames', sub: 'Empty frames to use with counters, or to draw in' },
+  { v: 'ten-frame', label: 'How many?', sub: 'Count the dots and write how many (1 to 20)' },
+  { v: 'show-number', label: 'Show the number', sub: 'Draw dots in the frame to show each number' },
+  { v: 'make-ten', label: 'Make 10', sub: 'How many more dots make 10?' },
+  { v: 'tf-add', label: 'Ten frame addition', sub: 'Two colors of dots, then write the sum' },
+];
+export const BLANK_LAYOUTS: { v: BlankLayout; label: string; sub: string }[] = [
+  { v: 'one', label: 'One big frame', sub: 'a counting mat' },
+  { v: 'double', label: 'Double frame', sub: 'for 11 to 20' },
+  { v: 'six', label: 'Six frames', sub: 'to draw in' },
+];
+
 const INK = COLORS.ink;
+const DOT2 = '#e8954a'; // second addend in ten frame addition (orange next to the blue)
 const DOT = '#5b86d9';
 const f2 = (n: number) => Math.round(n * 100) / 100;
 
@@ -52,7 +72,14 @@ function top(items: Item[], w: number, name: string) {
 
 const rangeText = (r: MathRange) => `1 to ${r}`;
 const labelFor = (o: MathOptions) => {
-  const k = MATH_KINDS.find((x) => x.v === o.kind)!.label;
+  if (o.series === 'ten-frames') {
+    const k = TEN_FRAME_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
+    if (o.kind === 'blank-frame') return `Ten frames: ${BLANK_LAYOUTS.find((x) => x.v === (o.blank ?? 'one'))!.label.toLowerCase()}`;
+    if (o.kind === 'make-ten') return `Ten frames: ${k}`;
+    if (o.kind === 'tf-add') return `Ten frames: ${k}, ${o.range === 20 ? 'sums 11 to 20' : `within ${o.range}`}`;
+    return `Ten frames: ${k}, ${o.range === 20 ? '11 to 20' : rangeText(o.range)}`;
+  }
+  const k = MATH_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
   return o.kind === 'count-color' ? `Pre-K math: ${k}, number ${o.number}` : `Pre-K math: ${k}, ${rangeText(o.range)}`;
 };
 
@@ -65,13 +92,22 @@ function pickNumbers(rand: () => number, max: number, count: number, min = 1): n
   return out;
 }
 
-/** A ten frame (2 rows of 5) with the first `dots` boxes filled, top row first. */
-function tenFrame(items: Item[], x: number, y: number, cell: number, dots: number) {
+/**
+ * A ten frame (2 rows of 5) with the first `dots` boxes filled, top row first.
+ * `extra` more boxes after those get a second color (ten frame addition).
+ */
+function tenFrame(items: Item[], x: number, y: number, cell: number, dots: number, extra = 0, width = 1.4) {
   for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) {
-    const xx = x + c * cell, yy = y + r * cell;
-    items.push({ kind: 'path', d: `M${f2(xx)} ${f2(yy)} H${f2(xx + cell)} V${f2(yy + cell)} H${f2(xx)} Z`, color: INK, width: 1.4 });
-    if (r * 5 + c < dots) items.push({ kind: 'dot', cx: xx + cell / 2, cy: yy + cell / 2, r: cell * 0.3, color: DOT });
+    const xx = x + c * cell, yy = y + r * cell, k = r * 5 + c;
+    items.push({ kind: 'path', d: `M${f2(xx)} ${f2(yy)} H${f2(xx + cell)} V${f2(yy + cell)} H${f2(xx)} Z`, color: INK, width });
+    if (k < dots) items.push({ kind: 'dot', cx: xx + cell / 2, cy: yy + cell / 2, r: cell * 0.3, color: DOT });
+    else if (k < dots + extra) items.push({ kind: 'dot', cx: xx + cell / 2, cy: yy + cell / 2, r: cell * 0.3, color: DOT2 });
   }
+}
+
+/** Plain text in the page font (for the + and = in number sentences). */
+function say(items: Item[], text: string, x: number, y: number, size: number, align: 'left' | 'center' | 'right' = 'left') {
+  items.push({ kind: 'text', x, y, size, text, color: INK, align });
 }
 
 function tenFramePage(o: MathOptions): Page {
@@ -86,7 +122,7 @@ function tenFramePage(o: MathOptions): Page {
   const bottom = h - M - 30;
   if (big) {
     // One problem per row: two frames side by side (a double ten frame), then the answer box.
-    const nums = pickNumbers(rand, 20, 5, 6);
+    const nums = pickNumbers(rand, 20, 5, o.series === 'ten-frames' ? 11 : 6); // the ten frames page keeps 1 to 20 to the teens
     const rowH = (bottom - y0) / nums.length;
     const cell = Math.min(34, (rowH - 22) / 2);
     nums.forEach((n, i) => {
@@ -215,6 +251,160 @@ function missingPage(o: MathOptions): Page {
   return { w, h, items };
 }
 
+/** Blank ten frame printables: one big counting mat, a double ten frame, or six small frames to draw in. */
+function blankFramePage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const layout = o.blank ?? 'one';
+  const note = layout === 'six'
+    ? 'Six empty ten frames. Call out a number and draw that many dots, or roll a die and fill a frame.'
+    : layout === 'double'
+      ? 'Two empty ten frames for numbers 11 to 20. Fill the top frame first, then keep going in the bottom one.'
+      : 'An empty ten frame. Put one counter (a button, a coin or a cracker) in each box as you count.';
+  const y0 = instruction(items, w, 'Ten frame', note) + 18;
+  const bottom = h - M - 34;
+  const span = w - 2 * M;
+  if (layout === 'six') {
+    const colW = span / 2;
+    const rowH = (bottom - y0) / 3;
+    const cell = Math.min((colW - 30) / 5, (rowH - 30) / 2);
+    for (let i = 0; i < 6; i++) {
+      const x = M + (i % 2) * colW + (colW - cell * 5) / 2;
+      const y = y0 + Math.floor(i / 2) * rowH + (rowH - cell * 2) / 2;
+      tenFrame(items, x, y, cell, 0, 0, 1.6);
+    }
+  } else if (layout === 'double') {
+    const gap = 36;
+    const cell = Math.min(span / 5, (bottom - y0 - gap) / 4);
+    const x = M + (span - cell * 5) / 2;
+    const y = y0 + (bottom - y0 - (cell * 4 + gap)) / 2;
+    tenFrame(items, x, y, cell, 0, 0, 2.2);
+    tenFrame(items, x, y + cell * 2 + gap, cell, 0, 0, 2.2);
+  } else {
+    const cell = Math.min(span / 5, (bottom - y0) / 2.6);
+    const x = M + (span - cell * 5) / 2;
+    tenFrame(items, x, y0 + 20, cell, 0, 0, 2.4);
+    // Room under the mat to write the number when the frame is done.
+    const by = y0 + 20 + cell * 2 + 40;
+    say(items, 'How many?', M + span / 2 - 40, by + 34, 16, 'right');
+    items.push({ kind: 'path', d: box(M + span / 2 - 20, by, 80, 60, 8), color: INK, width: 1.6 });
+  }
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Show the number: a number, then an empty frame (or two) to draw that many dots. */
+function showNumberPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const big = o.range === 20;
+  const y0 = instruction(items, w, 'Show the number', big
+    ? 'Read the number. Draw that many dots, filling the first ten frame before you start the second.'
+    : 'Read the number. Draw that many dots in the ten frame, starting in the top row.') + 12;
+  const rand = rng(`sn-${o.range}-${o.seed}`);
+  const bottom = h - M - 30;
+  if (big) {
+    const nums = pickNumbers(rand, 20, 5, 11);
+    const rowH = (bottom - y0) / nums.length;
+    const cell = Math.min(34, (rowH - 22) / 2);
+    const fx = M + 86;
+    nums.forEach((n, i) => {
+      const y = y0 + i * rowH + (rowH - cell * 2) / 2;
+      centered(items, String(n), M + 34, y + cell + 17, 34);
+      tenFrame(items, fx, y, cell, 0);
+      tenFrame(items, fx + cell * 5 + 18, y, cell, 0);
+    });
+  } else {
+    const nums = pickNumbers(rand, o.range, 6);
+    const rowH = (bottom - y0) / 3;
+    const colW = (w - 2 * M) / 2;
+    const cell = Math.min(36, (colW - 90) / 5);
+    nums.forEach((n, i) => {
+      const cx = M + (i % 2) * colW;
+      const y = y0 + Math.floor(i / 2) * rowH + (rowH - cell * 2) / 2;
+      centered(items, String(n), cx + 26, y + cell + 17, 34);
+      tenFrame(items, cx + 62, y, cell, 0);
+    });
+  }
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Make 10: each frame has some dots; draw the rest and write how many more make 10. */
+function makeTenPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, 'Make 10', 'Count the dots. Draw more dots to fill the ten frame, then write how many more make 10.') + 12;
+  const rand = rng(`mt-${o.seed}`);
+  const nums = pickNumbers(rand, 9, 6);
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / 6;
+  const cell = Math.min(34, (rowH - 18) / 2);
+  const fw = cell * 5;
+  nums.forEach((n, i) => {
+    const y = y0 + i * rowH + (rowH - cell * 2) / 2;
+    if (i > 0) items.push({ kind: 'line', x1: M, y1: y0 + i * rowH, x2: w - M, y2: y0 + i * rowH, color: COLORS.desc, width: 1 });
+    tenFrame(items, M, y, cell, n);
+    // Number sentence: n + [ ] = 10
+    const ty = y + cell + 9;
+    const sx = M + fw + 34;
+    say(items, `${n}  +`, sx, ty, 26);
+    items.push({ kind: 'path', d: box(sx + 66, y + cell - 26, 58, 52, 8), color: INK, width: 1.5 });
+    say(items, '=  10', sx + 140, ty, 26);
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Ten frame addition: blue dots plus orange dots, write the sum. Sums up to 5, 10 or 20. */
+function tfAddPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const big = o.range === 20;
+  const y0 = instruction(items, w, 'Ten frame addition', big
+    ? 'Count the blue dots and the orange dots. How many in all? Notice how the orange dots fill the first frame to make 10.'
+    : 'Count the blue dots and the orange dots. How many in all? Write the answer in the box.') + 12;
+  const rand = rng(`ta-${o.range}-${o.seed}`);
+  const bottom = h - M - 30;
+  const rows = 6;
+  const rowH = (bottom - y0) / rows;
+  const used = new Set<string>();
+  const pairs: [number, number][] = [];
+  for (let guard = 0; pairs.length < rows && guard < 400; guard++) {
+    let a: number, b: number;
+    if (big) { a = 5 + Math.floor(rand() * 5); b = 11 - a + Math.floor(rand() * (Math.min(9, 20 - a) - (11 - a) + 1)); } // a 5..9, sum 11..20
+    else { const s = 2 + Math.floor(rand() * (o.range - 1)); a = 1 + Math.floor(rand() * (s - 1)); b = s - a; }
+    const k = `${a}+${b}`;
+    if (used.has(k) && guard < 300) continue;
+    used.add(k);
+    pairs.push([a, b]);
+  }
+  const cell = Math.min(big ? 26 : 32, (rowH - 18) / 2);
+  pairs.forEach(([a, b], i) => {
+    const y = y0 + i * rowH + (rowH - cell * 2) / 2;
+    if (i > 0) items.push({ kind: 'line', x1: M, y1: y0 + i * rowH, x2: w - M, y2: y0 + i * rowH, color: COLORS.desc, width: 1 });
+    let fx = M;
+    tenFrame(items, fx, y, cell, Math.min(10, a), Math.max(0, Math.min(10, a + b) - a));
+    fx += cell * 5;
+    if (big) {
+      fx += 12;
+      tenFrame(items, fx, y, cell, 0, Math.max(0, a + b - 10));
+      fx += cell * 5;
+    }
+    const ty = y + cell + 9;
+    const sx = fx + 28;
+    say(items, `${a}  +  ${b}  =`, sx, ty, 24);
+    const bx = sx + (a >= 10 || b >= 10 ? 118 : 104);
+    items.push({ kind: 'path', d: box(bx, y + cell - 26, 62, 52, 8), color: INK, width: 1.5 });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
 export function buildMathPage(o: MathOptions): Page {
   if (o.kind === 'count-color') {
     const n = Math.max(1, Math.min(20, Math.round(o.number)));
@@ -226,6 +416,10 @@ export function buildMathPage(o: MathOptions): Page {
     return p;
   }
   if (o.kind === 'ten-frame') return tenFramePage(o);
+  if (o.kind === 'blank-frame') return blankFramePage(o);
+  if (o.kind === 'show-number') return showNumberPage(o);
+  if (o.kind === 'make-ten') return makeTenPage(o);
+  if (o.kind === 'tf-add') return tfAddPage(o);
   if (o.kind === 'count-circle') return countCirclePage(o);
   if (o.kind === 'more-less') return moreLessPage(o);
   return missingPage(o);
