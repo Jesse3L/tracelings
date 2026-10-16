@@ -49,3 +49,9 @@ One entry per growth run, newest last. Keep each entry to a few lines.
 - Linked from the K plan table (each family week and vowel review), the K weekly pack maker, `/homeschool/kindergarten/`, `/homeschool/` and `/sight-words/`. Previews `word-family-worksheet-at-hunt.webp` and `<family>-word-family-house.webp`.
 - Checks: build passes; every page type rendered at Letter and A4 with a long name for all 17 families (fixed crowded color boxes on the list page and slider slits that read like the letter l); phone and desktop screenshots, no horizontal scroll; link space grep clean; kept "-at" from splitting across lines on phones.
 - Next in queue: Pre-K math page in the weekly pack. New todo items: word families in the K weekly pack, CVC words worksheets, and the next word families (-am, -ad, -ill, -ell, -ack, -ock).
+
+## 2026-10-16: AI assistant visibility
+- Jesse noticed visits coming from ChatGPT. Added `public/llms.txt`, a plain-text guide to every hub and tool page for ChatGPT, Claude, Perplexity and other assistants.
+- `robots.txt` now names the AI search and browsing crawlers (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot and others) as allowed, so a future rule can't block them by accident. Nothing was blocked before.
+- Playbook step 6 now says: add new hub pages to `llms.txt`, open with a plain answer plus FAQ schema, and ping IndexNow after deploy.
+- Submitted every sitemap URL to IndexNow after deploy.
