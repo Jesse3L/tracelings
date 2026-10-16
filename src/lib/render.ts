@@ -17,7 +17,8 @@ export function pageToSvg(p: Page): string {
       out.push(`<circle cx="${it.cx}" cy="${it.cy}" r="${it.r}" fill="${it.color}"/>`);
     } else {
       const anchor = it.align === 'center' ? 'middle' : it.align === 'right' ? 'end' : 'start';
-      out.push(`<text x="${it.x}" y="${it.y}" font-size="${it.size}" fill="${it.color}" text-anchor="${anchor}" font-family="Helvetica, Arial, sans-serif">${esc(it.text)}</text>`);
+      const rot = it.rotate ? ` transform="rotate(${it.rotate} ${it.x} ${it.y})"` : '';
+      out.push(`<text x="${it.x}" y="${it.y}" font-size="${it.size}" fill="${it.color}" text-anchor="${anchor}"${rot} font-family="Helvetica, Arial, sans-serif">${esc(it.text)}</text>`);
     }
   }
   out.push('</svg>');
@@ -30,7 +31,7 @@ const hex = (h: string) => {
 };
 
 export async function pagesToPdf(pages: Page[], title = 'Name tracing worksheet'): Promise<Uint8Array> {
-  const { PDFDocument, rgb, StandardFonts, LineCapStyle } = await import('@cantoo/pdf-lib');
+  const { PDFDocument, rgb, StandardFonts, LineCapStyle, FillRule, degrees } = await import('@cantoo/pdf-lib');
   const doc = await PDFDocument.create();
   doc.setTitle(title);
   doc.setCreator('Tracelings');
@@ -52,13 +53,19 @@ export async function pagesToPdf(pages: Page[], title = 'Name tracing worksheet'
           borderWidth: it.width > 0 ? it.width : undefined,
           borderDashArray: it.dash,
           borderLineCap: LineCapStyle.Round,
+          fillRule: it.evenOdd ? FillRule.EvenOdd : undefined,
         });
       } else if (it.kind === 'dot') {
         page.drawCircle({ x: it.cx, y: Y(it.cy), size: it.r, color: c(it.color) });
       } else {
         const tw = font.widthOfTextAtSize(it.text, it.size);
-        const x = it.align === 'center' ? it.x - tw / 2 : it.align === 'right' ? it.x - tw : it.x;
-        page.drawText(it.text, { x, y: Y(it.y), size: it.size, font, color: c(it.color) });
+        const k = it.align === 'center' ? 0.5 : it.align === 'right' ? 1 : 0;
+        if (it.rotate) {
+          // Turned text (folded little books): step back along the turned baseline for center and right alignment.
+          const r = (it.rotate * Math.PI) / 180;
+          const sx = it.x - k * tw * Math.cos(r), sy = it.y - k * tw * Math.sin(r);
+          page.drawText(it.text, { x: sx, y: Y(sy), size: it.size, font, color: c(it.color), rotate: degrees(-it.rotate) });
+        } else page.drawText(it.text, { x: it.x - k * tw, y: Y(it.y), size: it.size, font, color: c(it.color) });
       }
     }
   }
