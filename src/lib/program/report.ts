@@ -2,6 +2,7 @@
 import type { CheckIn, ChildPlan, ChildProfile, SkillId } from './types';
 import { PAPER, COLORS, type Item, type Page, type Paper } from '../sheet';
 import { PLANS, M, para, footer, box } from '../homeschool';
+import { weekTitle } from './engine';
 
 export const SKILL_LABELS: Record<SkillId, string> = {
   'name-writing': 'Writes their name',
@@ -63,7 +64,7 @@ export function buildProgressReport(o: { name: string; profile: ChildProfile; pl
     const filled = st.state === 'got-it';
     items.push({ kind: 'path', d: box(M, y - 11, 13, 13, 3), color: INK, width: 1.1, ...(filled ? { fill: '#9fd3b8' } : {}) });
     items.push({ kind: 'text', x: M + 22, y, size: 12, text: SKILL_LABELS[s], color: INK, align: 'left' });
-    items.push({ kind: 'text', x: w - M - 120, y, size: 12, text: label[st.state], color: INK, align: 'left' });
+    items.push({ kind: 'text', x: w - M - 170, y, size: 12, text: label[st.state], color: INK, align: 'left' });
     if (st.at) items.push({ kind: 'text', x: w - M, y, size: 10, text: fmtDate(st.at), color: COLORS.quiet, align: 'right' });
   }
   y += 34;
@@ -77,8 +78,7 @@ export function buildProgressReport(o: { name: string; profile: ChildProfile; pl
   shown.forEach((wk, i) => {
     const col = i < Math.ceil(shown.length / 2) ? 0 : 1;
     const row = col === 0 ? i : i - Math.ceil(shown.length / 2);
-    const base = PLANS[wk.level].weeks[wk.baseWeek - 1];
-    const text = `Week ${wk.index}: ${base?.title ?? ''}${wk.extraReview ? ' (review)' : ''}${wk.index === o.plan.current ? ' (now)' : ''}`;
+    const text = `Week ${wk.index}: ${weekTitle(wk)}${wk.index === o.plan.current ? ', this week' : ''}`;
     items.push({ kind: 'text', x: M + col * colW, y: y + 18 + row * 16, size: 10.5, text, color: INK, align: 'left' });
   });
   if (weeks.length > shown.length) items.push({ kind: 'text', x: M, y: h - M - 12, size: 9, text: `Earlier weeks not shown: 1 to ${weeks.length - shown.length}.`, color: COLORS.quiet, align: 'left' });
