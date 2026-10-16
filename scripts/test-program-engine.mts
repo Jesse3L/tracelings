@@ -3,7 +3,8 @@
 import assert from 'node:assert/strict';
 import { placeChild, applyCheckIn, weekTitle, baseWeekOf, mathTitle } from '../src/lib/program/engine';
 import { templateContentFor, freeWeekContent } from '../src/lib/program/templates';
-import { THEME_IDS } from '../src/lib/program/themes';
+import { littleBookPlan, problemIcon } from '../src/lib/program/pages';
+import { THEME_IDS, THEMES, mentionsIcon } from '../src/lib/program/themes';
 import type { ChildProfile, ChildPlan } from '../src/lib/program/types';
 
 let passed = 0;
@@ -151,6 +152,48 @@ test('template content exists for every theme, level and week, with the week wor
     const free = freeWeekContent(theme, age === 3 ? 'pre-k' : 'kindergarten');
     assert.ok(free.story.pages.length >= 4);
   }
+});
+
+test('every template story page has a picture of a thing that page names (every theme, level and week)', () => {
+  const check = (theme: (typeof THEME_IDS)[number], story: { pages: string[]; icons?: (string | null)[] }, where: string) => {
+    assert.ok(Array.isArray(story.icons) && story.icons.length === story.pages.length, `${where}: icons parallel to pages`);
+    story.pages.forEach((p, i) => {
+      const id = story.icons![i];
+      assert.ok(id, `${where} page ${i + 1} has no picture: "${p}"`);
+      assert.ok(THEMES[theme].icons.some((x) => x.id === id), `${where} page ${i + 1}: ${id} is not a ${theme} picture`);
+      assert.ok(mentionsIcon(theme, p, id!), `${where} page ${i + 1}: [${id}] not named in "${p}"`);
+    });
+  };
+  let n = 0;
+  const starts: Partial<ChildProfile>[] = [{ ageYears: 3 }, { ageYears: 3, skills: { 'letter-names': 'learning' } }, { ageYears: 5 }, { ageYears: 5, skills: { 'letter-names': 'got-it' } },
+    { ageYears: 6, skills: { 'letter-names': 'got-it', 'letter-sounds': 'got-it', blending: 'got-it', 'word-families': 'got-it', 'count-20': 'got-it', 'count-10': 'got-it', numerals: 'got-it', 'add-5': 'got-it' } }];
+  for (const theme of THEME_IDS) {
+    for (const level of ['pre-k', 'kindergarten'] as const) { check(theme, freeWeekContent(theme, level).story, `${theme} free ${level}`); n++; }
+    for (const s of starts) {
+      const p = profile({ ...s, interests: [theme] });
+      for (const w of placeChild(p).weeks) { check(theme, templateContentFor(p, w).story, `${theme} ${w.level} week ${w.index} (base ${w.baseWeek})`); n++; }
+    }
+  }
+  console.log(`      ${n} template stories checked`);
+});
+
+test('little book pictures: reuse, aliases, buddy, "Draw it!" and the story\'s own icons', () => {
+  const plan = (pages: string[], icons?: (string | null)[]) => littleBookPlan({ name: 'Rex', theme: 'dinosaurs' }, { title: 'T', pages, icons }).pics.slice(0, pages.length);
+  // Two pages about the T-rex both show it; plurals and spellings match; the first thing named wins.
+  assert.deepEqual(plan(['A T-rex sat.', 'The T rex ate.', 'Two big eggs and a bone.', 'The long neck dinosaur ate leaves.']), ['t-rex', 't-rex', 'egg', 'long-neck']);
+  // Nothing pictured on the page: no picture (a "Draw it!" box), never the next unused icon. A child called Rex is not a T-rex.
+  assert.deepEqual(plan(['{{name}} ate green leaves.', 'It was fun.', 'The dino ran.']), [null, null, 't-rex']);
+  // The story's own pick is used when the page names it, and ignored when it doesn't.
+  assert.deepEqual(plan(['A T-rex by a volcano.', 'An egg.'], ['volcano', 'bone']), ['volcano', 'egg']);
+  // The buddy's picture only when the page names the buddy.
+  assert.deepEqual(littleBookPlan({ name: '', theme: 'sports' }, { title: 'T', pages: ['Go, team!', 'A swim race.'] }).pics.slice(0, 2), ['soccer-ball', null]);
+});
+test('word problem pictures count what the numbers count', () => {
+  assert.equal(problemIcon('dinosaurs', '2 T-rexes and 3 more T-rexes.', 'egg', [2, 3])?.id, 't-rex');
+  assert.equal(problemIcon('dinosaurs', 'A dinosaur takes 4 steps, then 1 more.', 't-rex', [4, 1]), null);
+  assert.equal(problemIcon('dinosaurs', 'There are 3 big dinosaur eggs and 1 more.', undefined, [3, 1])?.id, 'egg');
+  assert.equal(problemIcon('trains', 'A train has 4 train cars and 2 more.', undefined, [4, 2])?.id, 'passenger-car');
+  assert.equal(problemIcon('farm', 'Which is more, 3 or 5? Count the cows.', 'cow', [3, 5])?.id, 'cow');
 });
 
 console.log(`\n${passed} tests passed`);

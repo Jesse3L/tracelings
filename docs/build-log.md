@@ -55,3 +55,10 @@ One entry per growth run, newest last. Keep each entry to a few lines.
 - `robots.txt` now names the AI search and browsing crawlers (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot and others) as allowed, so a future rule can't block them by accident. Nothing was blocked before.
 - Playbook step 6 now says: add new hub pages to `llms.txt`, open with a plain answer plus FAQ schema, and ping IndexNow after deploy.
 - Submitted every sitemap URL to IndexNow after deploy.
+
+## 2026-10-16: Little book pictures match the story
+- Jesse printed two AI weeks and the pictures didn't match the words (a page about eating leaves showed a volcano). The old picker never reused a picture and fell back to the next unused one.
+- Stories now say which picture goes on each page (`story.icons`). The AI gets the theme's picture list, must name one pictured thing per page, and a story with more than one page lacking a matching picture is retried, then falls back to the template.
+- Every template story (24 free week 1s and the generated weeks) sets `icons`. Free week 1 pages that named nothing pictured were reworded.
+- Older cached AI weeks use a forgiving matcher (plurals, aliases in `themes.ts` `words`, reuse allowed, the first thing named wins). A page that names nothing pictured gets a dashed "Draw it!" box. Word problems count what follows the numbers ("4 steps" draws plain circles, not T-rexes).
+- Checks: `scripts/audit-story-pictures.mts` (every template week plus 120 AI-style fixture stories): 0 mismatches, against 5,381 wrong pictures under the old logic. Little books rendered for dinosaurs, trucks, bugs and space at Letter and A4 with a long name; build passes; link space grep clean.

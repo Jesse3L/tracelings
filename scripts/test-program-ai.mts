@@ -32,6 +32,8 @@ const good = () => ({
       `{{name}} and the dinosaur ${facts.sightWords[1] ?? 'see'} the egg.`,
       'Tap, tap, tap. A baby dinosaur! {{name}} can pat it.',
     ],
+    // Page 1 names nothing with a picture (one such page is allowed); "dinosaur" is a word for the T-rex picture.
+    icons: [null, 't-rex', 'egg', 'egg', 't-rex', 't-rex'] as (string | null)[],
   },
   wordProblems: [
     { text: '{{name}} sees 2 dinosaurs. Then 3 more come. How many dinosaurs now?', a: 2, b: 3, op: '+', answer: 99 },
@@ -205,9 +207,43 @@ await test('icon: kept when it is a theme icon named in the text, dropped otherw
   assert.equal(c.wordProblems[2].icon, undefined);
   assert.equal(c.wordProblems[3].icon, undefined);
 });
+await test('story icons: kept when the page names them, wrong or unnamed ones dropped', () => {
+  const g = fixture();
+  g.story.icons = ['t-rex', 't-rex', 'volcano', 'robot', 'egg', 't-rex'];
+  // page 1 names no T-rex: dropped. page 3 is about an egg, not a volcano: dropped -> 2 pages without a picture.
+  rejects(() => validateContent(g, facts), /without a matching picture/);
+  g.story.icons = [null, 't-rex', 'egg', 'robot', 'egg', 't-rex'];
+  rejects(() => validateContent(g, facts), /without a matching picture/);   // page 1 none + page 4 robot
+  g.story.icons = [null, 't-rex', 'egg', 'egg', 'egg', 't-rex'];
+  const c = validateContent(g, facts);
+  assert.deepEqual(c.story.icons, [null, 't-rex', 'egg', 'egg', 'egg', 't-rex']);
+});
+await test('story icons: forgiving matcher (plurals, spaces, aliases, the buddy)', () => {
+  const g = fixture();
+  g.story.pages[1] = 'Two T rexes sat by the hat.';
+  g.story.pages[2] = 'A long neck dinosaur and the eggs.';
+  g.story.icons = [null, 't-rex', 'long-neck', 'egg', 't-rex', 't-rex'];
+  assert.deepEqual(validateContent(g, facts).story.icons, [null, 't-rex', 'long-neck', 'egg', 't-rex', 't-rex']);
+});
+await test('story icons: missing icons array fails (every page would be unpictured)', () => {
+  const g = fixture(); delete (g.story as any).icons; rejects(() => validateContent(g, facts), /without a matching picture/);
+});
+await test('generate: a story with mismatched pictures retries, then falls back to the template', async () => {
+  const g = fixture(); g.story.icons = ['volcano', 'volcano', 'volcano', 'volcano', 'volcano', 'volcano'];
+  const c = seq(reply(g), reply(g)); const r = await generateWeekContent(profile, famWeek, { caller: c });
+  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 2);
+  assert.equal(r.content.story.icons?.length, r.content.story.pages.length);
+});
+await test('prompt: lists every story picture id with its name and asks for story.icons', () => {
+  const u = _prompts(profile, famWeek).user;
+  for (const i of THEMES.dinosaurs.icons) assert.ok(u.includes(`${i.id}: ${i.one}`), i.id);
+  assert.ok(u.includes('story.icons'));
+  assert.ok(_prompts(profile, famWeek).system.includes('story.icons'));
+});
 await test('schema: problems require icon, and Haiku-safe request (no temperature)', async () => {
   const { OUTPUT_SCHEMA } = await import('../src/lib/server/ai');
   assert.ok((OUTPUT_SCHEMA.properties.wordProblems.items.required as readonly string[]).includes('icon'));
+  assert.ok((OUTPUT_SCHEMA.properties.story.required as readonly string[]).includes('icons'));
   const src = (await import('node:fs')).readFileSync(new URL('../src/lib/server/ai.ts', import.meta.url), 'utf8');
   assert.ok(!/temperature\s*:/.test(src), 'temperature must not be sent to Haiku 5.5');
 });

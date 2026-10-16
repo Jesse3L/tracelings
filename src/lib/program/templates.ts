@@ -5,7 +5,7 @@
 import { PLANS, FAMILIES, type Level, type Week } from '../homeschool';
 import lettersData from '../../data/letters.json';
 import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from './types';
-import { THEMES, type ThemeIcon } from './themes';
+import { THEMES, storyIcon, type ThemeIcon } from './themes';
 import { baseWeekOf, reviewLetters, type MathStep } from './engine';
 
 type Problem = WeekContent['wordProblems'][number];
@@ -35,7 +35,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'They stomped past one volcano and one tall palm tree.',
         'At the end of the day, the T-rex curled up in a nest of leaves.',
         'Good night, little T-rex. Good night, {{name}}.',
-      ] },
+      ], icons: ['egg', 't-rex', 't-rex', 'volcano', 't-rex', 't-rex'] },
       problems: [
         add('{{name}} finds 1 bone. Then {{name}} finds 1 more. How many bones now?', 1, 1, 'bone'),
         add('2 dinosaur eggs sit in a nest. 1 more egg rolls in. How many eggs?', 2, 1, 'egg'),
@@ -50,13 +50,13 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     },
     kindergarten: {
       story: { title: '{{name}} Can Dig', pages: [
-        '{{name}} has a big hat and a red pan.',
-        '{{name}} can dig and dig in the mud.',
+        '{{name}} has a big hat and a red pan to dig up a bone.',
+        '{{name}} can dig and dig in the mud by a big footprint.',
         'Look! A big bone and a big egg.',
         'The egg can crack. Tap, tap, tap!',
         'It is a T-rex! The T-rex is not big. It is a little T-rex.',
         '{{name}} and the T-rex sit in the sun.',
-      ] },
+      ], icons: ['bone', 'footprint', 'bone', 'egg', 't-rex', 't-rex'] },
       problems: [
         add('{{name}} digs up 2 bones. Then {{name}} digs up 3 more. How many bones in all?', 2, 3, 'bone'),
         add('There are 4 eggs in a nest and 1 more egg. How many eggs?', 4, 1, 'egg'),
@@ -76,12 +76,12 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     'pre-k': {
       story: { title: '{{name}} Drives the Big Truck', pages: [
         'Beep, beep! Here comes one big dump truck.',
-        '{{name}} climbs up high and holds the big wheel.',
+        '{{name}} climbs up into the dump truck and holds the big wheel.',
         'They drive past one bus, one car and one tall digger.',
         'Stop at the red light. Go at the green light!',
         'The dump truck tips its load. Down come the rocks!',
-        'Back to the garage. Great driving, {{name}}!',
-      ] },
+        'The dump truck rolls back to the garage. Great driving, {{name}}!',
+      ], icons: ['dump-truck', 'dump-truck', 'bus', 'traffic-light', 'dump-truck', 'dump-truck'] },
       problems: [
         add('1 car is in the garage. 1 more car drives in. How many cars?', 1, 1, 'car'),
         add('{{name}} sees 2 trucks on the road and then 2 more. How many trucks?', 2, 2, 'dump-truck'),
@@ -96,13 +96,13 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     },
     kindergarten: {
       story: { title: '{{name}} and the Red Van', pages: [
-        '{{name}} has a red van and a big rig.',
-        'The van can go up a hill. Zip, zip!',
+        '{{name}} has a red van and a big dump truck.',
+        'The van can go up a hill past a red cone. Zip, zip!',
         'A dump truck is in the mud. It can not get up.',
-        '{{name}} and the van tug and tug.',
+        '{{name}} and the van get a tow truck. Tug, tug!',
         'Up it gets! The dump truck is not stuck.',
         'The van and the truck nap in the garage.',
-      ] },
+      ], icons: ['dump-truck', 'cone', 'dump-truck', 'tow-truck', 'dump-truck', 'dump-truck'] },
       problems: [
         add('{{name}} parks 3 cars and then 2 more cars. How many cars in all?', 3, 2, 'car'),
         sub('6 cones are on the road. A truck picks up 2. How many cones are left?', 6, 2, 'cone'),
@@ -126,8 +126,8 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'One day it meets {{name}}. "What a lovely name," says the unicorn.',
         'They hop from cloud to cloud and find one sparkly gem.',
         'The unicorn draws {{name}}\'s name in the sky with a rainbow.',
-        'Then they both curl up for a nap. Sweet dreams!',
-      ] },
+        'Then they curl up under the stars for a nap. Sweet dreams!',
+      ], icons: ['unicorn', 'unicorn', 'unicorn', 'cloud', 'unicorn', 'star'] },
       problems: [
         add('The unicorn finds 1 gem, then 1 more. How many gems?', 1, 1, 'gem'),
         add('2 hearts float by. Then 1 more heart floats by. How many hearts?', 2, 1, 'heart'),
@@ -148,7 +148,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'Oh no! The gem fell in the mud.',
         '{{name}} dug and dug and got the gem.',
         'The unicorn and {{name}} hug. It is a fun day!',
-      ] },
+      ], icons: ['unicorn', 'gem', 'unicorn', 'gem', 'gem', 'unicorn'] },
       problems: [
         add('{{name}} has 3 gems. The unicorn gives 2 more. How many gems now?', 3, 2, 'gem'),
         sub('There are 6 clouds in the sky. 2 float away. How many clouds are left?', 6, 2, 'cloud'),
@@ -167,13 +167,13 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
   ocean: {
     'pre-k': {
       story: { title: '{{name}} Under the Sea', pages: [
-        '{{name}} puts on a mask and swims down, down, down.',
+        '{{name}} puts on a mask and swims down, down, down past the fish.',
         'Hello, little crab! The crab waves one big claw.',
         'One whale sings a long, low song.',
         'One octopus wiggles all of its arms at once.',
         'The little crab writes {{name}}\'s name in the sand.',
-        'Swish! A wave takes {{name}} home for supper.',
-      ] },
+        'Swish! A sea turtle gives {{name}} a ride home for supper.',
+      ], icons: ['fish', 'crab', 'whale', 'octopus', 'crab', 'turtle'] },
       problems: [
         add('1 fish swims by. Then 1 more fish swims by. How many fish?', 1, 1, 'fish'),
         add('The crab finds 2 shells and then 1 more. How many shells?', 2, 1, 'shell'),
@@ -188,13 +188,13 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     },
     kindergarten: {
       story: { title: '{{name}} and the Crab', pages: [
-        '{{name}} sat in the sand in the hot sun.',
+        '{{name}} sat in the hot sand and got a shell.',
         'A red crab ran up to {{name}}.',
         'The crab had a big shell and a net.',
         '"Can I dig?" said the crab. "Yes, you can!"',
         'The crab and {{name}} dig a big pit.',
-        'A wet wave got them. Splash! It is fun.',
-      ] },
+        'A wet wave got the crab and {{name}}. Splash! It is fun.',
+      ], icons: ['shell', 'crab', 'crab', 'crab', 'crab', 'crab'] },
       problems: [
         add('{{name}} has 4 shells and finds 2 more. How many shells in all?', 4, 2, 'shell'),
         sub('7 fish swim by the rock. 3 swim away. How many fish are left?', 7, 3, 'fish'),
@@ -216,10 +216,10 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         '{{name}} climbs into one shiny rocket. 3, 2, 1, blast off!',
         'Up past the clouds. Up past the birds. Up to the stars!',
         'A little alien waves hello. "Who are you?"',
-        '"I am {{name}}," says {{name}}, and spells it out loud.',
+        '"I am {{name}}," says {{name}}, and spells it for the alien.',
         'They float around one big planet with a ring.',
         'Time to fly home. Good night, moon. Good night, little alien.',
-      ] },
+      ], icons: ['rocket', 'star', 'alien', 'alien', 'planet', 'moon'] },
       problems: [
         add('1 rocket blasts off. Then 1 more rocket blasts off. How many rockets?', 1, 1, 'rocket'),
         add('{{name}} sees 2 stars and then 2 more stars. How many stars?', 2, 2, 'star'),
@@ -235,12 +235,12 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     kindergarten: {
       story: { title: '{{name}} in the Big Rocket', pages: [
         '{{name}} got in a big red rocket.',
-        'Up, up, up it went! It is not a bus. It is a jet in space.',
+        'Up, up, up the rocket went! It is not a bus. It is a jet in space.',
         'A little alien sat on the moon.',
         'The alien had a map and a hat.',
         '{{name}} and the alien zip to the sun. It is hot!',
         'Back in the rocket, {{name}} had a nap.',
-      ] },
+      ], icons: ['rocket', 'rocket', 'alien', 'alien', 'alien', 'rocket'] },
       problems: [
         add('{{name}} sees 5 stars and then 2 more. How many stars in all?', 5, 2, 'star'),
         sub('There are 6 rockets on the pad. 4 blast off. How many rockets are left?', 6, 4, 'rocket'),
@@ -259,13 +259,13 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
   farm: {
     'pre-k': {
       story: { title: '{{name}} on the Farm', pages: [
-        'Cock-a-doodle-doo! {{name}} wakes up on the farm.',
+        'Cluck, cluck! A hen wakes {{name}} up on the farm.',
         'One cow says moo. One pig says oink.',
         'One hen lays one brown egg. {{name}} holds it carefully.',
         '{{name}} rides on the big tractor with the farmer.',
         'The farmer paints {{name}}\'s name on the red barn door.',
-        'Night falls. All the animals are asleep. Good night, farm!',
-      ] },
+        'Night falls. The animals sleep in the barn. Good night, farm!',
+      ], icons: ['hen', 'cow', 'hen', 'tractor', 'barn', 'barn'] },
       problems: [
         add('1 pig rolls in the mud. Then 1 more pig rolls in. How many pigs?', 1, 1, 'pig'),
         add('2 hens peck in the yard. 1 more hen comes out. How many hens?', 2, 1, 'hen'),
@@ -283,10 +283,10 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'A big pig sat in the mud.',
         'A red hen and a cat ran to the pig.',
         '"Get up, pig!" said the hen. The pig did not get up.',
-        '{{name}} had a bun and a cup of milk.',
+        '{{name}} had a bun and a cup of milk from the cow.',
         'The pig got up fast! It ran to {{name}}.',
         '{{name}} fed the pig. Yum, yum! The pig is glad.',
-      ] },
+      ], icons: ['pig', 'hen', 'pig', 'cow', 'pig', 'pig'] },
       problems: [
         add('{{name}} feeds 3 hens and then 4 more hens. How many hens in all?', 3, 4, 'hen'),
         sub('There are 5 pigs in the mud. 2 pigs get out. How many pigs are still in the mud?', 5, 2, 'pig'),
@@ -305,13 +305,13 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
   bugs: {
     'pre-k': {
       story: { title: '{{name}} and the Little Ladybug', pages: [
-        '{{name}} goes out to the garden with a magnifying glass.',
+        '{{name}} takes a magnifying glass to the garden and finds one busy ant.',
         'There on one green leaf sits one little ladybug.',
         'The ladybug has spots. {{name}} counts them, one by one.',
         'A bee buzzes by. A butterfly flutters past.',
         'The ladybug walks across {{name}}\'s hand. It tickles!',
         'Bye, little ladybug. See you tomorrow!',
-      ] },
+      ], icons: ['ant', 'leaf', 'ladybug', 'bee', 'ladybug', 'ladybug'] },
       problems: [
         add('1 ladybug sits on a leaf. 1 more lands. How many ladybugs?', 1, 1, 'ladybug'),
         add('{{name}} sees 2 bees and then 2 more bees. How many bees?', 2, 2, 'bee'),
@@ -328,11 +328,11 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
       story: { title: '{{name}} and the Bug', pages: [
         'A red bug sat on a big leaf.',
         'The bug had six legs and a lot of spots.',
-        '{{name}} sat and got a net.',
+        '{{name}} sat by a snail and got a net.',
         'Hop! The bug hid in a web. Uh oh!',
         'A spider and a bug? No! The spider is not mad.',
         '{{name}} and the bug sit in the sun. It is fun.',
-      ] },
+      ], icons: ['ladybug', 'ladybug', 'snail', 'ladybug', 'spider', 'ladybug'] },
       problems: [
         add('{{name}} sees 4 ants and then 3 more ants. How many ants in all?', 4, 3, 'ant'),
         sub('There are 6 bees by the flower. 2 fly away. How many bees are left?', 6, 2, 'bee'),
@@ -352,12 +352,12 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     'pre-k': {
       story: { title: '{{name}} at the Castle', pages: [
         'At the top of the hill stands one tall castle.',
-        '{{name}} knocks on the big gate. Knock, knock!',
+        '{{name}} knocks on the big castle gate. Knock, knock!',
         'Out peeks one little dragon. It is shy, and very friendly.',
         'The dragon gives {{name}} one shiny crown.',
-        'Everyone cheers: "Hooray for {{name}}!"',
+        'The princess cheers: "Hooray for {{name}}!"',
         'They have a party in the castle, then rest by the warm fire.',
-      ] },
+      ], icons: ['castle', 'castle', 'dragon', 'dragon', 'princess', 'castle'] },
       problems: [
         add('1 crown sits on the table. 1 more crown is put down. How many crowns?', 1, 1, 'crown'),
         add('The dragon has 2 rings and finds 2 more. How many rings?', 2, 2, 'ring'),
@@ -373,12 +373,12 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     kindergarten: {
       story: { title: '{{name}} and the Little Dragon', pages: [
         'A little dragon sat on top of a big castle.',
-        'It had a red hat and a gem.',
-        '{{name}} ran up and up and up the steps.',
+        'It had a red hat and a gold ring.',
+        '{{name}} ran up and up the castle steps.',
         '"Can I pet you?" said {{name}}. The dragon did a nod.',
         'The dragon and {{name}} sat in the sun.',
         'The dragon is not sad. It is a fun day at the castle.',
-      ] },
+      ], icons: ['dragon', 'ring', 'castle', 'dragon', 'dragon', 'dragon'] },
       problems: [
         add('{{name}} has 3 rings and finds 3 more. How many rings in all?', 3, 3, 'ring'),
         sub('There are 7 frogs by the castle. 2 hop away. How many frogs are left?', 7, 2, 'frog'),
@@ -403,12 +403,12 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'Into one dark tunnel. Out into the sun!',
         'The engine toots {{name}}\'s name: one toot for each letter.',
         'Last stop. Thank you, little engine. See you tomorrow!',
-      ] },
+      ], icons: ['engine', 'ticket', 'engine', 'tunnel', 'engine', 'engine'] },
       problems: [
         add('1 train car is on the track. 1 more car hooks on. How many train cars?', 1, 1, 'passenger-car'),
         add('{{name}} has 2 tickets and gets 1 more. How many tickets?', 2, 1, 'ticket'),
         add('2 engines and 2 more engines wait at the station. How many engines?', 2, 2, 'engine'),
-        cmp('The red train has 3 cars. The blue train has 1 car. Write the bigger number.', 3, 1, 'passenger-car'),
+        cmp('The red train has 3 train cars. The blue train has 1 train car. Write the bigger number.', 3, 1, 'passenger-car'),
       ],
       sentence: 'I see a train.',
       activities: [
@@ -419,18 +419,18 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     kindergarten: {
       story: { title: '{{name}} and the Red Engine', pages: [
         'A red engine sat on the track.',
-        '{{name}} got on and sat in the cab.',
-        'Toot, toot! Up the hill it ran.',
+        '{{name}} got a ticket and sat in the cab.',
+        'Toot, toot! Up the hill the engine ran.',
         'The engine and {{name}} went in a tunnel. It is dim!',
         'Out in the sun, the engine got to a big stop.',
         '{{name}} had a fun trip on a red train.',
-      ] },
+      ], icons: ['engine', 'ticket', 'engine', 'engine', 'engine', 'engine'] },
       problems: [
-        add('A train has 4 cars. 3 more cars hook on. How many cars in all?', 4, 3, 'passenger-car'),
+        add('A train has 4 train cars. 3 more train cars hook on. How many train cars in all?', 4, 3, 'passenger-car'),
         sub('There are 8 tickets. {{name}} gives away 3. How many tickets are left?', 8, 3, 'ticket'),
         add('2 engines and 2 more engines are at the station. How many engines?', 2, 2, 'engine'),
         sub('6 boxcars wait on the track. 4 go away. How many boxcars are left?', 6, 4, 'boxcar'),
-        cmp('The long train has 9 cars. The short train has 5. Write the bigger number.', 9, 5, 'passenger-car'),
+        cmp('The long train has 9 train cars. The short train has 5. Write the bigger number.', 9, 5, 'passenger-car'),
       ],
       sentence: 'A train and a track.',
       activities: [
@@ -447,9 +447,9 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'Kick! The soccer ball rolls across the grass.',
         'Bounce, bounce, bounce goes the basketball.',
         'Swing! The bat hits the ball. Run, {{name}}, run!',
-        'The team cheers and spells it out: "Go, {{name}}!"',
+        'The team cheers by the goal: "Go, {{name}}!"',
         '{{name}} gets one shiny medal for trying so hard.',
-      ] },
+      ], icons: ['sneaker', 'soccer-ball', 'basketball', 'bat-and-ball', 'goal', 'medal'] },
       problems: [
         add('1 soccer ball is in the goal. 1 more goes in. How many soccer balls?', 1, 1, 'soccer-ball'),
         add('{{name}} has 2 basketballs and finds 1 more. How many basketballs?', 2, 1, 'basketball'),
@@ -465,14 +465,14 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
     kindergarten: {
       story: { title: '{{name}} Can Hit', pages: [
         '{{name}} has a bat and a cap.',
-        'Hit the ball, {{name}}! Bam! It went up.',
-        '{{name}} ran and ran. The team ran too.',
-        'The ball hit the net. It is a win!',
-        'The team got a big cup.',
-        '{{name}} and the team sat and had a snack.',
-      ] },
+        'Hit the ball with the bat, {{name}}! Bam! It went up.',
+        '{{name}} ran in red sneakers. The team ran too.',
+        'It is a win! {{name}} got a medal.',
+        'The team got a big trophy.',
+        'The team sat by the trophy and had a snack.',
+      ], icons: ['bat-and-ball', 'bat-and-ball', 'sneaker', 'medal', 'trophy', 'trophy'] },
       problems: [
-        add('{{name}} kicks 3 goals and then 2 more. How many goals in all?', 3, 2, 'soccer-ball'),
+        add('{{name}} kicks 3 soccer balls into the goal, then 2 more. How many soccer balls in all?', 3, 2, 'soccer-ball'),
         sub('There are 7 basketballs. 3 roll away. How many basketballs are left?', 7, 3, 'basketball'),
         add('The team has 4 medals and wins 4 more. How many medals?', 4, 4, 'medal'),
         sub('6 sneakers are by the door. {{name}} puts on 2. How many are left by the door?', 6, 2, 'sneaker'),
@@ -493,9 +493,9 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         '{{name}} fills one bowl with food and one bowl with water.',
         'The pup chases one ball of yarn. The kitten wants a turn!',
         '{{name}} makes a name tag. It says the pup is {{name}}\'s best friend.',
-        'They walk around the block, one step at a time.',
+        'The pup and {{name}} walk around the block, one step at a time.',
         'Snuggle time. The pup falls asleep on {{name}}\'s lap.',
-      ] },
+      ], icons: ['puppy', 'food-bowl', 'puppy', 'puppy', 'puppy', 'puppy'] },
       problems: [
         add('1 puppy sits on the rug. 1 more puppy runs over. How many puppies?', 1, 1, 'puppy'),
         add('{{name}} sees 2 kittens and then 1 more kitten. How many kittens?', 2, 1, 'kitten'),
@@ -516,7 +516,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'The cat ran and the pup ran. Zig, zag!',
         '{{name}} fed the pup and the cat.',
         'Then the pup and the cat had a nap in the sun.',
-      ] },
+      ], icons: ['puppy', 'puppy', 'puppy', 'kitten', 'puppy', 'puppy'] },
       problems: [
         add('{{name}} has 3 fish and gets 2 more. How many fish in all?', 3, 2, 'goldfish'),
         sub('There are 6 food bowls. The pup licks 2 clean, and they go away. How many bowls are left?', 6, 2, 'food-bowl'),
@@ -541,7 +541,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'One giraffe stretches up high to eat the leaves.',
         'The parrot learns to say "{{name}}!" It says it again and again.',
         'The monkey shares a banana. What a jungle day!',
-      ] },
+      ], icons: ['monkey', 'lion', 'elephant', 'giraffe', 'parrot', 'monkey'] },
       problems: [
         add('1 monkey is in the tree. 1 more monkey climbs up. How many monkeys?', 1, 1, 'monkey'),
         add('The monkey has 2 bananas and finds 1 more. How many bananas?', 2, 1, 'bananas'),
@@ -562,7 +562,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         'A big hippo sat in the mud. It had a nap.',
         'The monkey and {{name}} dig in the mud. Yuck!',
         'The hippo got up and gave them a big hug.',
-      ] },
+      ], icons: ['monkey', 'monkey', 'monkey', 'hippo', 'monkey', 'hippo'] },
       problems: [
         add('{{name}} sees 4 monkeys and then 3 more. How many monkeys in all?', 4, 3, 'monkey'),
         sub('A bunch has 6 bananas. The monkey eats 2. How many bananas are left?', 6, 2, 'bananas'),
@@ -711,7 +711,26 @@ function sightLine(word: string, theme: ThemeId): string {
   return cap1(s);
 }
 
+/** Sets each page's picture to the pictured thing that page names (the buddy's picture when it only names the
+ *  buddy). Every generated page is written to name one, so no page is left without a picture. */
+function withIcons(theme: ThemeId, story: { title: string; pages: string[] }): WeekContent['story'] {
+  // A page that names nothing we have a picture for ("Look! A cat.") gets a short cheer for the buddy, which does.
+  const pages = story.pages.map((p) => (storyIcon(theme, p) ? p : `${p} ${CHEER[theme]}`));
+  return { ...story, pages, icons: pages.map((p) => storyIcon(theme, p)) };
+}
+/** A tense-free line that names a pictured thing (the buddy, or for sports the ball), for pages about other things. */
+const CHEER: Record<ThemeId, string> = {
+  dinosaurs: 'Stomp, stomp, little T-rex!', trucks: 'Beep, beep, little red truck!', unicorns: 'Hop, hop, little unicorn!',
+  ocean: 'Snap, snap, little crab!', space: 'Zoom, zoom, little alien!', farm: 'Oink, oink, little pig!',
+  bugs: 'Fly, fly, little ladybug!', castles: 'Flap, flap, little dragon!', trains: 'Toot, toot, little red engine!',
+  sports: 'Kick the soccer ball, team!', pets: 'Wag, wag, little pup!', jungle: 'Swing, swing, little monkey!',
+};
+
 function storyFor(level: Level, w: Week, pw: ProgramWeek): WeekContent['story'] {
+  return withIcons(pw.theme, storyText(level, w, pw));
+}
+
+function storyText(level: Level, w: Week, pw: ProgramWeek): { title: string; pages: string[] } {
   const T = THEMES[pw.theme];
   const B = T.buddy.one;
   const ic = T.icons;
@@ -722,28 +741,30 @@ function storyFor(level: Level, w: Week, pw: ProgramWeek): WeekContent['story'] 
   const close = level === 'pre-k' ? `What a day ${T.place}! Good night, ${B}. Good night, {{name}}.` : `{{name}} and the ${B} had a fun day.`;
 
   if (w.kind === 'name') {
-    return { title: titleCase(`{{name}} and the ${B}`), pages: [open, `The ${B} wants to know {{name}}'s name.`, '{{name}} says it slowly, one letter at a time.', `The ${B} draws each letter in the dirt with a stick.`, countLine, close] };
+    return { title: titleCase(`{{name}} and the ${B}`), pages: [open, `The ${B} wants to know {{name}}'s name.`, `{{name}} says it slowly for the ${B}, one letter at a time.`, `The ${B} draws each letter in the dirt with a stick.`, countLine, close] };
   }
 
   if (w.kind === 'letter' || w.kind === 'review') {
     const ls = pw.extraReview ? reviewLetters(pw) : w.letters;
     const pages = [open];
     if (level === 'pre-k') {
-      pages.push(ls.length === 1 ? `They look for things that start with /${ls[0]}/.` : `They look for things that start with ${ls.map((l) => `/${l}/`).join(', ').replace(/, ([^,]*)$/, ' and $1')}.`);
+      pages.push(ls.length === 1 ? `{{name}} and the ${B} look for things that start with /${ls[0]}/.` : `{{name}} and the ${B} look for things that start with ${ls.map((l) => `/${l}/`).join(', ').replace(/, ([^,]*)$/, ' and $1')}.`);
       for (const l of ls.slice(0, 3)) {
         const words = startWords(l);
-        const themed = T.nouns.find((x) => x.toLowerCase().startsWith(l)) ?? T.icons.map((i) => i.one).find((x) => x.toLowerCase().startsWith(l));
+        // A theme word when one starts with the letter (singular, so "a claws" never happens), else a letter word.
+        const single = (x: string) => !/[^s]s$/i.test(x);
+        const themed = T.icons.map((i) => i.one).find((x) => single(x) && x.toLowerCase().startsWith(l)) ?? T.nouns.find((x) => single(x) && x.toLowerCase().startsWith(l));
         const word = themed ?? words[0] ?? l;
-        pages.push(`Look! ${cap1(art(word))} ${word}. ${cap1(word)} starts with ${l.toUpperCase()}. /${l}/, /${l}/, ${word}!`);
+        pages.push(`Look! ${themed ? cap1(art(word)) : `The ${B} finds ${art(word)}`} ${word}. ${cap1(word)} starts with ${l.toUpperCase()}. /${l}/, /${l}/, ${word}!`);
       }
       if (pages.length < 5) pages.push(`The ${B} finds ${art(startWords(ls[0])[1] ?? 'egg')} ${startWords(ls[0])[1] ?? 'egg'} too. /${ls[0]}/!`);
       pages.push(countLine, close);
     } else {
-      pages.push(`They play a sound game: find things with ${ls.map((l) => `/${l}/`).join(' and ')}.`);
+      pages.push(`{{name}} and the ${B} play a sound game: find things with ${ls.map((l) => `/${l}/`).join(' and ')}.`);
       for (const l of ls.slice(0, 2)) {
         const [w1, w2] = CVC_NOUNS[l] ?? [l];
         const ends = l === 'x' ? 'ends' : 'starts';
-        pages.push(w2 ? `{{name}} finds ${art(w1)} ${w1} and ${art(w2)} ${w2}. ${cap1(w1)} and ${w2} ${ends === 'ends' ? 'end' : 'start'} with /${l}/.` : `{{name}} finds ${art(w1)} ${w1}. ${cap1(w1)} ${ends} with /${l}/.`);
+        pages.push(w2 ? `{{name}} and the ${B} find ${art(w1)} ${w1} and ${art(w2)} ${w2}. ${cap1(w1)} and ${w2} ${ends === 'ends' ? 'end' : 'start'} with /${l}/.` : `{{name}} finds ${art(w1)} ${w1}. ${cap1(w1)} ${ends} with /${l}/.`);
       }
       for (const s of w.sightWords.slice(0, 2)) pages.push(sightLine(s, pw.theme));
       pages.push(close);
@@ -757,8 +778,8 @@ function storyFor(level: Level, w: Week, pw: ProgramWeek): WeekContent['story'] 
   const nouns = spread(fams.map((f) => FAMILY_NOUNS[f] ?? []));
   const words = spread(fams.map((f) => FAMILIES[f] ?? []));
   const pages = [open];
-  pages.push(fams.length === 1 ? `They play a word game. Every word ends in -${fams[0]}.` : `They play a word game with ${fams.map((f) => `-${f}`).join(', ')} words.`);
-  if (nouns[0]) pages.push(`Look! ${cap1(art(nouns[0]))} ${nouns[0]}.`);
+  pages.push(fams.length === 1 ? `{{name}} and the ${B} play a word game. Every word ends in -${fams[0]}.` : `{{name}} and the ${B} play a word game with ${fams.map((f) => `-${f}`).join(', ')} words.`);
+  if (nouns[0]) pages.push(`Look! The ${B} finds ${art(nouns[0])} ${nouns[0]}.`);
   if (nouns[1]) pages.push(`The ${B} finds ${art(nouns[1])} ${nouns[1]}${nouns[2] ? ` and ${art(nouns[2])} ${nouns[2]}` : ''}.`);
   for (const s of w.sightWords.slice(0, 2)) pages.push(sightLine(s, pw.theme));
   pages.push(`${words.slice(0, 3).map(cap1).join(', ')}! ${fams.length === 1 ? `They all end in -${fams[0]}.` : 'Short words are fun.'}`);
