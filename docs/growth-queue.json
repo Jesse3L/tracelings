@@ -388,7 +388,7 @@
     },
     {
       "id": "word-family-pages",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "month1-homeschool-foundation"
       ],
@@ -402,9 +402,95 @@
         "phonics worksheets": [
           3600,
           26
+        ],
+        "word families": [
+          12100,
+          28
+        ],
+        "at word family": [
+          1300,
+          25
+        ],
+        "word family worksheets": [
+          1000,
+          22
+        ],
+        "word families list": [
+          1000,
+          25
+        ],
+        "what is word families": [
+          880,
+          19
+        ],
+        "word families in kindergarten": [
+          720,
+          24
+        ],
+        "cvc word families": [
+          390,
+          22
+        ],
+        "it word families": [
+          390,
+          17
+        ],
+        "et word families": [
+          390,
+          18
+        ],
+        "op word families": [
+          320,
+          15
+        ],
+        "at word family worksheets": [
+          320,
+          22
+        ],
+        "word family house": [
+          90,
+          28
+        ],
+        "word family slider": [
+          10,
+          13
         ]
       },
-      "buildOn": "FAMILIES and huntPage() in src/lib/homeschool.ts. Check volume for 'at word family worksheets' style terms first."
+      "buildOn": "FAMILIES and huntPage() in src/lib/homeschool.ts. Check volume for 'at word family worksheets' style terms first.",
+      "done": "2026-10-16",
+      "urls": [
+        "/word-families/",
+        "/word-families/at/ (and /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/)"
+      ],
+      "notes": "Hub named around 'word families' (12,100/SD 28) plus 'word family worksheets' (1,000/22); family pages around '-xx word family worksheets' since 'at word family' is 1,300/25 and most single families get 170 to 720 a month. 17 families (every family in the K plan), 6 page types each in src/lib/wordFamilies.ts + src/components/WordFamilySheets.tsx: read the words (list + sentences), trace, word hunt (same-vowel distractors), word sort (paired with the next same-vowel family), word family house, word slider (cut-out). Free: every page one at a time. Members: all 6 pages for a family in one PDF or one page per kid. Linked from the K plan table (every family and review week), the K weekly pack maker (family and review weeks), /homeschool/kindergarten/, /homeschool/ and /sight-words/. Previews word-family-worksheet-at-hunt.webp and <family>-word-family-house.webp."
+    },
+    {
+      "id": "word-families-in-k-pack",
+      "status": "todo",
+      "needs": [
+        "word-family-pages"
+      ],
+      "title": "Put the word family house and the word sort into the Kindergarten weekly packs (family weeks: the house page; vowel review weeks: a sort page)",
+      "buildOn": "buildFamilyPage() in src/lib/wordFamilies.ts. Keep the pack at about one page per day plus the plan page; update the day text in planFor() in homeschool.ts."
+    },
+    {
+      "id": "cvc-words-worksheets",
+      "status": "todo",
+      "needs": [
+        "word-family-pages"
+      ],
+      "title": "CVC words worksheets: a mixed short vowel CVC word maker (read and trace, missing vowel, build the word from letter tiles) at /cvc-words/",
+      "suggestedUrl": "/cvc-words/",
+      "buildOn": "FAMILY_INFO words grouped by vowel; the house and sort layouts in wordFamilies.ts. Check volume for cvc words, cvc worksheets, cvc words kindergarten before building."
+    },
+    {
+      "id": "more-word-families",
+      "status": "todo",
+      "needs": [
+        "word-family-pages"
+      ],
+      "title": "Add the next word families to /word-families/: -am, -ad, -ill, -ell, -ack, -ock (long vowel -ake and -ight later)",
+      "buildOn": "Add entries to FAMILY_INFO in src/lib/wordFamilies.ts (words, sentences, tricky, stretch, tip). They are not in the K plan, so the page needs its own \"where it fits\" text. Keywords (Ubersuggest US, 2026-10-16): am word families 480/20, ad word families 320/16, ack 110/21, ock 110/20, ell 90/17."
     },
     {
       "id": "phonics-hub",

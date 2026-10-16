@@ -1,0 +1,142 @@
+---
+import Preview from '../../components/site/Preview.astro';
+import Base from '../../layouts/Base.astro';
+import WordFamilySheets from '../../components/WordFamilySheets.tsx';
+import Faqs from '../../components/homeschool/Faqs.astro';
+import { SITE } from '../../config';
+import { FAMILY_INFO, planWeeks } from '../../lib/wordFamilies';
+
+const url = new URL('/word-families/', SITE.url).href;
+const title = `Word Families: Free Word Family Worksheets and Lists | ${SITE.name}`;
+const description = 'Free word family worksheets for 17 short vowel CVC word families (-at, -an, -ig, -op, -ug, -et and more): word lists, tracing, hunts, sorts, houses and sliders.';
+const VOWELS = ['a', 'i', 'o', 'u', 'e'] as const;
+const byVowel = VOWELS.map((v) => ({ v, fams: FAMILY_INFO.filter((f) => f.vowel === v) }));
+const weeks = FAMILY_INFO.map((f) => planWeeks(f.slug).week.n);
+const firstWeek = Math.min(...weeks), lastWeek = Math.max(...weeks);
+
+const faqs = [
+  { q: 'What are word families?', a: 'A word family is a group of words that share the same ending, like cat, hat and mat in the -at family. The ending (teachers call it a rime) stays the same and only the first sound changes, so one ending lets a child read many words.' },
+  { q: 'What are CVC word families?', a: 'CVC stands for consonant, vowel, consonant: three-letter words like c-a-t or p-i-g. CVC word families group those words by their ending. All 17 families here are CVC families with a short vowel, which is where most kids start reading.' },
+  { q: 'Which word family should we teach first?', a: 'Many programs start with -at and -an, because short a is the easiest vowel to hear and those words are everywhere in early books. Our kindergarten plan goes -at, -an, -ap, -ag, then short i, o, u and e, with a review after each vowel.' },
+  { q: 'How many word families are there?', a: 'There is no single official count. A list of 37 common endings from reading researchers Richard Wylie and Donald Durrell (1970) is often shared with teachers, and it mixes short vowels with longer endings like -ake and -ight. The 17 here are the short vowel families most kids learn first.' },
+  { q: 'Are these word family worksheets free?', a: 'Yes. Every family and every page type is free to print one page at a time, with your child\'s name on the Name line. Members can also print all six pages for a family in one PDF, or one page for every child on their list, with no footer line.', html: 'Yes. Every family and every page type is free to print one page at a time, with your child\'s name on the Name line. <a href="/membership/">Members</a> can also print all six pages for a family in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'Do word families replace phonics?', a: 'No. Word families are one part of phonics. They work best once a child knows most letter sounds and can blend three sounds together. Keep sounding words out letter by letter too, so your child doesn\'t only guess from the ending.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Word family worksheets (free generator for 17 short vowel word families)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Kindergarten, First grade',
+    teaches: 'Short vowel CVC word families: reading, tracing, sorting and building words',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Word families', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Word families</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Word families: free word family worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">
+        Free printable word family worksheets for 17 short vowel CVC families, from -at to -ed. Each family has six pages: a word list with
+        sentences, tracing, a word hunt, a word sort, a word family house and a word slider.
+      </p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <WordFamilySheets client:load pickFamily source="word-families" />
+    </div>
+    <Preview k="word-families" caption="Example: an -at word hunt, with -an, -ap and -ag words mixed in." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        Word families are groups of words that share an ending, like cat, hat and mat. Once a child can read the ending, changing the first
+        letter gives them a new word every time. That is why word families are often the first real reading kids do. Every worksheet here
+        is made in your browser, so your child's name never leaves your device.
+      </p>
+    </article>
+
+    <section class="mt-10 max-w-4xl" aria-labelledby="list-h">
+      <h2 id="list-h" class="text-[1.6rem] font-bold">Word families list, by short vowel</h2>
+      <p class="mt-2 text-muted max-w-[68ch]">Tap a family for its own page, with the full word list, sentences, teaching tips and all six worksheets.</p>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {byVowel.map((g) => (
+          <div class="rounded-xl border border-hairline bg-white p-5">
+            <h3 class="text-lg font-bold">Short {g.v} word families</h3>
+            <ul class="mt-3 grid gap-2">
+              {g.fams.map((f) => (
+                <li><a href={`/word-families/${f.slug}/`} class="font-bold text-[#2f5fc4] underline underline-offset-2">-{f.slug} word family</a> <span class="text-muted text-[15px]">{f.words.slice(0, 4).join(', ')}</span></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <h2>Six word family worksheets for every family</h2>
+      <ul>
+        <li><strong>Read the words:</strong> the family's words in big print with three boxes to color, one per reading, plus short sentences.</li>
+        <li><strong>Trace the words:</strong> each word on handwriting lines with green starting dots, then room to write it alone.</li>
+        <li><strong>Word hunt:</strong> a grid of words. Your child circles the ones in the family. The other words share the same vowel, so the ending has to be read.</li>
+        <li><strong>Word sort:</strong> eight words, two endings (like -at and -an). Your child writes each word in the right column.</li>
+        <li><strong>Word family house:</strong> the ending sits in the roof. Your child writes a first letter in each box, traces the ending and reads the word.</li>
+        <li><strong>Word slider:</strong> cut out the card and the letter strip, thread the strip through two slits, and slide it to make new words.</li>
+      </ul>
+
+      <h2>How to teach word families at home</h2>
+      <p>
+        Start when your child knows most letter sounds and can blend three sounds, like /c/ /a/ /t/, into cat. Many kids get there in
+        kindergarten, somewhere between ages 5 and 6, and some sooner or later. Kids develop at different speeds. If you have concerns,
+        ask your child's teacher or pediatrician.
+      </p>
+      <ol>
+        <li><strong>One family a week.</strong> Read the list on Monday, trace on Tuesday, hunt on Wednesday, build the house or slider on Thursday, sort on Friday.</li>
+        <li><strong>One vowel at a time.</strong> Finish the short a families before short i. Mixing vowels too early makes it harder to hear the difference.</li>
+        <li><strong>Review after each vowel.</strong> The sort page is good for this: it pairs two families with the same vowel.</li>
+        <li><strong>Keep sounding out.</strong> Ask your child to point to each letter now and then, so they read the whole word and don't guess from the ending.</li>
+      </ol>
+
+      <h2>Word families in the kindergarten homeschool plan</h2>
+      <p>
+        Our free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> teaches these word families in
+        weeks {firstWeek} to {lastWeek + 1}, one family a week with a short vowel review after each vowel. Each family page above links to its week. Many
+        word family words are also Dolch sight words (can, big, it, run, not, get), so our <a href="/sight-words/kindergarten/">kindergarten sight words</a> list
+        is a natural partner. To trace any word or short sentence, use the <a href="/word-tracing/">word tracing worksheet maker</a>.
+      </p>
+
+      <h2>A 10-minute word family routine</h2>
+      <ol>
+        <li><strong>2 minutes:</strong> say the ending together, then add first sounds out loud: at, cat, hat, mat.</li>
+        <li><strong>6 minutes:</strong> the day's worksheet. Do the first word together, then let your child try the next one alone.</li>
+        <li><strong>2 minutes:</strong> a rhyme game. Say a word and ask if it belongs in this week's family. Mix in a few that don't.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about word families</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

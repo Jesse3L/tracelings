@@ -784,5 +784,113 @@
     "width": 800,
     "height": 1035,
     "alt": "Make 10 ten frame worksheet: six ten frames with some dots, draw the rest and write how many more make 10"
+  },
+  "wf-ag": {
+    "src": "/previews/ag-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ag word family house worksheet: write a first letter, trace -ag and read words like bag, rag, tag"
+  },
+  "wf-an": {
+    "src": "/previews/an-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-an word family house worksheet: write a first letter, trace -an and read words like can, fan, man"
+  },
+  "wf-ap": {
+    "src": "/previews/ap-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ap word family house worksheet: write a first letter, trace -ap and read words like cap, map, nap"
+  },
+  "wf-at": {
+    "src": "/previews/at-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-at word family house worksheet: write a first letter, trace -at and read words like cat, bat, hat"
+  },
+  "wf-ed": {
+    "src": "/previews/ed-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ed word family house worksheet: write a first letter, trace -ed and read words like bed, fed, red"
+  },
+  "wf-en": {
+    "src": "/previews/en-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-en word family house worksheet: write a first letter, trace -en and read words like hen, men, pen"
+  },
+  "wf-et": {
+    "src": "/previews/et-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-et word family house worksheet: write a first letter, trace -et and read words like get, jet, net"
+  },
+  "wf-ig": {
+    "src": "/previews/ig-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ig word family house worksheet: write a first letter, trace -ig and read words like big, dig, pig"
+  },
+  "wf-in": {
+    "src": "/previews/in-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-in word family house worksheet: write a first letter, trace -in and read words like bin, fin, pin"
+  },
+  "wf-ip": {
+    "src": "/previews/ip-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ip word family house worksheet: write a first letter, trace -ip and read words like dip, hip, lip"
+  },
+  "wf-it": {
+    "src": "/previews/it-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-it word family house worksheet: write a first letter, trace -it and read words like bit, hit, sit"
+  },
+  "wf-og": {
+    "src": "/previews/og-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-og word family house worksheet: write a first letter, trace -og and read words like dog, fog, hog"
+  },
+  "wf-op": {
+    "src": "/previews/op-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-op word family house worksheet: write a first letter, trace -op and read words like hop, mop, pop"
+  },
+  "wf-ot": {
+    "src": "/previews/ot-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ot word family house worksheet: write a first letter, trace -ot and read words like cot, dot, hot"
+  },
+  "wf-ug": {
+    "src": "/previews/ug-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ug word family house worksheet: write a first letter, trace -ug and read words like bug, hug, jug"
+  },
+  "wf-un": {
+    "src": "/previews/un-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-un word family house worksheet: write a first letter, trace -un and read words like bun, fun, run"
+  },
+  "wf-ut": {
+    "src": "/previews/ut-word-family-house.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "-ut word family house worksheet: write a first letter, trace -ut and read words like but, cut, hut"
+  },
+  "word-families": {
+    "src": "/previews/word-family-worksheet-at-hunt.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words"
   }
 }

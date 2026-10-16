@@ -135,6 +135,14 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
           {busy ? 'Making your PDF…' : `Download week ${week.n} (${pages.length} pages)`}
         </button>
         {!font && <p class="mt-2 text-[13px] text-muted">Loading the coloring page letters…</p>}
+        {(week.family || week.families) && (
+          <p class="mt-3 text-[14px] text-muted">
+            More practice this week:{' '}
+            {week.families
+              ? <>{week.families.map((f, i) => <>{i > 0 && (i === week.families!.length - 1 ? ' and ' : ', ')}<a class={`${link} whitespace-nowrap`} href={`/word-families/${f}/`}>-{f}</a></>)} word family worksheets</>
+              : <a class={link} href={`/word-families/${week.family}/`}>-{week.family} word family worksheets</a>}
+          </p>
+        )}
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">{done}</p>}
 
         <div class="mt-5 rounded-lg border border-dashed border-rule/60 bg-white/70 p-4 text-[14px] leading-snug text-muted">
