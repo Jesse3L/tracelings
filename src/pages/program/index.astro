@@ -1,0 +1,174 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProgramPlacement from '../../components/program/ProgramPlacement.tsx';
+import Faqs from '../../components/homeschool/Faqs.astro';
+import { SITE } from '../../config';
+import { THEMES, THEME_IDS, coverUrl, iconUrl } from '../../lib/program/themes';
+
+const url = new URL('/program/', SITE.url).href;
+const title = `Personalized Homeschool Program for Pre-K and K | ${SITE.name}`;
+const description = 'A personalized homeschool program for preschool and kindergarten, built around your child’s level, pace and interests. Free first week, then $14.99 a month.';
+
+const how = [
+  { n: '1', t: 'A 5-minute placement check', p: 'Tell us their age, what they can do today, what they love and how much time you have. There\'s an optional printable "show me" page if you\'d rather check together.' },
+  { n: '2', t: 'A plan for one child', p: 'We place them on the Pre-K or Kindergarten track, skip what they already know, and add review weeks where a skill is still settling in.' },
+  { n: '3', t: 'A themed pack every week', p: 'They count dinosaurs (or trucks, or unicorns), read a little book starring them, and solve word problems about the thing they love.' },
+  { n: '4', t: 'A 1-minute check-in', p: 'Each week you tick "got it" or "still working" for that week\'s skills, and the weeks ahead adjust: an extra review week, or a skip ahead.' },
+];
+
+const inside = [
+  { t: 'A little book starring your child', p: 'A short story at their reading level, using that week\'s letters, word family and sight words. It prints on one page and folds into an 8-page book.' },
+  { t: 'Word problems about what they love', p: '4 to 6 problems with pictures to count, at that week\'s math level. The numbers are checked by code, not guessed.' },
+  { t: 'Counting, ten frames and adding with their pictures', p: 'Count and color pages, ten frames, more or fewer and picture addition, all drawn with their theme.' },
+  { t: 'Letters, word families and sight words', p: 'The same carefully ordered tracing, letter hunt and word family pages as our free plans, with their name on them.' },
+  { t: 'A note for you', p: 'What the week teaches, why it matters, and 2 ideas away from the paper tied to their interest.' },
+  { t: 'A progress record', p: 'A printable record of what you covered and what they have got, handy for homeschool records.' },
+];
+
+const faqs = [
+  { q: 'How much does it cost?', a: '$14.99 a month or $99 a year, and it covers up to 4 kids in one family. Week 1 of your child\'s plan is free to print, with no card needed. You can cancel anytime.' },
+  { q: 'Why a free week instead of a free trial?', a: 'A trial would let anyone download a whole year in 7 days, which would make the program unaffordable to run. Week 1 is the real thing: your child\'s own plan, themed to what they love, with their name and a little book starring them.' },
+  { q: 'What age is it for?', a: 'Many kids ages 3 to 6. The placement check puts your child on the Pre-K or Kindergarten track based on what they can do, not just their age, and skips what they already know.' },
+  { q: 'Does my child\'s name get sent anywhere?', a: 'No. The name is added to the pages in your browser when you print. It is never stored on our servers, never sent to the AI, and never put in a link. The story is written with a placeholder that your device fills in.' },
+  { q: 'Is the story written by AI?', a: 'For paying members, yes: each week a short story, word problems, a tracing sentence and your parent note are written fresh for your child\'s level and interests, then checked by code for length, word choice and the week\'s words. The free week 1 uses stories we wrote by hand.' },
+  { q: 'What if the plan is too easy or too hard?', a: 'Use the weekly check-in. "Still working" adds a review week; "got it" skips upcoming reviews. You can also redo the placement check anytime. Kids learn at very different speeds, and that\'s normal. If you have concerns, ask your child\'s teacher or pediatrician.' },
+  { q: 'Is there a faith track?', a: 'Yes. Turn it on in the placement check to add a Bible verse each week from the Berean Standard Bible, an easy modern English translation, with a verse copywork page.' },
+  { q: 'Do the free plans stay free?', a: 'Yes. The free Pre-K and Kindergarten plans and every free worksheet stay free. The personalized program is a layer on top for families who want it built around one child.', html: 'Yes. The free <a href="/homeschool/preschool/">Pre-K plan</a>, the free <a href="/homeschool/kindergarten/">Kindergarten plan</a> and every free worksheet stay free. The personalized program is a layer on top for families who want it built around one child.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Tracelings at Home, Personalized',
+    url,
+    description,
+    brand: { '@type': 'Brand', name: SITE.name },
+    offers: [
+      { '@type': 'Offer', name: 'Monthly', price: '14.99', priceCurrency: 'USD', url },
+      { '@type': 'Offer', name: 'Yearly', price: '99.00', priceCurrency: 'USD', url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Personalized program', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+const strip = ['dinosaurs', 'unicorns', 'trucks', 'ocean', 'space', 'farm'] as const;
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Personalized program</span>
+    </nav>
+
+    <header class="pt-6 pb-10 grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] items-center">
+      <div>
+        <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Tracelings at Home, Personalized</p>
+        <h1 class="mt-2 text-[2.1rem] sm:text-[2.8rem] font-bold leading-tight"><span class="ruled">A homeschool program built around your child</span></h1>
+        <p class="mt-4 text-lg text-muted leading-relaxed">
+          A personalized homeschool program for preschool and kindergarten: their level, their pace, and the things they love.
+          If your child loves dinosaurs, they count dinosaurs, read a little book about a dinosaur, and solve dinosaur word problems, while the plan still teaches the letters, word families and math for their level.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <a href="#placement" class="btn-pencil px-6 py-3.5 text-lg">Start the free placement check</a>
+          <span class="text-[15px] text-muted">Free first week. Then $14.99/month or $99/year.</span>
+        </div>
+        <p class="mt-3 text-[14px] text-muted">About 5 minutes. No card needed. Names stay on your device.</p>
+      </div>
+      <div class="relative rounded-2xl border border-hairline bg-white p-5 shadow-[0_18px_40px_-28px_rgba(30,42,68,.45)]" aria-hidden="true">
+        <div class="grid grid-cols-3 gap-3">
+          {strip.map((t) => (
+            <div class="flex flex-col items-center rounded-xl bg-[#f6f8fb] p-3">
+              <img src={coverUrl(t)} alt="" width={88} height={88} class="size-16 sm:size-20" />
+              <span class="mt-1 text-[13px] font-bold text-muted">{THEMES[t].label}</span>
+            </div>
+          ))}
+        </div>
+        <p class="mt-4 text-center text-[14px] text-muted">12 themes. Pick up to 3, and the weeks take turns.</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="how-h" class="pb-4">
+      <h2 id="how-h" class="text-[1.6rem] font-bold">How it works</h2>
+      <ol class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {how.map((s) => (
+          <li class="rounded-xl border border-hairline bg-white p-5">
+            <span class="grid size-8 place-items-center rounded-full bg-[#e4ecf9] font-bold text-ink">{s.n}</span>
+            <span class="mt-3 block text-lg font-bold text-ink">{s.t}</span>
+            <span class="mt-1 block text-[15px] text-muted leading-relaxed">{s.p}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="placement" class="mt-12 scroll-mt-20 rounded-2xl bg-[#eef2f8] p-4 sm:p-8" aria-labelledby="placement-h">
+      <h2 id="placement-h" class="text-[1.6rem] sm:text-[1.9rem] font-bold">Free placement check</h2>
+      <p class="mt-1 mb-6 text-muted">Answer a few questions and see your child's whole plan, with week 1 ready to print.</p>
+      <ProgramPlacement client:load />
+      <noscript><p class="mt-4 text-muted">The placement check needs JavaScript turned on.</p></noscript>
+    </section>
+
+    <section class="mt-14" aria-labelledby="inside-h">
+      <h2 id="inside-h" class="text-[1.6rem] font-bold">What's in each week</h2>
+      <p class="mt-2 max-w-2xl text-muted">A plan page for you, then short pages for Monday to Friday, about 10 to 30 minutes a day depending on what you pick.</p>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {inside.map((x, i) => (
+          <li class="flex gap-4 rounded-xl border border-hairline bg-white p-5">
+            <img src={iconUrl(THEME_IDS[i * 2], THEMES[THEME_IDS[i * 2]].icons[1].id)} alt="" width={48} height={48} loading="lazy" class="size-12 shrink-0" />
+            <span>
+              <span class="block font-bold text-ink">{x.t}</span>
+              <span class="mt-1 block text-[15px] text-muted leading-relaxed">{x.p}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-14 grid gap-6 lg:grid-cols-2" aria-labelledby="price-h">
+      <div class="rounded-2xl border border-hairline bg-white p-6 sm:p-8">
+        <h2 id="price-h" class="text-[1.6rem] font-bold">Simple pricing</h2>
+        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-xl border border-hairline p-5">
+            <span class="block text-[13px] font-bold uppercase tracking-wider text-muted">Monthly</span>
+            <span class="mt-1 block text-[2rem] font-bold text-ink">$14.99</span>
+            <span class="block text-[14px] text-muted">a month</span>
+          </div>
+          <div class="rounded-xl border border-rule p-5 shadow-[inset_0_0_0_1px_var(--color-rule)]">
+            <span class="block text-[13px] font-bold uppercase tracking-wider text-[#2f5fc4]">Yearly</span>
+            <span class="mt-1 block text-[2rem] font-bold text-ink">$99</span>
+            <span class="block text-[14px] text-muted">a year, about $8.25 a month</span>
+          </div>
+        </div>
+        <ul class="mt-5 space-y-2 text-[15px] text-ink">
+          <li>Covers up to 4 kids in one family, each with their own plan.</li>
+          <li>Week 1 of each child's plan is free, no card needed.</li>
+          <li>No footer line, no email prompts, and batch printing.</li>
+          <li>Cancel anytime from your account.</li>
+        </ul>
+        <a href="#placement" class="btn-pencil mt-6 inline-block px-6 py-3 text-lg">Start with the free week</a>
+      </div>
+      <div class="rounded-2xl border border-hairline bg-white p-6 sm:p-8">
+        <h2 class="text-[1.6rem] font-bold">Private by design</h2>
+        <p class="mt-3 text-muted leading-relaxed">Your child's name never leaves your device. Stories are written with a placeholder, and your browser fills in the name when it builds the PDF. If you become a member, we keep only what the plan needs: age, skills, interests, pace and the faith toggle. No name and no birthday.</p>
+        <h2 class="mt-8 text-[1.6rem] font-bold">Prefer the free plans?</h2>
+        <p class="mt-3 text-muted leading-relaxed">They stay free. The <a class="text-[#2f5fc4] underline underline-offset-2" href="/homeschool/preschool/">free Pre-K homeschool plan</a> and the <a class="text-[#2f5fc4] underline underline-offset-2" href="/homeschool/kindergarten/">free kindergarten homeschool plan</a> have all 36 weeks, with packs made with your child's name.</p>
+      </div>
+    </section>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

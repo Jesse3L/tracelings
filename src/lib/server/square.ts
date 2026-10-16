@@ -39,14 +39,24 @@ export async function locationId(): Promise<string> {
 }
 
 // ---------- Plans ----------
-export type PlanKey = 'family-monthly' | 'family-annual' | 'classroom' | 'founding';
-export const PLANS: Record<PlanKey, { label: string; cents: number; cadence: 'MONTHLY' | 'ANNUAL'; maxNames: number }> = {
-  'family-monthly': { label: 'Family, monthly', cents: 599, cadence: 'MONTHLY', maxNames: 8 },
-  'family-annual': { label: 'Family, yearly', cents: 3900, cadence: 'ANNUAL', maxNames: 8 },
-  classroom: { label: 'Classroom, yearly', cents: 7900, cadence: 'ANNUAL', maxNames: 40 },
-  founding: { label: 'Founding member, yearly', cents: 2900, cadence: 'ANNUAL', maxNames: 40 },
+// New checkouts sell only the two program plans. The older plans stay so anyone still subscribed to one is
+// recognized as a member: they get the full personalized program too, and keep their class list size.
+export type ProgramPlanKey = 'program-monthly' | 'program-annual';
+export type LegacyPlanKey = 'family-monthly' | 'family-annual' | 'classroom' | 'founding';
+export type PlanKey = ProgramPlanKey | LegacyPlanKey;
+/** Child profiles per family in the personalized program, on every plan. */
+export const MAX_CHILDREN = 4;
+export const PLANS: Record<PlanKey, { label: string; cents: number; cadence: 'MONTHLY' | 'ANNUAL'; maxNames: number; maxChildren: number }> = {
+  'program-monthly': { label: 'Tracelings at Home, Personalized (monthly)', cents: 1499, cadence: 'MONTHLY', maxNames: 4, maxChildren: MAX_CHILDREN },
+  'program-annual': { label: 'Tracelings at Home, Personalized (yearly)', cents: 9900, cadence: 'ANNUAL', maxNames: 4, maxChildren: MAX_CHILDREN },
+  'family-monthly': { label: 'Family, monthly', cents: 599, cadence: 'MONTHLY', maxNames: 8, maxChildren: MAX_CHILDREN },
+  'family-annual': { label: 'Family, yearly', cents: 3900, cadence: 'ANNUAL', maxNames: 8, maxChildren: MAX_CHILDREN },
+  classroom: { label: 'Classroom, yearly', cents: 7900, cadence: 'ANNUAL', maxNames: 40, maxChildren: MAX_CHILDREN },
+  founding: { label: 'Founding member, yearly', cents: 2900, cadence: 'ANNUAL', maxNames: 40, maxChildren: MAX_CHILDREN },
 };
-export const FOUNDING_LIMIT = 200;
+/** The only plans a new checkout can buy. */
+export const SELLABLE: readonly ProgramPlanKey[] = ['program-annual', 'program-monthly'];
+export const isSellable = (k: unknown): k is ProgramPlanKey => typeof k === 'string' && (SELLABLE as readonly string[]).includes(k);
 
 interface Variation { id: string; cents: number; cadence: string; name: string }
 let variationCache: { at: number; list: Variation[] } | null = null;
@@ -112,51 +122,74 @@ export async function cardLast4s(customerId: string): Promise<string[]> {
   return (r.cards ?? []).filter((c: any) => c.enabled !== false).map((c: any) => String(c.last_4));
 }
 
-export async function foundingCount(): Promise<number> {
-  const v = await variationFor('founding');
-  if (!v) return 0;
-  let n = 0;
+// Square's checkout links need plans priced on the plan itself (STATIC). ensureProgramPlans() creates the two program
+// plans once, under one "Tracelings at Home, Personalized" subscription plan, when the catalog has no price+cadence match.
+// It only ever creates the exact SELLABLE prices, checks first and uses fixed idempotency keys (safe to call again),
+// reuses an existing plan with the same name, and never throws: without catalog write permission it logs and reports.
+const PROGRAM_PLAN_NAME = 'Tracelings at Home, Personalized';
+export interface EnsureResult { ok: boolean; created: ProgramPlanKey[]; missing: ProgramPlanKey[]; error?: string }
+let ensuring: Promise<EnsureResult> | null = null;
+
+export function ensureProgramPlans(): Promise<EnsureResult> {
+  ensuring ??= doEnsureProgramPlans().finally(() => { ensuring = null; });
+  return ensuring;
+}
+
+async function findPlanId(name: string): Promise<string | undefined> {
   let cursor: string | undefined;
   do {
-    const r = await sq<any>('/v2/subscriptions/search', { body: { cursor, limit: 200, query: { filter: { location_ids: [await locationId()] } } } });
-    n += (r.subscriptions ?? []).filter((s: Sub) => s.plan_variation_id === v.id && s.status !== 'CANCELED').length;
+    const r = await sq<any>(`/v2/catalog/list?types=SUBSCRIPTION_PLAN${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`);
+    const hit = (r.objects ?? []).find((o: any) => !o.is_deleted && o.subscription_plan_data?.name === name);
+    if (hit) return hit.id;
     cursor = r.cursor;
   } while (cursor);
-  return n;
+  return undefined;
 }
 
-// Square's checkout links need plans priced on the plan itself (STATIC). If a plan has no match, create it once
-// under a single "Tracelings Membership" plan. Only ever creates the exact prices in PLANS.
-let ensuring: Promise<void> | null = null;
-async function ensurePlans(): Promise<void> {
-  const missing = [] as PlanKey[];
-  for (const k of Object.keys(PLANS) as PlanKey[]) if (!(await variationFor(k))) missing.push(k);
-  if (!missing.length) return;
-  const plan = await sq<any>('/v2/catalog/object', { body: { idempotency_key: `tl-plan-${missing.join('-')}`, object: { type: 'SUBSCRIPTION_PLAN', id: '#tl-plan', subscription_plan_data: { name: 'Tracelings Membership' } } } });
-  const planId = plan.catalog_object.id;
-  for (const k of missing) {
-    const p = PLANS[k];
-    await sq('/v2/catalog/object', { body: { idempotency_key: `tl-var-${planId}-${k}`, object: {
-      type: 'SUBSCRIPTION_PLAN_VARIATION', id: `#tl-${k}`,
-      subscription_plan_variation_data: { name: `Tracelings ${p.label}`, subscription_plan_id: planId,
-        phases: [{ cadence: p.cadence, ordinal: 0, pricing: { type: 'STATIC', price_money: { amount: p.cents, currency: 'USD' } } }] },
-    } } });
+async function doEnsureProgramPlans(): Promise<EnsureResult> {
+  const created: ProgramPlanKey[] = [];
+  const missing: ProgramPlanKey[] = [];
+  try {
+    for (const k of SELLABLE) if (!(await variationFor(k))) missing.push(k);
+    if (!missing.length) return { ok: true, created, missing };
+    let planId = await findPlanId(PROGRAM_PLAN_NAME);
+    if (!planId) {
+      const plan = await sq<any>('/v2/catalog/object', { body: { idempotency_key: 'tl-program-plan-v1', object: {
+        type: 'SUBSCRIPTION_PLAN', id: '#tl-program-plan', subscription_plan_data: { name: PROGRAM_PLAN_NAME },
+      } } });
+      planId = plan.catalog_object.id as string;
+    }
+    for (const k of missing) {
+      const p = PLANS[k];
+      await sq('/v2/catalog/object', { body: { idempotency_key: `tl-program-var-v1-${planId}-${k}`, object: {
+        type: 'SUBSCRIPTION_PLAN_VARIATION', id: `#tl-${k}`,
+        subscription_plan_variation_data: { name: p.label, subscription_plan_id: planId,
+          phases: [{ cadence: p.cadence, ordinal: 0, pricing: { type: 'STATIC', price_money: { amount: p.cents, currency: 'USD' } } }] },
+      } } });
+      created.push(k);
+    }
+    variationCache = null;
+    console.log('square program plans created', created.join(','));
+    return { ok: true, created, missing: [] };
+  } catch (e) {
+    const status = (e as { status?: number }).status;
+    const hint = status === 401 || status === 403 ? ' (token lacks catalog write permission: create the plans in the Square Dashboard)' : '';
+    console.error(`square ensureProgramPlans failed: ${status ?? (e as Error).message}${hint}`);
+    variationCache = null;
+    return { ok: false, created, missing: missing.filter((m) => !created.includes(m)), error: status ? `square_${status}` : 'unknown' };
   }
-  variationCache = null;
 }
 
-export async function createCheckout(plan: PlanKey, email: string, redirectUrl: string): Promise<string> {
-  if (!(await variationFor(plan))) {
-    ensuring ??= ensurePlans().finally(() => { ensuring = null; });
-    await ensuring;
-  }
+export async function createCheckout(plan: ProgramPlanKey, email: string, redirectUrl: string): Promise<string> {
+  if (!isSellable(plan)) throw new Error(`Plan ${plan} is not for sale`);
+  if (!(await variationFor(plan))) await ensureProgramPlans();
   const v = await variationFor(plan);
   if (!v) throw new Error(`No Square plan found for ${plan}`);
   const p = PLANS[plan];
   const r = await sq<any>('/v2/online-checkout/payment-links', {
     body: {
       idempotency_key: crypto.randomUUID(),
-      quick_pay: { name: `Tracelings membership: ${p.label}`, price_money: { amount: p.cents, currency: 'USD' }, location_id: await locationId() },
+      quick_pay: { name: p.label, price_money: { amount: p.cents, currency: 'USD' }, location_id: await locationId() },
       checkout_options: { subscription_plan_id: v.id, redirect_url: redirectUrl, ask_for_shipping_address: false },
       pre_populated_data: { buyer_email: email },
     },

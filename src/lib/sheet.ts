@@ -25,7 +25,7 @@ export type Item =
   | { kind: 'line'; x1: number; y1: number; x2: number; y2: number; color: string; width: number; dash?: number[] }
   | { kind: 'path'; d: string; color: string; width: number; dash?: number[]; fill?: string; evenOdd?: boolean }
   | { kind: 'dot'; cx: number; cy: number; r: number; color: string }
-  | { kind: 'text'; x: number; y: number; size: number; text: string; color: string; align: 'left' | 'center' | 'right' };
+  | { kind: 'text'; x: number; y: number; size: number; text: string; color: string; align: 'left' | 'center' | 'right'; rotate?: number }; // rotate: degrees clockwise around (x, y)
 
 export interface Page { w: number; h: number; items: Item[] }
 

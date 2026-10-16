@@ -82,19 +82,19 @@ export default function DownloadNudge() {
         <p class="pr-8 text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Your PDF is downloading</p>
         {names ? (
           <>
-            <p class="mt-2 text-[17px] font-bold leading-snug text-ink">Printing for a whole class?</p>
-            <p class="mt-1.5 text-[15px] leading-relaxed text-muted">Members save their class list once and print every child's tracing sheet, cursive sheet and coloring page in one click. No footer line, no email prompts.</p>
+            <p class="mt-2 text-[17px] font-bold leading-snug text-ink">Teaching at home?</p>
+            <p class="mt-1.5 text-[15px] leading-relaxed text-muted">Get a weekly plan built for each of your kids, themed on what they love, with a new story starring them every week.</p>
           </>
         ) : (
           <>
-            <p class="mt-2 text-[17px] font-bold leading-snug text-ink">Print more with a membership</p>
-            <p class="mt-1.5 text-[15px] leading-relaxed text-muted">Every printable with no footer line, no email prompts, and a saved class list that prints a page for every child at once.</p>
+            <p class="mt-2 text-[17px] font-bold leading-snug text-ink">A plan built for your child</p>
+            <p class="mt-1.5 text-[15px] leading-relaxed text-muted">Weekly packs at their level, themed on what they love, with a new story starring them every week. Week 1 is free.</p>
           </>
         )}
         <p class="mt-3 text-[14px] font-bold leading-snug text-[#1f7a50]">Members keep Tracelings free for every family.</p>
         <div class="mt-4 flex items-center gap-3">
-          <a href="/membership/" onClick={() => { snooze(7); track('member_nudge_clicked'); }} class="btn-pencil px-4 py-2.5 text-[15px]">See membership</a>
-          <span class="text-[13px] text-muted">From $29 a year</span>
+          <a href="/membership/" onClick={() => { snooze(7); track('member_nudge_clicked'); }} class="btn-pencil px-4 py-2.5 text-[15px]">See the program</a>
+          <span class="text-[13px] text-muted">From $8.25 a month</span>
         </div>
       </div>
     </div>

@@ -220,6 +220,8 @@ export interface PackOptions {
   credit: boolean;
   bubble: LoadedFont | null; // bubble letter font for coloring pages; skipped while it loads
   faith?: boolean; // faith track: adds the week's Bible verse (BSB) to the plan and a verse copywork page
+  coloring?: (text: string, caps: boolean) => Page | null; // optional: draws the coloring pages instead (the personalized program adds theme pictures)
+  label?: string; // optional footer label (the personalized program numbers weeks its own way)
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -327,6 +329,11 @@ const numberPage = (n: number, label: string) => (o: PackOptions) => {
   return p;
 };
 const coloringPage = (text: string, label: string, caps: boolean) => (o: PackOptions) => {
+  if (o.coloring) {
+    const p = o.coloring(text, caps);
+    if (p) footer(p.items, p.w, p.h, o.credit, label);
+    return p;
+  }
   if (!o.bubble) return null;
   const p = buildColoringPage(o.bubble, { name: text, theme: 'stars', paper: o.paper, credit: false, caps });
   footer(p.items, p.w, p.h, o.credit, label);
@@ -466,8 +473,8 @@ const ALPHA = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const distractors = (ls: string[]) => ALPHA.filter((x) => !ls.includes(x) && !'bdpq'.includes(x));
 
 /** The day-by-day plan for a week, which also lists the pages in the pack, in order. */
-function planFor(level: Level, w: Week): Planned[] {
-  const label = `Week ${w.n}: ${w.title}`;
+function planFor(level: Level, w: Week, labelOverride?: string): Planned[] {
+  const label = labelOverride ?? `Week ${w.n}: ${w.title}`;
   const both = (l: string) => [l.toUpperCase(), l];
   const mathDay: Planned = w.addTo
     ? { day: 3, title: `Adding within ${w.addTo}`, how: 'Use real objects first (blocks, crackers, toy cars) to act out a problem or two, then do the page together.', page: (o) => additionPage(o, w.addTo!, label, `${level}-${w.n}`) }
@@ -594,6 +601,14 @@ export function versePage(o: PackOptions, label: string): Page {
   }
   footer(items, w, h, o.credit, label);
   return { w, h, items };
+}
+
+/** The days of a week's pack with their pages (no plan page or verse page), for the personalized program. */
+export function weekDays(o: PackOptions): { day: number; title: string; how: string; pages: Page[] }[] {
+  return planFor(o.level, o.week, o.label).map((d) => {
+    const p = d.page(o);
+    return { day: d.day, title: d.title, how: d.how, pages: p ? (Array.isArray(p) ? p : [p]) : [] };
+  });
 }
 
 /** Every page of a week's pack, plan page first. Coloring pages are left out until the bubble font loads. */

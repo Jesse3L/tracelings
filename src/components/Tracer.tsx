@@ -272,7 +272,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
           {member.member ? (
             <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets{mode === 'name' ? ', and class lists print in one PDF' : ''}. <a href="/class-pack/" class="text-[#2f5fc4] underline underline-offset-2">Make a class pack</a> · <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
           ) : (
-            <><span class="font-bold text-ink">Members</span> print a whole class list in one PDF, with no footer line on any sheet.{' '}
+            <><span class="font-bold text-ink">Members</span> print every kid in one PDF, with no footer line on any sheet.{' '}
             <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">See membership</a></>
           )}
         </div>

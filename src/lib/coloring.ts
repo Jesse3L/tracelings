@@ -4,7 +4,11 @@ import { shape, runBounds, toPagePath, type LoadedFont } from './fontshape';
 import { SITE } from '../config';
 
 export type Theme = 'stars' | 'hearts' | 'flowers' | 'bubbles' | 'plain';
-export interface ColoringOptions { name: string; theme: Theme; paper: Paper; credit: boolean; caps: boolean }
+export interface ColoringOptions {
+  name: string; theme: Theme; paper: Paper; credit: boolean; caps: boolean;
+  /** Optional: draws a picture in each free spot instead of the theme shapes (the personalized program's theme icons). */
+  decorate?: (x: number, y: number, r: number, i: number) => Item[];
+}
 
 const INK = '#1e2a44';
 const f2 = (n: number) => Math.round(n * 100) / 100;
@@ -86,11 +90,13 @@ export function buildColoringPage(f: LoadedFont, o: ColoringOptions): Page {
       x - r > m + 8 && x + r < w - m - 8 && y - r > m + 8 && y + r < h - m - 26 &&
       !nameBoxes.some((bx) => x + r > bx.x1 && x - r < bx.x2 && y + r > bx.y1 && y - r < bx.y2) &&
       placed.every((p) => Math.hypot(p.x - x, p.y - y) > p.r + r + 10);
-    for (let tries = 0; tries < 900 && placed.length < 22; tries++) {
-      const r = 18 + rand() * 30;
+    const max = o.decorate ? 14 : 22;
+    for (let tries = 0; tries < 900 && placed.length < max; tries++) {
+      const r = o.decorate ? 30 + rand() * 22 : 18 + rand() * 30;
       const x = m + rand() * (w - 2 * m), y = m + rand() * (h - 2 * m);
       if (!clear(x, y, r)) continue;
       placed.push({ x, y, r });
+      if (o.decorate) { items.push(...o.decorate(x, y, r, placed.length - 1)); continue; }
       const rot = rand() * Math.PI;
       const paths = o.theme === 'stars' ? [star(x, y, r, rot)] : o.theme === 'hearts' ? [heart(x, y, r * 0.85)] : o.theme === 'flowers' ? flower(x, y, r, rot) : [circle(x, y, r * 0.8), circle(x + r * 0.3, y - r * 0.3, r * 0.18)];
       for (const d of paths) items.push({ kind: 'path', d, color: INK, width: 2, fill: '#ffffff' });
