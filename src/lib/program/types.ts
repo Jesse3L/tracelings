@@ -74,3 +74,42 @@ export interface WeekContent {
   tracingSentence: string;
   parentNote: { teaches: string; why: string; activities: string[] };
 }
+
+// ---------- Added by Part B (accounts, storage, AI). New types only; nothing above changed. ----------
+
+/** Per-family usage counters kept in the family doc. */
+export interface FamilyUsage {
+  month: string;                          // "YYYY-MM" the generation count belongs to
+  generations: number;                    // AI generations this month, all children together
+  redos: Record<string, number>;          // "childId:weekIndex" -> redos used (max 2 each)
+}
+
+/** What the server stores per paying family (private Vercel Blob), keyed by a hash of the member email. No names. */
+export interface FamilyDoc {
+  children: ChildProfile[];
+  plans: Record<string, ChildPlan>;       // childId -> plan
+  checkIns: CheckIn[];
+  content: Record<string, WeekContent>;   // "childId:weekIndex" -> cached content
+  contentFor?: Record<string, string>;    // "childId:weekIndex" -> "level:baseWeek:theme" the content was made for (a check-in can shift weeks)
+  usage: FamilyUsage;
+}
+
+/** Response of GET and POST /api/program/family. */
+export interface FamilyResponse {
+  children: ChildProfile[];
+  plans: Record<string, ChildPlan>;
+  checkIns: CheckIn[];
+  cached: string[];                       // "childId:weekIndex" keys with saved content
+  redos: Record<string, number>;
+  limits: { maxChildren: number; redosPerWeek: number };
+}
+
+/** Response of POST /api/program/week. */
+export interface WeekResponse {
+  content: WeekContent;
+  cached: boolean;                        // true when it came from the family's saved content
+  redosLeft: number;
+  /** redo-limit: no redos left; not-yet: AI story is made when the plan reaches this week (template for now);
+   *  limit: a monthly cap was reached (template); fallback: the AI was unavailable (template, not saved). */
+  note?: 'redo-limit' | 'not-yet' | 'limit' | 'fallback';
+}

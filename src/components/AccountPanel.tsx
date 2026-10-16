@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { fetchMember, type MemberState } from '../lib/member';
+import ProgramDashboard from './ProgramDashboard';
 
 const fmt = (d?: string | null) => {
   if (!d) return '';
@@ -104,10 +105,11 @@ export default function AccountPanel() {
       <div class="grid gap-5">
         {welcome && (
           <div class="rounded-xl border border-[#9fd3b8] bg-[#eef8f2] p-5" role="status">
-            <p class="font-bold text-lg text-ink">Welcome to Tracelings membership!</p>
-            <p class="mt-1 text-muted">Member printing is on in this browser. Start with a <a href="/class-pack/" class={linkCls}>class pack</a>: paste your names once and print everything.</p>
+            <p class="font-bold text-lg text-ink">Welcome to Tracelings at Home, Personalized!</p>
+            <p class="mt-1 text-muted">Member printing is on in this browser. Pick a child below and print this week’s pack, or add a child with the placement check.</p>
           </div>
         )}
+        <ProgramDashboard />
         <div class="rounded-xl border border-hairline bg-white p-6">
           <h2 class="text-xl font-bold">Your membership</h2>
           <dl class="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[15px]">
@@ -115,15 +117,16 @@ export default function AccountPanel() {
             <dt class="text-muted">Email</dt><dd class="text-ink">{m.email}</dd>
             {m.paidThrough && !m.cancelsOn && <><dt class="text-muted">Renews</dt><dd class="text-ink">{fmt(m.paidThrough)}</dd></>}
             {m.cancelsOn && <><dt class="text-muted">Ends</dt><dd class="text-ink">{fmt(m.cancelsOn)} (canceled, no further charges)</dd></>}
+            <dt class="text-muted">Kids in the program</dt><dd class="text-ink">Up to {m.maxChildren ?? 4}</dd>
             <dt class="text-muted">Names per PDF</dt><dd class="text-ink">Up to {m.maxNames}</dd>
           </dl>
-          <h3 class="mt-6 font-bold">What’s included now</h3>
+          <h3 class="mt-6 font-bold">What’s included</h3>
           <ul class="mt-2 list-disc pl-5 text-[15px] text-muted space-y-1">
-            <li>No footer line on any printable</li>
-            <li>A saved class list that works in <a href="/name-tracing/" class={linkCls}>name tracing</a>, <a href="/cursive/" class={linkCls}>cursive</a> and <a href="/name-coloring-pages/" class={linkCls}>name coloring pages</a></li>
-            <li><a href="/class-pack/" class={linkCls}>Class packs</a>: every child’s tracing, cursive and coloring pages in one PDF</li>
-            <li>No email prompts on downloads</li>
-            <li>New member features as they launch, at no extra cost</li>
+            <li>A personalized plan for each child, with weekly packs themed on what they love</li>
+            <li>A new story starring your child each week, plus word problems and a parent note</li>
+            <li>The weekly check-in and a printable progress report</li>
+            <li>No footer line on any printable, and no email prompts on downloads</li>
+            <li>A saved list of names that works in <a href="/name-tracing/" class={linkCls}>name tracing</a>, <a href="/cursive/" class={linkCls}>cursive</a> and <a href="/name-coloring-pages/" class={linkCls}>name coloring pages</a>{(m.maxNames ?? 0) > 8 && <>, and <a href="/class-pack/" class={linkCls}>class packs</a> for your class</>}</li>
           </ul>
         </div>
 
@@ -177,7 +180,7 @@ export default function AccountPanel() {
       )}
       {msg && <p class={`mt-3 text-[14px] ${msg.kind === 'error' ? 'text-[#b4232c]' : 'text-[#1f7a50]'}`} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
       <button type="submit" disabled={busy} class="btn-pencil mt-5 w-full px-5 py-3.5 text-lg disabled:opacity-60">{busy ? 'Checking…' : 'Sign in'}</button>
-      <p class="mt-3 text-[13px] text-muted">Not a member yet? <a href="/membership/" class={linkCls}>See plans</a></p>
+      <p class="mt-3 text-[13px] text-muted">Not a member yet? <a href="/program/" class={linkCls}>Try week 1 free</a> or <a href="/membership/" class={linkCls}>see the program</a></p>
     </form>
   );
 }
