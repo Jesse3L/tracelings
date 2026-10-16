@@ -58,7 +58,7 @@
     },
     {
       "id": 30,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-10-16",
       "primaryKeyword": "kindergarten readiness checklist",
       "volume": 2900,
@@ -71,7 +71,9 @@
         "/number-tracing/1-10/",
         "/sight-words/pre-k/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "kindergarten-readiness-checklist",
+      "publishedOn": "2026-10-16"
     },
     {
       "id": 9,
