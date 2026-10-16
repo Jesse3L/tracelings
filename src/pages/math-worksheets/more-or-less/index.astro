@@ -1,0 +1,131 @@
+---
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import MathSheets from '../../../components/MathSheets.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/math-worksheets/more-or-less/', SITE.url).href;
+const title = `Kindergarten More or Less Worksheets (Free) | ${SITE.name}`;
+const description = 'Free kindergarten more or less worksheets: compare groups of pictures, circle the bigger number, greater than less than symbols, and one more, one less.';
+
+const faqs = [
+  { q: 'What is the difference between more or less and greater than, less than?', a: 'They are the same idea at two levels. More or less (or more and fewer) is about groups you can see and count. Greater than and less than is the same comparison with numbers alone, and later with the > and < symbols. Most kids start with pictures and move to numbers once counting a group feels easy.' },
+  { q: 'When do kids learn greater than and less than?', a: 'Comparing groups often starts in preschool. Comparing written numbers to 10 usually comes in kindergarten, and many programs add the > and < symbols late in kindergarten or in first grade. Kids develop at different speeds. If you have concerns, ask your child’s teacher or pediatrician.' },
+  { q: 'How do I explain the greater than and less than signs?', a: 'Tell your child the open side of the sign always faces the bigger number, so 7 > 4 and 2 < 9. Some families draw the sign as a hungry mouth that eats the bigger number. Use whichever picture sticks, and read the whole sentence out loud each time: seven is greater than four.' },
+  { q: 'Should I say fewer or less?', a: 'For things you count, fewer is the textbook word (fewer stars), and less is common in everyday speech and in many kindergarten programs. The worksheet uses fewer on the picture page and smaller on the number page. Use the word your child hears at school or in your curriculum.' },
+  { q: 'Are these more or less worksheets free?', a: 'Yes. Every page type, every number range and the New problems button are free, one page at a time. Members can also print five different pages in one PDF, or one page for every child on their list, with no footer line.', html: 'Yes. Every page type, every number range and the New problems button are free, one page at a time. <a href="/membership/">Members</a> can also print five different pages in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'Do these fit the free kindergarten plan?', a: 'Yes. The kindergarten homeschool plan works on numbers 0 to 20 with ten frames in the first half of the year. A compare page for the same numbers is good extra practice on any math day.', html: 'Yes. The <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> works on numbers 0 to 20 with ten frames in the first half of the year. A compare page for the same numbers is good extra practice on any math day.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Kindergarten more or less worksheets (free generator)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Kindergarten',
+    teaches: 'Comparing groups, comparing numbers 1 to 20, greater than and less than symbols, one more and one less',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Kindergarten math worksheets', item: SITE.url + '/math-worksheets/kindergarten/' },
+      { '@type': 'ListItem', position: 3, name: 'More or less worksheets', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/math-worksheets/kindergarten/" class="hover:text-ink">Kindergarten math</a> <span aria-hidden="true">/</span> <span aria-current="page">More or less</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Kindergarten more or less worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes free printable more or less worksheets for kindergarten: compare two groups of pictures, circle the bigger number, write greater than and less than signs, or fill in one more and one less. Pick a page and a number range, tap New problems as often as you like, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <MathSheets client:load source="more-or-less" series="more-less" />
+    </div>
+    <Preview k="more-or-less" caption="Example: a greater than, less than worksheet for numbers 1 to 10." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        Comparing amounts is one of the first big ideas in kindergarten math. Kids start by looking at two groups and saying which has
+        more, then learn that 8 is more than 5 even with no pictures at all. These more or less worksheets walk through that in four
+        steps, and each one prints with your child's name on it. The name is added in your browser and never leaves your device.
+      </p>
+
+      <h2>Four kinds of more or less pages</h2>
+      <ul>
+        <li><strong>Compare groups:</strong> two boxes of pictures on each row. Circle the box with more, or switch the page to fewer. Pictures sit in rows of five so they are easier to count.</li>
+        <li><strong>Compare numbers:</strong> ten pairs of numbers. Circle the bigger one, or the smaller one. For 1 to 5 and 1 to 10, a few dots under each number let kids check by counting.</li>
+        <li><strong>Greater than, less than:</strong> write &gt;, &lt; or = in the circle between two numbers. A small key at the top shows all three signs, and every page has a couple of equal pairs so = gets used too.</li>
+        <li><strong>One more, one less:</strong> a number in the middle, with a box on each side for the number before and the number after.</li>
+      </ul>
+
+      <h2>Start with pictures, then numbers</h2>
+      <p>
+        Begin with the compare groups page for 1 to 5. Ask your child to count each box out loud before circling. Once that is easy, try
+        compare groups for 1 to 10, then the compare numbers page with dots. The dots are a bridge: kids can count to check, and over a
+        few weeks most stop needing them. Save numbers 11 to 20 for when your child can read the teen numbers without help.
+      </p>
+      <p>
+        If a group is hard to count, put a cracker or a button on each picture as you count, then line up the two groups side by side.
+        The longer line has more. That matching step is how many kids first see the difference.
+      </p>
+
+      <h2>Greater than and less than worksheets for kindergarten</h2>
+      <p>
+        The &gt; and &lt; signs are new symbols to learn, so keep the first page short. Do two or three problems together, reading each
+        one as a sentence: "nine is greater than three." The open side of the sign faces the bigger number. Some kids like the hungry
+        mouth picture, where the mouth opens toward the bigger number because it wants more to eat.
+      </p>
+      <p>
+        Many kindergarten programs introduce the symbols near the end of the year, and some wait until first grade. If your child isn't
+        ready, use the compare numbers page instead. It practices the same thinking with no symbols. Kids develop at different speeds.
+        If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>One more, one less</h2>
+      <p>
+        Knowing the number just before and just after is a quiet skill that helps with counting on, counting back and early addition.
+        If the page feels tricky, lay out a strip of paper with 1 to 20 written on it and let your child find the middle number first.
+        For writing practice on the same numbers, a <a href="/number-tracing/1-20/">number tracing 1 to 20</a> sheet pairs well with it.
+      </p>
+
+      <h2>More kindergarten math</h2>
+      <p>
+        These pages are part of our free <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a>. Once comparing feels
+        easy, move on to <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> with pictures and a
+        number line. For counting and number sense, the <a href="/math-worksheets/ten-frames/">ten frame printables</a> show 5 and 10 at
+        a glance, which makes comparing faster too.
+      </p>
+
+      <h2>A 10-minute more or less routine</h2>
+      <ol>
+        <li><strong>3 minutes:</strong> make two piles of small snacks. Ask which pile has more, then count both to check. Let your child eat the extras to make the piles equal.</li>
+        <li><strong>5 minutes:</strong> one worksheet side by side. Do the first row together out loud, then let your child try the next two on their own.</li>
+        <li><strong>2 minutes:</strong> a quick game. Say two numbers and have your child hold up the bigger one on their fingers.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about more or less worksheets</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

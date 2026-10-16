@@ -1,0 +1,140 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MathSampler from '../../../components/MathSampler.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+import previews from '../../../data/previews.json';
+
+const url = new URL('/math-worksheets/kindergarten/', SITE.url).href;
+const title = `Free Kindergarten Math Worksheets to Print | ${SITE.name}`;
+const description = 'Free printable kindergarten math worksheets: counting, ten frames, more or less, addition and subtraction. Make your own pages or print a free 6-page sampler.';
+
+const P = previews as Record<string, { src: string; width: number; height: number; alt: string }>;
+const makers = [
+  { href: '/math-worksheets/ten-frames/', title: 'Ten frame printables', k: 'ten-frames', body: 'Blank and double ten frames, how many?, show the number, make 10 and ten frame addition to 20.' },
+  { href: '/math-worksheets/more-or-less/', title: 'More or less worksheets', k: 'more-or-less', body: 'Compare groups of pictures, circle the bigger number, greater than and less than signs, one more and one less.' },
+  { href: '/math-worksheets/kindergarten-addition/', title: 'Addition and subtraction', k: 'k-addition', body: 'Picture addition, number line addition and addition facts within 5, 10 and 20, plus subtraction with pictures.' },
+  { href: '/math-worksheets/pre-k/', title: 'Counting and number order', k: 'prek-math', body: 'Count and color, count and circle, and missing numbers 1 to 20. Started in pre-K and still useful early in kindergarten.' },
+];
+
+const faqs = [
+  { q: 'What math do kids learn in kindergarten?', a: 'Most kindergarten math covers counting to 20 and beyond, counting a group of objects, writing numbers 0 to 20, comparing groups and numbers, the teen numbers as ten and some more, and adding and taking away within 10. Exact goals vary by state and program, so check your school or curriculum if you need to match a list.' },
+  { q: 'What is in the free kindergarten math sampler?', a: 'Six different pages in one PDF: ten frames for 11 to 20, missing numbers to 20, compare numbers to 10, make 10, picture addition within 10 and subtraction with pictures within 10. It is free for everyone and prints with your child’s name if you type one.' },
+  { q: 'Are these kindergarten math worksheets really free?', a: 'Yes. Every maker on this page is free, one page at a time, with new problems whenever you like. Members can also print five different pages in one PDF, or one page for every child on their list, with no footer line.', html: 'Yes. Every maker on this page is free, one page at a time, with new problems whenever you like. <a href="/membership/">Members</a> can also print five different pages in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'How many math worksheets a day for a kindergartner?', a: 'One page is plenty for most kindergartners, about 5 to 10 minutes. Pair it with a few minutes of counting real things. Short and regular usually beats long and rare.' },
+  { q: 'What order should we do the worksheets in?', a: 'A common order is counting and ten frames first, then comparing (more or less), then make 10, then addition and subtraction within 5 and 10. The free kindergarten homeschool plan follows roughly this order across 36 weeks.', html: 'A common order is counting and ten frames first, then comparing (more or less), then make 10, then addition and subtraction within 5 and 10. The free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> follows roughly this order across 36 weeks.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. Every page is drawn in your browser. The name you type goes on the Name line and stays on your device. It is never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Free kindergarten math worksheets',
+    url,
+    description,
+    inLanguage: 'en-US',
+    hasPart: makers.map((m) => ({ '@type': 'LearningResource', name: m.title, url: SITE.url + m.href, isAccessibleForFree: true, educationalLevel: 'Kindergarten' })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Kindergarten math worksheets', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Kindergarten math worksheets</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free kindergarten math worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">This page gathers every free printable kindergarten math worksheet on Tracelings: counting, ten frames, more or less, addition and subtraction. Print the free 6-page sampler below, or open any maker to make as many fresh pages as you need.</p>
+    </header>
+
+    <section id="sampler" class="scroll-mt-24" aria-labelledby="sampler-h">
+      <h2 id="sampler-h" class="text-2xl font-bold mb-4">Free kindergarten math sampler</h2>
+      <MathSampler client:load source="k-math-sampler" />
+    </section>
+
+    <section class="mt-14" aria-labelledby="makers-h">
+      <h2 id="makers-h" class="text-2xl font-bold mb-4">Every kindergarten math worksheet maker</h2>
+      <ul class="grid gap-5 sm:grid-cols-2">
+        {makers.map((m) => (
+          <li>
+            <a href={m.href} class="flex h-full gap-4 rounded-xl border border-hairline bg-white p-5 hover:border-rule">
+              {P[m.k] && <img src={P[m.k].src} width={P[m.k].width} height={P[m.k].height} alt={P[m.k].alt} loading="lazy" decoding="async" class="w-[92px] shrink-0 self-start h-auto rounded border border-hairline" />}
+              <span class="block">
+                <span class="block text-xl font-bold text-ink">{m.title}</span>
+                <span class="mt-2 block text-muted leading-relaxed">{m.body}</span>
+                <span class="mt-3 block font-bold text-[#2f5fc4]">Make a worksheet</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        These free kindergarten math worksheets cover the skills most kindergarten programs work on: counting, the teen numbers, comparing
+        amounts, making 10, and adding and taking away within 10. Each maker builds the page in your browser, so you get new problems every
+        time and your child's name stays on your device.
+      </p>
+
+      <h2>What kindergarten math covers</h2>
+      <ul>
+        <li><strong>Counting and number order:</strong> counting a group one at a time, and knowing which number comes next. Try the count and circle and missing numbers pages in the <a href="/math-worksheets/pre-k/">pre-K math worksheets</a>.</li>
+        <li><strong>Teen numbers:</strong> seeing 14 as ten and four more. A <a href="/math-worksheets/ten-frames/">double ten frame</a> shows it clearly.</li>
+        <li><strong>Comparing:</strong> which group has more, which number is bigger, and later the &gt; and &lt; signs, on the <a href="/math-worksheets/more-or-less/">more or less worksheets</a>.</li>
+        <li><strong>Making 10:</strong> the pairs that add to 10 (3 and 7, 4 and 6), with the make 10 ten frame page.</li>
+        <li><strong>Adding and taking away:</strong> within 5, then within 10, with pictures and a number line, on the <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a>.</li>
+      </ul>
+      <p>
+        Goals vary by state and program. If you need to match a specific list, check your school district or your state's kindergarten
+        standards. Many kids are working on these skills somewhere between ages 5 and 6, and some take longer on one part than another.
+        If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>A kindergarten math order that works</h2>
+      <ol>
+        <li><strong>First months:</strong> counting to 20, ten frames for 1 to 10, and writing numbers.</li>
+        <li><strong>Middle of the year:</strong> teen numbers with a double ten frame, comparing groups and numbers, one more and one less.</li>
+        <li><strong>Later in the year:</strong> make 10, then picture addition and subtraction within 5 and within 10.</li>
+      </ol>
+      <p>
+        Move on when a page feels easy, not when the calendar says so. Going back to an easier page for a week is normal and often helps.
+      </p>
+
+      <h2>How these fit our kindergarten homeschool plan</h2>
+      <p>
+        Our free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> has a math page in every weekly pack. It works on
+        numbers 0 to 20 with ten frames through week 21, then moves to adding within 5 and within 10. Use the makers above for extra practice on
+        the same skill, or to slow down on a week that needs more time. For number writing, the <a href="/number-tracing/1-20/">number tracing 1 to 20</a> page
+        has every number in order.
+      </p>
+
+      <h2>A simple 10-minute math routine</h2>
+      <ol>
+        <li><strong>2 minutes:</strong> count something real together, like steps, spoons or toy cars. Count past 20 when you can.</li>
+        <li><strong>5 minutes:</strong> one worksheet side by side. Do the first problem out loud together, then let your child try the next ones.</li>
+        <li><strong>3 minutes:</strong> act out one problem from the page with snacks or toys, then eat the answer.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about kindergarten math worksheets</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>
