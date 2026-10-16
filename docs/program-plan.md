@@ -58,6 +58,16 @@ Decided with Jesse on 2026-10-16. This replaces the old membership (Family, Clas
 - `/account/` becomes the program dashboard: kids, this week's pack, check-in, plan timeline, progress report.
 - Needs from Jesse: an `ANTHROPIC_API_KEY` for Tracelings in Vercel (a separate key from Speechfolk, with a monthly spend limit set in the Anthropic console), and a real checkout test once live.
 
+## Story v2: the big picture book (Oct 2026)
+
+Printed weeks showed pictures that didn't match the words and stories that jumped around, so the story is now a picture book built from pre-drawn scenes.
+
+- **Scenes** (`src/lib/program/scenes.ts`): per theme a recurring cast, 34 to 36 scenes with what each picture shows, and ready story paths. Art lives at `public/program/scenes/<theme>/<id>.png`. `src/lib/program/sceneArt.json` lists only reviewed scenes and the ready paths. When that file is missing or a theme has no ready path, weeks print the old folded little book with icons.
+- **Book**: portrait sheets printed one-sided, two half-page leaves per sheet. Cut on the dashed line, fold each strip on the dotted line with the pictures outside, stack by page number and staple along the folds. Pre-K: cover, 6 story pages, "The end" (2 sheets). Kindergarten: cover, 10 story pages, "The end" (3 sheets).
+- **AI**: when a theme has ready art, one call to `PROGRAM_STORY_MODEL` (default `claude-sonnet-5-5`) writes the week, with the story as scenes plus one page of words per scene. Code checks that each page matches its picture, the arc, the cast names and the week's words. Otherwise it is the old `PROGRAM_AI_MODEL` call. Caps, the global guard and the name rules are unchanged.
+- **Templates**: hand-written text for every path (`src/lib/program/storyTexts.ts`), with one slot for the week's word family, letter or name line.
+- Checks: `npx tsx scripts/test-story-v2.mts`, `npx tsx scripts/story-v2-lint.mts`, renders with `scripts/render-big-books.mts` (set `ART_DIR` to test with placeholder art).
+
 ## After launch
 
 - Watch: placement checks started and finished, free week 1 downloads, checkouts started, paid.

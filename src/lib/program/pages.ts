@@ -10,6 +10,8 @@ import { PLANS, M, rng, header, footer, para, circlePath, starPath, box, centere
 import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from './types';
 import { THEMES, smallIcons, iconPath, storyIcon, mentionsIcon, countedIcon, type ThemeIcon } from './themes';
 import { baseWeekOf, weekTitle, reviewLetters, type MathStep } from './engine';
+import { SCENES, sceneById, sceneSrc } from './scenes';
+import { sceneArt, readyScenes, storyHasArt } from './story';
 
 const INK = COLORS.ink;
 const f2 = (n: number) => Math.round(n * 100) / 100;
@@ -473,6 +475,133 @@ export function littleBookPage(o: ThemedOptions, story: WeekContent['story'], bu
 /** How to fold the little book, for the plan page. */
 export const LITTLE_BOOK_HOW = 'Fold the page in half both ways and open it. Cut only the red line, fold it in half the long way, push the ends together, then fold it into a book.';
 
+// ---------- 6b. Big picture book (scene pictures) ----------
+//
+// Printed one-sided, portrait. A dashed line across the middle of each sheet is cut, giving two strips. Each strip
+// folds in half on its dotted line with the pictures outside, making one leaf with a page on each face:
+// the right half is the leaf's front, the left half its back. Leaves are stacked in order and stapled along the folds.
+// Leaf k holds book pages 2k (front) and 2k + 1 (back); sheet s holds leaves 2s (top strip) and 2s + 1 (bottom).
+// Book pages: 0 = cover, 1..n = the story, n + 1 = "The end". Pre-K: 6 story pages, 8 pages, 4 leaves, 2 sheets.
+// Kindergarten: 10 story pages, 12 pages, 6 leaves, 3 sheets.
+
+/** Where book page p goes: which sheet, which strip (0 top, 1 bottom), and which half (front = right). */
+export function bookSlot(p: number): { sheet: number; strip: 0 | 1; face: 'front' | 'back' } {
+  const leaf = Math.floor(p / 2);
+  return { sheet: Math.floor(leaf / 2), strip: (leaf % 2) as 0 | 1, face: p % 2 === 0 ? 'front' : 'back' };
+}
+
+/** How to put the big book together, for the plan page. */
+export const BIG_BOOK_HOW = 'Cut each sheet on the dashed line. Fold every strip in half on the dotted line with the pictures outside. Stack them by page number, cover on top, and staple along the folds.';
+
+export interface BigBookPlan { title: string; who: string; cover: string; pages: { scene: string; text: string }[] }
+
+/** The words and pictures of the big book, with the name swapped in. The cover shows the first page with the most cast. */
+export function bigBookPlan(o: Pick<ThemedOptions, 'name' | 'theme'>, story: WeekContent['story']): BigBookPlan {
+  const scenes = story.scenes ?? [];
+  const who = styleName(o.name, 'capital') || 'Little One';
+  // Cover: a whole-cast opening or ending picture that isn't already a page (so the cover isn't page 1 twice),
+  // else the story page with the most of the cast.
+  const castOf = (id: string) => sceneById(o.theme, id)?.cast.length ?? 0;
+  const full = SCENES[o.theme].cast.length;
+  const spare = readyScenes(o.theme).find((s) => (s.beat === 'opening' || s.beat === 'ending') && s.cast.length === full && !scenes.includes(s.id));
+  const cover = spare?.id ?? scenes.reduce((best, id) => (castOf(id) > castOf(best) ? id : best), scenes[0] ?? '');
+  return { title: personalize(story.title, o.name), who, cover, pages: story.pages.map((t, i) => ({ scene: scenes[i], text: personalize(t, o.name) })) };
+}
+
+/** Wraps text to fit a box, shrinking from `start` down to `min` points. */
+function fitText(text: string, start: number, min: number, maxW: number, maxH: number, lead = 1.3): { size: number; lines: string[] } {
+  for (let size = start; size >= min; size -= 0.5) {
+    const lines = text.split('\n').flatMap((para) => wrap(para, size, maxW));
+    if (lines.length * size * lead <= maxH && lines.every((l) => textW(l, size) <= maxW)) return { size, lines };
+  }
+  const lines = text.split('\n').flatMap((para) => wrap(para, min, maxW));
+  return { size: min, lines };
+}
+
+/**
+ * The story as a big picture book: 2 sheets (Pre-K) or 3 sheets (Kindergarten). Each half sheet is one leaf of
+ * the book (see bookSlot). The pictures are the scene drawings from the scene library, large and ready to color;
+ * the words go underneath in big type (bigger for Pre-K).
+ */
+export function bigBookPages(o: ThemedOptions, level: 'pre-k' | 'kindergarten', story: WeekContent['story']): Page[] {
+  const { w, h } = dims(o);
+  const plan = bigBookPlan(o, story);
+  const total = plan.pages.length + 2;
+  const sheets = Math.ceil(total / 4);
+  const out: Page[] = Array.from({ length: sheets }, () => ({ w, h, items: [] as Item[] }));
+  const pw = w / 2, ph = h / 2;
+  const pre = level === 'pre-k';
+  const outer = 20, spine = 24, top = 24;
+
+  // Guides on every sheet: the cut line across the middle and a fold line down each strip.
+  for (const pg of out) {
+    pg.items.push({ kind: 'line', x1: 6, y1: ph, x2: w - 6, y2: ph, color: COLORS.quiet, width: 1, dash: [7, 5] });
+    for (const x of [w / 4, (3 * w) / 4]) pg.items.push({ kind: 'text', x, y: ph + 10, size: 7, text: 'cut on the dashed line', color: COLORS.quiet, align: 'center' });
+    for (const t of [0, 1]) {
+      pg.items.push({ kind: 'line', x1: pw, y1: t * ph + 8, x2: pw, y2: (t + 1) * ph - 8, color: COLORS.desc, width: 0.8, dash: [1.5, 4] });
+      pg.items.push({ kind: 'text', x: pw, y: (t + 1) * ph - 3, size: 6.5, text: 'fold', color: COLORS.quiet, align: 'center' });
+    }
+  }
+
+  const picture = (items: Item[], id: string, x: number, y: number, maxW: number, maxH: number): number => {
+    const art = sceneArt(o.theme, id) ?? { w: 4, h: 3 };
+    const k = Math.min(maxW / art.w, maxH / art.h);
+    const iw = art.w * k, ih = art.h * k;
+    const ix = x + (maxW - iw) / 2;
+    items.push({ kind: 'image', x: ix, y, w: iw, h: ih, src: sceneSrc(o.theme, id) });
+    items.push({ kind: 'path', d: box(ix - 3, y - 3, iw + 6, ih + 6, 6), color: COLORS.desc, width: 1 });
+    return ih;
+  };
+  const center = (items: Item[], lines: string[], cx: number, y: number, size: number, color = INK, lead = 1.3): number => {
+    for (const l of lines) { items.push({ kind: 'text', x: cx, y, size, text: l, color, align: 'center' }); y += size * lead; }
+    return y;
+  };
+
+  for (let p = 0; p < total; p++) {
+    const slot = bookSlot(p);
+    const items = out[slot.sheet].items;
+    const front = slot.face === 'front';
+    const x0 = front ? pw : 0, y0 = slot.strip * ph;
+    // Content box: more room on the spine side (staples), the spine is left on a front and right on a back.
+    const cx0 = x0 + (front ? spine : outer), cw = pw - spine - outer;
+    const mid = cx0 + cw / 2;
+    if (p === 0) {
+      const t = fitText(plan.title, pre ? 26 : 24, 15, cw, 64, 1.18);
+      let y = center(items, t.lines, mid, y0 + top + t.size, t.size, INK, 1.18);
+      const ih = plan.cover ? picture(items, plan.cover, cx0 + 8, y + 2, cw - 16, ph - (y - y0) - 66) : 0;
+      y += ih + 26;
+      const s = fitText(`A story for ${plan.who}`, 15, 10, cw, 20);
+      center(items, s.lines, mid, y, s.size, INK);
+    } else if (p === total - 1) {
+      let y = center(items, ['The end'], mid, y0 + top + 46, 36);
+      y += 10;
+      center(items, [`Well read, ${plan.who}!`].flatMap((t) => fitText(t, 15, 10, cw, 20).lines), mid, y + 6, 15);
+      y += 30;
+      // A small box to draw a favorite part of the story.
+      const bh = Math.min(170, ph - (y - y0) - 62), bw = Math.min(cw - 40, bh * 1.3);
+      items.push({ kind: 'path', d: box(mid - bw / 2, y, bw, bh, 10), color: COLORS.quiet, width: 1, dash: [4, 3] });
+      center(items, ['Draw your favorite part.'], mid, y + 18, 11, COLORS.quiet);
+      y += bh + 22;
+      center(items, ['Read it again tomorrow. Point to each word.'], mid, y, 9.5, COLORS.quiet);
+      center(items, [SITE.domain], mid, y + 14, 8, COLORS.quiet);
+    } else {
+      const page = plan.pages[p - 1];
+      const picMax = ph * (pre ? 0.6 : 0.55);
+      const ih = picture(items, page.scene, cx0, y0 + top, cw, picMax);
+      const ty = y0 + top + ih + 16;
+      const avail = y0 + ph - 30 - ty;
+      const t = fitText(page.text, pre ? 24 : 19, pre ? 15 : 12, cw - 6, avail, 1.3);
+      // Center the block of words in the space under the picture.
+      const blockH = t.lines.length * t.size * 1.3;
+      center(items, t.lines, mid, ty + Math.max(0, (avail - blockH) / 2) + t.size * 0.9, t.size);
+      // Page number in the outer bottom corner.
+      items.push({ kind: 'text', x: front ? x0 + pw - outer : x0 + outer, y: y0 + ph - 13, size: 9, text: String(p), color: COLORS.quiet, align: front ? 'right' : 'left' });
+    }
+  }
+  if (o.credit) for (const pg of out) pg.items.push({ kind: 'text', x: w - 10, y: h - 4, size: 6.5, text: `Free printable from ${SITE.domain}`, color: COLORS.quiet, align: 'right' });
+  return out;
+}
+
 // ---------- 7. Tracing sentence ----------
 
 /** The week's sentence about their interest: read it, trace it, then copy it, with a box to draw it. */
@@ -724,7 +853,12 @@ export function buildProgramWeek(opts: ProgramWeekOptions): Page[] {
   const tenFrame: Activity = { title: 'Ten frames', how: 'Count each frame by touching every picture once. Notice that a full frame is always 10.', min: 6, pages: [themedTenFramePage(T, step)] };
   const moreMax = step.addTo ?? Math.max(5, Math.min(10, n + 2));
   const moreLess: Activity = { title: level === 'pre-k' ? 'Which has more?' : 'More or fewer', how: 'Count both groups out loud before circling. Lining up toy pieces side by side helps.', min: 5, pages: [themedMoreLessPage(T, moreMax, level === 'kindergarten')] };
-  const book: Activity = { title: `Read ${who}'s little book`, how: `Cut and fold the book together (${LITTLE_BOOK_HOW.charAt(0).toLowerCase()}${LITTLE_BOOK_HOW.slice(1, -1)}). Read it aloud and let ${who} point to the pictures.`, min: 10, pages: [littleBookPage(T, content.story)] };
+  // The big picture book when every page of the story has its scene picture; older stories (and themes whose
+  // pictures aren't ready yet) print as the folded little book with theme icons.
+  const big = storyHasArt(theme, content.story);
+  const book: Activity = big
+    ? { title: `Read ${who}'s picture book`, how: `A story starring ${who}, with a big picture to color on every page. ${BIG_BOOK_HOW} Read it aloud together, then let ${who} color the pictures.`, min: 12, pages: bigBookPages(T, level, content.story) }
+    : { title: `Read ${who}'s little book`, how: `Cut and fold the book together (${LITTLE_BOOK_HOW.charAt(0).toLowerCase()}${LITTLE_BOOK_HOW.slice(1, -1)}). Read it aloud and let ${who} point to the pictures.`, min: 10, pages: [littleBookPage(T, content.story)] };
   const sentence: Activity = { title: 'Trace the sentence', how: 'Read it together first, pointing to each word, then trace it and draw a picture of it.', min: 7, pages: [tracingSentencePage(T, content.tracingSentence, level)] };
   const problems: Activity = { title: 'Word problems', how: 'Read each problem out loud. Count the pictures together, then write the answer.', min: 8, pages: [wordProblemsPage(T, content.wordProblems)] };
   const fromBase = (d: number): Activity => ({ title: days[d].title, how: days[d].how, min: 7, pages: days[d].pages });
