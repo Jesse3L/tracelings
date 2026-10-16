@@ -45,6 +45,9 @@ export interface ProgramWeek {
   theme: ThemeId;             // which interest this week leans on (rotates through interests)
   focus: SkillId[];           // skills taught or reviewed this week
   extraReview?: boolean;      // inserted because a check-in said "still working"
+  /** Added in Part A: the week's math step. Math runs on its own track, so a child who already counts to 20
+   *  works on bigger numbers even during an early letter week. Missing means "use the base week's math". */
+  math?: { number?: number; addTo?: 5 | 10 };
 }
 
 export interface ChildPlan {
@@ -65,7 +68,9 @@ export interface CheckIn {
 export interface WeekContent {
   source: 'ai' | 'template';
   story: { title: string; pages: string[] };          // 4 to 8 short pages for a little book
-  wordProblems: { text: string; a: number; b: number; op: '+' | '-' | 'compare'; answer: number }[];
+  /** op '+': answer = a + b. op '-': answer = a - b. op 'compare': "which is more?", answer = the larger of a and b.
+   *  icon (added in Part A, optional): a theme icon id from themes.ts to picture the problem; matched from the text when missing. */
+  wordProblems: { text: string; a: number; b: number; op: '+' | '-' | 'compare'; answer: number; icon?: string }[];
   tracingSentence: string;
   parentNote: { teaches: string; why: string; activities: string[] };
 }
