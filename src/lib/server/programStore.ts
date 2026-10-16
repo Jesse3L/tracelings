@@ -3,7 +3,7 @@
 // so the store never holds an email address. It never holds a child's name either: every profile is rebuilt
 // field by field from the ChildProfile type, and a request that carries a name-like field is refused.
 import { createHash } from 'node:crypto';
-import { get, put, BlobPreconditionFailedError } from '@vercel/blob';
+import { get, head, put, BlobNotFoundError, BlobPreconditionFailedError } from '@vercel/blob';
 import type { ChildProfile, ChildPlan, CheckIn, FamilyDoc, ProgramWeek, SkillId, SkillState, ThemeId, WeekContent } from '../program/types';
 import { PLANS as BASE_PLANS, type Level } from '../homeschool';
 
@@ -151,9 +151,13 @@ export class Conflict extends Error {}
 
 const blobBackend: Backend = {
   async read(path) {
+    // The etag must come from the Blob API (head), the same source put() checks ifMatch against. The ETag header on
+    // the download response is the CDN's and never matches, so every conditional write failed as "stale".
+    let meta;
+    try { meta = await head(path); } catch (e) { if (e instanceof BlobNotFoundError) return null; throw e; }
     const r = await get(path, { access: 'private', useCache: false });
     if (!r || r.statusCode !== 200) return null;
-    return { text: await new Response(r.stream).text(), etag: r.blob.etag };
+    return { text: await new Response(r.stream).text(), etag: meta.etag };
   },
   async write(path, text, ifMatch) {
     try {
