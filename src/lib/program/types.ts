@@ -67,7 +67,10 @@ export interface CheckIn {
 /** AI (paid) or template (free week 1) content for one child-week. Uses the literal placeholder {{name}} for the child's name. */
 export interface WeekContent {
   source: 'ai' | 'template';
-  story: { title: string; pages: string[] };          // 4 to 8 short pages for a little book
+  /** 4 to 8 short pages for a little book. icons (optional, parallel to pages): the theme icon id from themes.ts
+   *  pictured on each page, a thing that page names; null for a page with no picture. Missing on older cached
+   *  content, where the little book matches a picture from each page's words. */
+  story: { title: string; pages: string[]; icons?: (string | null)[] };
   /** op '+': answer = a + b. op '-': answer = a - b. op 'compare': "which is more?", answer = the larger of a and b.
    *  icon (added in Part A, optional): a theme icon id from themes.ts to picture the problem; matched from the text when missing. */
   wordProblems: { text: string; a: number; b: number; op: '+' | '-' | 'compare'; answer: number; icon?: string }[];

@@ -5,7 +5,7 @@
 // The child's name is never sent: the model writes the literal placeholder {{name}}, and the browser swaps it in.
 import type { ChildProfile, ProgramWeek, WeekContent } from '../program/types';
 import { templateContentFor } from '../program/templates';
-import { THEMES } from '../program/themes';
+import { THEMES, mentionsIcon, countedIcon } from '../program/themes';
 import { PLANS as BASE_PLANS, FAMILIES, type Week } from '../homeschool';
 
 const env = (k: string): string | undefined => ((import.meta.env ?? {}) as Record<string, string | undefined>)[k] ?? process.env[k];
@@ -109,6 +109,7 @@ function systemPrompt(): string {
     '',
     'The parts:',
     '- story: a little book. A short title (2 to 6 words) and 4 to 8 pages. Each page is 1 or 2 short sentences, at most 12 words per sentence. {{name}} is the star and appears on at least two pages. Lean on decodable words for the level: the week\'s letters, word family words and sight words, plus the theme words. Avoid long or tricky words. A gentle, happy ending.',
+    '- story.icons: the little book has one picture per page, and only the pictures in the list you are given exist. Every page is about one pictured thing from that list and names it in the words of that page ("The T-rex sat in the mud.", not "It sat in the mud."). icons has one entry per page, in the same order as pages: the id of the picture that page names. The same picture may be used on more than one page. Do not build a page around something that has no picture.',
     '- wordProblems: 4 to 6 short problems about the theme, each one or two sentences read aloud by the grown-up. Use only the numbers allowed for the week. Each problem lists a, b, op, an answer, and icon (the id of the picture the child counts). op "+" means a plus b. op "-" means a minus b, with a at least b. op "compare" asks which number is more, with a and b different; the answer is the bigger number. Write a and b as digits in the text. Do not put the answer in the text. Do not use any other numbers.',
     '- tracingSentence: one short sentence for the child to trace, 3 to 7 words and at most 36 letters, about the theme. It may use {{name}}. Letters, spaces and a final period or exclamation mark only.',
     '- parentNote: written to the grown-up. teaches: one or two sentences on what this week teaches. why: one or two sentences on why it helps right now. activities: exactly 2 off-paper activity ideas tied to the theme, each one sentence, using things most homes have. Do not talk to the child here.',
@@ -129,7 +130,8 @@ function userPrompt(f: WeekFacts): string {
   lines.push(`Skills in focus: ${f.focus.join(', ') || 'general review'}.`);
   lines.push(`Math this week: ${f.math.addTo ? `adding within ${f.math.addTo}` : `the number ${f.math.number}`}.`);
   lines.push(`Word problems: every number is a whole number from 1 to ${f.mathMax}, and every answer is at most ${f.mathMax}. Allowed op values: ${f.ops.map((o) => `"${o}"`).join(', ')}.`);
-  lines.push(`Each word problem counts one kind of thing that has a picture. Set icon to its id, and use that thing's name in the text. Pictures (id: name): ${f.icons.map((i) => `${i.id}: ${i.one} (${i.many})`).join('; ')}.`);
+  lines.push(`Story pictures (id: name): ${f.icons.map((i) => `${i.id}: ${i.one}`).join('; ')}. Each story page names one of these things, and story.icons[i] is its id. Nothing else has a picture.`);
+  lines.push(`Each word problem counts one kind of thing that has a picture. Set icon to its id, and write its name right after the numbers ("3 eggs", "2 more eggs"). Pictures (id: name): ${f.icons.map((i) => `${i.id}: ${i.one} (${i.many})`).join('; ')}.`);
   lines.push(`The friendly character can be the ${f.buddy}. Stories can happen ${f.place}.`);
   lines.push(f.level === 'pre-k'
     ? 'Keep the story very simple: mostly 3 and 4 letter words, about 40 to 90 words in all.'
@@ -140,7 +142,7 @@ function userPrompt(f: WeekFacts): string {
 export const OUTPUT_SCHEMA = {
   type: 'object',
   properties: {
-    story: { type: 'object', properties: { title: { type: 'string' }, pages: { type: 'array', items: { type: 'string' }, minItems: 1 } }, required: ['title', 'pages'], additionalProperties: false },
+    story: { type: 'object', properties: { title: { type: 'string' }, pages: { type: 'array', items: { type: 'string' }, minItems: 1 }, icons: { type: 'array', items: { type: 'string' } } }, required: ['title', 'pages', 'icons'], additionalProperties: false },
     wordProblems: { type: 'array', minItems: 1, items: { type: 'object', properties: {
       text: { type: 'string' }, a: { type: 'integer' }, b: { type: 'integer' }, op: { type: 'string', enum: ['+', '-', 'compare'] }, answer: { type: 'integer' }, icon: { type: 'string' },
     }, required: ['text', 'a', 'b', 'op', 'answer', 'icon'], additionalProperties: false } },
@@ -232,6 +234,14 @@ export function validateContent(raw: unknown, f: WeekFacts): WeekContent {
     const used = f.sightWords.filter((w) => sw.has(w.toLowerCase())).length;
     if (used < Math.ceil(f.sightWords.length / 2)) fail('story misses the sight words');
   }
+  // Pictures: icons[i] is kept only when it is one of this theme's pictures and page i names it. A dropped or
+  // missing one leaves that page without a picture (it gets a "Draw it!" box). One such page is fine; more fails.
+  const given: unknown[] = Array.isArray(r.story?.icons) ? r.story.icons : [];
+  const icons: (string | null)[] = pages.map((p, i) => {
+    const id = given[i];
+    return typeof id === 'string' && f.icons.some((x) => x.id === id) && mentionsIcon(f.theme as keyof typeof THEMES, p, id) ? id : null;
+  });
+  if (icons.filter((x) => !x).length > 1) fail('story pages without a matching picture');
   const letters = f.letters.filter((l) => l !== 'x' && l !== 'q');
   const hits = letters.filter((l) => [...sw].some((w) => w.startsWith(l))).length;
   if (hits < Math.ceil((letters.length * 2) / 3)) fail('story misses the week\'s letters');
@@ -262,9 +272,9 @@ export function validateContent(raw: unknown, f: WeekFacts): WeekContent {
     // The picture: the given id when it is one of this theme's, else none (the page matches one from the text).
     // A picture that the text doesn't talk about is dropped, so the page never shows eggs for a problem about T-rexes.
     const pic = typeof p?.icon === 'string' ? f.icons.find((x) => x.id === p.icon) : undefined;
-    const low = text.toLowerCase();
-    const head = (x: string) => x.toLowerCase().split(/\s+/).pop() ?? '';
-    const icon = pic && [pic.one, pic.many, head(pic.one), head(pic.many)].some((n) => n.length > 2 && hasPhrase(low, n.toLowerCase())) ? pic.id : undefined;
+    const th = f.theme as keyof typeof THEMES;
+    const counted = countedIcon(th, text, [a, b]);
+    const icon = pic && mentionsIcon(th, text, pic.id) && (counted === undefined || counted === pic.id) ? pic.id : undefined;
     return icon ? { text, a, b, op, answer, icon } : { text, a, b, op, answer };
   });
 
@@ -291,7 +301,7 @@ export function validateContent(raw: unknown, f: WeekFacts): WeekContent {
   for (const t of [teaches, why, ...activities]) checkCaps(t, 'parent note', themeCaps);
   if (/should be able to|\bmust\b|\bbehind\b|\bdelay/i.test(`${teaches} ${why}`)) fail('parent note pressure words');
 
-  return { source: 'ai', story: { title, pages }, wordProblems, tracingSentence, parentNote: { teaches, why, activities } };
+  return { source: 'ai', story: { title, pages, icons }, wordProblems, tracingSentence, parentNote: { teaches, why, activities } };
 }
 
 /** Pulls the JSON object out of a Messages API response body. */

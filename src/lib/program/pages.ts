@@ -8,7 +8,7 @@ import type { LoadedFont } from '../fontshape';
 import { SITE } from '../../config';
 import { PLANS, M, rng, header, footer, para, circlePath, starPath, box, centered, weekDays, versePage, verseFor, FAMILIES, type PackOptions, type Week } from '../homeschool';
 import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from './types';
-import { THEMES, smallIcons, iconPath, type ThemeIcon } from './themes';
+import { THEMES, smallIcons, iconPath, storyIcon, mentionsIcon, countedIcon, type ThemeIcon } from './themes';
 import { baseWeekOf, weekTitle, reviewLetters, type MathStep } from './engine';
 
 const INK = COLORS.ink;
@@ -60,20 +60,33 @@ export function drawIcon(items: Item[], theme: ThemeId, id: string, cx: number, 
   else items.push({ kind: 'path', d: starPath(cx, cy, size * 0.42), color: INK, width: 1.4, fill: '#ffffff' });
 }
 
-const iconById = (theme: ThemeId, id?: string) => THEMES[theme].icons.find((i) => i.id === id);
-/** The icon a word problem is about: given, or the theme noun found in its text, or the theme's buddy. */
-export function problemIcon(theme: ThemeId, text: string, id?: string): ThemeIcon {
-  const T = THEMES[theme];
+const iconById = (theme: ThemeId, id?: string | null) => THEMES[theme].icons.find((i) => i.id === id);
+/** The icon a word problem counts: the pictured thing named right after one of its numbers ("4 eggs"; see
+ *  countedIcon). With no noun after the numbers: the given icon when the text names it, else the first pictured thing
+ *  the text names. Null when what is counted has no picture ("4 steps"): the page counts plain circles instead of
+ *  showing a picture that has nothing to do with the problem. */
+export function problemIcon(theme: ThemeId, text: string, id?: string, nums: number[] = []): ThemeIcon | null {
+  const counted = nums.length ? countedIcon(theme, text, nums) : undefined;
+  if (counted === null) return null;                      // what the child counts has no picture: plain circles
+  if (counted) return iconById(theme, counted) ?? null;   // what the child counts, even if another icon was given
   const given = iconById(theme, id);
-  if (given) return given;
-  const low = text.toLowerCase();
-  const hits = T.icons.filter((i) => low.includes(i.many.toLowerCase()) || low.includes(i.one.toLowerCase()))
-    .sort((a, b) => b.one.length - a.one.length);
-  return hits[0] ?? iconById(theme, T.buddy.icon) ?? T.icons[0];
+  if (given && mentionsIcon(theme, text, given.id)) return given;
+  return iconById(theme, storyIcon(theme, text)) ?? null;
+}
+
+/** The picture for each story page: the story's own choice when that page names it, else the matcher's.
+ *  Null means nothing on the page has a picture (the page gets a "Draw it!" box). Matching runs on the
+ *  text with {{name}} still in it, so a child called Rex never gets a T-rex. */
+export function storyPictures(theme: ThemeId, story: WeekContent['story']): (string | null)[] {
+  return story.pages.map((p, i) => {
+    const given = story.icons?.[i];
+    if (given && iconById(theme, given) && mentionsIcon(theme, p, given)) return given;
+    return storyIcon(theme, p);
+  });
 }
 
 /** A group of `n` icons in rows, centered on (cx, top). Returns the height used. */
-function iconGroup(items: Item[], theme: ThemeId, id: string, n: number, cx: number, top: number, size: number, perRow: number, crossFrom = Infinity): number {
+function iconGroup(items: Item[], theme: ThemeId, id: string | null, n: number, cx: number, top: number, size: number, perRow: number, crossFrom = Infinity): number {
   const gap = size * 0.18;
   const rows = Math.ceil(n / perRow);
   for (let k = 0; k < n; k++) {
@@ -81,7 +94,8 @@ function iconGroup(items: Item[], theme: ThemeId, id: string, n: number, cx: num
     const inRow = Math.min(perRow, n - r * perRow);
     const x = cx - ((inRow - 1) * (size + gap)) / 2 + c * (size + gap);
     const y = top + size / 2 + r * (size + gap);
-    drawIcon(items, theme, id, x, y, size);
+    if (id) drawIcon(items, theme, id, x, y, size);
+    else items.push({ kind: 'path', d: circlePath(x, y, size * 0.4), color: INK, width: 1.6 });
     if (k >= crossFrom) {
       const q = size * 0.42;
       items.push({ kind: 'line', x1: x - q, y1: y - q, x2: x + q, y2: y + q, color: '#d9534f', width: 2.6 });
@@ -315,7 +329,7 @@ export function wordProblemsPage(o: ThemedOptions, problems: WeekContent['wordPr
   const textMax = w - 2 * M - 34;
   list.forEach((q, i) => {
     const yTop = top + rowH * i;
-    const ic = problemIcon(o.theme, q.text, q.icon);
+    const ic = problemIcon(o.theme, q.text, q.icon, [q.a, q.b])?.id ?? null;
     // Number badge and the problem text.
     items.push({ kind: 'path', d: circlePath(M + 11, yTop + 13, 11), color: INK, width: 1.3 });
     items.push({ kind: 'text', x: M + 11, y: yTop + 17.5, size: 12, text: String(i + 1), color: INK, align: 'center' });
@@ -332,20 +346,20 @@ export function wordProblemsPage(o: ThemedOptions, problems: WeekContent['wordPr
     const cy0 = picTop;
     if (q.op === 'compare') {
       const half = pw / 2;
-      iconGroup(items, o.theme, ic.id, q.a, M + 32 + half / 2 - 10, cy0, Math.min(isz, (half - 30) / Math.min(perRow, Math.max(q.a, q.b)) - 3), perRow);
+      iconGroup(items, o.theme, ic, q.a, M + 32 + half / 2 - 10, cy0, Math.min(isz, (half - 30) / Math.min(perRow, Math.max(q.a, q.b)) - 3), perRow);
       items.push({ kind: 'line', x1: M + 32 + half, y1: cy0, x2: M + 32 + half, y2: cy0 + isz, color: COLORS.desc, width: 1 });
-      iconGroup(items, o.theme, ic.id, q.b, M + 32 + half * 1.5 + 10, cy0, Math.min(isz, (half - 30) / Math.min(perRow, Math.max(q.a, q.b)) - 3), perRow);
+      iconGroup(items, o.theme, ic, q.b, M + 32 + half * 1.5 + 10, cy0, Math.min(isz, (half - 30) / Math.min(perRow, Math.max(q.a, q.b)) - 3), perRow);
     } else if (q.op === '+') {
       const tot = q.a + q.b;
       const s = Math.min(isz, (pw - 30) / tot - 4);
       const wa = q.a * (s * 1.18), wb = q.b * (s * 1.18);
       const x0 = M + 32;
-      iconGroup(items, o.theme, ic.id, q.a, x0 + wa / 2, cy0, s, perRow);
+      iconGroup(items, o.theme, ic, q.a, x0 + wa / 2, cy0, s, perRow);
       plusSign(items, x0 + wa + 12, cy0 + s / 2, 7);
-      iconGroup(items, o.theme, ic.id, q.b, x0 + wa + 24 + wb / 2, cy0, s, perRow);
+      iconGroup(items, o.theme, ic, q.b, x0 + wa + 24 + wb / 2, cy0, s, perRow);
     } else {
       const s = Math.min(isz, (pw - 10) / q.a - 4);
-      iconGroup(items, o.theme, ic.id, q.a, M + 32 + (q.a * s * 1.18) / 2, cy0, s, perRow, q.a - q.b);
+      iconGroup(items, o.theme, ic, q.a, M + 32 + (q.a * s * 1.18) / 2, cy0, s, perRow, q.a - q.b);
     }
     answerBox(items, w - M - 52, Math.max(yTop + 4, picTop + isz / 2 - 24), 48);
     if (i < list.length - 1) items.push({ kind: 'line', x1: M, y1: yTop + rowH, x2: w - M, y2: yTop + rowH, color: COLORS.desc, width: 0.8, dash: [3, 4] });
@@ -354,6 +368,30 @@ export function wordProblemsPage(o: ThemedOptions, problems: WeekContent['wordPr
 }
 
 // ---------- 6. Little book ----------
+
+/**
+ * What goes on the 6 inside pages of the little book: the words (with the name in) and the picture for each.
+ * Pictures are decided on the story as written (with {{name}}), one per page: the story's own pick when that page
+ * names it, else the thing the page names first, else the buddy if the page is about the buddy, else null (a
+ * "Draw it!" box). A picture can repeat: two pages about the T-rex both show the T-rex. Spare pages start "DRAW:".
+ */
+export function littleBookPlan(o: Pick<ThemedOptions, 'name' | 'theme'>, story: WeekContent['story']): { pages: string[]; pics: (string | null)[] } {
+  const T = THEMES[o.theme];
+  const pages = story.pages.map((p) => personalize(p, o.name));
+  const pics = storyPictures(o.theme, story);
+  // Fit the story into the 6 inside pages: merge the shortest neighbors if there are more than 6.
+  // The merged page keeps the first of the two pictures (its words are on the page too).
+  while (pages.length > 6) {
+    let best = 0;
+    for (let i = 0; i < pages.length - 1; i++) if (pages[i].length + pages[i + 1].length < pages[best].length + pages[best + 1].length) best = i;
+    pages.splice(best, 2, `${pages[best]} ${pages[best + 1]}`);
+    pics.splice(best, 2, pics[best] ?? pics[best + 1]);
+  }
+  const who = styleName(o.name, 'capital') || 'Little One';
+  const spare = [`Draw ${who} ${T.place}.`, 'Draw your favorite part of the story.'];
+  while (pages.length < 6) { pages.push(`DRAW:${spare[(pages.length) % 2]}`); pics.push(null); }
+  return { pages, pics };
+}
 
 /**
  * The story as a little book: one sheet, 8 panels, cut once and folded (no stapler needed).
@@ -373,27 +411,8 @@ export function littleBookPage(o: ThemedOptions, story: WeekContent['story'], bu
   items.push({ kind: 'line', x1: cw, y1: ch, x2: 3 * cw, y2: ch, color: '#d9534f', width: 1.2, dash: [7, 4] });
   items.push({ kind: 'text', x: w / 2, y: ch - 5, size: 7.5, text: 'cut on the red line only', color: '#d9534f', align: 'center' });
 
-  // Fit the story into the 6 inside pages: merge the shortest neighbors if there are more than 6.
-  let pages = story.pages.map((p) => personalize(p, o.name));
-  while (pages.length > 6) {
-    let best = 0;
-    for (let i = 0; i < pages.length - 1; i++) if (pages[i].length + pages[i + 1].length < pages[best].length + pages[best + 1].length) best = i;
-    pages.splice(best, 2, `${pages[best]} ${pages[best + 1]}`);
-  }
   const who = styleName(o.name, 'capital') || 'Little One';
-  const spare = [`Draw ${who} ${T.place}.`, 'Draw your favorite part of the story.'];
-  while (pages.length < 6) pages.push(`DRAW:${spare[(pages.length) % 2]}`);
-  const icons = T.icons;
-  const used = new Set<string>();
-  const pageIcon = (i: number, txt: string) => {
-    const low = txt.toLowerCase();
-    const hit = [...icons].sort((a, b) => b.one.length - a.one.length).find((ic) => !used.has(ic.id) && (low.includes(ic.one.toLowerCase()) || low.includes(ic.many.toLowerCase())));
-    const pick = hit ?? icons.find((ic) => !used.has(ic.id)) ?? icons[(i * 3 + 1) % icons.length];
-    used.add(pick.id);
-    return pick.id;
-  };
-  // Decide pictures in reading order, so the first mention of something gets its picture.
-  const pics = pages.map((t, i) => (t.startsWith('DRAW:') ? '' : pageIcon(i, t)));
+  const { pages, pics } = littleBookPlan(o, story);
 
   // panel: page number (1 = front cover, 8 = back cover), column, row (0 = top, upside down)
   const layout: [number, number, number][] = [[5, 0, 0], [4, 1, 0], [3, 2, 0], [2, 3, 0], [6, 0, 1], [7, 1, 1], [8, 2, 1], [1, 3, 1]];
@@ -431,7 +450,14 @@ export function littleBookPage(o: ThemedOptions, story: WeekContent['story'], bu
         const fx = pad, fy = ty + 2, fw = inner, fh = ch - 34 - fy;
         items.push({ kind: 'path', d: box(Math.min(X(fx), X(fx + fw)), Math.min(Y(fy), Y(fy + fh)), fw, fh, 8), color: COLORS.quiet, width: 1, dash: [4, 3] });
       } else {
-        icon(pics[pg - 2], cw / 2, 78, 104);
+        const pic = pics[pg - 2];
+        if (pic) icon(pic, cw / 2, 78, 104);
+        else {
+          // Nothing on this page has a picture: a small dashed box to draw in, never an unrelated picture.
+          const bw = 108, bh = 84, bx = cw / 2 - bw / 2, by = 78 - bh / 2;
+          items.push({ kind: 'path', d: box(Math.min(X(bx), X(bx + bw)), Math.min(Y(by), Y(by + bh)), bw, bh, 8), color: COLORS.quiet, width: 1, dash: [4, 3] });
+          text(cw / 2, 82, 11, 'Draw it!', COLORS.quiet);
+        }
         const size = raw.length > 150 ? 10.5 : raw.length > 105 ? 11.5 : 12.5;
         const lines = wrap(raw, size, inner);
         let ty = 152;
