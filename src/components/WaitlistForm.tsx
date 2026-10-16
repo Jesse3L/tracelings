@@ -27,14 +27,14 @@ export default function WaitlistForm() {
     return (
       <div class="rounded-xl border border-[#9fd3b8] bg-[#eef8f2] p-6" role="status">
         <p class="font-bold text-lg text-ink">You're on the list.</p>
-        <p class="mt-2 text-muted leading-relaxed">We'll email you as soon as membership opens so you can claim the $29/year founding price. In the meantime, everything on the site is still free to use.</p>
+        <p class="mt-2 text-muted leading-relaxed">We'll email you as soon as the personalized program opens. In the meantime, everything on the site is still free to use, including week 1 of your child's plan.</p>
       </div>
     );
   }
 
   return (
     <form onSubmit={submit} class="rounded-xl border border-hairline bg-white p-6">
-      <h2 class="text-xl font-bold">Get on the founding member waitlist</h2>
+      <h2 class="text-xl font-bold">Get on the waitlist</h2>
       <label class="block mt-4">
         <span class="block text-[15px] font-bold mb-2">Your email</span>
         <input id="waitlist-email" type="email" required autoComplete="email" value={email}

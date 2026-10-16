@@ -7,6 +7,8 @@ export interface MemberState {
   plan?: string | null;
   planLabel?: string;
   maxNames?: number;
+  maxChildren?: number; // child profiles in the personalized program
+  program?: boolean; // the plan includes the personalized program (every active plan does)
   status?: string;
   paidThrough?: string | null;
   cancelsOn?: string | null;

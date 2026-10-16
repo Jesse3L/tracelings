@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { squareConfigured, activeMembership, PLANS } from '../../../lib/server/square';
+import { squareConfigured, activeMembership, PLANS, MAX_CHILDREN } from '../../../lib/server/square';
 import { json, readSession } from '../../../lib/server/session';
 
 export const prerender = false;
@@ -19,12 +19,14 @@ export const GET: APIRoute = async ({ cookies }) => {
       plan: plan ?? null,
       planLabel: plan ? PLANS[plan].label : 'Membership',
       maxNames: plan ? PLANS[plan].maxNames : 8,
+      maxChildren: MAX_CHILDREN,
+      program: true, // every active plan, old or new, includes the personalized program
       status: sub.status,
       paidThrough: sub.charged_through_date ?? null,
       cancelsOn: sub.canceled_date ?? null,
     });
   } catch {
     // If Square is unreachable, trust a valid session for now rather than locking a paying member out.
-    return json(200, { member: true, available: true, email: s.email, plan: null, planLabel: 'Membership', maxNames: 8, degraded: true });
+    return json(200, { member: true, available: true, email: s.email, plan: null, planLabel: 'Membership', maxNames: 8, maxChildren: MAX_CHILDREN, program: true, degraded: true });
   }
 };

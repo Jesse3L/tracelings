@@ -90,7 +90,7 @@ export default function Seo2CursiveAlphabet(props: { source?: string }) {
           {member.member ? (
             <><span class="font-bold text-ink">Member printing is on.</span> No footer line on your sheets. <a href="/class-pack/" class="text-[#2f5fc4] underline underline-offset-2">Make a class pack</a> · <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Your account</a></>
           ) : (
-            <><span class="font-bold text-ink">Members</span> get every printable with no footer line, plus class lists that print a page for every child in one PDF.{' '}
+            <><span class="font-bold text-ink">Members</span> get every printable with no footer line, a page for each of their kids in one PDF, and a weekly plan built for each child.{' '}
             <a href="/membership/" class="text-[#2f5fc4] underline underline-offset-2">See membership</a></>
           )}
         </div>

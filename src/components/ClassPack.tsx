@@ -82,9 +82,8 @@ export default function ClassPack() {
   if (!member.member) {
     return (
       <div class="rounded-xl border border-hairline bg-white p-6 max-w-xl">
-        <p class="font-bold text-lg text-ink">Class packs are a member feature.</p>
-        <p class="mt-2 text-muted leading-relaxed">Paste your class list once, then download a name tracing sheet, a cursive sheet and a name coloring page for every child in one PDF. Already a member? <a href="/account/" class={link}>Sign in</a> on this browser.</p>
-        <a href="/membership/" class="btn-pencil mt-4 inline-block px-5 py-3 text-lg">See membership</a>
+        <p class="font-bold text-lg text-ink">Class packs are for signed-in members.</p>
+        <p class="mt-2 text-muted leading-relaxed">Already a member? <a href="/account/" class={link}>Sign in</a> on this browser to print your saved list. Teaching a whole class? Every name tool on the site stays free one name at a time, starting with <a href="/name-tracing/" class={link}>name tracing</a>.</p>
       </div>
     );
   }
