@@ -1,0 +1,159 @@
+---
+import Preview from '../../components/site/Preview.astro';
+import Base from '../../layouts/Base.astro';
+import WordFamilySheets from '../../components/WordFamilySheets.tsx';
+import Faqs from '../../components/homeschool/Faqs.astro';
+import { SITE } from '../../config';
+import { FAMILY_INFO, familyInfo, planWeeks, partnerOf, sameVowel, onsets } from '../../lib/wordFamilies';
+
+export function getStaticPaths() {
+  return FAMILY_INFO.map((f) => ({ params: { family: f.slug }, props: { slug: f.slug } }));
+}
+const { slug } = Astro.props as { slug: string };
+const f = familyInfo(slug);
+const i = FAMILY_INFO.findIndex((x) => x.slug === slug);
+const prev = FAMILY_INFO[(i + FAMILY_INFO.length - 1) % FAMILY_INFO.length];
+const next = FAMILY_INFO[(i + 1) % FAMILY_INFO.length];
+const { week, review } = planWeeks(slug);
+const partner = partnerOf(slug);
+const siblings = sameVowel(slug).filter((s) => s !== slug);
+const fam = `-${slug}`;
+const nb = (t: string) => t.replace(/-(?=[a-z])/g, '-\u2060'); // for visible text only
+const url = new URL(`/word-families/${slug}/`, SITE.url).href;
+const title = `${fam} Word Family Worksheets: Free Printables | ${SITE.name}`;
+const description = `Free ${fam} word family worksheets: read ${f.words.slice(0, 3).join(', ')} and more, trace the words, a word hunt, a ${fam} or -${partner} sort, a word family house and a slider.`;
+const firstThree = f.words.slice(0, 3).join(', ');
+const onsetList = onsets(f).join(', ');
+const listOr = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+
+const faqs = [
+  { q: `What words are in the ${fam} word family?`, a: `The ${fam} words on these worksheets are ${listOr(f.words)}. They all end in ${fam} and have the short ${f.vowel} sound. Later, ${listOr(f.stretch)} ${f.stretch.length > 1 ? 'add' : 'adds'} a blend or a digraph to the front.` },
+  f.tricky,
+  { q: `When do kids learn ${fam} words?`, a: `Many kids start reading short vowel word families like ${fam} in kindergarten, somewhere between ages 5 and 6, once they know most letter sounds. Some start earlier and some later, and both are normal. If you have concerns, ask your child's teacher or pediatrician.` },
+  { q: `Are these ${fam} worksheets free?`, a: `Yes. All six page types, with your child's name on the Name line, are free one page at a time. Members can print all six ${fam} pages in one PDF, or one page for every child on their list, with no footer line.`, html: `Yes. All six page types, with your child's name on the Name line, are free one page at a time. <a href="/membership/">Members</a> can print all six ${fam} pages in one PDF, or one page for every child on their list, with no footer line.` },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `${fam} word family worksheets (free printables)`,
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Kindergarten',
+    teaches: `Reading and writing the ${fam} word family (${f.words.join(', ')}), short ${f.vowel} sound`,
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Word families', item: SITE.url + '/word-families/' },
+      { '@type': 'ListItem', position: 3, name: `${fam} word family`, item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((x) => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/word-families/" class="hover:text-ink">Word families</a> <span aria-hidden="true">/</span> <span aria-current="page">{nb(fam)}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{nb(fam)} word family worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">
+        Six free printable {nb(fam)} word family worksheets: a word list with sentences, tracing, a word hunt, a {nb(fam)} or {nb(`-${partner}`)} sort, a
+        word family house and a word slider. Pick a page, type your child's name if you like, and print.
+      </p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <WordFamilySheets client:load family={slug} source={`word-family-${slug}`} />
+    </div>
+    <Preview k={`wf-${slug}`} caption={`Example: the ${nb(fam)} word family house.`} />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        The {nb(fam)} word family is the group of short words that end in {nb(fam)}: {firstThree} and more. Change the first letter and you get a
+        new word, so a child who can read one {nb(fam)} word can read the whole set. These worksheets practice that one move from six angles.
+        Everything is made in your browser, so your child's name never leaves your device.
+      </p>
+
+      <h2>The {nb(fam)} word family list</h2>
+      <p>Every word here is a short {f.vowel} word your child can sound out letter by letter.</p>
+      <ul class="columns-2 sm:columns-3">{f.words.map((w) => <li>{w}</li>)}</ul>
+      <p>
+        <strong>Sentences to read:</strong> {f.sentences.map((s) => `"${s}"`).join(' ')} They mix {nb(fam)} words with early sight words,
+        so the reading feels like a real book.
+      </p>
+      <p><strong>Sight words:</strong> {f.sight}</p>
+      <p>
+        <strong>For later:</strong> {listOr(f.stretch)} {f.stretch.length > 1 ? 'also end' : 'also ends'} in {nb(fam)}, but {f.stretch.length > 1 ? 'they have' : 'it has'} two or more letters before the vowel, like
+        the {f.stretch[0].slice(0, f.stretch[0].length - slug.length)} in {f.stretch[0]}. Save {f.stretch.length > 1 ? 'them' : 'it'} until the short words feel easy.
+      </p>
+
+      <h2>How to teach the {nb(fam)} word family</h2>
+      <ol>
+        <li><strong>Say the ending.</strong> Write {nb(fam)} on a card. Read it together a few times until your child says it quickly.</li>
+        <li><strong>Add a first sound.</strong> Hold the letters {onsetList} in front of the card one at a time. Say the sound, then blend it with {nb(fam)}.</li>
+        <li><strong>Read the list page.</strong> Your child colors a box each time they read a word, three readings per word.</li>
+        <li><strong>Trace and build.</strong> Do the tracing page, then the word family house: write a first letter in each box, trace {nb(fam)}, and read the word.</li>
+        <li><strong>Check the ending.</strong> The word hunt mixes in words like {siblings.length ? familyInfo(siblings[0]).words.slice(0, 2).join(' and ') : 'other short words'}, so your child has to look at the end of every word, not only the first letter.</li>
+      </ol>
+      <p>Away from the paper: {f.tip}</p>
+
+      <h2>The {nb(fam)} or {nb(`-${partner}`)} word sort</h2>
+      <p>
+        The sort page puts four {nb(fam)} words and four {nb(`-${partner}`)} words in a box. Your child reads each one and writes it under the right
+        ending. Both families share the short {f.vowel} sound, so the only clue is the last letter. That is the skill that turns
+        guessing into reading. Tap New words for a fresh mix.
+      </p>
+
+      <h2>Where {nb(fam)} fits in the kindergarten plan</h2>
+      <p>
+        In our free <a href={`/homeschool/kindergarten/?week=${week.n}#pack`}>kindergarten homeschool curriculum</a>, {nb(fam)} is
+        week {week.n}. That week's pack reads the {nb(fam)} words on Monday, has a word hunt on Tuesday and adds the
+        sight words {week.sightWords.join(' and ')}. Week {review.n} is the short {f.vowel} review, which mixes {review.families!.map((x) => nb(`-${x}`)).join(', ')} in one hunt.
+        Use these pages for extra practice in the same week, or to go back to {nb(fam)} later.
+      </p>
+      <p>
+        Kids learn to read at different speeds, and plenty need a family more than once. Repeat a page whenever you like. If you have
+        concerns about your child's reading, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>A 10-minute {nb(fam)} routine</h2>
+      <ol>
+        <li><strong>2 minutes:</strong> read the {nb(fam)} list out loud together, then have your child read it alone.</li>
+        <li><strong>5 minutes:</strong> one worksheet. Monday the list, Tuesday tracing, Wednesday the hunt, Thursday the house or slider, Friday the sort.</li>
+        <li><strong>3 minutes:</strong> read one sentence from the list page, then find a {nb(fam)} word in a book you already own.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about the {nb(fam)} word family</h2>
+      <Faqs faqs={faqs.map((x) => ({ q: nb(x.q), a: nb(x.a), html: x.html && nb(x.html) }))} />
+    </section>
+
+    <section class="mt-14 max-w-4xl" aria-labelledby="more-h">
+      <h2 id="more-h" class="text-[1.6rem] font-bold">More word family worksheets</h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {FAMILY_INFO.map((x) => (
+          <li><a href={`/word-families/${x.slug}/`} aria-current={x.slug === slug ? 'page' : undefined} class={`block rounded-lg border px-3 py-2 text-[16px] font-bold ${x.slug === slug ? 'border-rule bg-[#eef4ff] text-ink' : 'border-hairline bg-white text-[#2f5fc4] hover:border-rule'}`}>-{x.slug}</a></li>
+        ))}
+      </ul>
+      <p class="mt-5 flex justify-between gap-4 text-[16px]">
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/word-families/${prev.slug}/`}>{nb(`-${prev.slug}`)} word family</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href="/word-families/">All word families</a>
+        <a class="text-[#2f5fc4] underline underline-offset-4" href={`/word-families/${next.slug}/`}>{nb(`-${next.slug}`)} word family</a>
+      </p>
+    </section>
+  </div>
+</Base>

@@ -95,6 +95,8 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Kindergarten math worksheets (hub, free sampler) | `/math-worksheets/kindergarten/` | live |
 | Kindergarten more or less worksheets (greater than, less than) | `/math-worksheets/more-or-less/` | live |
 | Kindergarten addition worksheets (and subtraction with pictures) | `/math-worksheets/kindergarten-addition/` | live |
+| Word family worksheets (hub) | `/word-families/` | live |
+| Single word family | `/word-families/at/`, `/an/`, `/ap/`, `/ag/`, `/ig/`, `/it/`, `/in/`, `/ip/`, `/op/`, `/ot/`, `/og/`, `/ug/`, `/un/`, `/ut/`, `/en/`, `/et/`, `/ed/` | live |
 | Letter of the week | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
 | Membership | `/membership/` | live |
 | Class packs | `/class-pack/` | members only |
@@ -161,4 +163,4 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 
 ## Live pages you can link to (updated Oct 16, 2026)
 
-/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /homeschool/christian/, /letter-of-the-week/ and /a/ to /z/, /math-worksheets/pre-k/, /math-worksheets/ten-frames/, /math-worksheets/kindergarten/, /math-worksheets/more-or-less/, /math-worksheets/kindergarten-addition/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/.
+/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /homeschool/christian/, /letter-of-the-week/ and /a/ to /z/, /math-worksheets/pre-k/, /math-worksheets/ten-frames/, /math-worksheets/kindergarten/, /math-worksheets/more-or-less/, /math-worksheets/kindergarten-addition/, /word-families/ and /at/, /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/.

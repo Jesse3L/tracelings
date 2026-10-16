@@ -15,6 +15,7 @@ import { buildColoringPage } from '../src/lib/coloring';
 import { loadFont } from '../src/lib/fontshape';
 import { PLANS, buildWeekPack, preKWeekForLetter } from '../src/lib/homeschool';
 import { buildMathPage } from '../src/lib/mathSheets';
+import { FAMILY_INFO, buildFamilyPage } from '../src/lib/wordFamilies';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'public/previews');
@@ -136,6 +137,13 @@ jobs.push(render('more-or-less', 'kindergarten-greater-than-less-than-worksheet'
 // Kindergarten addition: picture addition within 10 (the maker's default page).
 jobs.push(render('k-addition', 'kindergarten-picture-addition-worksheet', buildMathPage({ kind: 'add-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-addition' }),
   'Kindergarten picture addition worksheet within 10: count two groups of shapes, then write how many in all'));
+// Word families: the hub shows the -at word hunt; each family page shows its word family house.
+jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
+  'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));
+for (const f of FAMILY_INFO) {
+  jobs.push(render(`wf-${f.slug}`, `${f.slug}-word-family-house`, buildFamilyPage({ family: f.slug, kind: 'house', name: '', paper: 'letter', credit: true, seed: 1 }),
+    `-${f.slug} word family house worksheet: write a first letter, trace -${f.slug} and read words like ${f.words.slice(0, 3).join(', ')}`));
+}
 for (const l of 'abcdefghijklmnopqrstuvwxyz') {
   const U = l.toUpperCase();
   jobs.push(render(`lotw-${l}`, `letter-of-the-week-${l}`, pack('pre-k', preKWeekForLetter(l).n)[2],

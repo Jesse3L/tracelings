@@ -10,7 +10,7 @@ import { FAMILIES } from '../../../lib/homeschool';
 const url = new URL('/homeschool/kindergarten/', SITE.url).href;
 const title = `Free Kindergarten Homeschool Curriculum | ${SITE.name}`;
 const description = 'A free kindergarten homeschool curriculum: letters, word families, Dolch sight words and adding within 10, with weekly packs made with your child’s name.';
-const families = Object.keys(FAMILIES).map((f) => `-${f}`);
+const families = Object.keys(FAMILIES);
 
 const faqs = [
   { q: 'Is this kindergarten homeschool curriculum really free?', a: 'Yes. All 36 weeks are free to print for one child, one week at a time. Add your email once and every pack on that device stays free, with no password.' },
@@ -77,7 +77,7 @@ const schema = [
       <ul>
         <li><strong>Week 1, their name:</strong> name tracing, a coloring page of their name and a hunt for its letters.</li>
         <li><strong>Weeks 2 to 14, letters and sounds:</strong> two letters a week, with words that start with each sound.</li>
-        <li><strong>Weeks 15 to 36, word families:</strong> {families.join(', ')}, with a short vowel review after each vowel.</li>
+        <li><strong>Weeks 15 to 36, word families:</strong> {families.map((f, i) => <>{i > 0 && ', '}<a href={`/word-families/${f}/`} class="whitespace-nowrap">-{f}</a></>)}, with a short vowel review after each vowel.</li>
         <li><strong>Sight words:</strong> two or three Dolch words a week, from the pre-primer and primer lists.</li>
         <li><strong>Math:</strong> numbers 0 to 20 with ten frames through week 21, then adding within 5 and within 10 with dot pictures. For extra practice, make <a href="/math-worksheets/ten-frames/">ten frame worksheets</a> for the teen numbers, make 10 and ten frame addition.</li>
       </ul>
@@ -96,6 +96,10 @@ const schema = [
         A word family is a group of words that share an ending, like cat, hat and mat. Once a child can read -at, changing the first letter
         gives them a whole set of new words. That quick win builds confidence. Each word family week has a reading page, a word hunt where kids
         circle the words in the family, and sight words to trace.
+      </p>
+      <p>
+        For more practice on the same family, each one has its own page of free <a href="/word-families/">word family worksheets</a>:
+        a word list with sentences, tracing, a word sort, a word family house and a word slider to cut out.
       </p>
 
       <h2>A sample kindergarten day</h2>

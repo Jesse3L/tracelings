@@ -18,7 +18,7 @@ const plan = PLANS[Astro.props.level];
         <tr class="border-b border-hairline last:border-0 align-top">
           <td class="p-3 text-muted">{w.n}</td>
           <td class="p-3"><a href={`?week=${w.n}#pack`} class="font-bold text-[#2f5fc4] underline underline-offset-2">{w.title}</a></td>
-          <td class="p-3 text-muted">{weekSummary(w)}</td>
+          <td class="p-3 text-muted">{weekSummary(w)}{w.family && <> <a href={`/word-families/${w.family}/`} class="text-[#2f5fc4] underline underline-offset-2 whitespace-nowrap">-{w.family} worksheets</a></>}{w.families && <> <span class="whitespace-nowrap">Worksheets:</span> {w.families.map((f, i) => <>{i > 0 && ', '}<a href={`/word-families/${f}/`} class="text-[#2f5fc4] underline underline-offset-2 whitespace-nowrap">-{f}</a></>)}</>}</td>
         </tr>
       ))}
     </tbody>
