@@ -7,6 +7,9 @@ import lettersData from '../../data/letters.json';
 import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from './types';
 import { THEMES, storyIcon, type ThemeIcon } from './themes';
 import { baseWeekOf, reviewLetters, type MathStep } from './engine';
+import { SCENES } from './scenes';
+import { readyPaths } from './story';
+import { STORY_TEXTS } from './storyTexts';
 
 type Problem = WeekContent['wordProblems'][number];
 const add = (text: string, a: number, b: number, icon?: string): Problem => ({ text, a, b, op: '+', answer: a + b, ...(icon ? { icon } : {}) });
@@ -21,7 +24,7 @@ const cmp = (text: string, a: number, b: number, icon?: string): Problem => ({ t
 const PRE_K_TEACHES = 'This week is all about {{name}}\'s name: tracing it, finding its letters, and coloring it. Math is the number 1.';
 const PRE_K_WHY = 'A name is the word kids care about most, so it is a friendly first word to learn. Knowing the letters in their own name helps many kids start noticing letters everywhere.';
 const K_TEACHES = 'This week {{name}} practices writing their name and reads two of the most common words in books: a and and. Math is counting and the number 1.';
-const K_WHY = 'Writing their own name is a big early writing step, and a and and show up on almost every page of picture books. Spotting them early makes the little book feel like real reading.';
+const K_WHY = 'Writing their own name is a big early writing step, and a and and show up on almost every page of picture books. Spotting them early makes this week\'s story feel like real reading.';
 
 interface Free { story: WeekContent['story']; problems: Problem[]; sentence: string; activities: string[] }
 
@@ -388,7 +391,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
       ],
       sentence: 'A dragon and a castle.',
       activities: [
-        'Make a crown from paper and write {{name}}\'s name across the front. Wear it while reading this week\'s little book.',
+        'Make a crown from paper and write {{name}}\'s name across the front. Wear it while reading this week\'s story book.',
         'Read a fairy tale together. Each time you reach a or and, {{name}} gives a royal wave.',
       ],
     },
@@ -579,12 +582,60 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
   },
 };
 
+// ---------- Picture book stories (scene paths) ----------
+
+/** A thing named in the story that starts with a letter, for "S is for sun!": a one-word prop of the story's
+ *  scenes that the text uses (never a cast name or a little word like "and"). */
+function storyWordFor(letter: string, pages: string[], theme: ThemeId, scenes: string[]): string | undefined {
+  const seen = new Set(pages.join(' ').toLowerCase().match(/[a-z]+/g) ?? []);
+  const things = scenes.flatMap((id) => SCENES[theme].scenes.find((s) => s.id === id)?.props ?? []).filter((p) => /^[a-z]{3,6}$/.test(p));
+  return things.find((w) => w.startsWith(letter) && seen.has(w));
+}
+
+/** The one line that carries the week's teaching into a template story ({W}), or '' when there is none. */
+function teachLine(level: Level, w: Week, pw: ProgramWeek, pages: string[], scenes: string[]): string {
+  if (w.kind === 'name') return 'Hip, hip, hooray for {{name}}!';
+  if (w.kind === 'family' || w.kind === 'vowel-review') {
+    const fams = w.kind === 'family' ? [w.family!] : (w.families ?? []);
+    const list = fams.length === 1 ? (FAMILIES[fams[0]] ?? []).slice(0, 3) : fams.slice(0, 3).map((f) => (FAMILIES[f] ?? [])[0]).filter(Boolean);
+    return list.length ? `"${list.map((x, i) => (i ? x : cap1(x))).join(', ')}!" sings {{name}}.` : '';
+  }
+  const ls = (pw.extraReview ? reviewLetters(pw) : w.letters).filter((l) => /^[a-z]$/.test(l));
+  if (!ls.length) return '';
+  // "S is for sun!" for each letter (up to 2), with a word from the story when one starts with it.
+  const parts = ls.slice(0, level === 'pre-k' ? 1 : 2).map((l) => {
+    const word = storyWordFor(l, pages, pw.theme, scenes) ?? (CVC_NOUNS[l] ?? []).find((x) => x.length <= 5);
+    return word ? `${l.toUpperCase()} is for ${word}` : '';
+  }).filter(Boolean);
+  return parts.length ? `"${parts.join(', ')}!" says {{name}}.` : '';
+}
+
+/**
+ * The template picture book story for a week, or null when the theme has no ready picture book for the level
+ * (then the old little book is used). Paths rotate by week so a child gets a different story each week.
+ */
+export function sceneStoryFor(theme: ThemeId, level: Level, w: Week | null, pw: ProgramWeek | null, pick = 0): WeekContent['story'] | null {
+  const paths = readyPaths(theme, level);
+  if (!paths.length) return null;
+  const path = paths[((pick % paths.length) + paths.length) % paths.length];
+  const text = STORY_TEXTS[theme]?.[path.id];
+  if (!text) return null;
+  const byScene = new Map(text.pages);
+  if (!path.fitted.every((id) => byScene.has(id))) return null;
+  const raw = path.fitted.map((id) => byScene.get(id)!);
+  const line = w && pw ? teachLine(level, w, pw, raw, path.fitted) : '';
+  const pages = raw.map((p) => (line ? p.replace('{W}', line) : p.replace(/\s*\{W\}/, '')).replace(/\s+/g, ' ').trim());
+  return { title: text.title, pages, scenes: [...path.fitted], pathId: path.id };
+}
+
 /** Free week 1 content for a theme and level (no AI). */
 export function freeWeekContent(theme: ThemeId, level: Level): WeekContent {
   const f = FREE[theme][level];
+  const nameWeek = PLANS[level].weeks[0];
+  const scene = sceneStoryFor(theme, level, nameWeek, { index: 1, level, baseWeek: 1, theme, focus: [] }, 0);
   return {
     source: 'template',
-    story: f.story,
+    story: scene ?? f.story,
     wordProblems: f.problems,
     tracingSentence: f.sentence,
     parentNote: { teaches: level === 'pre-k' ? PRE_K_TEACHES : K_TEACHES, why: level === 'pre-k' ? PRE_K_WHY : K_WHY, activities: f.activities },
@@ -727,7 +778,8 @@ const CHEER: Record<ThemeId, string> = {
 };
 
 function storyFor(level: Level, w: Week, pw: ProgramWeek): WeekContent['story'] {
-  return withIcons(pw.theme, storyText(level, w, pw));
+  // Week 1 is path 0 (the free week), so week n gets path n - 1.
+  return sceneStoryFor(pw.theme, level, w, pw, pw.index - 1) ?? withIcons(pw.theme, storyText(level, w, pw));
 }
 
 function storyText(level: Level, w: Week, pw: ProgramWeek): { title: string; pages: string[] } {

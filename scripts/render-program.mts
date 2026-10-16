@@ -5,7 +5,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { pageToSvg } from '../src/lib/render';
+import { pageToSvg, imagesIn, setSvgImageHref } from '../src/lib/render';
+import { setSceneArt } from '../src/lib/program/story';
 import { loadFont } from '../src/lib/fontshape';
 import { loadThemeIcons, THEME_IDS } from '../src/lib/program/themes';
 import { placeChild } from '../src/lib/program/engine';
@@ -21,14 +22,20 @@ await loadThemeIcons(THEME_IDS, (u) => readFile(path.join(ROOT, 'public', u), 'u
 const fetcher = async (u: string) => { const b = await readFile(path.join(ROOT, 'public', u)); return b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength) as ArrayBuffer; };
 const bubble = await loadFont('bubble', fetcher);
 const NAME = process.env.NAME ?? 'Maximiliana Christabel';
+// Picture book art: src/lib/program/sceneArt.json and public/ by default, or ART_DIR (sceneArt.json + program/scenes/).
+const ART = process.env.ART_DIR ? path.resolve(process.env.ART_DIR) : path.join(ROOT, 'public');
+try { setSceneArt(JSON.parse(await readFile(process.env.ART_DIR ? path.join(ART, 'sceneArt.json') : path.join(ROOT, 'src/lib/program/sceneArt.json'), 'utf8'))); } catch { setSceneArt({}); }
+const dataUri = new Map<string, string>();
+setSvgImageHref((src) => dataUri.get(src) ?? src);
 
 async function png(page: Page, file: string) {
   // Anything drawn outside the page is a bug.
   for (const it of page.items) {
-    const xs = it.kind === 'line' ? [it.x1, it.x2] : it.kind === 'dot' ? [it.cx] : it.kind === 'text' ? [it.x] : [];
-    const ys = it.kind === 'line' ? [it.y1, it.y2] : it.kind === 'dot' ? [it.cy] : it.kind === 'text' ? [it.y] : [];
+    const xs = it.kind === 'line' ? [it.x1, it.x2] : it.kind === 'dot' ? [it.cx] : it.kind === 'text' ? [it.x] : it.kind === 'image' ? [it.x, it.x + it.w] : [];
+    const ys = it.kind === 'line' ? [it.y1, it.y2] : it.kind === 'dot' ? [it.cy] : it.kind === 'text' ? [it.y] : it.kind === 'image' ? [it.y, it.y + it.h] : [];
     if (xs.some((x) => x < 4 || x > page.w - 4) || ys.some((y) => y < 4 || y > page.h - 2)) console.log('OUTSIDE', file, JSON.stringify(it).slice(0, 140));
   }
+  for (const src of imagesIn([page])) if (!dataUri.has(src)) dataUri.set(src, `data:image/png;base64,${(await readFile(path.join(ART, src))).toString('base64')}`);
   const svg = pageToSvg(page).replace('width="100%"', `width="${page.w}" height="${page.h}"`)
     .replace(/font-family="[^"]*"/g, 'font-family="Helvetica, Arial, Liberation Sans, DejaVu Sans, sans-serif"');
   await writeFile(file, await sharp(Buffer.from(svg), { density: 110 }).flatten({ background: '#ffffff' }).png().toBuffer());

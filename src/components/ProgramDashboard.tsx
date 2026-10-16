@@ -8,6 +8,8 @@ import { loadFont, type LoadedFont } from '../lib/fontshape';
 import { buildProgressReport, SKILL_LABELS } from '../lib/program/report';
 import { PLANS } from '../lib/homeschool';
 import { savePdf } from '../lib/download';
+import { pageToSvg, imagesIn, loadImages } from '../lib/render';
+import type { Page } from '../lib/sheet';
 
 // The member's program dashboard. Profiles and plans come from the server (no names); names come from this
 // browser's localStorage and are only ever used here, to build the PDF.
@@ -38,6 +40,7 @@ async function api<T>(path: string, body?: unknown): Promise<{ ok: true; data: T
 const weekTitle = (wk: ProgramWeek) => PLANS[wk.level].weeks[wk.baseWeek - 1]?.title ?? `Week ${wk.baseWeek}`;
 
 export default function ProgramDashboard() {
+  const [book, setBook] = useState<Page[]>([]);
   const [fam, setFam] = useState<FamilyResponse | null>(null);
   const [loadErr, setLoadErr] = useState('');
   const [local, setLocal] = useState<{ children: ChildProfile[]; names: Record<string, string> }>({ children: [], names: {} });
@@ -88,7 +91,7 @@ export default function ProgramDashboard() {
       setSel(kids.find((k) => k.profile.id === want)?.profile.id ?? kids[0].profile.id);
     }
   }, [kids]);
-  useEffect(() => { setCheck({}); setMsg(null); setShowAll(false); setNameDraft(''); }, [sel]);
+  useEffect(() => { setCheck({}); setMsg(null); setShowAll(false); setNameDraft(''); setBook([]); }, [sel]);
 
   // Back from the placement check (?sync=1&child=<id>): save that child's new or changed answers to the account,
   // through the same sync() as the buttons below. Only the profile goes, never the name.
@@ -151,6 +154,10 @@ export default function ProgramDashboard() {
       // The theme's pictures must be loaded first, or every picture prints as a plain star.
       await loadThemeIcons([wk.theme]);
       const pages = buildProgramWeek({ name, profile: kid.profile, week: wk, content: r.data.content, paper, credit: false, bubble: font, planLength: plan.weeks.length });
+      // The story's scene pictures are loaded before the PDF is made (savePdf also does this, cached).
+      await loadImages(imagesIn(pages));
+      // Show the picture book sheets on screen too.
+      setBook(pages.filter((pg) => pg.items.some((it) => it.kind === 'image')));
       const title = `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`;
       await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, title);
       const notes: Record<string, string> = {
@@ -300,7 +307,16 @@ export default function ProgramDashboard() {
                 <button type="button" disabled={Boolean(busy)} onClick={() => printWeek(week)} class="btn-pencil px-5 py-3 text-[16px] disabled:opacity-60">{busy === `week-${week.index}` ? 'Making the pack…' : 'Print this week’s pack'}</button>
                 <button type="button" disabled={Boolean(busy) || left <= 0} onClick={() => printWeek(week, true)} class={btn}>{busy === 'redo' ? 'Writing a new story…' : `Make a new story (${left} left)`}</button>
               </div>
-              <p class="mt-2 text-[13px] text-muted">One PDF: the plan page, the day pages, the story as a little book, word problems and a note for you.</p>
+              <p class="mt-2 text-[13px] text-muted">One PDF: the plan page, the day pages, the story as a picture book to cut, staple and color, word problems and a note for you.</p>
+              {book.length > 0 && (
+                <details class="mt-3" open>
+                  <summary class="cursor-pointer text-[14px] font-bold text-ink">This week’s picture book ({book.length} sheets)</summary>
+                  <p class="mt-1 text-[13px] text-muted">Cut each sheet on the dashed line, fold each strip with the pictures outside, stack by page number and staple along the fold.</p>
+                  <ul class="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2" aria-label="Picture book sheets">
+                    {book.map((pg, i) => <li class="overflow-hidden rounded border border-hairline bg-white" aria-label={`Sheet ${i + 1}`} dangerouslySetInnerHTML={{ __html: pageToSvg(pg) }} />)}
+                  </ul>
+                </details>
+              )}
             </div>
           </div>
         )}

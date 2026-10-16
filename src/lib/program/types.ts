@@ -70,7 +70,16 @@ export interface WeekContent {
   /** 4 to 8 short pages for a little book. icons (optional, parallel to pages): the theme icon id from themes.ts
    *  pictured on each page, a thing that page names; null for a page with no picture. Missing on older cached
    *  content, where the little book matches a picture from each page's words. */
-  story: { title: string; pages: string[]; icons?: (string | null)[] };
+  story: {
+    title: string;
+    pages: string[];
+    icons?: (string | null)[];
+    /** Big picture book (story v2): the scene id from scenes.ts pictured on each page, parallel to pages. When every
+     *  scene has reviewed art (sceneArt.json) the week prints the big book; otherwise the little book with icons. */
+    scenes?: string[];
+    /** The ready story path from scenes.ts the scenes came from, when one was used. */
+    pathId?: string;
+  };
   /** op '+': answer = a + b. op '-': answer = a - b. op 'compare': "which is more?", answer = the larger of a and b.
    *  icon (added in Part A, optional): a theme icon id from themes.ts to picture the problem; matched from the text when missing. */
   wordProblems: { text: string; a: number; b: number; op: '+' | '-' | 'compare'; answer: number; icon?: string }[];
