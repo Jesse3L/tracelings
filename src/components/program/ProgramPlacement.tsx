@@ -65,10 +65,20 @@ export default function ProgramPlacement() {
   const member = useMember();
   const top = useRef<HTMLDivElement>(null);
 
-  // Restore the last child from this device.
+  // ?return=/account/ (members adding a child) and &edit=<childId> (members changing one child) come from the dashboard.
+  const [returnTo, setReturnTo] = useState('');
+  const [editing, setEditing] = useState(false);
+
+  // Restore the child being edited, or the last child from this device. "Add a child" starts fresh.
   useEffect(() => {
     const saved = loadLocalProgram();
-    const c = saved.children[saved.children.length - 1];
+    let q: URLSearchParams | null = null;
+    try { q = new URLSearchParams(location.search); } catch { /* ignore */ }
+    const ret = safeReturn(q?.get('return'));
+    const editId = q?.get('edit') ?? '';
+    setReturnTo(ret);
+    const c = editId ? saved.children.find((x) => x.id === editId) : ret ? undefined : saved.children[saved.children.length - 1];
+    if (c) setEditing(Boolean(editId));
     if (c) {
       setId(c.id); setCreatedAt(c.createdAt); setAge(c.ageYears); setSkills(c.skills); setInterests(c.interests);
       setDays(c.daysPerWeek); setMinutes(c.minutesPerDay); setFaith(c.faith); setName(saved.names[c.id] ?? '');
@@ -132,6 +142,17 @@ export default function ProgramPlacement() {
   }
   const ask = (kind: 'week' | 'showme') => (!member.member && needsEmail() ? setGate(kind) : save(kind));
 
+  /** Members: save on this device, then go back to the account page, which saves the profile (never the name). */
+  function finish() {
+    persist();
+    const dest = returnTo || '/account/';
+    const u = new URL(dest, location.origin);
+    u.searchParams.set('sync', '1');
+    u.searchParams.set('child', id);
+    location.href = u.pathname + u.search;
+  }
+  const isMember = member.member;
+
   const toggleInterest = (t: ThemeId) => setInterests((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : cur.length >= 3 ? [...cur.slice(1), t] : [...cur, t]));
   const stepIdx = STEPS.findIndex((s) => s.id === step);
   const who = name.trim() || 'your child';
@@ -160,7 +181,7 @@ export default function ProgramPlacement() {
 
       {step === 'about' && (
         <section class="rounded-xl border border-hairline bg-white p-5 sm:p-7" aria-labelledby="pc-about">
-          <h2 id="pc-about" class="text-[1.5rem] font-bold text-ink">Tell us about your child</h2>
+          <h2 id="pc-about" class="text-[1.5rem] font-bold text-ink">{editing ? 'Change your answers' : 'Tell us about your child'}</h2>
           <p class="mt-1 text-muted">It takes about 5 minutes. You can change any answer later.</p>
           <label class="mt-6 block max-w-md">
             <span class="block text-[15px] font-bold mb-2">First name <span class="font-normal text-muted">(optional)</span></span>
@@ -285,7 +306,14 @@ export default function ProgramPlacement() {
 
           <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] items-start">
             <div class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6">
-              <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Free</p>
+              {isMember && (
+                <div class="mb-5 rounded-lg border border-[#9fd3b8] bg-[#eef8f2] p-4">
+                  <p class="font-bold text-ink">{editing ? 'Save these answers to your account' : 'Add this child to your account'}</p>
+                  <p class="mt-1 text-[14px] text-muted leading-snug">Their weekly packs, stories and check-ins are on your account page. Only the profile is saved there, never the name.</p>
+                  <button type="button" onClick={finish} class="btn-pencil mt-3 w-full px-5 py-3 text-[16px]">{editing ? 'Save and go back to my account' : 'Save and go to my account'}</button>
+                </div>
+              )}
+              <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">{isMember ? 'Included' : 'Free'}</p>
               <h3 class="mt-1 text-xl font-bold text-ink">Week 1: {weekTitle(week1)}</h3>
               <p class="mt-1 text-[15px] text-muted leading-snug">{THEMES[week1.theme].label} week. A plan page for you, then {pages.length - 1} pages across the week, including a little book starring {who}.</p>
               <div class="mt-5">
@@ -318,13 +346,15 @@ export default function ProgramPlacement() {
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h3 class="text-[1.35rem] font-bold text-ink">The whole year, week by week</h3>
-                <p class="mt-1 text-muted">Week 1 is free. The rest arrive one week at a time, with a fresh story and word problems made for {who}.</p>
+                <p class="mt-1 text-muted">{isMember ? `Print each week from your account, with a fresh story and word problems made for ${who}.` : `Week 1 is free. The rest arrive one week at a time, with a fresh story and word problems made for ${who}.`}</p>
               </div>
-              <a href="/membership/" class="btn-pencil shrink-0 px-5 py-3 text-center text-[16px]">Start the full program</a>
+              {isMember
+                ? <button type="button" onClick={finish} class="btn-pencil shrink-0 px-5 py-3 text-center text-[16px]">Save and go to my account</button>
+                : <a href="/membership/" class="btn-pencil shrink-0 px-5 py-3 text-center text-[16px]">Start the full program</a>}
             </div>
             <ol class="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {plan.weeks.map((w) => {
-                const free = w.index === 1;
+                const free = w.index === 1 || isMember;
                 return (
                   <li class={`flex items-start gap-3 rounded-lg border px-3 py-2.5 ${free ? 'border-[#9fd3b8] bg-[#eef8f2]' : 'border-hairline bg-[#fafbfd]'}`}>
                     <img src={coverUrl(w.theme)} alt="" width={36} height={36} loading="lazy" class={`mt-0.5 size-9 shrink-0 ${free ? '' : 'opacity-60'}`} />
@@ -333,17 +363,21 @@ export default function ProgramPlacement() {
                       <span class="block font-bold text-ink leading-tight">{weekTitle(w)}</span>
                       <span class="block text-[13px] text-muted leading-snug">{weekBlurb(w)}</span>
                     </span>
-                    <span class="ml-auto shrink-0 pt-0.5 text-[12px] font-bold" aria-label={free ? 'Free' : 'Locked'}>
-                      {free ? <span class="text-[#1f7a50]">Free</span> : <LockIcon />}
-                    </span>
+                    {!isMember && (
+                      <span class="ml-auto shrink-0 pt-0.5 text-[12px] font-bold" aria-label={free ? 'Free' : 'Locked'}>
+                        {free ? <span class="text-[#1f7a50]">Free</span> : <LockIcon />}
+                      </span>
+                    )}
                   </li>
                 );
               })}
             </ol>
-            <div class="mt-6 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <p class="text-[15px] text-muted">$14.99 a month or $99 a year. Covers up to 4 kids. Cancel anytime.</p>
-              <a href="/membership/" class="btn-pencil px-5 py-3 text-[16px]">Start the full program</a>
-            </div>
+            {!isMember && (
+              <div class="mt-6 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-[15px] text-muted">$14.99 a month or $99 a year. Covers up to 4 kids. Cancel anytime.</p>
+                <a href="/membership/" class="btn-pencil px-5 py-3 text-[16px]">Start the full program</a>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -351,6 +385,15 @@ export default function ProgramPlacement() {
       <EmailGate open={gate !== null} source={gate === 'showme' ? 'program-showme' : 'program-week1'} onClose={() => setGate(null)} onDone={() => { const k = gate ?? 'week'; setGate(null); save(k); }} />
     </div>
   );
+}
+
+/** Only same-site relative paths ("/account/"), never another site or a protocol-relative "//host". */
+function safeReturn(raw: string | null | undefined): string {
+  if (!raw || raw.length > 200 || !raw.startsWith('/') || raw.startsWith('//') || raw.includes('\\')) return '';
+  try {
+    const u = new URL(raw, location.origin);
+    return u.origin === location.origin ? u.pathname + u.search : '';
+  } catch { return ''; }
 }
 
 function LockIcon() {

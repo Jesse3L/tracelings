@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ChildProfile, ChildPlan, CheckIn, FamilyResponse, ProgramWeek, SkillId, WeekResponse } from '../lib/program/types';
 import type { Paper } from '../lib/sheet';
 import { loadLocalProgram, saveLocalProgram } from '../lib/program/local';
 import { buildProgramWeek } from '../lib/program/pages';
+import { loadThemeIcons } from '../lib/program/themes';
+import { loadFont, type LoadedFont } from '../lib/fontshape';
 import { buildProgressReport, SKILL_LABELS } from '../lib/program/report';
 import { PLANS } from '../lib/homeschool';
 import { savePdf } from '../lib/download';
@@ -48,6 +50,8 @@ export default function ProgramDashboard() {
   const [showAll, setShowAll] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const [confirmRemove, setConfirmRemove] = useState('');
+  const [font, setFont] = useState<LoadedFont | null>(null);
+  const autoSynced = useRef(false);
 
   async function load() {
     const r = await api<FamilyResponse>('/api/program/family/');
@@ -60,6 +64,8 @@ export default function ProgramDashboard() {
     setLocal(loadLocalProgram());
     try { const p = localStorage.getItem(PAPER_KEY); if (p === 'a4' || p === 'letter') setPaper(p); } catch { /* storage unavailable */ }
     load();
+    // Bubble letters for the coloring pages in the pack (same as the free weekly packs).
+    loadFont('bubble').then(setFont).catch(() => setFont(null));
   }, []);
   useEffect(() => { try { localStorage.setItem(PAPER_KEY, paper); } catch { /* ignore */ } }, [paper]);
 
@@ -84,6 +90,21 @@ export default function ProgramDashboard() {
   }, [kids]);
   useEffect(() => { setCheck({}); setMsg(null); setShowAll(false); setNameDraft(''); }, [sel]);
 
+  // Back from the placement check (?sync=1&child=<id>): save that child's new or changed answers to the account,
+  // through the same sync() as the buttons below. Only the profile goes, never the name.
+  useEffect(() => {
+    if (autoSynced.current || !fam || !kids.length) return;
+    let want = '';
+    try { const q = new URLSearchParams(location.search); if (q.get('sync') === '1') want = q.get('child') ?? ''; } catch { /* ignore */ }
+    autoSynced.current = true;
+    if (!want) return;
+    try { const u = new URL(location.href); u.searchParams.delete('sync'); history.replaceState(null, '', u.pathname + u.search + u.hash); } catch { /* ignore */ }
+    const k = kids.find((x) => x.profile.id === want);
+    if (!k) return;
+    if (!k.onServer && fam.children.length < (fam.limits.maxChildren ?? 4)) sync(k.profile);
+    else if (k.onServer && k.localDiffers && k.localProfile) sync(k.localProfile);
+  }, [fam, kids]);
+
   const kid = kids.find((k) => k.profile.id === sel);
   const plan: ChildPlan | undefined = kid && fam?.plans[kid.profile.id];
   const name = kid ? local.names[kid.profile.id] ?? '' : '';
@@ -103,7 +124,7 @@ export default function ProgramDashboard() {
   }
 
   function saveName(id: string, n: string) {
-    const clean = n.replace(/\s+/g, ' ').trim().slice(0, 40);
+    const clean = n.replace(/\s+/g, ' ').trim().slice(0, 24);
     if (!clean) return;
     const next = { ...local, names: { ...local.names, [id]: clean } };
     // Keep the profile locally too, so /program/ shows this child on this device.
@@ -127,7 +148,9 @@ export default function ProgramDashboard() {
     setRedosLeft((s) => ({ ...s, [k]: r.data.redosLeft }));
     if (!r.data.cached) load();
     try {
-      const pages = buildProgramWeek({ name, profile: kid.profile, week: wk, content: r.data.content, paper, credit: false });
+      // The theme's pictures must be loaded first, or every picture prints as a plain star.
+      await loadThemeIcons([wk.theme]);
+      const pages = buildProgramWeek({ name, profile: kid.profile, week: wk, content: r.data.content, paper, credit: false, bubble: font, planLength: plan.weeks.length });
       const title = `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`;
       await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, title);
       const notes: Record<string, string> = {
@@ -187,6 +210,14 @@ export default function ProgramDashboard() {
   }
 
   const editHref = (id?: string) => `/program/?return=${encodeURIComponent('/account/')}${id ? `&edit=${encodeURIComponent(id)}` : ''}`;
+  /** Before editing a child on a device that only has the server copy, keep that profile locally so the placement check can fill it in. */
+  function keepLocal(id: string) {
+    const p = kids.find((k) => k.profile.id === id)?.profile;
+    if (!p || local.children.some((c) => c.id === id)) return;
+    const next = { ...local, children: [...local.children, profileOnly(p)].slice(-4) };
+    saveLocalProgram(next);
+    setLocal(next);
+  }
 
   if (loadErr) {
     return (
@@ -252,7 +283,7 @@ export default function ProgramDashboard() {
             <label class="block"><span class="block font-bold text-ink">Child’s first name on this device</span>
               <span class="block text-[14px] text-muted">Names are saved only in this browser, so type it once on each device. It goes on the pages and in the story.</span>
               <span class="mt-2 flex gap-2">
-                <input value={nameDraft} maxLength={40} onInput={(e) => setNameDraft((e.target as HTMLInputElement).value)} class="min-w-0 flex-1 rounded-lg border border-hairline px-3 py-2 text-ink" placeholder="First name" autoComplete="off" />
+                <input value={nameDraft} maxLength={24} onInput={(e) => setNameDraft((e.target as HTMLInputElement).value)} class="min-w-0 flex-1 rounded-lg border border-hairline px-3 py-2 text-ink" placeholder="First name" autoComplete="off" />
                 <button type="submit" class={btn}>Save</button>
               </span>
             </label>
@@ -336,7 +367,7 @@ export default function ProgramDashboard() {
           <p class="mt-1 text-muted">A one-page report of skills and weeks covered, handy for homeschool records.</p>
           <div class="mt-3 flex flex-wrap gap-2">
             <button type="button" disabled={busy === 'report'} onClick={printReport} class={btn}>{busy === 'report' ? 'Making…' : 'Print progress report'}</button>
-            <a href={editHref(kid.profile.id)} class={`${btn} inline-block`}>Edit answers or interests</a>
+            <a href={editHref(kid.profile.id)} onClick={() => keepLocal(kid.profile.id)} class={`${btn} inline-block`}>Edit answers or interests</a>
           </div>
           {confirmRemove === kid.profile.id ? (
             <div class="mt-4 rounded-lg bg-[#fff4f4] p-4">
