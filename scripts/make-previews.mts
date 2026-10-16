@@ -130,6 +130,12 @@ jobs.push(render('prek-math', 'pre-k-math-ten-frames', buildMathPage({ kind: 'te
 // Ten frame printables: the Make 10 page (the maker opens on the blank frame, which makes a poor preview).
 jobs.push(render('ten-frames', 'ten-frame-worksheet-make-10', buildMathPage({ kind: 'make-ten', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'ten-frames' }),
   'Make 10 ten frame worksheet: six ten frames with some dots, draw the rest and write how many more make 10'));
+// Kindergarten more or less: the greater than, less than page (the most searched of the four types).
+jobs.push(render('more-or-less', 'kindergarten-greater-than-less-than-worksheet', buildMathPage({ kind: 'compare-symbols', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'more-less' }),
+  'Kindergarten greater than less than worksheet: compare two numbers from 1 to 10 with dots under each, and write >, < or = in the circle'));
+// Kindergarten addition: picture addition within 10 (the maker's default page).
+jobs.push(render('k-addition', 'kindergarten-picture-addition-worksheet', buildMathPage({ kind: 'add-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-addition' }),
+  'Kindergarten picture addition worksheet within 10: count two groups of shapes, then write how many in all'));
 for (const l of 'abcdefghijklmnopqrstuvwxyz') {
   const U = l.toUpperCase();
   jobs.push(render(`lotw-${l}`, `letter-of-the-week-${l}`, pack('pre-k', preKWeekForLetter(l).n)[2],

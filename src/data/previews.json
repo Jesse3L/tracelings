@@ -335,6 +335,12 @@
     "height": 1035,
     "alt": "Homeschool preschool weekly plan page for letter S, with a Monday to Friday checklist and ideas away from the paper"
   },
+  "k-addition": {
+    "src": "/previews/kindergarten-picture-addition-worksheet.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Kindergarten picture addition worksheet within 10: count two groups of shapes, then write how many in all"
+  },
   "letter-a": {
     "src": "/previews/letter-tracing-a.webp",
     "width": 800,
@@ -646,6 +652,12 @@
     "width": 800,
     "height": 1035,
     "alt": "Letter Z of the week letter hunt worksheet: find and circle every capital Z and lowercase z"
+  },
+  "more-or-less": {
+    "src": "/previews/kindergarten-greater-than-less-than-worksheet.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Kindergarten greater than less than worksheet: compare two numbers from 1 to 10 with dots under each, and write >, < or = in the circle"
   },
   "name-coloring": {
     "src": "/previews/name-coloring-sample.webp",

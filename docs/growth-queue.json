@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-15",
+  "updated": "2026-10-16",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13.",
   "items": [
     {
@@ -145,16 +145,36 @@
     },
     {
       "id": "more-or-less-worksheets",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "prek-math-worksheets"
       ],
-      "title": "Kindergarten more or less worksheets: compare groups and compare numbers with pictures, as a type in the math maker plus its own page",
+      "title": "Kindergarten more or less worksheets: compare groups with pictures, compare numbers, greater than / less than symbols, one more one less",
       "suggestedUrl": "/math-worksheets/more-or-less/",
       "keywords": {
         "kindergarten more or less worksheets": [
           390,
           22
+        ],
+        "greater than less than kindergarten worksheet": [
+          390,
+          26
+        ],
+        "greater than less than worksheets": [
+          1600,
+          26
+        ],
+        "one more one less worksheets": [
+          390,
+          24
+        ],
+        "comparing numbers worksheets kindergarten": [
+          210,
+          28
+        ],
+        "greater than less than kindergarten": [
+          170,
+          30
         ],
         "preschool more or less worksheets": [
           70,
@@ -165,7 +185,12 @@
           21
         ]
       },
-      "buildOn": "moreLessPage() in src/lib/mathSheets.ts. Add a numbers-only compare page for K."
+      "buildOn": "moreLessPage() in src/lib/mathSheets.ts. Add a numbers-only compare page for K.",
+      "done": "2026-10-16",
+      "urls": [
+        "/math-worksheets/more-or-less/"
+      ],
+      "notes": "Kept the queue's URL and named the page around 'kindergarten more or less worksheets' (390/SD 22); greater than less than gets its own H2 and page type (390/26 for the kindergarten phrase). Series 'more-less' in MathSheets.tsx and mathSheets.ts: compare groups (moreLessPage), compare numbers with dots up to 10, greater than/less than with a symbol key and some equal pairs, one more one less. Supports ?type= and ?range=. Preview kindergarten-greater-than-less-than-worksheet.webp."
     },
     {
       "id": "prek-math-in-pack",
@@ -178,13 +203,41 @@
     },
     {
       "id": "k-addition-worksheets",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "month1-homeschool-foundation"
       ],
-      "title": "Kindergarten addition worksheet maker (within 5, 10, 20, with dots or a number line)",
+      "title": "Kindergarten addition worksheet maker: picture addition, number line addition, addition facts within 5, 10, 20, plus subtraction with pictures",
       "suggestedUrl": "/math-worksheets/kindergarten-addition/",
       "keywords": {
+        "kindergarten addition worksheets": [
+          3600,
+          26
+        ],
+        "addition worksheets for kindergarten": [
+          1300,
+          24
+        ],
+        "subtraction and addition worksheets for kindergarten": [
+          1000,
+          23
+        ],
+        "kindergarten addition worksheets pdf": [
+          390,
+          24
+        ],
+        "free printable addition worksheets for kindergarten": [
+          210,
+          10
+        ],
+        "picture addition worksheets for kindergarten": [
+          170,
+          25
+        ],
+        "kindergarten subtraction worksheets": [
+          2900,
+          23
+        ],
         "addition kindergarten math worksheets": [
           1000,
           24
@@ -194,11 +247,16 @@
           22
         ]
       },
-      "buildOn": "additionPage() in src/lib/homeschool.ts. Add subtraction as a second option."
+      "buildOn": "additionPage() in src/lib/homeschool.ts. Add subtraction as a second option.",
+      "done": "2026-10-16",
+      "urls": [
+        "/math-worksheets/kindergarten-addition/"
+      ],
+      "notes": "Main keyword changed from 'addition kindergarten math worksheets' (1,000) to 'kindergarten addition worksheets' (3,600/SD 26). Built on the math maker (series 'k-addition'), not additionPage() in homeschool.ts, so it gets New problems, A4, member sets. Subtraction with pictures is one type on this page; 'kindergarten subtraction worksheets' (2,900/23) is big enough for its own page later (see k-subtraction-worksheets). Preview kindergarten-picture-addition-worksheet.webp."
     },
     {
       "id": "k-math-hub",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "prek-math-worksheets",
         "k-addition-worksheets"
@@ -214,11 +272,76 @@
           4400,
           27
         ],
+        "free kindergarten math worksheets": [
+          3600,
+          48
+        ],
         "free printable kindergarten math worksheets": [
           1300,
           25
+        ],
+        "printable kindergarten math worksheets free": [
+          1300,
+          23
+        ],
+        "kindergarten math worksheets printable free": [
+          1000,
+          12
         ]
-      }
+      },
+      "done": "2026-10-16",
+      "urls": [
+        "/math-worksheets/kindergarten/"
+      ],
+      "notes": "H1 'Free kindergarten math worksheets'; title leans on 'free ... to print' since the head term is SD 47. Free 6-page sampler (MathSampler.tsx: ten frames 11 to 20, missing numbers, compare numbers, make 10, picture addition, subtraction) for everyone, with the child's name, one PDF. Links every math maker with its preview. Breadcrumb parent for the more-or-less and addition pages."
+    },
+    {
+      "id": "k-subtraction-worksheets",
+      "status": "todo",
+      "needs": [
+        "k-addition-worksheets"
+      ],
+      "title": "Kindergarten subtraction worksheets: its own page on the math maker (subtraction with pictures, cross out and count, number line subtraction, subtraction facts within 5 and 10)",
+      "suggestedUrl": "/math-worksheets/kindergarten-subtraction/",
+      "keywords": {
+        "kindergarten subtraction worksheets": [
+          2900,
+          23
+        ],
+        "kindergarten subtraction worksheets free": [
+          320,
+          22
+        ],
+        "kindergarten subtraction worksheets with pictures": [
+          70,
+          25
+        ]
+      },
+      "buildOn": "subtractPicturesPage() and numberLinePage() in src/lib/mathSheets.ts; add a 'k-subtraction' series. Link from /math-worksheets/kindergarten/ and the addition page."
+    },
+    {
+      "id": "k-math-in-pack",
+      "status": "todo",
+      "needs": [
+        "k-addition-worksheets"
+      ],
+      "title": "Kindergarten weekly pack: optional extra math page that matches the week (compare numbers in weeks 1 to 21, picture addition or number line in weeks 22 to 36), a free checkbox in the pack maker",
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'more-less' | 'k-addition' }). Pairs with ten-frames-in-k-pack; keep it free."
+    },
+    {
+      "id": "number-bonds-worksheets",
+      "status": "todo",
+      "needs": [
+        "k-addition-worksheets"
+      ],
+      "title": "Number bond worksheets for kindergarten (part-part-whole circles to 5, 10 and 20) as a type in the addition maker or its own page; check volume first",
+      "keywords": {
+        "kindergarten math worksheets number bonds": [
+          10,
+          14
+        ]
+      },
+      "buildOn": "mathSheets.ts circlePath(). Check 'number bonds worksheets' volume in Ubersuggest before choosing a new URL vs. a type on /math-worksheets/kindergarten-addition/."
     },
     {
       "id": "ten-frame-subtraction",

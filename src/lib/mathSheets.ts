@@ -5,9 +5,11 @@ import { PAPER, COLORS, styleName, type Item, type Page, type Paper } from './sh
 import { M, rng, header, footer, instruction, circlePath, starPath, heartPath, box, centered, countPage, PLANS } from './homeschool';
 
 export type MathKind = 'count-color' | 'ten-frame' | 'count-circle' | 'more-less' | 'missing'
-  | 'make-ten' | 'tf-add' | 'show-number' | 'blank-frame';
+  | 'make-ten' | 'tf-add' | 'show-number' | 'blank-frame'
+  | 'compare-numbers' | 'compare-symbols' | 'one-more-less'
+  | 'add-pictures' | 'add-number-line' | 'add-facts' | 'subtract-pictures';
 export type BlankLayout = 'one' | 'double' | 'six';
-export type MathSeries = 'pre-k' | 'ten-frames';
+export type MathSeries = 'pre-k' | 'ten-frames' | 'more-less' | 'k-addition';
 export type MathRange = 5 | 10 | 20;
 export type Compare = 'more' | 'fewer';
 
@@ -40,6 +42,29 @@ export const TEN_FRAME_KINDS: { v: MathKind; label: string; sub: string }[] = [
   { v: 'make-ten', label: 'Make 10', sub: 'How many more dots make 10?' },
   { v: 'tf-add', label: 'Ten frame addition', sub: 'Two colors of dots, then write the sum' },
 ];
+/** Kindergarten more or less worksheets (/math-worksheets/more-or-less/). */
+export const MORE_LESS_KINDS: { v: MathKind; label: string; sub: string }[] = [
+  { v: 'more-less', label: 'Compare groups', sub: 'Count two groups of pictures, circle the one with more (or fewer)' },
+  { v: 'compare-numbers', label: 'Compare numbers', sub: 'Circle the bigger (or smaller) number in each pair' },
+  { v: 'compare-symbols', label: 'Greater than, less than', sub: 'Write >, < or = between two numbers' },
+  { v: 'one-more-less', label: 'One more, one less', sub: 'Write the number before and after' },
+];
+
+/** Kindergarten addition worksheets (/math-worksheets/kindergarten-addition/). */
+export const ADDITION_KINDS: { v: MathKind; label: string; sub: string }[] = [
+  { v: 'add-pictures', label: 'Picture addition', sub: 'Count two groups of pictures, write how many in all' },
+  { v: 'add-number-line', label: 'Number line addition', sub: 'Start on the dot, hop forward, write where you land' },
+  { v: 'add-facts', label: 'Addition facts', sub: 'Twelve number sentences, no pictures' },
+  { v: 'subtract-pictures', label: 'Subtraction with pictures', sub: 'Some pictures are crossed out. How many are left?' },
+];
+
+export const KINDS_FOR: Record<MathSeries, { v: MathKind; label: string; sub: string }[]> = {
+  'pre-k': MATH_KINDS,
+  'ten-frames': TEN_FRAME_KINDS,
+  'more-less': MORE_LESS_KINDS,
+  'k-addition': ADDITION_KINDS,
+};
+
 export const BLANK_LAYOUTS: { v: BlankLayout; label: string; sub: string }[] = [
   { v: 'one', label: 'One big frame', sub: 'a counting mat' },
   { v: 'double', label: 'Double frame', sub: 'for 11 to 20' },
@@ -49,6 +74,7 @@ export const BLANK_LAYOUTS: { v: BlankLayout; label: string; sub: string }[] = [
 const INK = COLORS.ink;
 const DOT2 = '#e8954a'; // second addend in ten frame addition (orange next to the blue)
 const DOT = '#5b86d9';
+const CROSS = '#d9534f'; // the X on taken-away pictures
 const f2 = (n: number) => Math.round(n * 100) / 100;
 
 type Shape = 'star' | 'heart' | 'circle' | 'square' | 'triangle';
@@ -78,6 +104,14 @@ const labelFor = (o: MathOptions) => {
     if (o.kind === 'make-ten') return `Ten frames: ${k}`;
     if (o.kind === 'tf-add') return `Ten frames: ${k}, ${o.range === 20 ? 'sums 11 to 20' : `within ${o.range}`}`;
     return `Ten frames: ${k}, ${o.range === 20 ? '11 to 20' : rangeText(o.range)}`;
+  }
+  if (o.series === 'more-less') {
+    const k = MORE_LESS_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
+    return `More or less: ${k}, ${rangeText(o.range)}`;
+  }
+  if (o.series === 'k-addition') {
+    const k = ADDITION_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
+    return `Kindergarten math: ${k}, within ${o.range}`;
   }
   const k = MATH_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
   return o.kind === 'count-color' ? `Pre-K math: ${k}, number ${o.number}` : `Pre-K math: ${k}, ${rangeText(o.range)}`;
@@ -405,6 +439,324 @@ function tfAddPage(o: MathOptions): Page {
   return { w, h, items };
 }
 
+// ---------- Kindergarten more or less ----------
+
+/** Distinct random pairs [a, b] from min..max with a !== b. With equalEvery = n, every nth pair is equal (for the = sign). */
+function pairs(rand: () => number, count: number, min: number, max: number, equalEvery = 0): [number, number][] {
+  const out: [number, number][] = [];
+  const used = new Set<string>();
+  for (let guard = 0; out.length < count && guard < 500; guard++) {
+    const a = min + Math.floor(rand() * (max - min + 1));
+    let b = min + Math.floor(rand() * (max - min + 1));
+    const wantEqual = equalEvery > 0 && out.length % equalEvery === equalEvery - 1;
+    if (wantEqual) b = a;
+    else if (a === b) continue;
+    const k = `${a}-${b}`;
+    if (used.has(k) && guard < 400) continue;
+    used.add(k);
+    out.push([a, b]);
+  }
+  return out;
+}
+
+/** n small dots in rows of 5, centered under a number, so kids can check by counting. */
+function dotRow(items: Item[], n: number, cx: number, y: number, r = 4, gap = 11) {
+  const perRow = 5;
+  const rows = Math.ceil(n / perRow);
+  for (let k = 0; k < n; k++) {
+    const c = k % perRow, row = Math.floor(k / perRow);
+    const inRow = row === rows - 1 ? n - row * perRow : perRow;
+    const x = cx - ((inRow - 1) * gap) / 2 + c * gap;
+    items.push({ kind: 'dot', cx: x, cy: y + row * gap, r, color: DOT });
+  }
+}
+
+/** Compare numbers: two numbers in each pair, circle the bigger (or smaller) one. */
+function compareNumbersPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const word = o.compare === 'more' ? 'bigger' : 'smaller';
+  const dots = o.range <= 10;
+  const y0 = instruction(items, w, `Circle the ${word} number`, dots
+    ? `Read both numbers. Count the dots if it helps. Circle the number that is ${word}.`
+    : `Read both numbers out loud. Circle the number that is ${word}.`) + 10;
+  const rand = rng(`cn-${o.range}-${o.compare}-${o.seed}`);
+  const list = pairs(rand, 10, 1, o.range);
+  const rows = 5;
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const colW = (w - 2 * M) / 2;
+  const bw = Math.min(84, colW / 2 - 26), bh = Math.min(dots ? 84 : 64, rowH - 18);
+  const cap = Math.min(30, bh * 0.4);
+  list.forEach(([a, b], i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const cx = M + col * colW + colW / 2;
+    const yT = y0 + row * rowH + (rowH - bh) / 2;
+    if (row > 0 && col === 0) items.push({ kind: 'line', x1: M, y1: y0 + row * rowH, x2: w - M, y2: y0 + row * rowH, color: COLORS.desc, width: 1 });
+    [a, b].forEach((n, k) => {
+      const bx = cx + (k === 0 ? -bw - 12 : 12);
+      items.push({ kind: 'path', d: box(bx, yT, bw, bh, 10), color: COLORS.desc, width: 1.4 });
+      const base = dots ? yT + 10 + cap : yT + bh / 2 + cap / 2;
+      centered(items, String(n), bx + bw / 2, base, cap);
+      if (dots) dotRow(items, n, bx + bw / 2, base + 14, 3.6, Math.min(12, (bw - 14) / 5));
+    });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Greater than, less than: write >, < or = in the circle between two numbers. */
+function compareSymbolsPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const dots = o.range <= 10;
+  let y0 = instruction(items, w, 'Greater than, less than', 'Compare the two numbers. Write > (greater than), < (less than) or = (equal to) in the circle. The open side faces the bigger number.');
+  // A small key so the grown-up and child can check the symbols.
+  const ky = y0 + 20;
+  const kw = (w - 2 * M) / 3;
+  ([['5 > 3', '5 is greater than 3'], ['2 < 4', '2 is less than 4'], ['3 = 3', '3 is equal to 3']] as const).forEach(([sym, words], k) => {
+    say(items, sym, M + k * kw, ky, 18);
+    say(items, words, M + k * kw + 54, ky - 1, 10);
+  });
+  items.push({ kind: 'line', x1: M, y1: ky + 14, x2: w - M, y2: ky + 14, color: COLORS.desc, width: 1 });
+  y0 = ky + 22;
+  const rand = rng(`cs-${o.range}-${o.seed}`);
+  const list = pairs(rand, 10, 1, o.range, 5);
+  const rows = 5;
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const colW = (w - 2 * M) / 2;
+  const cap = Math.min(32, rowH * 0.34);
+  list.forEach(([a, b], i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const cx = M + col * colW + colW / 2;
+    const cy = y0 + row * rowH + rowH * (dots ? 0.38 : 0.5);
+    if (row > 0 && col === 0) items.push({ kind: 'line', x1: M, y1: y0 + row * rowH, x2: w - M, y2: y0 + row * rowH, color: COLORS.desc, width: 1 });
+    const off = Math.min(72, colW / 2 - 34);
+    centered(items, String(a), cx - off, cy + cap / 2, cap);
+    centered(items, String(b), cx + off, cy + cap / 2, cap);
+    items.push({ kind: 'path', d: circlePath(cx, cy, 24), color: INK, width: 1.5 });
+    if (dots) {
+      dotRow(items, a, cx - off, cy + cap / 2 + 16, 3.4, 10);
+      dotRow(items, b, cx + off, cy + cap / 2 + 16, 3.4, 10);
+    }
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** One more, one less: write the number that comes before and after. */
+function oneMoreLessPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  let y0 = instruction(items, w, 'One less, one more', 'Read the number in the middle. Write the number that is one less on the left and one more on the right. A number line or counters can help.');
+  const span = w - 2 * M;
+  const xs = [M + span * 0.2, M + span * 0.5, M + span * 0.8];
+  ['1 less', 'the number', '1 more'].forEach((t, k) => say(items, t, xs[k], y0 + 18, 13, 'center'));
+  y0 += 28;
+  const rand = rng(`om-${o.range}-${o.seed}`);
+  const rows = 7;
+  // 1 to 5 only has 3 middle numbers that work (2, 3, 4), so they repeat; otherwise the middle number is 2 to range - 1.
+  const nums = pickNumbers(rand, o.range - 1, rows, 2);
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const bw = 76, bh = Math.min(62, rowH - 14);
+  const cap = Math.min(32, bh * 0.55);
+  nums.forEach((n, i) => {
+    const yT = y0 + i * rowH + (rowH - bh) / 2;
+    xs.forEach((x, k) => {
+      const mid = k === 1;
+      items.push({ kind: 'path', d: box(x - bw / 2, yT, bw, bh, 8), color: mid ? COLORS.desc : INK, width: mid ? 1.2 : 1.6 });
+      if (mid) centered(items, String(n), x, yT + bh / 2 + cap / 2, cap);
+    });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+// ---------- Kindergarten addition and subtraction ----------
+
+/** Addition problems [a, b]: within 5 and 10 the sum is 2 to the range; within 20 the sums run 8 to 20 with each part 10 or less. */
+function addPairs(rand: () => number, count: number, range: MathRange): [number, number][] {
+  const out: [number, number][] = [];
+  const used = new Set<string>();
+  for (let guard = 0; out.length < count && guard < 600; guard++) {
+    let a: number, b: number;
+    if (range === 20) { a = 1 + Math.floor(rand() * 10); const lo = Math.max(1, 8 - a); b = lo + Math.floor(rand() * (10 - lo + 1)); }
+    else { const s = 2 + Math.floor(rand() * (range - 1)); a = 1 + Math.floor(rand() * (s - 1)); b = s - a; }
+    const k = `${a}+${b}`;
+    if (used.has(k) && guard < 500) continue;
+    used.add(k);
+    out.push([a, b]);
+  }
+  return out;
+}
+
+/** Plus and equals signs drawn as lines (bigger and clearer than text at this size). */
+function plus(items: Item[], cx: number, cy: number, s = 11) {
+  items.push({ kind: 'line', x1: cx - s, y1: cy, x2: cx + s, y2: cy, color: INK, width: 3 });
+  items.push({ kind: 'line', x1: cx, y1: cy - s, x2: cx, y2: cy + s, color: INK, width: 3 });
+}
+function equals(items: Item[], cx: number, cy: number, s = 11) {
+  items.push({ kind: 'line', x1: cx - s, y1: cy - 5, x2: cx + s, y2: cy - 5, color: INK, width: 3 });
+  items.push({ kind: 'line', x1: cx - s, y1: cy + 5, x2: cx + s, y2: cy + 5, color: INK, width: 3 });
+}
+
+/** Picture addition: a group of pictures plus another group, write how many in all. */
+function addPicturesPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Picture addition within ${o.range}`, 'Count the pictures in each group. Then count them all and write how many in the box.') + 8;
+  const rand = rng(`ap-${o.range}-${o.seed}`);
+  const rows = 6;
+  const list = addPairs(rand, rows, o.range);
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const span = w - 2 * M;
+  const gw = span * 0.33, sign = span * 0.075, bw = 62;
+  list.forEach(([a, b], i) => {
+    const yT = y0 + i * rowH + 4;
+    const gh = rowH - 26;
+    const cy = yT + gh / 2;
+    const s = SHAPES[(i + o.seed) % SHAPES.length];
+    const most = Math.max(a, b);
+    const gap = Math.min(30, gh / (most > 5 ? 2.2 : 1.3), (gw - 12) / 5.2);
+    let x = M;
+    [a, b].forEach((n, k) => {
+      items.push({ kind: 'path', d: box(x, yT, gw, gh, 10), color: COLORS.desc, width: 1.4 });
+      shapeGroup(items, s, n, x + gw / 2, cy, gap, 5);
+      x += gw;
+      if (k === 0) { plus(items, x + sign / 2, cy); x += sign; }
+    });
+    equals(items, x + sign / 2, cy);
+    x += sign;
+    items.push({ kind: 'path', d: box(x + (w - M - x - bw) / 2, cy - 28, bw, 56, 8), color: INK, width: 1.6 });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Number line addition: start on the dot, hop forward, write where you land. */
+function numberLinePage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Number line addition within ${o.range}`, 'Put a finger on the first number (the blue dot). Hop forward the second number, one jump at a time. Write the number you land on.') + 6;
+  const rand = rng(`nl-${o.range}-${o.seed}`);
+  const rows = 5;
+  const list = addPairs(rand, rows, o.range);
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const max = o.range;
+  const x0 = M + 10, x1 = w - M - 10;
+  const step = (x1 - x0) / max;
+  const label = o.range === 20 ? 11 : 14;
+  list.forEach(([a, b], i) => {
+    const yT = y0 + i * rowH;
+    if (i > 0) items.push({ kind: 'line', x1: M, y1: yT, x2: w - M, y2: yT, color: COLORS.desc, width: 1 });
+    const ty = yT + 36;
+    say(items, `${a}  +  ${b}  =`, M, ty, 24);
+    items.push({ kind: 'path', d: box(M + (a >= 10 || b >= 10 ? 118 : 104), ty - 32, 58, 44, 8), color: INK, width: 1.5 });
+    // The line sits low in the row, leaving room above it to draw the hops.
+    const ly = yT + rowH - 40;
+    items.push({ kind: 'line', x1: x0 - 6, y1: ly, x2: x1 + 6, y2: ly, color: INK, width: 1.6 });
+    for (let n = 0; n <= max; n++) {
+      const x = x0 + n * step;
+      const tall = n % 5 === 0;
+      items.push({ kind: 'line', x1: x, y1: ly - (tall ? 8 : 5), x2: x, y2: ly + (tall ? 8 : 5), color: INK, width: tall ? 1.6 : 1.1 });
+      say(items, String(n), x, ly + 23, label, 'center');
+    }
+    items.push({ kind: 'dot', cx: x0 + a * step, cy: ly, r: 5.5, color: DOT });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Addition facts: twelve number sentences in two columns. */
+function factsPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Addition facts within ${o.range}`, 'Solve each one. Fingers, counters or a number line are all fine to use.') + 8;
+  const rand = rng(`af-${o.range}-${o.seed}`);
+  const list = addPairs(rand, 12, o.range);
+  const rows = 6;
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const colW = (w - 2 * M) / 2;
+  list.forEach(([a, b], i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const x = M + col * colW + 14;
+    const cy = y0 + row * rowH + rowH / 2;
+    if (row > 0 && col === 0) items.push({ kind: 'line', x1: M, y1: y0 + row * rowH, x2: w - M, y2: y0 + row * rowH, color: COLORS.desc, width: 1 });
+    say(items, `${a}  +  ${b}  =`, x, cy + 10, 28);
+    const bx = x + (a >= 10 || b >= 10 ? 138 : 122);
+    items.push({ kind: 'path', d: box(bx, cy - 27, 62, 54, 8), color: INK, width: 1.5 });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Subtraction with pictures: some pictures are crossed out; write how many are left. */
+function subtractPicturesPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Subtraction within ${o.range}`, 'Count all the pictures. The ones with an X are taken away. Count the pictures that are left and write the number.') + 8;
+  const rand = rng(`sp-${o.range}-${o.seed}`);
+  const rows = 6;
+  const list: [number, number][] = [];
+  const used = new Set<string>();
+  for (let guard = 0; list.length < rows && guard < 500; guard++) {
+    const lo = o.range === 20 ? 8 : 2;
+    const a = lo + Math.floor(rand() * (o.range - lo + 1));
+    const b = 1 + Math.floor(rand() * (a - 1));
+    const k = `${a}-${b}`;
+    if (used.has(k) && guard < 400) continue;
+    used.add(k);
+    list.push([a, b]);
+  }
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const span = w - 2 * M;
+  const gw = span * 0.55;
+  const perRow = o.range === 20 ? 10 : 5;
+  list.forEach(([a, b], i) => {
+    const yT = y0 + i * rowH + 5;
+    const gh = rowH - 10;
+    const cy = yT + gh / 2;
+    const s = SHAPES[(i + o.seed) % SHAPES.length];
+    const gap = Math.min(30, gh / (a > perRow ? 2.2 : 1.3), (gw - 20) / (perRow + 0.9));
+    items.push({ kind: 'path', d: box(M, yT, gw, gh, 10), color: COLORS.desc, width: 1.4 });
+    // Same placement as shapeGroup, so the X marks land on the last b pictures.
+    const rowsN = Math.ceil(a / perRow);
+    const cols = Math.min(perRow, a);
+    const split = gap * 0.45;
+    const spanG = (cols - 1) * gap + (cols > 5 ? split : 0);
+    const cx = M + gw / 2;
+    for (let k = 0; k < a; k++) {
+      const c = k % perRow, r = Math.floor(k / perRow);
+      const x = cx - spanG / 2 + c * gap + (c >= 5 ? split : 0);
+      const y = cy - ((rowsN - 1) * gap) / 2 + r * gap;
+      shape(items, s, x, y, gap * 0.4);
+      if (k >= a - b) {
+        const d = gap * 0.33;
+        items.push({ kind: 'line', x1: x - d, y1: y - d, x2: x + d, y2: y + d, color: CROSS, width: 2.2 });
+        items.push({ kind: 'line', x1: x - d, y1: y + d, x2: x + d, y2: y - d, color: CROSS, width: 2.2 });
+      }
+    }
+    const sx = M + gw + 22;
+    say(items, `${a}  -  ${b}  =`, sx, cy + 9, 24);
+    items.push({ kind: 'path', d: box(sx + (a >= 10 || b >= 10 ? 118 : 104), cy - 26, 58, 52, 8), color: INK, width: 1.5 });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
 export function buildMathPage(o: MathOptions): Page {
   if (o.kind === 'count-color') {
     const n = Math.max(1, Math.min(20, Math.round(o.number)));
@@ -422,6 +774,13 @@ export function buildMathPage(o: MathOptions): Page {
   if (o.kind === 'tf-add') return tfAddPage(o);
   if (o.kind === 'count-circle') return countCirclePage(o);
   if (o.kind === 'more-less') return moreLessPage(o);
+  if (o.kind === 'compare-numbers') return compareNumbersPage(o);
+  if (o.kind === 'compare-symbols') return compareSymbolsPage(o);
+  if (o.kind === 'one-more-less') return oneMoreLessPage(o);
+  if (o.kind === 'add-pictures') return addPicturesPage(o);
+  if (o.kind === 'add-number-line') return numberLinePage(o);
+  if (o.kind === 'add-facts') return factsPage(o);
+  if (o.kind === 'subtract-pictures') return subtractPicturesPage(o);
   return missingPage(o);
 }
 
