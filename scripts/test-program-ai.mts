@@ -3,6 +3,9 @@
 import assert from 'node:assert/strict';
 import type { ChildProfile, ProgramWeek } from '../src/lib/program/types';
 import { validateContent, parseResponse, generateWeekContent, weekFacts, computeAnswer, ContentInvalid, _prompts, type Caller } from '../src/lib/server/ai';
+import { placeChild } from '../src/lib/program/engine';
+import { templateContentFor } from '../src/lib/program/templates';
+import { THEMES } from '../src/lib/program/themes';
 import { cleanProfile, cleanPlan, cleanCheckIn, InvalidInput, setBackend, memoryBackend, updateFamily, loadFamily, reserveGlobalAi, familyKey, GLOBAL_MONTHLY_CAP, hadUnknownKeys } from '../src/lib/server/programStore';
 
 process.env.SESSION_SECRET ??= 'test-secret-test-secret-test-secret-123';
@@ -167,6 +170,64 @@ await test('store: global guard stops at the cap', async () => {
   let ok = 0;
   for (let i = 0; i < GLOBAL_MONTHLY_CAP + 5 && i < 4000; i++) if (await reserveGlobalAi()) ok++;
   assert.equal(ok, GLOBAL_MONTHLY_CAP);
+});
+
+// ---------- Integration with Part A (real THEMES, real plans, ProgramWeek.math, wordProblems[].icon) ----------
+await test('plan: a real engine plan survives cleanPlan with its math track', () => {
+  for (const p of [profile, { ...profile, ageYears: 4 as const, skills: {} }, { ...profile, skills: { 'count-20': 'got-it' as const, numerals: 'got-it' as const, 'letter-names': 'got-it' as const } }]) {
+    const plan = placeChild(p);
+    const clean = cleanPlan(JSON.parse(JSON.stringify(plan)), p);
+    assert.deepEqual(clean, plan);
+  }
+  assert.throws(() => cleanPlan({ ...placeChild(profile), weeks: placeChild(profile).weeks.map((w, i) => (i ? w : { ...w, math: { number: 99 } })) }, profile), InvalidInput);
+  assert.throws(() => cleanPlan({ ...placeChild(profile), weeks: placeChild(profile).weeks.map((w, i) => (i ? w : { ...w, math: { addTo: 7 } })) }, profile), InvalidInput);
+});
+await test('facts: real theme words and icon ids, week.math sets the number range', () => {
+  const f = weekFacts(profile, { ...famWeek, math: { addTo: 5 } });
+  assert.equal(f.themeLabel, 'dinosaurs');
+  assert.ok(f.themeWords.includes('T-rex') && f.themeWords.includes('fossil'));
+  assert.deepEqual(f.icons.map((i) => i.id), THEMES.dinosaurs.icons.map((i) => i.id));
+  assert.equal(f.mathMax, 5);
+  assert.equal(weekFacts(profile, { ...famWeek, math: { number: 8 } }).mathMax, 8);
+  const u = _prompts(profile, { ...famWeek, math: { addTo: 5 } }).user;
+  assert.ok(u.includes('t-rex: T-rex') && u.includes('adding within 5') && u.includes('1 to 5'), u);
+});
+await test('icon: kept when it is a theme icon named in the text, dropped otherwise', () => {
+  const g = fixture();
+  (g.wordProblems[0] as any).icon = 't-rex';
+  g.wordProblems[0].text = '{{name}} sees 2 T-rexes. Then 3 more come. How many T-rexes now?';
+  (g.wordProblems[1] as any).icon = 'egg';                 // text says "eggs": kept
+  (g.wordProblems[2] as any).icon = 'robot';               // not a dinosaur icon: dropped
+  (g.wordProblems[3] as any).icon = 'volcano';             // text is about steps: dropped
+  const c = validateContent(g, facts);
+  assert.equal(c.wordProblems[0].icon, 't-rex');
+  assert.equal(c.wordProblems[1].icon, 'egg');
+  assert.equal(c.wordProblems[2].icon, undefined);
+  assert.equal(c.wordProblems[3].icon, undefined);
+});
+await test('schema: problems require icon, and Haiku-safe request (no temperature)', async () => {
+  const { OUTPUT_SCHEMA } = await import('../src/lib/server/ai');
+  assert.ok((OUTPUT_SCHEMA.properties.wordProblems.items.required as readonly string[]).includes('icon'));
+  const src = (await import('node:fs')).readFileSync(new URL('../src/lib/server/ai.ts', import.meta.url), 'utf8');
+  assert.ok(!/temperature\s*:/.test(src), 'temperature must not be sent to Haiku 5.5');
+});
+await test('templates: every week of real plans validates against the AI rules for numbers and icons', () => {
+  const bad: string[] = [];
+  for (const t of Object.keys(THEMES) as (keyof typeof THEMES)[]) for (const age of [3, 5, 6] as const) {
+    const p = { ...profile, ageYears: age, interests: [t] };
+    for (const wk of placeChild(p).weeks) {
+      if (wk.index === 1 && wk.baseWeek === 1) continue; // the hand-written free week 1 is not AI-checked
+      const c = templateContentFor(p, wk);
+      const f = weekFacts(p, wk);
+      for (const q of c.wordProblems) {
+        assert.equal(q.answer, computeAnswer(q.op, q.a, q.b), `${t} ${wk.index} ${q.text}`);
+        assert.ok(f.ops.includes(q.op), `${t} age ${age} week ${wk.index}: op ${q.op} not in ${f.ops}`);
+        bad.push(...(q.a <= f.mathMax && q.b <= f.mathMax && q.answer <= f.mathMax ? [] : [`${t} age ${age} week ${wk.index} (${JSON.stringify(wk.math)}): ${q.a}${q.op}${q.b} over ${f.mathMax}`]));
+        if (q.icon) assert.ok(THEMES[t].icons.some((i) => i.id === q.icon), `${t} icon ${q.icon}`);
+      }
+    }
+  }
+  assert.deepEqual(bad.slice(0, 8), []);
 });
 
 console.log(`\n${passed} passed${process.exitCode ? ', some FAILED' : ''}`);

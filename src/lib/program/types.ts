@@ -90,7 +90,7 @@ export interface FamilyDoc {
   plans: Record<string, ChildPlan>;       // childId -> plan
   checkIns: CheckIn[];
   content: Record<string, WeekContent>;   // "childId:weekIndex" -> cached content
-  contentFor?: Record<string, string>;    // "childId:weekIndex" -> "level:baseWeek:theme" the content was made for (a check-in can shift weeks)
+  contentFor?: Record<string, string>;    // "childId:weekIndex" -> "level:baseWeek:theme[:math][:r]" the content was made for (a check-in can shift weeks)
   usage: FamilyUsage;
 }
 

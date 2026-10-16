@@ -45,7 +45,8 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     if (!child || !plan) return json(404, { error: 'unknown_child' });
     const week = plan.weeks[weekIndex - 1];
     if (!week) return json(404, { error: 'unknown_week' });
-    const sig = `${week.level}:${week.baseWeek}:${week.theme}`;
+    // What the content was made for. A check-in can shift a week's base week, theme or math step, and then it is made again.
+    const sig = `${week.level}:${week.baseWeek}:${week.theme}${week.math ? `:${week.math.addTo ? `a${week.math.addTo}` : `n${week.math.number}`}` : ''}${week.extraReview ? ':r' : ''}`;
     const used = doc.usage.redos[wk] ?? 0;
     const cached = doc.content[wk] && (doc.contentFor?.[wk] ?? sig) === sig ? doc.content[wk] : undefined;
     const reply = (content: WeekContent, isCached: boolean, redosUsed: number, note?: WeekResponse['note']) =>

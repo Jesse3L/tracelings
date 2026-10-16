@@ -5,7 +5,7 @@
 // The child's name is never sent: the model writes the literal placeholder {{name}}, and the browser swaps it in.
 import type { ChildProfile, ProgramWeek, WeekContent } from '../program/types';
 import { templateContentFor } from '../program/templates';
-import * as themesMod from '../program/themes';
+import { THEMES } from '../program/themes';
 import { PLANS as BASE_PLANS, FAMILIES, type Week } from '../homeschool';
 
 const env = (k: string): string | undefined => ((import.meta.env ?? {}) as Record<string, string | undefined>)[k] ?? process.env[k];
@@ -23,6 +23,12 @@ export interface WeekFacts {
   theme: string;           // theme id
   themeLabel: string;      // "dinosaurs"
   themeWords: string[];
+  /** The theme's picture ids with what each one shows ("t-rex" = "T-rex"), so a word problem can name its picture. */
+  icons: { id: string; one: string; many: string }[];
+  buddy: string;           // "little T-rex": the friendly character in stories and problems
+  place: string;           // "in dinosaur land"
+  /** The week's math step from the plan's math track (ProgramWeek.math), or the base week's. */
+  math: { number?: number; addTo?: 5 | 10 };
   letters: string[];
   family?: string;
   familyWords: string[];
@@ -34,27 +40,27 @@ export interface WeekFacts {
   extraReview: boolean;
 }
 
-/** Theme label and word list from Part A's themes.ts, read defensively so a small shape change there can't break this. */
-export function themeInfo(id: string): { label: string; words: string[] } {
-  const m = themesMod as unknown as Record<string, any>;
-  const t = m.THEMES?.[id] ?? m.themes?.[id] ?? (typeof m.themeFor === 'function' ? m.themeFor(id) : undefined) ?? (typeof m.getTheme === 'function' ? m.getTheme(id) : undefined);
-  const label = String(t?.label ?? t?.name ?? t?.title ?? id).toLowerCase();
-  const raw = t?.words ?? t?.wordList ?? t?.vocab ?? [];
-  const words = Array.isArray(raw) ? raw.map((w: unknown) => (typeof w === 'string' ? w : (w as any)?.word)).filter((w: unknown): w is string => typeof w === 'string' && w.length > 0 && w.length < 24).slice(0, 20) : [];
-  return { label, words };
+/** Theme label, words and pictures from themes.ts. */
+export function themeInfo(id: string): { label: string; words: string[]; icons: WeekFacts['icons']; buddy: string; place: string } {
+  const t = THEMES[id as keyof typeof THEMES];
+  if (!t) throw new Error(`unknown theme ${id}`);
+  const words = [...new Set([...t.nouns, ...t.cvc, ...t.icons.map((i) => i.one)])].filter((w) => w.length > 0 && w.length < 24).slice(0, 24);
+  return { label: t.short.toLowerCase(), words, icons: t.icons.map(({ id: i, one, many }) => ({ id: i, one, many })), buddy: t.buddy.one, place: t.place };
 }
 
 export function weekFacts(profile: ChildProfile, week: ProgramWeek): WeekFacts {
   const base = BASE_PLANS[week.level].weeks[week.baseWeek - 1];
-  const { label, words } = themeInfo(week.theme);
+  const { label, words, icons, buddy, place } = themeInfo(week.theme);
   const familyWords = base.family ? FAMILIES[base.family] ?? [] : (base.families ?? []).flatMap((f) => (FAMILIES[f] ?? []).slice(0, 2));
+  // The plan's own math track wins (a child who counts to 20 isn't held to "the number 3" on an early letter week).
+  const math: WeekFacts['math'] = week.math ?? (base.addTo ? { addTo: base.addTo } : { number: base.number || 1 });
   let mathMax: number;
   let ops: WeekFacts['ops'];
-  if (base.addTo) { mathMax = base.addTo; ops = ['+', '-', 'compare']; }
-  else if (week.level === 'pre-k') { mathMax = Math.min(10, Math.max(3, base.number ?? 5)); ops = ['+', 'compare']; }
-  else { mathMax = Math.min(10, Math.max(5, base.number ?? 5)); ops = ['+', '-', 'compare']; }
+  if (math.addTo) { mathMax = math.addTo; ops = week.level === 'kindergarten' ? ['+', '-', 'compare'] : ['+', 'compare']; }
+  else if (week.level === 'pre-k') { mathMax = Math.min(5, Math.max(3, (math.number ?? 1) + 1)); ops = ['+', 'compare']; }
+  else { mathMax = Math.min(10, Math.max(5, math.number ?? 5)); ops = (math.number ?? 0) >= 5 ? ['+', '-', 'compare'] : ['+', 'compare']; }
   return {
-    level: week.level, base, theme: week.theme, themeLabel: label, themeWords: words,
+    level: week.level, base, theme: week.theme, themeLabel: label, themeWords: words, icons, buddy, place, math,
     letters: base.letters ?? [], family: base.family, familyWords, sightWords: base.sightWords ?? [],
     mathMax, ops, focus: week.focus, ageYears: profile.ageYears, extraReview: Boolean(week.extraReview),
   };
@@ -103,7 +109,7 @@ function systemPrompt(): string {
     '',
     'The parts:',
     '- story: a little book. A short title (2 to 6 words) and 4 to 8 pages. Each page is 1 or 2 short sentences, at most 12 words per sentence. {{name}} is the star and appears on at least two pages. Lean on decodable words for the level: the week\'s letters, word family words and sight words, plus the theme words. Avoid long or tricky words. A gentle, happy ending.',
-    '- wordProblems: 4 to 6 short problems about the theme, each one or two sentences read aloud by the grown-up. Use only the numbers allowed for the week. Each problem lists a, b, op and an answer. op "+" means a plus b. op "-" means a minus b, with a at least b. op "compare" asks which number is more, with a and b different; the answer is the bigger number. Write a and b as digits in the text. Do not put the answer in the text. Do not use any other numbers.',
+    '- wordProblems: 4 to 6 short problems about the theme, each one or two sentences read aloud by the grown-up. Use only the numbers allowed for the week. Each problem lists a, b, op, an answer, and icon (the id of the picture the child counts). op "+" means a plus b. op "-" means a minus b, with a at least b. op "compare" asks which number is more, with a and b different; the answer is the bigger number. Write a and b as digits in the text. Do not put the answer in the text. Do not use any other numbers.',
     '- tracingSentence: one short sentence for the child to trace, 3 to 7 words and at most 36 letters, about the theme. It may use {{name}}. Letters, spaces and a final period or exclamation mark only.',
     '- parentNote: written to the grown-up. teaches: one or two sentences on what this week teaches. why: one or two sentences on why it helps right now. activities: exactly 2 off-paper activity ideas tied to the theme, each one sentence, using things most homes have. Do not talk to the child here.',
   ].join('\n');
@@ -121,7 +127,10 @@ function userPrompt(f: WeekFacts): string {
   if (f.sightWords.length) lines.push(`Sight words this week: ${f.sightWords.join(', ')}. Use each one in the story.`);
   if (f.base.kind === 'name') lines.push('This is the name week, so the story can be about {{name}} and the letters in their name.');
   lines.push(`Skills in focus: ${f.focus.join(', ') || 'general review'}.`);
-  lines.push(`Word problems: every number is a whole number from 0 to ${f.mathMax}, and every answer is at most ${f.mathMax}. Allowed op values: ${f.ops.map((o) => `"${o}"`).join(', ')}.`);
+  lines.push(`Math this week: ${f.math.addTo ? `adding within ${f.math.addTo}` : `the number ${f.math.number}`}.`);
+  lines.push(`Word problems: every number is a whole number from 1 to ${f.mathMax}, and every answer is at most ${f.mathMax}. Allowed op values: ${f.ops.map((o) => `"${o}"`).join(', ')}.`);
+  lines.push(`Each word problem counts one kind of thing that has a picture. Set icon to its id, and use that thing's name in the text. Pictures (id: name): ${f.icons.map((i) => `${i.id}: ${i.one} (${i.many})`).join('; ')}.`);
+  lines.push(`The friendly character can be the ${f.buddy}. Stories can happen ${f.place}.`);
   lines.push(f.level === 'pre-k'
     ? 'Keep the story very simple: mostly 3 and 4 letter words, about 40 to 90 words in all.'
     : 'Keep the story simple: mostly short words, about 60 to 140 words in all.');
@@ -133,8 +142,8 @@ export const OUTPUT_SCHEMA = {
   properties: {
     story: { type: 'object', properties: { title: { type: 'string' }, pages: { type: 'array', items: { type: 'string' }, minItems: 1 } }, required: ['title', 'pages'], additionalProperties: false },
     wordProblems: { type: 'array', minItems: 1, items: { type: 'object', properties: {
-      text: { type: 'string' }, a: { type: 'integer' }, b: { type: 'integer' }, op: { type: 'string', enum: ['+', '-', 'compare'] }, answer: { type: 'integer' },
-    }, required: ['text', 'a', 'b', 'op', 'answer'], additionalProperties: false } },
+      text: { type: 'string' }, a: { type: 'integer' }, b: { type: 'integer' }, op: { type: 'string', enum: ['+', '-', 'compare'] }, answer: { type: 'integer' }, icon: { type: 'string' },
+    }, required: ['text', 'a', 'b', 'op', 'answer', 'icon'], additionalProperties: false } },
     tracingSentence: { type: 'string' },
     parentNote: { type: 'object', properties: { teaches: { type: 'string' }, why: { type: 'string' }, activities: { type: 'array', items: { type: 'string' } } }, required: ['teaches', 'why', 'activities'], additionalProperties: false },
   },
@@ -198,7 +207,7 @@ export function computeAnswer(op: '+' | '-' | 'compare', a: number, b: number): 
 export function validateContent(raw: unknown, f: WeekFacts): WeekContent {
   if (typeof raw !== 'object' || raw === null) fail('not an object');
   const r = raw as Record<string, any>;
-  const themeCaps = new Set([...f.themeWords, f.themeLabel].flatMap((w) => w.toLowerCase().split(/\s+/)));
+  const themeCaps = new Set([...f.themeWords, f.themeLabel, ...f.icons.flatMap((i) => [i.one, i.many])].flatMap((w) => w.toLowerCase().split(/[\s-]+/)));
 
   // Story
   const title = tidy(r.story?.title, 60, 'title');
@@ -248,7 +257,15 @@ export function validateContent(raw: unknown, f: WeekFacts): WeekContent {
     const nums = numbersIn(text);
     if (nums.some((n) => n > f.mathMax)) fail(`${what}: number in text out of range`);
     if (!nums.includes(a) || !nums.includes(b)) fail(`${what}: text does not show both numbers`);
-    return { text, a, b, op, answer };
+    if (a > 10 || b > 10) fail(`${what}: too many pictures`);
+    if ((op === '+' || op === '-' || op === 'compare') && Math.max(a, b) < 1) fail(`${what}: nothing to count`);
+    // The picture: the given id when it is one of this theme's, else none (the page matches one from the text).
+    // A picture that the text doesn't talk about is dropped, so the page never shows eggs for a problem about T-rexes.
+    const pic = typeof p?.icon === 'string' ? f.icons.find((x) => x.id === p.icon) : undefined;
+    const low = text.toLowerCase();
+    const head = (x: string) => x.toLowerCase().split(/\s+/).pop() ?? '';
+    const icon = pic && [pic.one, pic.many, head(pic.one), head(pic.many)].some((n) => n.length > 2 && hasPhrase(low, n.toLowerCase())) ? pic.id : undefined;
+    return icon ? { text, a, b, op, answer, icon } : { text, a, b, op, answer };
   });
 
   // Tracing sentence
@@ -299,8 +316,10 @@ const anthropicCaller: Caller = async ({ system, user, signal }) => {
     headers: { 'content-type': 'application/json', 'x-api-key': env('ANTHROPIC_API_KEY')!, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model: PROGRAM_AI_MODEL,
-      max_tokens: 1800,
-      temperature: 0.8,
+      // Haiku 5.5 rejects temperature values other than 1 (400), so no sampling parameters are sent. Its adaptive
+      // thinking would count toward max_tokens; this is a short structured job, so thinking is turned off.
+      max_tokens: 3000,
+      thinking: { type: 'disabled' },
       system,
       messages: [{ role: 'user', content: user }],
       output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } },

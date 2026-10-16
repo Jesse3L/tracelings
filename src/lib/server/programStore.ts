@@ -87,6 +87,18 @@ export function cleanPlan(raw: unknown, child: ChildProfile): ChildPlan {
     if (!Array.isArray(w.focus) || w.focus.length > SKILL_IDS.length || !w.focus.every((s) => oneOf(SKILL_IDS, s))) throw new InvalidInput('bad_plan_focus');
     const out: ProgramWeek = { index: i + 1, level: w.level, baseWeek: w.baseWeek as number, theme: w.theme, focus: [...new Set(w.focus as SkillId[])] };
     if (w.extraReview === true) out.extraReview = true;
+    // The week's math step (its own track in the engine): a number 1 to 20, or adding within 5 or 10.
+    if (w.math !== undefined) {
+      if (!isObj(w.math) || Object.keys(w.math).some((k) => k !== 'number' && k !== 'addTo')) throw new InvalidInput('bad_plan_math');
+      const { number, addTo } = w.math as { number?: unknown; addTo?: unknown };
+      if (addTo !== undefined) {
+        if (addTo !== 5 && addTo !== 10) throw new InvalidInput('bad_plan_math');
+        out.math = { addTo };
+      } else if (number !== undefined) {
+        if (!Number.isInteger(number) || (number as number) < 0 || (number as number) > 20) throw new InvalidInput('bad_plan_math');
+        out.math = { number: number as number };
+      }
+    }
     return out;
   });
   if (!Number.isInteger(raw.current) || (raw.current as number) < 1 || (raw.current as number) > weeks.length) throw new InvalidInput('bad_plan_current');
