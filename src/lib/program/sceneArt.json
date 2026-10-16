@@ -1,0 +1,1817 @@
+{
+ "dinosaurs": {
+  "open-morning": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-den": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-walk": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-lake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-ferns": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-egg": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-tree": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-puddle": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-bone": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-egg-rolls": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-high": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-stuck": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-big": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-tracks": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-jump": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-pull": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-push": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-dot-egg": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-dot-branch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-dot-mud": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-carry": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-egg-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-leaves": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-pop": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-bone-den": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-hatch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-baby-hi": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-dance": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-splash": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-stars": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-baby-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-hug": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "trucks": {
+  "open-garage": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-road": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-hill": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-site": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-bridge": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-mud": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-rock": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-bumpy": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-stuck": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-hole": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-rock": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-flat": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-spin": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-reach": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-beep": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-pump": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-hook-mud": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-scoop-hole": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-scoop-rock": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-hook-tow": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-out": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-clear": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-tire": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-wash": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-parade": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-ball-bed": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-night": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-shade": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-lamp": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-row": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-beep-bye": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "unicorns": {
+  "open-meadow": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-wake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-hills": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-flowers": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-pond": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-star": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-stream": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-kite": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-garden": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-star-high": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-stream": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-kite-tree": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-droopy": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-star-hop": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-jump-stream": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-horn-reach": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-bucket": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-fluff-star": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-rainbow": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-fluff-kite": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-fluff-rain": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-star-sky": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-cross": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-kite": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-flowers": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-twinkle": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-picnic": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-dance": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-crowns": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-cloud-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-night": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-burrow": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-rainbow-walk": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-hug": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "ocean": {
+  "open-beach": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-reef": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-swim": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-seaweed": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-tidepool": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-shell": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-chest": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-gup-gone": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-shell-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-chest-stuck": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-ball-far": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-gup-lost": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-shell-wade": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-chest-pull": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-ball-reach": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-look-rocks": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-flip-shell": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-flip-chest": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-flip-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-bubbles": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-shell": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-chest-open": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-ball-back": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-gup-found": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-bubbles": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-ball-game": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-pearls": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-sand-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-moon": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-coral-sleep": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-swim-away": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-beach": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "farm": {
+  "open-barn": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-wake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-field": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-pond": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-tractor": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-egg": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-gate": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-apple-tree": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-bell": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-egg-rolls": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-gate-shut": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-apples-high": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-bell-lost": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-look-hay": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-squeeze": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-jump-apple": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-moo-looks": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-pip-sniff": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-moo-latch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-moo-shake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-peck-hay": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-egg-nest": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-gate-open": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-apples": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-bell-on": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-chick": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-apple-snack": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-mud": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-bell-ring": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-hay-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-hen-house": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-moon-barn": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-barn": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-hug": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "pets": {
+  "open-house": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-wake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-yard": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-yarn": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-window": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-shelf": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-cage-open": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-mud": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-ball-couch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-mitt-high": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-nibs-gone": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-muddy": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-paw": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-mitt-reach": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-look-room": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-wipe": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-mitt-under": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-wag-pillows": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-mitt-listen": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-tub": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-ball-out": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-mitt-down": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-nibs-found": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-clean": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-fetch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-chase": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-wheel": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-towel": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-pile-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-nibs-sleep": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-moon-window": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-door": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-hug": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "bugs": {
+  "open-garden": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-hive": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-flowers": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-path": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-puddle": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-tall-flower": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-leaf-boat": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-crumb": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-grass": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-high": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-drift": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-heavy": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-lost": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-climb": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-paddle": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-pull-crumb": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-peek": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-buzz-leaf": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-buzz-push": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-ants": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-spot-look": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-leaf-eat": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-shore": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-carry": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-butterfly": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-picnic": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-dance": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-hive": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-cocoon": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-leaf-bed": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-flower-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-log": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-fireflies": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "space": {
+  "open-rocket": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-liftoff": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-fly": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-moonwalk": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-comet": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-crater": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-far-planet": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-seed": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-ball-floats": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-crater": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-far": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-no-grow": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-ball-jump": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-pull-beep": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-tiptoe": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-water": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-rocket-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-rope": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-telescope": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-light": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-grab-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-out-crater": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-see-planet": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-sprout": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-flower": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-float-dance": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-catch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-bunk": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-moon-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-charge": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-fly-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-landing": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "jungle": {
+  "open-tree": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-wake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-vines": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-river": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-path": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-bananas": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-hot": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-hide": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-high": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-ball-river": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-hot": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-cant-find": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-bim-hop": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-stick": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-fan": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-look-log": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-zip-climb": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-bim-wade": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-zip-leaf": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-mango-points": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-bananas": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-ball-back": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-cool": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-found-zip": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-bananas": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-splash": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-dance": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-swing": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-hammock": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-moon": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-bim-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-walk-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-hug": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "castles": {
+  "open-castle": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-window": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-garden": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-hall": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-meadow": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-pond": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-gate-shut": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-party": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-crown-splash": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-ball-tower": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-gate-stuck": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-big": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-crown-reach": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-stairs": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-gate-push": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-squeeze": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-flap-crown": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-flap-ball": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-kip-wheel": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-carry-table": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-crown-on": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-ball-back": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-gate-up": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-party-garden": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-dance": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-cake": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-parade": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-crown-flap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-tower-bed": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-flap-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-garden-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-carriage": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-window-moon": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "trains": {
+  "open-station": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-friends": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-shed": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-hills": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-bridge": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-farm": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-hill": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-branch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-caboose-gone": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-boxes": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-slow-hill": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-branch": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-caboose-far": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-too-tall": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-hill-again": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-peep-tug": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-back-up": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-peep-box": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-chug-push": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-chug-rope": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-peep-finds": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-chug-cars": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-top-hill": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-track-clear": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-hook-caboose": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-tunnel": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-downhill": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-party": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-whistle": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-shed-night": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-peep-nest": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-siding": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-away": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-station": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "sports": {
+  "open-field": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-team": {
+   "w": 2400,
+   "h": 1800
+  },
+  "open-bag": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-warmup": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-pass": {
+   "w": 2400,
+   "h": 1800
+  },
+  "exp-court": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-kick": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-tee": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-race-day": {
+   "w": 2400,
+   "h": 1800
+  },
+  "find-hoop": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-ball-tree": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-miss": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-sneaker-gone": {
+   "w": 2400,
+   "h": 1800
+  },
+  "prob-short-shot": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-zig-jump": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-swing-again": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-look-bench": {
+   "w": 2400,
+   "h": 1800
+  },
+  "try-big-throw": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-hoot-fly": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-hoot-shows": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-zig-finds": {
+   "w": 2400,
+   "h": 1800
+  },
+  "help-hoot-lower": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-ball-down": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-hit": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-sneaker-on": {
+   "w": 2400,
+   "h": 1800
+  },
+  "solve-swish": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-goal": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-run-bases": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-medals": {
+   "w": 2400,
+   "h": 1800
+  },
+  "cel-high-five": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-water": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-shade-nap": {
+   "w": 2400,
+   "h": 1800
+  },
+  "rest-night": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-wave": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-walk-home": {
+   "w": 2400,
+   "h": 1800
+  },
+  "end-team-hug": {
+   "w": 2400,
+   "h": 1800
+  }
+ },
+ "pathsReady": {
+  "dinosaurs": [
+   "lost-egg",
+   "egg-short",
+   "high-leaves",
+   "mud",
+   "big-bone"
+  ],
+  "trucks": [
+   "mud",
+   "ball",
+   "rock",
+   "flat"
+  ],
+  "unicorns": [
+   "star",
+   "stream",
+   "kite",
+   "flowers"
+  ],
+  "ocean": [
+   "shell",
+   "chest",
+   "ball",
+   "gup"
+  ],
+  "farm": [
+   "egg",
+   "gate",
+   "apples",
+   "bell"
+  ],
+  "pets": [
+   "ball",
+   "shelf",
+   "nibs",
+   "mud"
+  ],
+  "bugs": [
+   "butterfly",
+   "leaf-boat",
+   "crumb",
+   "lost-buzz"
+  ],
+  "space": [
+   "ball",
+   "crater",
+   "planet",
+   "seed"
+  ],
+  "jungle": [
+   "bananas",
+   "ball",
+   "hot",
+   "hide"
+  ],
+  "castles": [
+   "crown",
+   "ball",
+   "gate",
+   "party"
+  ],
+  "trains": [
+   "hill",
+   "branch",
+   "caboose",
+   "boxes"
+  ],
+  "sports": [
+   "tree",
+   "tee",
+   "sneaker",
+   "hoop"
+  ]
+ }
+}

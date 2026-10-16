@@ -10,6 +10,7 @@ import { THEMES, THEME_IDS, coverUrl, loadThemeIcons } from '../../lib/program/t
 import { placeChild, weekTitle, SKILL_LABELS } from '../../lib/program/engine';
 import { templateContentFor, weekBlurb } from '../../lib/program/templates';
 import { buildProgramWeek, showMePage } from '../../lib/program/pages';
+import { imagesIn, loadImages } from '../../lib/render';
 import { loadLocalProgram, upsertLocalChild, newChildId } from '../../lib/program/local';
 import { Segmented } from '../Tracer';
 import EmailGate from '../EmailGate';
@@ -108,6 +109,9 @@ export default function ProgramPlacement() {
     return buildProgramWeek({ name, profile, week: week1, content, paper, credit: !member.member, bubble: font, planLength: plan.weeks.length });
   }, [JSON.stringify(profile), plan, name, paper, font, iconsOk, member.member, step]);
   const svgs = useMemo(() => pages.map(pageToSvg), [pages]);
+  // The picture book's scene drawings: the preview shows them straight from their URLs; fetch them early for the PDF.
+  const bigBook = pages.some((p) => p.items.some((it) => it.kind === 'image'));
+  useEffect(() => { if (bigBook) loadImages(imagesIn(pages)); }, [pages]);
   useEffect(() => { setShown(0); }, [JSON.stringify(profile)]);
 
   function persist() {
@@ -134,7 +138,7 @@ export default function ProgramPlacement() {
       } else if (week1 && plan) {
         const who = slug(name);
         await savePdf(pages, `${who ? `${who}-` : ''}tracelings-week-1-${slug(THEMES[week1.theme].label)}.pdf`, `Tracelings at Home, personalized: week 1`);
-        setDone('Downloaded week 1. Print at 100% size, start with the plan page, and cut out the little book together.');
+        setDone(`Downloaded week 1. Print at 100% size, start with the plan page, and ${bigBook ? 'make the picture book together (cut, stack and staple)' : 'cut out the little book together'}.`);
       }
     } finally {
       setBusy(false);
@@ -315,7 +319,7 @@ export default function ProgramPlacement() {
               )}
               <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">{isMember ? 'Included' : 'Free'}</p>
               <h3 class="mt-1 text-xl font-bold text-ink">Week 1: {weekTitle(week1)}</h3>
-              <p class="mt-1 text-[15px] text-muted leading-snug">{THEMES[week1.theme].label} week. A plan page for you, then {pages.length - 1} pages across the week, including a little book starring {who}.</p>
+              <p class="mt-1 text-[15px] text-muted leading-snug">{THEMES[week1.theme].label} week. A plan page for you, then {pages.length - 1} pages across the week, including {bigBook ? 'a picture book' : 'a little book'} starring {who}.</p>
               <div class="mt-5">
                 <Segmented legend="Paper" name="pc-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
               </div>

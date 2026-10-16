@@ -25,7 +25,10 @@ export type Item =
   | { kind: 'line'; x1: number; y1: number; x2: number; y2: number; color: string; width: number; dash?: number[] }
   | { kind: 'path'; d: string; color: string; width: number; dash?: number[]; fill?: string; evenOdd?: boolean }
   | { kind: 'dot'; cx: number; cy: number; r: number; color: string }
-  | { kind: 'text'; x: number; y: number; size: number; text: string; color: string; align: 'left' | 'center' | 'right'; rotate?: number }; // rotate: degrees clockwise around (x, y)
+  | { kind: 'text'; x: number; y: number; size: number; text: string; color: string; align: 'left' | 'center' | 'right'; rotate?: number } // rotate: degrees clockwise around (x, y)
+  // A raster picture (PNG or JPEG) drawn into the box x, y, w, h (top-left origin). src is its public URL; the PDF
+  // embeds the bytes loaded with loadImages (render.ts), the on-screen SVG links the URL.
+  | { kind: 'image'; x: number; y: number; w: number; h: number; src: string };
 
 export interface Page { w: number; h: number; items: Item[] }
 
