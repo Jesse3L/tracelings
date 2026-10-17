@@ -222,6 +222,7 @@ export interface PackOptions {
   faith?: boolean; // faith track: adds the week's Bible verse (BSB) to the plan and a verse copywork page
   coloring?: (text: string, caps: boolean) => Page | null; // optional: draws the coloring pages instead (the personalized program adds theme pictures)
   label?: string; // optional footer label (the personalized program numbers weeks its own way)
+  extraMath?: (o: PackOptions, n: number, label: string) => Page; // Pre-K: an extra math page for the number of the week, after Thursday's page
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -646,9 +647,24 @@ export function weekDays(o: PackOptions): { day: number; title: string; how: str
 }
 
 /** Every page of a week's pack, plan page first. Coloring pages are left out until the bubble font loads. */
+/** Pre-K with the extra math box ticked: Thursday gets a second page for the number of the week, and the plan says so. */
+function withExtraMath(plan: Planned[], o: PackOptions, label: string): Planned[] {
+  const n = o.week.number;
+  const extra = o.extraMath;
+  if (!extra || o.level !== 'pre-k' || n === undefined || n < 1) return plan;
+  return plan.map((d) => d.day !== 3 ? d : {
+    ...d,
+    how: `${d.how} Extra page: circle every box with ${n} ${n === 1 ? 'shape' : 'shapes'}, today or any day.`,
+    page: (p: PackOptions) => {
+      const base = d.page(p);
+      return [...(base ? (Array.isArray(base) ? base : [base]) : []), extra(p, n, label)];
+    },
+  });
+}
+
 export function buildWeekPack(o: PackOptions): Page[] {
-  const plan = planFor(o.level, o.week);
   const label = `Week ${o.week.n}: ${o.week.title}`;
+  const plan = withExtraMath(planFor(o.level, o.week), o, label);
   const pages: Page[] = [planPage(o, plan, label)];
   if (o.faith) pages.push(versePage(o, label));
   for (const d of plan) {

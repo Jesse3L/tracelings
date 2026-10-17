@@ -2,9 +2,9 @@
 // Same page model as the tracing tools and the homeschool packs, so everything is drawn in the browser
 // and the child's name (if typed) never leaves the device.
 import { PAPER, COLORS, styleName, type Item, type Page, type Paper } from './sheet';
-import { M, rng, header, footer, instruction, circlePath, starPath, heartPath, box, centered, countPage, PLANS } from './homeschool';
+import { M, rng, header, footer, instruction, circlePath, starPath, heartPath, box, centered, countPage, PLANS, type PackOptions } from './homeschool';
 
-export type MathKind = 'count-color' | 'ten-frame' | 'count-circle' | 'more-less' | 'missing'
+export type MathKind = 'count-color' | 'find-number' | 'ten-frame' | 'count-circle' | 'more-less' | 'missing'
   | 'make-ten' | 'tf-add' | 'show-number' | 'blank-frame'
   | 'compare-numbers' | 'compare-symbols' | 'one-more-less'
   | 'add-pictures' | 'add-number-line' | 'add-facts' | 'subtract-pictures';
@@ -24,10 +24,12 @@ export interface MathOptions {
   seed: number; // "New problems" bumps this
   blank?: BlankLayout; // blank ten frame printable: one big mat, a double ten frame, or six small frames
   series?: MathSeries; // which page the sheet was made on (sets the footer label); default 'pre-k'
+  label?: string; // footer label override (pages printed inside a weekly pack carry the week's label)
 }
 
 export const MATH_KINDS: { v: MathKind; label: string; sub: string }[] = [
   { v: 'count-color', label: 'Count and color', sub: 'Trace a number, count a ten frame, color that many stars' },
+  { v: 'find-number', label: 'Find the number', sub: 'Circle every box of shapes that has your number' },
   { v: 'ten-frame', label: 'Ten frames', sub: 'Count the dots in each frame and write how many' },
   { v: 'count-circle', label: 'Count and circle', sub: 'Count the shapes, circle the right number' },
   { v: 'more-less', label: 'More or fewer', sub: 'Circle the group with more (or fewer)' },
@@ -98,6 +100,7 @@ function top(items: Item[], w: number, name: string) {
 
 const rangeText = (r: MathRange) => `1 to ${r}`;
 const labelFor = (o: MathOptions) => {
+  if (o.label) return o.label;
   if (o.series === 'ten-frames') {
     const k = TEN_FRAME_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
     if (o.kind === 'blank-frame') return `Ten frames: ${BLANK_LAYOUTS.find((x) => x.v === (o.blank ?? 'one'))!.label.toLowerCase()}`;
@@ -114,7 +117,7 @@ const labelFor = (o: MathOptions) => {
     return `Kindergarten math: ${k}, within ${o.range}`;
   }
   const k = MATH_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
-  return o.kind === 'count-color' ? `Pre-K math: ${k}, number ${o.number}` : `Pre-K math: ${k}, ${rangeText(o.range)}`;
+  return o.kind === 'count-color' || o.kind === 'find-number' ? `Pre-K math: ${k}, number ${o.number}` : `Pre-K math: ${k}, ${rangeText(o.range)}`;
 };
 
 /** n distinct numbers from 1..max (or fewer if the range is small), in random order. */
@@ -183,9 +186,9 @@ function tenFramePage(o: MathOptions): Page {
 }
 
 /** Lays out `n` shapes in rows of 5 (groups of five are easier to count), centered on cx. */
-function shapeGroup(items: Item[], s: Shape, n: number, cx: number, cy: number, gap: number, perRow = 5) {
+function shapeGroup(items: Item[], s: Shape, n: number, cx: number, cy: number, gap: number, perRow = 5, fullWidth = false) {
   const rows = Math.ceil(n / perRow);
-  const cols = Math.min(perRow, n);
+  const cols = fullWidth ? perRow : Math.min(perRow, n);
   // Rows of 10 get a small space after the fifth shape, so kids can count by fives.
   const split = gap * 0.45;
   const span = (cols - 1) * gap + (cols > 5 ? split : 0);
@@ -754,6 +757,68 @@ function subtractPicturesPage(o: MathOptions): Page {
   return { w, h, items };
 }
 
+/**
+ * Find the number: a key at the top shows the number and that many dots in a ten frame, then six boxes of shapes.
+ * Two or three boxes hold exactly that many; the rest hold one or two more or fewer. Kids circle every match,
+ * then write how many boxes they circled. Built for the number of the week in the Pre-K plan (1 to 20).
+ */
+function findNumberPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const n = Math.max(1, Math.min(20, Math.round(o.number)));
+  const y0 = instruction(items, w, `Find ${n}`, `Count the shapes in each box. Circle every box that has ${n}. Then write how many boxes you circled.`) + 8;
+  const rand = rng(`fn-${n}-${o.seed}`);
+
+  // The key: the numeral, then n dots in one or two ten frames.
+  const frames = n > 10 ? 2 : 1;
+  const cell = 22;
+  const keyH = cell * 2 + 20;
+  items.push({ kind: 'path', d: box(M, y0, w - 2 * M, keyH, 10), color: COLORS.desc, width: 1.2 });
+  const kc = y0 + keyH / 2;
+  centered(items, String(n), M + 46, kc + 17, 34);
+  say(items, 'looks like', M + 92, kc + 5, 13);
+  const fx = M + 172;
+  tenFrame(items, fx, kc - cell, cell, Math.min(10, n));
+  if (frames === 2) tenFrame(items, fx + cell * 5 + 14, kc - cell, cell, n - 10);
+
+  // Six boxes: 2 or 3 matches, the rest near misses (never below 1 or above 20).
+  const matches = n === 1 ? 3 : 2 + Math.floor(rand() * 2);
+  const near = [n - 2, n - 1, n + 1, n + 2].filter((x) => x >= 1 && x <= 20);
+  const counts: number[] = [];
+  for (let i = 0; i < 6; i++) counts.push(i < matches ? n : near[Math.floor(rand() * near.length)]);
+  for (let i = counts.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [counts[i], counts[j]] = [counts[j], counts[i]]; }
+
+  const answerH = 64;
+  const gy = y0 + keyH + 16;
+  const bottom = h - M - 30 - answerH;
+  const gapX = 18, gapY = 14;
+  const bw = (w - 2 * M - gapX) / 2;
+  const bh = (bottom - gy - 2 * gapY) / 3;
+  // Shapes sit in rows of 5. Past 10, the first ten get a little space below them (like a full ten frame), so kids can say "ten" and count on.
+  const maxRows = Math.ceil(Math.max(...counts) / 5);
+  const big = Math.max(...counts) > 10;
+  const gap = Math.min(30, (bh - 18) / (Math.max(2, maxRows) + (big ? 0.35 : 0)), (bw - 24) / 5);
+  counts.forEach((c, i) => {
+    const x = M + (i % 2) * (bw + gapX);
+    const y = gy + Math.floor(i / 2) * (bh + gapY);
+    items.push({ kind: 'path', d: box(x, y, bw, bh, 10), color: INK, width: 1.3 });
+    const s = SHAPES[(i + o.seed) % SHAPES.length];
+    if (c <= 10) { shapeGroup(items, s, c, x + bw / 2, y + bh / 2, gap, 5); return; }
+    const rest = Math.ceil((c - 10) / 5);
+    const split = gap * 0.35;
+    const y1 = y + bh / 2 - ((1 + rest) * gap + split) / 2; // center of the first row
+    shapeGroup(items, s, 10, x + bw / 2, y1 + gap / 2, gap, 5);
+    shapeGroup(items, s, c - 10, x + bw / 2, y1 + 2 * gap + split + ((rest - 1) * gap) / 2, gap, 5, true);
+  });
+
+  const ay = bottom + 18;
+  say(items, `How many boxes have ${n}?`, M, ay + 26, 14);
+  items.push({ kind: 'path', d: box(M + 214, ay, 60, 44, 8), color: INK, width: 1.4 });
+  footer(items, w, h, o.credit, labelFor({ ...o, number: n }));
+  return { w, h, items };
+}
+
 export function buildMathPage(o: MathOptions): Page {
   if (o.kind === 'count-color') {
     const n = Math.max(1, Math.min(20, Math.round(o.number)));
@@ -764,6 +829,7 @@ export function buildMathPage(o: MathOptions): Page {
     footer(p.items, p.w, p.h, o.credit, labelFor({ ...o, number: n }));
     return p;
   }
+  if (o.kind === 'find-number') return findNumberPage(o);
   if (o.kind === 'ten-frame') return tenFramePage(o);
   if (o.kind === 'blank-frame') return blankFramePage(o);
   if (o.kind === 'show-number') return showNumberPage(o);
@@ -783,10 +849,15 @@ export function buildMathPage(o: MathOptions): Page {
 
 /** Several different pages of the same kind (members print a short set at once). */
 export function buildMathSet(o: MathOptions, count: number): Page[] {
-  if (o.kind === 'count-color') {
+  if (o.kind === 'count-color' || o.kind === 'find-number') {
     const out: Page[] = [];
     for (let k = 0; k < count; k++) out.push(buildMathPage({ ...o, number: ((o.number - 1 + k) % 20) + 1 }));
     return out;
   }
   return Array.from({ length: count }, (_, k) => buildMathPage({ ...o, seed: o.seed + k * 7919 }));
+}
+
+/** The extra math page in a Pre-K weekly pack: find the number of the week. Each week gets its own layout. */
+export function packFindNumberPage(o: PackOptions, n: number, label: string): Page {
+  return buildMathPage({ kind: 'find-number', range: 20, number: n, compare: 'more', name: o.name, paper: o.paper, credit: o.credit, seed: o.week.n, series: 'pre-k', label });
 }

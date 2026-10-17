@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-16",
+  "updated": "2026-10-17",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13.",
   "items": [
     {
@@ -194,12 +194,41 @@
     },
     {
       "id": "prek-math-in-pack",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "prek-math-worksheets"
       ],
       "title": "Optional extra math page in the Pre-K weekly pack (a ten frame or count and circle page for that week's number), a checkbox in the pack maker for everyone",
-      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage(). Keep it free; nothing existing moves behind the paywall."
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage(). Keep it free; nothing existing moves behind the paywall.",
+      "done": "2026-10-17",
+      "urls": [],
+      "keywords": {
+        "preschool math curriculum": [
+          590,
+          23
+        ],
+        "pre k math curriculum": [
+          390,
+          32
+        ],
+        "preschool math worksheets": [
+          3600,
+          27
+        ],
+        "free preschool math worksheets": [
+          480,
+          28
+        ],
+        "pre k counting worksheets": [
+          210,
+          28
+        ],
+        "preschool math curriculum homeschool": [
+          40,
+          25
+        ]
+      },
+      "notes": "No new URL. New page type 'find-number' (Find the number) in src/lib/mathSheets.ts: a key with the numeral and that many dots in a ten frame, six boxes of shapes (2 or 3 hold exactly the number, the rest one or two off), past 10 the first ten sit apart like a full ten frame, then 'How many boxes have N?'. Pre-K weekly pack: free 'Extra math page' checkbox (remembered per device, off by default, Pre-K only) adds it after Thursday's page via PackOptions.extraMath, and Thursday's plan line says so; each week gets its own layout (seed = week number). Also a type on /math-worksheets/pre-k/ (number picker, ?type=find-number&number=N). /homeschool/preschool/ got an H2 'The preschool math curriculum, one number a week' (preschool math curriculum 590/SD 23) and a math FAQ. Render check: scripts/render-pack-math.mts."
     },
     {
       "id": "k-addition-worksheets",
@@ -556,6 +585,47 @@
         ]
       },
       "buildOn": "Ship before mid-November. Add as an extra week, not one of the 36."
+    },
+    {
+      "id": "prek-math-guide",
+      "status": "todo",
+      "needs": [
+        "prek-math-in-pack"
+      ],
+      "title": "Learn article: preschool math at home, week by week (what to teach, the number of the week, counting games, when to move on), linking the Pre-K plan, Pre-K math worksheets and ten frame printables",
+      "keywords": {
+        "preschool math curriculum": [
+          590,
+          23
+        ],
+        "pre k math curriculum": [
+          390,
+          32
+        ],
+        "preschool math curriculum homeschool": [
+          40,
+          25
+        ]
+      },
+      "buildOn": "Follow docs/content-guide.md. The plan page section on /homeschool/preschool/ covers the 'what'; the article covers the 'how' with ranges and the referral line."
+    },
+    {
+      "id": "program-find-number",
+      "status": "todo",
+      "needs": [
+        "prek-math-in-pack"
+      ],
+      "title": "Personalized program: offer the find the number page in Pre-K weeks (theme pictures instead of plain shapes)",
+      "buildOn": "packFindNumberPage() in src/lib/mathSheets.ts and weekDays() in homeschool.ts. Program code only; do not touch pricing, sign-in or src/lib/server/. Check with Jesse's program notes first."
+    },
+    {
+      "id": "prek-shapes-worksheets",
+      "status": "todo",
+      "needs": [
+        "prek-math-worksheets"
+      ],
+      "title": "Shapes worksheets for preschool (trace, find and color circles, squares, triangles, rectangles) as a Pre-K math type or its own page; check volume first",
+      "buildOn": "shape() and SHAPES in src/lib/mathSheets.ts. Check 'shapes worksheets for preschool' and 'preschool shapes worksheets' volume before choosing a type vs. a URL."
     },
     {
       "id": "first-grade-plan",
