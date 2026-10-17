@@ -9,6 +9,8 @@ for f in astro mocks; do
   fi
 done
 pkill -f "astro.mjs dev --port ${QA_PORT:-4421} " 2>/dev/null
-pkill -f "SQ_PORT=${SQ_PORT:-4110} " 2>/dev/null
+# tsx runs the mocks in a child node process, which outlives its parent: stop whatever holds the mock ports.
+pkill -f "[n]ode.* scripts/qa/mocks[.]mts" 2>/dev/null
+for p in ${SQ_PORT:-4110} ${AI_PORT:-4111}; do fuser -k $p/tcp 2>/dev/null; done
 sleep 1
 echo down

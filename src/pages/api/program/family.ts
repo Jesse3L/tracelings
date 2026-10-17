@@ -100,7 +100,8 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
         doc.plans[id] = cleanPlan(raw, child);
       }
       for (const [id, n] of Object.entries(current)) {
-        const plan: ChildPlan | undefined = doc.plans[id];
+        // Own keys only: "__proto__" must not reach Object.prototype (a 400, not a crash that looks like storage down).
+        const plan: ChildPlan | undefined = childIdOk(id) && Object.hasOwn(doc.plans, id) ? doc.plans[id] : undefined;
         if (!plan || !Number.isInteger(n) || (n as number) < 1 || (n as number) > plan.weeks.length) throw new InvalidInput('bad_current');
         plan.current = n as number;
       }

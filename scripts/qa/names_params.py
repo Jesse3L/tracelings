@@ -1,4 +1,4 @@
-import json, os, re, sys
+import json, os, re, sys, urllib.parse
 from playwright.sync_api import sync_playwright
 B='http://127.0.0.1:'+os.environ.get('QA_PORT','4421'); Q=os.environ.get('QA_OUT','/tmp/tracelings-qa')
 S=Q+'/shots/names'; P=Q+'/pdfs/names'; os.makedirs(S,exist_ok=True); os.makedirs(P,exist_ok=True)
@@ -15,7 +15,7 @@ with sync_playwright() as pw:
     page.on('request', lambda r: reqs.append({'url':r.url,'method':r.method,'headers':r.headers,'body':r.post_data or ''}))
     page.on('pageerror', lambda e: probs.append(f'pageerror {e}'))
     for tag,nm in NAMES:
-        page.goto(B+'/program/', wait_until='domcontentloaded')
+        page.goto(B+'/robots.txt', wait_until='load')  # same origin, nothing navigating while storage is set
         # sessionStorage.clear(): a fresh visit, not a reload of the last case (a reload returns to the step it was on).
         page.evaluate("([c,n])=>{localStorage.setItem('tl-program', JSON.stringify({children:[c],names:{[c.id]:n}})); sessionStorage.clear()}", [child('c_name'+re.sub('[^a-z]','',tag)[:6]), nm])
         page.goto(B+'/program/', wait_until='networkidle'); page.wait_for_timeout(500)
@@ -39,12 +39,23 @@ with sync_playwright() as pw:
         page.goto(B+'/program/'+q, wait_until='networkidle'); page.wait_for_timeout(500)
         N(f'free {q}: h2={page.locator("#placement section h2").first.inner_text()!r} name={page.locator("#pc-name").input_value()!r}')
     ctx.close()
-    # member: ?return with malicious values -> where does "Save and go" send?
-    st=json.load(open(Q+'/logs/member-state.json')) if os.path.exists(Q+'/logs/member-state.json') else None
+    # member: ?return with malicious values -> where does "Save and go" send? Signs in itself (member2, card 1111),
+    # since member_flow.py saves its state after signing out; the family is emptied before each probe so the 4-kid
+    # cap never hides the save button.
+    sc=b.new_context(); sp=sc.new_page(); sp.goto(B+'/robots.txt')
+    JS="""async ([m,p,b]) => { const r = await fetch(p, { method: m, headers: { 'Content-Type': 'application/json' }, body: b === null ? undefined : JSON.stringify(b) }); let j = {}; try { j = await r.json(); } catch (e) {} return [r.status, j]; }"""
+    N(f"member sign-in for the ?return probes: {sp.evaluate(JS, ['POST','/api/member/signin/',{'email':os.environ.get('QA_MEMBER','member2@example.com'),'last4':os.environ.get('QA_MEMBER_L4','1111')}])[0]}")
+    sc.storage_state(path=Q+'/logs/names-member-state.json')
+    def empty_family():
+        f=sp.evaluate(JS, ['GET','/api/program/family/',None])[1]; ids=[c['id'] for c in f.get('children',[])]
+        if ids: sp.evaluate(JS, ['POST','/api/program/family/',{'remove':ids}])
+    st=True
     if st:
         for q in ['?return=//evil.com','?return=https://evil.com/x','?return=javascript:alert(1)','?return=/\\evil.com','?return=/account/?x=1%26sync=0','?return=/%5Cevil.com','?return=/api/member/signout/','?return=/program/?return=/program/']:
-            c=b.new_context(viewport={'width':1280,'height':900}, storage_state=Q+'/logs/member-state.json'); pg=c.new_page()
-            c.route('**evil.com**', lambda r: r.fulfill(status=200, body='EVIL'))
+            empty_family()
+            c=b.new_context(viewport={'width':1280,'height':900}, storage_state=Q+'/logs/names-member-state.json'); pg=c.new_page()
+            # Match the host only: a glob on the whole URL would also catch our own /program/?return=//evil.com.
+            c.route(lambda u: 'evil.com' in (urllib.parse.urlsplit(u).hostname or ''), lambda r: r.fulfill(status=200, body='EVIL'))
             pg.goto(B+'/program/'+q, wait_until='networkidle'); pg.wait_for_timeout(600)
             try:
                 pg.locator('label:has(input[name=pc-age])').nth(2).click()
@@ -52,9 +63,9 @@ with sync_playwright() as pw:
                 pg.get_by_role('button', name='Dinosaurs', exact=True).click(); pg.get_by_role('button', name='Next: your week').click(); pg.get_by_role('button', name=re.compile('^See ')).click()
                 pg.wait_for_selector('text=Save and go', timeout=15000); pg.get_by_role('button', name=re.compile('^Save and go')).first.click(); pg.wait_for_timeout(2500)
                 N(f'member {q}: landed {pg.url}')
-            except Exception as e: N(f'member {q}: ERR {str(e)[:150]}')
+            except Exception as e: pg.screenshot(path=f'{S}/member-return-err.png', full_page=True); N(f'member {q}: ERR {str(e)[:600]}')
             c.close()
-    b.close()
+    sc.close(); b.close()
 leak=[(r['method'],r['url'][:100]) for r in reqs if any(t in (r['url']+json.dumps(r['headers'])+r['body']) for t in ['Zo%C3%AB','Zoë','José','Brien','WWWWWWWW','Kid0','Kid1','سارة','小明'])]
 N(f'name leaks {leak}'); N('PROBLEMS '+json.dumps(probs))
 open(Q+'/logs/names-params.txt','w').write('\n'.join(notes))

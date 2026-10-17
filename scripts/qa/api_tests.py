@@ -98,8 +98,8 @@ T('current out of range', req('POST','/api/program/family/',{'current':{'c_qates
 T('current 0', req('POST','/api/program/family/',{'current':{'c_qatest01':0}},cookie=c1), 400)
 T('current string', req('POST','/api/program/family/',{'current':{'c_qatest01':'3'}},cookie=c1), 400)
 T('current unknown child', req('POST','/api/program/family/',{'current':{'c_nokid1':3}},cookie=c1), 400)
-T('current proto key', req('POST','/api/program/family/',raw=b'{"current":{"__proto__":3}}',cookie=c1))
-T('plans proto key', req('POST','/api/program/family/',raw=b'{"plans":{"__proto__":{"childId":"x"}}}',cookie=c1))
+T('current proto key', req('POST','/api/program/family/',raw=b'{"current":{"__proto__":3}}',cookie=c1), 400)
+T('plans proto key', req('POST','/api/program/family/',raw=b'{"plans":{"__proto__":{"childId":"x"}}}',cookie=c1), 400)
 T('children non-array', req('POST','/api/program/family/',{'children':{'a':1}},cookie=c1), 400)
 # client-supplied plan
 plan={'childId':'c_qatest01','level':'kindergarten','current':1,'weeks':[{'index':1,'level':'kindergarten','baseWeek':36,'theme':'dinosaurs','focus':[]}]}

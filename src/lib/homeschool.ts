@@ -235,8 +235,27 @@ function planPage(o: PackOptions, plan: Planned[], label: string): Page {
   const P = PLANS[o.level];
   const who = styleName(o.name, 'capital');
   items.push({ kind: 'text', x: M, y: 58, size: 11, text: `${P.label} at home, week ${o.week.n} of ${P.weeks.length}`, color: COLORS.quiet, align: 'left' });
-  items.push({ kind: 'text', x: M, y: 92, size: 26, text: who ? `${who}'s week: ${o.week.title}` : `This week: ${o.week.title}`, color: INK, align: 'left' });
-  let y = para(items, 'About 15 minutes a day. Do one page each day, and stop while it is still fun. Tick each box when you finish.', M, 116, 12, w - 2 * M, COLORS.quiet) + 10;
+  // A long name (up to 24 letters) would run the title off the page: wrap it to two lines and shrink (to 18 pt at
+  // most) until it fits. A single word too wide even then is split with a hyphen.
+  const title = who ? `${who}'s week: ${o.week.title}` : `This week: ${o.week.title}`;
+  const maxW = w - 2 * M;
+  const fitLines = (size: number) => wrap(title, size, maxW).flatMap((line) => {
+    const out: string[] = [];
+    let rest = line;
+    while (textW(rest, size) > maxW && rest.length > 1) {
+      let cut = rest.length - 1;
+      while (cut > 1 && textW(`${rest.slice(0, cut)}-`, size) > maxW) cut--;
+      out.push(`${rest.slice(0, cut)}-`); rest = rest.slice(cut);
+    }
+    return [...out, rest];
+  });
+  let ts = 26;
+  let lines = wrap(title, ts, maxW);
+  while (ts > 18 && (lines.length > 2 || lines.some((l) => textW(l, ts) > maxW))) { ts -= 1; lines = wrap(title, ts, maxW); }
+  if (lines.some((l) => textW(l, ts) > maxW)) lines = fitLines(ts);
+  let ty = 92;
+  for (const l of lines) { items.push({ kind: 'text', x: M, y: ty, size: ts, text: l, color: INK, align: 'left' }); ty += ts * 1.15; }
+  let y = para(items, 'About 15 minutes a day. Do one page each day, and stop while it is still fun. Tick each box when you finish.', M, ty - ts * 1.15 + 24, 12, w - 2 * M, COLORS.quiet) + 10;
 
   for (const d of plan) {
     items.push({ kind: 'path', d: box(M, y - 14, 16, 16, 3), color: INK, width: 1.2 });

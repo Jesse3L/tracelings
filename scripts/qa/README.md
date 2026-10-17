@@ -10,7 +10,10 @@ python3 scripts/qa/ui_fixes.py 1280                     # N4 N5 N6 M2 M7 M8 in t
 QA_EXTRA_ENV=PROGRAM_STORE_DOWN=1 bash scripts/qa/up.sh # storage down, then: python3 scripts/qa/ui_fixes.py 1280 m1
 python3 scripts/qa/api_tests.py scripts/qa out.txt      # broad API checks
 python3 scripts/qa/free_flow.py                         # free placement flow, 390 and 1280
-python3 scripts/qa/member_flow.py 1280 member2@example.com 1111
+python3 scripts/qa/member_flow.py 1280 new1280@example.com 4321  # new buyer: pays the mock order, then the welcome page signs in
+python3 scripts/qa/member_flow.py 390 new390@example.com 4321
+python3 scripts/qa/names_params.py                      # name edge cases and ?return probes (signs in as member2 itself)
+python3 scripts/qa/integration.py scripts/qa            # 27-week plan, story paths, caps, cached weeks after edits
 npx tsx scripts/qa/probe-plans.mts                      # print a few placement plans
 bash scripts/qa/down.sh
 ```

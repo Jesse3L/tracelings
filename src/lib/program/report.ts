@@ -42,6 +42,8 @@ export function buildProgressReport(o: { name: string; profile: ChildProfile; pl
   const level = PLANS[o.plan.level].label;
   const done = Math.max(0, o.plan.current - 1);
   const mine = o.checkIns.filter((c) => c.childId === o.profile.id);
+  // Every review week in the plan: the ones placement spreads through a short plan and the ones check-ins added.
+  // Not called "added": a skipped-ahead child's short plan has several from the start.
   const reviews = o.plan.weeks.filter((wk) => wk.extraReview).length;
 
   items.push({ kind: 'text', x: M, y: 58, size: 11, text: `Tracelings at Home, Personalized. Printed ${fmtDate(new Date().toISOString())}`, color: COLORS.quiet, align: 'left' });
@@ -49,7 +51,7 @@ export function buildProgressReport(o: { name: string; profile: ChildProfile; pl
   // Rough Helvetica width (about 0.56 em per character) so a long name shrinks instead of running off the page.
   const titleSize = Math.max(14, Math.min(26, (w - 2 * M) / (title.length * 0.56)));
   items.push({ kind: 'text', x: M, y: 92, size: titleSize, text: title, color: INK, align: 'left' });
-  let y = para(items, `${level} plan, week ${o.plan.current} of ${o.plan.weeks.length}. ${done} ${done === 1 ? 'week' : 'weeks'} finished, ${mine.length} weekly ${mine.length === 1 ? 'check-in' : 'check-ins'}${reviews ? `, ${reviews} extra review ${reviews === 1 ? 'week' : 'weeks'} added` : ''}.`, M, 120, 12, w - 2 * M, COLORS.quiet) + 14;
+  let y = para(items, `${level} plan, week ${o.plan.current} of ${o.plan.weeks.length}. ${done} ${done === 1 ? 'week' : 'weeks'} finished, ${mine.length} weekly ${mine.length === 1 ? 'check-in' : 'check-ins'}${reviews ? `. The plan has ${reviews} review ${reviews === 1 ? 'week' : 'weeks'} to practice skills again` : ''}.`, M, 120, 12, w - 2 * M, COLORS.quiet) + 14;
 
   items.push({ kind: 'text', x: M, y, size: 15, text: 'Skills', color: INK, align: 'left' });
   y += 10;

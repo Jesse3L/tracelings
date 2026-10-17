@@ -53,17 +53,26 @@ with sync_playwright() as pw:
     N(f'checkout monthly redirected {page.url}; pending cookie: {[c["name"] for c in ctx.cookies() if c["name"]=="tl_pending"]}; tl-checkout-email={page.evaluate("localStorage.getItem(\'tl-checkout-email\')") if False else ""}')
     last=[json.loads(l) for l in open(Q+'/logs/mock-log.jsonl') if '/payment-links' in l][-1]; bd=json.loads(last['body'])
     N(f"square link body: plan={bd['checkout_options']['subscription_plan_id']} redirect={bd['checkout_options']['redirect_url']} price={bd['quick_pay']['price_money']} email={bd['pre_populated_data']}")
-    # ---- account: wrong digits, then right
-    page.goto(B+'/account/', wait_until='load'); page.wait_for_timeout(500)
-    page.screenshot(path=f'{S}/signin.png', full_page=True)
-    page.fill('#signin-email','unknown@example.com'); page.locator('main form button[type=submit]').click(); page.wait_for_timeout(1200); N(f'signin unknown -> {msg(page)}')
-    page.fill('#signin-email', EMAIL); page.locator('main form button[type=submit]').click()
-    try: page.wait_for_selector('#signin-last4', timeout=5000)
-    except: N('no last4 asked (pending cookie sign-in?)')
-    if page.locator('#signin-last4').count():
-        page.fill('#signin-last4','0000'); page.locator('main form button[type=submit]').click(); page.wait_for_timeout(1200); N(f'signin wrong digits -> {msg(page)}')
-        page.fill('#signin-last4', L4); page.locator('main form button[type=submit]').click()
-    page.wait_for_selector('text=Your program', timeout=20000); page.wait_for_timeout(1000)
+    # ---- back from Square: the welcome page signs in once Square says the order is paid. Pay a few seconds after
+    # landing (Square is often slower than the redirect), so the welcome page's retry is exercised too.
+    page.goto(B+'/account/?welcome=1', wait_until='load'); page.wait_for_timeout(4000)
+    N(f'welcome before pay: {msg(page)} member={page.locator("text=Your program").count()}')
+    pr=urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:'+os.environ.get('SQ_PORT','4110')+'/__pay/latest', data=json.dumps({'email':EMAIL,'last4':L4}).encode(), method='POST')).read(); N(f'paid: {pr.decode()}')
+    try: page.wait_for_selector('#signin-last4', timeout=12000); N('welcome asked for card digits (existing member email)'); page.fill('#signin-last4', L4); page.locator('main form button[type=submit]').click()
+    except Exception: pass
+    page.wait_for_selector('text=Your program', timeout=20000); page.wait_for_timeout(800)
+    N(f'welcome signed in: banner={page.locator("text=Welcome to Tracelings at Home").count()} pending cookie left={[c["name"] for c in ctx.cookies() if c["name"]=="tl_pending"]}')
+    page.screenshot(path=f'{S}/welcome.png', full_page=True)
+    # ---- another browser (no pending cookie): unknown email, wrong digits, then right
+    c0=b.new_context(viewport={'width':VW,'height':900}); p0=c0.new_page()
+    p0.on('request', lambda r: reqs.append({'url':r.url,'method':r.method,'headers':r.headers,'body':r.post_data or ''}))
+    p0.goto(B+'/account/', wait_until='load'); p0.wait_for_timeout(500)
+    p0.screenshot(path=f'{S}/signin.png', full_page=True)
+    p0.fill('#signin-email','unknown@example.com'); p0.locator('main form button[type=submit]').click(); p0.wait_for_timeout(1200); N(f'signin unknown -> {msg(p0)}')
+    p0.fill('#signin-email', EMAIL); p0.locator('main form button[type=submit]').click(); p0.wait_for_selector('#signin-last4', timeout=5000)
+    p0.fill('#signin-last4','0000'); p0.locator('main form button[type=submit]').click(); p0.wait_for_timeout(1200); N(f'signin wrong digits -> {msg(p0)}')
+    p0.fill('#signin-last4', L4); p0.locator('main form button[type=submit]').click()
+    p0.wait_for_selector('text=Your program', timeout=20000); N('other browser signed in with card digits'); c0.close()
     page.screenshot(path=f'{S}/account-empty.png', full_page=True); hs(page,'account empty')
     # membership page as member
     page.goto(B+'/membership/', wait_until='load'); page.wait_for_timeout(800); N(f'membership as member: {page.locator("[role=status]").first.inner_text()[:120]!r}')

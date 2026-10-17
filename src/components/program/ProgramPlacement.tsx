@@ -458,12 +458,14 @@ export default function ProgramPlacement() {
   );
 }
 
-/** Only same-site relative paths ("/account/"), never another site or a protocol-relative "//host". */
+/** Only our account page ("/account/", maybe with a query), never another site, a protocol-relative "//host" or
+ *  another path: the account page is what saves the new child to the account (?sync=1), so landing anywhere else
+ *  (an API route, the placement again) would leave the child saved on this device only. */
 function safeReturn(raw: string | null | undefined): string {
   if (!raw || raw.length > 200 || !raw.startsWith('/') || raw.startsWith('//') || raw.includes('\\')) return '';
   try {
     const u = new URL(raw, location.origin);
-    return u.origin === location.origin ? u.pathname + u.search : '';
+    return u.origin === location.origin && u.pathname === '/account/' ? u.pathname + u.search : '';
   } catch { return ''; }
 }
 

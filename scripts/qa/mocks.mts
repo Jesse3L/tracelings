@@ -2,7 +2,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import art from '../../src/lib/program/sceneArt.json' with { type: 'json' };
-import { setSceneArt } from '../../src/lib/program/story';
+import { setSceneArt, readyPaths } from '../../src/lib/program/story';
 import { PLANS } from '../../src/lib/homeschool';
 import { THEMES, THEME_IDS } from '../../src/lib/program/themes';
 import { templateContentFor, sceneStoryFor } from '../../src/lib/program/templates';
@@ -122,18 +122,30 @@ function goodAnswer(user: string, k: number): any {
   const theme = byLabel[user.match(/Theme: ([^.]*)\./)?.[1] ?? ''] ?? 'dinosaurs';
   const base = PLANS[level].weeks.find((w) => w.title === title) ?? PLANS[level].weeks[0];
   const review = /an extra review week/.test(user);
-  const pw: any = { index: 2 + k, level, baseWeek: base.n, theme, focus: [], ...(review ? { extraReview: true } : {}) };
-  const prof: any = { id: 'c_mockai1', ageYears: 5, skills: {}, interests: [theme], daysPerWeek: 5, minutesPerDay: 15, faith: false, createdAt: '2026-10-16T00:00:00Z' };
+  // The plan's math step (it can differ from the base week's), and the story path code picked for this week.
+  const mm = user.match(/Math this week: (?:adding within (\d+)|the number (\d+))\./);
+  const math = mm ? (mm[1] ? { addTo: Number(mm[1]) as 5 | 10 } : { number: Number(mm[2]) }) : undefined;
+  const pathId = user.match(/pathId "([^"]+)"/)?.[1];
+  const age = Number(user.match(/Age: (\d+)/)?.[1] ?? 5);
+  const pw: any = { index: 2 + k, level, baseWeek: base.n, theme, focus: [], ...(math ? { math } : {}), ...(review ? { extraReview: true } : {}) };
+  const prof: any = { id: 'c_mockai1', ageYears: age, skills: {}, interests: [theme], daysPerWeek: 5, minutesPerDay: 15, faith: false, createdAt: '2026-10-16T00:00:00Z' };
   const c = templateContentFor(prof, pw);
-  const f = weekFacts(prof, pw); const sf = storyFacts(f);
-  for (let pick = k; pick < k + 8; pick++) {
+  const f = weekFacts(prof, pw); const sf = storyFacts(f, pathId ? { id: pathId } : {});
+  const ready = readyPaths(theme as any, level as any);
+  const at = Math.max(0, ready.findIndex((p) => p.id === pathId));
+  for (let pick = at; pick < at + 8; pick++) {
     const st = sceneStoryFor(theme as any, level as any, base, pw, pick) ?? c.story;
     let story: any = sf ? { title: st.title, pathId: st.pathId ?? '', scenes: st.scenes, pages: st.pages } : st;
     // Sight words help: add a line on the last page when missing.
     const cand = { ...c, story, wordProblems: c.wordProblems.map((p) => ({ ...p, icon: p.icon ?? '' })), tracingSentence: 'I like to play.' };
-    try { validateContent(cand, f, sf); return { ...cand, story: { ...story, title: story.title } }; } catch { /* try next */ }
+    try { validateContent(cand, f, sf); return { ...cand, story: { ...story, title: story.title } }; } catch (e) { log({ svc: 'anthropic-mock', invalid: (e as Error).message, pathId, pick }); }
   }
   return { ...c, tracingSentence: 'I like to play.' };
+}
+/** The picture-truth check: every page matches (mode "check-no" says page 1 does not). */
+function checkAnswer(user: string): any {
+  const n = (user.match(/^Page \d+\./gm) ?? []).length;
+  return { pages: Array.from({ length: n }, (_, i) => ({ page: i + 1, matches: !(aiMode === 'check-no' && i === 0), missing: aiMode === 'check-no' && i === 0 ? 'a kite' : '' })) };
 }
 http.createServer(async (req, res) => {
   const b = await body(req);
@@ -151,6 +163,7 @@ http.createServer(async (req, res) => {
   if (aiMode === 'refusal') return send(res, 200, { id: 'x', type: 'message', role: 'assistant', stop_reason: 'refusal', content: [] });
   const j = JSON.parse(b);
   const user: string = j.messages[0].content;
+  if (/You check a children's picture book/.test(j.system ?? '')) return send(res, 200, { id: 'msg_' + n, type: 'message', role: 'assistant', model: j.model, stop_reason: 'end_turn', content: [{ type: 'text', text: JSON.stringify(checkAnswer(user)) }] });
   const out = goodAnswer(user, n);
   if (aiMode === 'name') { out.story.pages[0] = 'Liam and Stomp sat on the hill.'; out.tracingSentence = 'Emma likes to play.'; }
   if (aiMode === 'badmath') out.wordProblems = out.wordProblems.map((p: any) => ({ ...p, a: 99, b: 50, answer: 149 }));

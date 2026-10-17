@@ -34,7 +34,11 @@ def names(t):
         for i, nm in enumerate(HARD):
             p.fill(sel, nm); p.wait_for_timeout(250)
             shown = p.input_value(sel)
-            path = t.dl(f'names-{tag}-{i}', sub(p, btn), expect_gate=first); first = False
+            # Word tracing has nothing to trace when no character is traceable: Download is disabled (with a note).
+            if p.locator('button[type=submit]').filter(has_text=btn).first.is_disabled():
+                results.append({'tag': f'names-{tag}-{i}', 'disabled': True}); print('OK', f'names-{tag}-{i}', 'download disabled (nothing traceable)', flush=True)
+            else:
+                path = t.dl(f'names-{tag}-{i}', sub(p, btn), expect_gate=first); first = False
             sub_labels = ''
             if tag == 'name-tracing':
                 sub_labels = ' / '.join(x.inner_text().replace('\n', ' ') for x in p.locator('fieldset:has(legend:text("Letter style")) label').all())
