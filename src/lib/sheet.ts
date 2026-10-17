@@ -50,21 +50,59 @@ export const COLORS = {
   quiet: '#8a93a6',
 };
 
-export function styleName(raw: string, style: LetterStyle): string {
-  const clean = raw.replace(/[^A-Za-z0-9 ]/g, '').replace(/\s+/g, ' ').trim().slice(0, 24);
-  if (style === 'caps') return clean.toUpperCase();
-  if (style === 'lower') return clean.toLowerCase();
-  return clean
-    .toLowerCase()
-    .split(' ')
-    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
-    .join(' ');
+// Letters that don't split into a base letter plus an accent under NFD, and look-alike punctuation.
+const LATIN_SPECIAL: Record<string, string> = {
+  'ß': 'ss', 'ẞ': 'SS', 'æ': 'ae', 'Æ': 'AE', 'œ': 'oe', 'Œ': 'OE', 'ø': 'o', 'Ø': 'O', 'ł': 'l', 'Ł': 'L', 'đ': 'd', 'Đ': 'D',
+  'ð': 'd', 'Ð': 'D', 'þ': 'th', 'Þ': 'Th', 'ı': 'i', 'ħ': 'h', 'Ħ': 'H', 'ŀ': 'l', 'Ŀ': 'L', 'ŧ': 't', 'Ŧ': 'T', 'ĸ': 'k', 'ſ': 's',
+  '\u2018': "'", '\u2019': "'", '\u02bc': "'", '`': "'", '\u00b4': "'", '\u2010': '-', '\u2011': '-', '\u2013': '-', '\u2014': '-',
+};
+
+/** Accented Latin letters to their plain base letter (José → Jose, Núñez → Nunez, Søren → Soren). Other characters pass through. */
+export function toLatin(raw: string): string {
+  return [...raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '')].map((c) => LATIN_SPECIAL[c] ?? c).join('');
 }
 
-// Punctuation that sight words need (don't). Kept here so the letter set in glyphs.ts stays A–Z, a–z, 0–9.
+/** A name cleaned to what the tracing letters can draw: A to Z, digits, spaces, apostrophes and hyphens. */
+export function cleanName(raw: string, max = 24): string {
+  return toLatin(raw)
+    .replace(/[^A-Za-z0-9 '-]/g, '')
+    .replace(/\s*-\s*/g, '-').replace(/'+/g, "'").replace(/-+/g, '-')
+    .replace(/\s+/g, ' ').trim()
+    .replace(/(^|\s)['-]+|['-]+(?=\s|$)/g, '$1')
+    .slice(0, max).trim();
+}
+
+/** A note for the tool UI when a typed name can't be traced as typed, or null when it can. */
+export function nameNote(raw: string, punctuation = "'-"): string | null {
+  if (!raw.trim()) return null;
+  if (!/[A-Za-z0-9]/.test(toLatin(raw))) return 'Our tracing letters are A to Z, so this name can’t be traced yet. The sheet shows a placeholder for now. You can type the name in English letters instead.';
+  const ok = new RegExp(`[^A-Za-z0-9\\s${punctuation.replace(/[-\]\\^]/g, '\\$&')}]`);
+  if (ok.test(toLatin(raw))) return 'Some characters can’t be traced and were left out. Letters A to Z, numbers, apostrophes and hyphens work.';
+  return null;
+}
+
+/** Capital first: the first letter of each word becomes a capital and the rest stays as typed (McKenzie, DeShawn,
+ *  Mary-Kate). A word typed all in capitals (MIA) or all in lowercase (mia) becomes Mia. */
+function capitalFirst(word: string): string {
+  if (!word) return word;
+  const letters = word.replace(/[^A-Za-z]/g, '');
+  const allCaps = letters.length > 1 && letters === letters.toUpperCase();
+  const fix = (part: string) => (part ? part[0].toUpperCase() + (allCaps ? part.slice(1).toLowerCase() : part.slice(1)) : part);
+  // Each part of a hyphenated name gets its own capital (mary-kate → Mary-Kate).
+  return word.split('-').map(fix).join('-');
+}
+
+export function styleName(raw: string, style: LetterStyle): string {
+  const clean = cleanName(raw);
+  if (style === 'caps') return clean.toUpperCase();
+  if (style === 'lower') return clean.toLowerCase();
+  return clean.split(' ').map(capitalFirst).join(' ');
+}
+
+// Punctuation that sight words need (don't). Kept here so the letter set in glyphs.ts stays A to Z, a to z, 0 to 9.
 const EXTRA_GLYPHS: Record<string, Glyph> = {
   "'": { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
-  '’': { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
+  '\u2019': { w: 0.02, strokes: [[['M', 0, -1], ['L', 0, -0.8]]] },
   // Sentence punctuation for the word tracing tool.
   '.': { w: 0.04, strokes: [], dots: [[0.02, -0.03]] },
   ',': { w: 0.06, strokes: [[['M', 0.05, -0.05], ['L', 0, 0.13]]] },

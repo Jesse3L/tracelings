@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../lib/seo';
 import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import FontTool from '../../components/FontTool.tsx';
@@ -39,7 +40,7 @@ const schema = [
       { '@type': 'ListItem', position: 3, name: 'Cursive Name Tracing', item: url },
     ],
   },
-  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })) },
 ];
 ---
 <Base title={title} description={description} schema={schema}>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import type { Page, Paper } from '../lib/sheet';
+import { useHydrated } from '../lib/hydrated';
+import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
 import { needsEmail, subscribe, markEmailOk } from '../lib/gate';
@@ -21,6 +22,7 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
   const [level, setLevel] = useState<Level>(props.level ?? 'pre-k');
   const [weekN, setWeekN] = useState(props.week ?? 1);
   const [name, setName] = useState('');
+  const ready = useHydrated();
   const [paper, setPaper] = useState<Paper>('letter');
   const [font, setFont] = useState<LoadedFont | null>(null);
   const [faith, setFaith] = useState(props.faith ?? false);
@@ -56,7 +58,7 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
   useEffect(() => { setShown(0); setDone(''); }, [level, weekN]);
   const svgs = useMemo(() => pages.map(pageToSvg), [pages]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
-  const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   async function save(kind: 'week' | 'list' | 'month') {
     setBusy(true);
@@ -99,6 +101,7 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-2xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
           />
           <span class="block text-[13px] text-muted mt-2">Their name goes on the plan, the tracing page and the coloring page. It stays on this device.</span>
+          {nameNote(name) && <span class="block text-[13px] text-[#b4232c] mt-1" role="status">{nameNote(name)}</span>}
         </label>
 
         {!props.fixedLevel && (
@@ -131,8 +134,8 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
 
         <Segmented legend="Paper" name="pack-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
-        <button type="submit" disabled={busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : `Download week ${week.n} (${pages.length} pages)`}
+        <button type="submit" disabled={!ready || busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : `Download week ${week.n} (${pages.length} pages)`}
         </button>
         {!font && <p class="mt-2 text-[13px] text-muted">Loading the coloring page letters…</p>}
         {(week.family || week.families) && (

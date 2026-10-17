@@ -9,7 +9,7 @@ const description = 'Free printable bubble letters A to Z, plus a bubble letter 
 const url = new URL('/bubble-letters/', SITE.url).href;
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Bubble Letter Generator', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any (web browser)', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    description: 'Type any word or name up to 16 characters and download it in big printable bubble letters, with or without shapes to color.' },
+    description: 'Type any word or name up to 24 characters and download it in big printable bubble letters, with or without shapes to color.' },
   { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Bubble letters A to Z', url, description,
     hasPart: letters.map((l) => ({ '@type': 'LearningResource', name: `Bubble letter ${l.letter.toUpperCase()}`, url: `${SITE.url}/bubble-letters/${l.letter}/` })) },
   { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
@@ -30,8 +30,8 @@ const schema = [
 
     <section aria-labelledby="generator">
       <h2 id="generator" class="text-[1.6rem] font-bold">Bubble letter generator</h2>
-      <p class="mt-2 mb-6 text-muted max-w-[68ch]">Type a word or name, up to 16 letters. Keep the page plain for clean outlines, or add stars, hearts, flowers or bubbles around it.</p>
-      <FontTool client:visible kind="coloring" source="bubble-letters" plainOption defaultTheme="plain" label="Word or name" placeholder="Type a word or name" />
+      <p class="mt-2 mb-6 text-muted max-w-[68ch]">Type a word or name, up to 24 letters. Keep the page plain for clean outlines, or add stars, hearts, flowers or bubbles around it.</p>
+      <FontTool client:load kind="coloring" source="bubble-letters" plainOption defaultTheme="plain" label="Word or name" placeholder="Type a word or name" />
     </section>
 
     <h2 id="a-to-z" class="mt-14 text-[1.6rem] font-bold">Printable bubble letters A to Z</h2>

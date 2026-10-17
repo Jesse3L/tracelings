@@ -1,5 +1,5 @@
 // Cursive practice sheets drawn from the Playwrite US Trad font (OFL), shaped so letters connect.
-import { PAPER, COLORS, type Item, type Page, type Paper, type LineSize, type Practice } from './sheet';
+import { PAPER, COLORS, toLatin, type Item, type Page, type Paper, type LineSize, type Practice } from './sheet';
 import { shape, glyphTop, toPagePath, type LoadedFont } from './fontshape';
 import { SITE } from '../config';
 
@@ -16,7 +16,8 @@ export interface CursiveOptions {
 const CAP: Record<LineSize, number> = { large: 60, medium: 44, small: 30 };
 
 export function cleanCursiveText(raw: string): string {
-  return raw.replace(/[^A-Za-z0-9 .,'!?-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 40);
+  // Accented letters print as their base letter (José → Jose); the font has apostrophes and hyphens.
+  return toLatin(raw).replace(/[^A-Za-z0-9 .,'!?-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 40);
 }
 
 export function buildCursiveSheet(f: LoadedFont, o: CursiveOptions): Page {

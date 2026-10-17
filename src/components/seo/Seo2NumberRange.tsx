@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'preact/hooks';
+import { useHydrated } from '../../lib/hydrated';
 import type { LineSize, Paper, Practice } from '../../lib/sheet';
 import { buildRangePages, type RangeLayout } from '../../lib/rowSheet';
 import { pageToSvg } from '../../lib/render';
@@ -18,6 +19,7 @@ export default function Seo2NumberRange(props: { from?: number; to: number; sour
   const [startDots, setStartDots] = useState(true);
   const [paper, setPaper] = useState<Paper>('letter');
   const [busy, setBusy] = useState(false);
+  const ready = useHydrated();
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState(false);
   const member = useMember();
@@ -48,8 +50,8 @@ export default function Seo2NumberRange(props: { from?: number; to: number; sour
         ]} />
         {layout === 'rows' && (
           <Segmented legend="Line size" name="range-size" value={size} onChange={setSize} options={[
-            { v: 'large', label: 'Large', sub: 'ages 3–4' },
-            { v: 'medium', label: 'Medium', sub: 'ages 5–6' },
+            { v: 'large', label: 'Large', sub: 'ages 3 to 4' },
+            { v: 'medium', label: 'Medium', sub: 'ages 5 to 6' },
             { v: 'small', label: 'Small', sub: 'ages 6+' },
           ]} />
         )}
@@ -62,8 +64,8 @@ export default function Seo2NumberRange(props: { from?: number; to: number; sour
           Green starting dots
         </label>
         <Segmented legend="Paper" name="range-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
-        <button type="submit" disabled={busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : `Download ${from} to ${to} (${pages.length} ${pages.length === 1 ? 'page' : 'pages'})`}
+        <button type="submit" disabled={!ready || busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : `Download ${from} to ${to} (${pages.length} ${pages.length === 1 ? 'page' : 'pages'})`}
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}
         <p class="mt-4 text-[14px] text-muted">Each row starts with a solid number to look at, then dotted copies to trace.</p>

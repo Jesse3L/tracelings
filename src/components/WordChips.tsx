@@ -18,9 +18,9 @@ export default function WordChips(props: {
       <legend class="text-[15px] font-bold mb-1">{props.legend}</legend>
       <div class="flex items-center justify-between gap-3 mb-2 text-[13px] text-muted">
         <span>{props.selected.length} of {props.words.length} chosen</span>
-        <span class="flex gap-3">
-          <button type="button" class="underline underline-offset-2 hover:text-ink" onClick={() => props.onChange(props.words.slice())}>All</button>
-          <button type="button" class="underline underline-offset-2 hover:text-ink" onClick={() => props.onChange([])}>None</button>
+        <span class="flex gap-1 -my-2 -mr-2">
+          <button type="button" class="inline-flex min-h-10 min-w-10 items-center justify-center px-2 underline underline-offset-2 hover:text-ink" onClick={() => props.onChange(props.words.slice())}>All</button>
+          <button type="button" class="inline-flex min-h-10 min-w-10 items-center justify-center px-2 underline underline-offset-2 hover:text-ink" onClick={() => props.onChange([])}>None</button>
         </span>
       </div>
       <div class="flex flex-wrap gap-1.5">

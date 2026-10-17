@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks';
+import { useHydrated } from '../lib/hydrated';
 import { needsEmail, countDownload } from '../lib/gate';
 import { PAPER, type Paper } from '../lib/sheet';
 import { SITE } from '../config';
@@ -13,6 +14,7 @@ export default function ColoringDownload(props: { src: string; slug: string; tit
   const [done, setDone] = useState(false);
   const [error, setError] = useState(false);
   const member = useMember();
+  const ready = useHydrated();
 
   async function save() {
     setBusy(true);
@@ -66,8 +68,8 @@ export default function ColoringDownload(props: { src: string; slug: string; tit
           ))}
         </div>
       </fieldset>
-      <button type="button" disabled={busy} onClick={() => (!member.member && needsEmail() ? setGate(true) : save())} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-        {busy ? 'Making your PDF…' : 'Download PDF'}
+      <button type="button" disabled={!ready || busy} onClick={() => (!member.member && needsEmail() ? setGate(true) : save())} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+        {!ready ? 'Loading…' : busy ? 'Making your PDF…' : 'Download PDF'}
       </button>
       {done && <p class="mt-3 text-[14px] text-[#1f7a50]" role="status">Downloaded. Print at 100% size for a full page.</p>}
       {error && <p class="mt-3 text-[14px] text-[#b4232c]" role="alert">The download didn't work. Refresh the page and try again.</p>}

@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../../lib/seo';
 import Preview from '../../../components/site/Preview.astro';
 import Base from '../../../layouts/Base.astro';
 import MathSheets from '../../../components/MathSheets.tsx';
@@ -6,7 +7,7 @@ import Faqs from '../../../components/homeschool/Faqs.astro';
 import { SITE } from '../../../config';
 
 const url = new URL('/math-worksheets/pre-k/', SITE.url).href;
-const title = `Pre-K Math Worksheets: Free Preschool Math Printables | ${SITE.name}`;
+const title = `Pre-K Math Worksheets: Free Preschool Printables | ${SITE.name}`;
 const description = 'Free pre-k math worksheets you make yourself: count and color, ten frames, more or fewer, and missing numbers 1 to 20. New problems every time you print.';
 
 const faqs = [
@@ -43,7 +44,7 @@ const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
   },
 ];
 ---

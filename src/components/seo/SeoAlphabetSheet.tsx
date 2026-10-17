@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'preact/hooks';
+import { useHydrated } from '../../lib/hydrated';
 import { buildSheet, rowKinds, type LineSize, type Page, type Paper } from '../../lib/sheet';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
@@ -39,6 +40,7 @@ export function buildAlphabetPages(letterCase: Case, size: LineSize, paper: Pape
 // The whole alphabet in one PDF: one letter per tracing row, as many pages as the line size needs.
 export default function SeoAlphabetSheet(props: { source?: string }) {
   const [letterCase, setLetterCase] = useState<Case>('both');
+  const ready = useHydrated();
   const [size, setSize] = useState<LineSize>('medium');
   const [paper, setPaper] = useState<Paper>('letter');
   const [startDots, setStartDots] = useState(true);
@@ -71,8 +73,8 @@ export default function SeoAlphabetSheet(props: { source?: string }) {
           { v: 'lower', label: 'Lowercase', sub: 'a b c' },
         ]} />
         <Segmented legend="Line size" name="abc-size" value={size} onChange={setSize} options={[
-          { v: 'large', label: 'Large', sub: 'ages 3–4' },
-          { v: 'medium', label: 'Medium', sub: 'ages 5–6' },
+          { v: 'large', label: 'Large', sub: 'ages 3 to 4' },
+          { v: 'medium', label: 'Medium', sub: 'ages 5 to 6' },
           { v: 'small', label: 'Small', sub: 'ages 6+' },
         ]} />
         <label class="mb-5 flex items-center gap-3 cursor-pointer text-[15px]">
@@ -80,8 +82,8 @@ export default function SeoAlphabetSheet(props: { source?: string }) {
           Green starting dots
         </label>
         <Segmented legend="Paper" name="abc-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
-        <button type="submit" disabled={busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : `Download A to Z (${pages.length} pages)`}
+        <button type="submit" disabled={!ready || busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : `Download A to Z (${pages.length} pages)`}
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}
         <p class="mt-4 text-[14px] text-muted">One letter per row, A to Z in order. Smaller lines fit more letters on each page.</p>

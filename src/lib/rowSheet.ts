@@ -1,6 +1,6 @@
 // Row and grid tracing sheets built from the same ball-and-stick glyphs as sheet.ts.
 // Used by the number range sheets (1-10, 1-20) and the free-text word tracing tool.
-import { PAPER, COLORS, layoutWord, glyphFor, strokeToPath, type Item, type Page, type Paper, type LineSize, type Practice } from './sheet';
+import { PAPER, COLORS, layoutWord, toLatin, glyphFor, strokeToPath, type Item, type Page, type Paper, type LineSize, type Practice } from './sheet';
 import { SITE } from '../config';
 
 export const ROW_CAP: Record<LineSize, number> = { large: 64, medium: 46, small: 32 };
@@ -52,7 +52,7 @@ export function drawText(items: Item[], text: string, x: number, yBase: number, 
   }
 }
 
-export interface CellStyle { practice: Practice; startDots: boolean; model: boolean }
+export interface CellStyle { practice: Practice; startDots: boolean; model: boolean; /** Draw the copies solid (an example row for text that fits only once). */ solid?: boolean }
 
 /**
  * One handwriting cell: guide lines across [x1, x2] and the text repeated to fill it.
@@ -74,7 +74,7 @@ export function drawCell(items: Item[], text: string, x1: number, x2: number, yT
   const extra = drawn === reps && reps > 1 ? Math.min(gap, (avail - (reps * oneW + (reps - 1) * gap)) / (reps - 1)) : 0;
   const step = oneW + gap + extra;
   for (let r = 0; r < drawn; r++) {
-    const kind = st.model && reps >= 2 && r === 0 ? 'model' : 'trace';
+    const kind = st.solid || (st.model && reps >= 2 && r === 0) ? 'model' : 'trace';
     drawText(items, text, x1 + INSET + r * step, yBase, cap, kind, st.startDots);
   }
   return { reps, writeSpace: drawn < reps };
@@ -144,7 +144,8 @@ export function buildRangePages(o: RangeOptions): Page[] {
 
 /** Characters the tracing letters can draw: A-Z, a-z, 0-9, spaces and simple punctuation. */
 export function cleanTraceText(raw: string): string {
-  return raw.replace(/[‘’`]/g, "'").replace(/[^A-Za-z0-9 '.,?!:;-]/g, '').replace(/\s+/g, ' ').trim();
+  // Accented letters trace as their base letter (José → Jose, Núñez → Nunez).
+  return toLatin(raw).replace(/[^A-Za-z0-9 '.,?!:;-]/g, '').replace(/\s+/g, ' ').trim();
 }
 
 /** Splits text into lines that fit `maxUnits` (in letter-height units), breaking between words. */
@@ -180,7 +181,7 @@ export function buildWordPages(o: WordSheetOptions): Page[] {
   const { w, h } = PAPER[o.paper];
   const avail = w - 2 * M - 2 * INSET;
   const baseCap = ROW_CAP[o.size];
-  type Row = { text: string; cap: number };
+  type Row = { text: string; cap: number; solid?: boolean };
   const rows: Row[] = [];
   for (const raw of o.lines) {
     const t = cleanTraceText(raw);
@@ -188,8 +189,10 @@ export function buildWordPages(o: WordSheetOptions): Page[] {
     for (const part of wrapToWidth(t, avail / baseCap)) {
       const unitsW = layoutWord(part).width;
       const cap = unitsW * baseCap > avail ? avail / unitsW : baseCap;
-      rows.push({ text: part, cap });
       const reps = Math.floor((avail + baseCap * 0.9) / (unitsW * cap + baseCap * 0.9));
+      // Text that fits only once gets its own solid example row first, so the example never disappears.
+      if (o.model && reps < 2) rows.push({ text: part, cap, solid: true });
+      rows.push({ text: part, cap });
       if (o.practice === 'trace-write' && reps < 3) rows.push({ text: '', cap });
     }
   }
@@ -210,7 +213,7 @@ export function buildWordPages(o: WordSheetOptions): Page[] {
   for (const r of rows) {
     if (y + r.cap * 1.5 > bottom) { finish(); start(); }
     // Blank rows use the page's line size so they match the tracing above.
-    drawCell(items, r.text, M, w - M, y, r.cap, { practice: o.practice, startDots: o.startDots, model: o.model });
+    drawCell(items, r.text, M, w - M, y, r.cap, { practice: o.practice, startDots: o.startDots, model: o.model, solid: r.solid });
     y += pitchFor(r.cap);
   }
   finish();

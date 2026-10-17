@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../lib/seo';
 import Base from '../../layouts/Base.astro';
 import Seo2WordTracing from '../../components/seo/Seo2WordTracing.tsx';
 import { SITE } from '../../config';
@@ -37,7 +38,7 @@ const schema = [
       { '@type': 'ListItem', position: 2, name: 'Word Tracing', item: url },
     ],
   },
-  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })) },
 ];
 ---
 <Base title={title} description={description} schema={schema}>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import type { Page, Paper } from '../lib/sheet';
+import { useHydrated } from '../lib/hydrated';
+import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
 import { needsEmail } from '../lib/gate';
@@ -23,6 +24,7 @@ export default function MathSampler(props: { source?: string }) {
   const [name, setName] = useState('');
   const [paper, setPaper] = useState<Paper>('letter');
   const [busy, setBusy] = useState(false);
+  const ready = useHydrated();
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState('');
   const member = useMember();
@@ -39,7 +41,7 @@ export default function MathSampler(props: { source?: string }) {
   async function save() {
     setBusy(true);
     try {
-      const who = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const who = toLatin(name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       await savePdf(build(), `${who ? `${who}-` : ''}kindergarten-math-sampler.pdf`, 'Kindergarten math sampler');
       setDone(`Downloaded ${SAMPLER.length} pages. Print at 100% size.`);
     } finally {
@@ -60,10 +62,11 @@ export default function MathSampler(props: { source?: string }) {
             onInput={(e) => setName((e.target as HTMLInputElement).value)}
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none" />
           <span class="block text-[13px] text-muted mt-2">Printed on every page. It stays on this device.</span>
+          {nameNote(name) && <span class="block text-[13px] text-[#b4232c] mt-1" role="status">{nameNote(name)}</span>}
         </label>
         <Segmented legend="Paper" name="sampler-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
-        <button type="submit" disabled={busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : `Download the free sampler (${SAMPLER.length} pages)`}
+        <button type="submit" disabled={!ready || busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : `Download the free sampler (${SAMPLER.length} pages)`}
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">{done}</p>}
       </form>

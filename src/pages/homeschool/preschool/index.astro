@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../../lib/seo';
 import Preview from '../../../components/site/Preview.astro';
 import Base from '../../../layouts/Base.astro';
 import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
@@ -46,7 +47,7 @@ const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
   },
 ];
 ---
@@ -101,7 +102,7 @@ const schema = [
       </p>
 
       <h2>Want a Bible verse each week?</h2>
-      <p>Tick the faith track box above to add a Bible verse to every week, in easy modern English,, with a short phrase to trace. All 36 verses are on the <a href="/homeschool/christian/">Christian homeschool preschool curriculum</a> page.</p>
+      <p>Tick the faith track box above to add a Bible verse to every week, in easy modern English, with a short phrase to trace. All 36 verses are on the <a href="/homeschool/christian/">Christian homeschool preschool curriculum</a> page.</p>
 
       <h2>All 36 weeks</h2>
       <p>Tap any week to open its pack above.</p>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'preact/hooks';
+import { useHydrated } from '../lib/hydrated';
 import { buildFlashCards, CARDS_PER_PAGE } from '../lib/flashcards';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
@@ -20,6 +21,7 @@ export default function FlashCards(props: { words: string[]; slug: string; label
   const [error, setError] = useState(false);
   const member = useMember();
   const credit = !member.member;
+  const ready = useHydrated();
 
   const list = (which === 'all' ? props.words : chosen).map(wordCase);
   const pageCount = Math.max(1, Math.ceil(list.length / CARDS_PER_PAGE));
@@ -67,8 +69,8 @@ export default function FlashCards(props: { words: string[]; slug: string; label
         <Segmented legend="Paper" name="fc-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
         {!list.length && <p class="mb-3 text-[14px] text-[#b4232c]" role="alert">Choose at least one word to make cards.</p>}
-        <button type="submit" disabled={busy || !list.length} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : `Download ${list.length} flash card${list.length === 1 ? '' : 's'}`}
+        <button type="submit" disabled={!ready || busy || !list.length} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : `Download ${list.length} flash card${list.length === 1 ? '' : 's'}`}
         </button>
         <p class="mt-3 text-[13px] text-muted">{pageCount} page{pageCount === 1 ? '' : 's'}, 8 cards per page. Print on card stock if you have it, then cut on the dashed lines.</p>
         {done && <p class="mt-3 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}

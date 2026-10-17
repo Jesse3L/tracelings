@@ -212,23 +212,41 @@ const year = new Date().getFullYear();
       const hover = matchMedia('(hover: hover) and (pointer: fine)').matches;
       dds.forEach((dd) => {
         const btn = dd.querySelector('button')!;
-        btn.addEventListener('click', () => { const open = btn.getAttribute('aria-expanded') !== 'true'; closeAll(dd); setDd(dd, open); });
+        // A hover opens the panel just before the click lands, so a click right after a hover-open keeps it open
+        // instead of toggling it shut. Later clicks toggle as usual.
+        let hoverOpenedAt = 0;
+        btn.addEventListener('click', () => {
+          const isOpen = btn.getAttribute('aria-expanded') === 'true';
+          const justHovered = isOpen && Date.now() - hoverOpenedAt < 600;
+          hoverOpenedAt = 0;
+          closeAll(dd); setDd(dd, justHovered ? true : !isOpen);
+        });
         if (hover) {
           let t: number | undefined;
-          dd.addEventListener('mouseenter', () => { clearTimeout(t); closeAll(dd); setDd(dd, true); });
+          dd.addEventListener('mouseenter', () => {
+            clearTimeout(t); closeAll(dd);
+            if (btn.getAttribute('aria-expanded') !== 'true') { hoverOpenedAt = Date.now(); setDd(dd, true); }
+          });
           dd.addEventListener('mouseleave', () => { t = window.setTimeout(() => setDd(dd, false), 160); });
         }
         dd.addEventListener('focusout', (e) => { if (!dd.contains(e.relatedTarget as Node)) setDd(dd, false); });
       });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const open = dds.find((d) => d.querySelector('button')!.getAttribute('aria-expanded') === 'true'); closeAll(); open?.querySelector('button')!.focus(); } });
       document.addEventListener('click', (e) => { if (!(e.target as Element).closest('[data-dd]')) closeAll(); });
       const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
       const menu = document.getElementById('mobile-menu');
-      toggle?.addEventListener('click', () => {
-        const open = toggle.getAttribute('aria-expanded') !== 'true';
+      const setMenu = (open: boolean) => {
+        if (!toggle) return;
         toggle.setAttribute('aria-expanded', String(open)); if (menu) menu.hidden = !open;
         toggle.querySelector('.menu-open')!.classList.toggle('hidden', open);
         toggle.querySelector('.menu-close')!.classList.toggle('hidden', !open);
+      };
+      toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+      // Escape closes an open dropdown or the mobile menu and puts focus back on the button that opened it.
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        const open = dds.find((d) => d.querySelector('button')!.getAttribute('aria-expanded') === 'true');
+        if (open) { closeAll(); open.querySelector('button')!.focus(); return; }
+        if (toggle?.getAttribute('aria-expanded') === 'true') { setMenu(false); toggle.focus(); }
       });
     </script>
   </body>

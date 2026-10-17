@@ -37,12 +37,12 @@ const schema = [
     </nav>
     <div class="pt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] items-start">
       <figure class="sheet-frame overflow-hidden max-w-[640px]">
-        <img src={p.src} alt={p.alt} width="880" height="1168" loading="eager" decoding="async" class="w-full h-auto" />
+        <img src={p.view} alt={p.alt} width="880" height="1168" loading="eager" fetchpriority="high" decoding="async" class="w-full h-auto" />
       </figure>
       <div class="lg:sticky lg:top-6">
         <h1 class="text-[1.9rem] sm:text-[2.3rem] font-bold leading-tight text-balance">{p.title}</h1>
         <p class="mt-4 text-[1.075rem] leading-relaxed text-[#2c3954]">{p.description}</p>
-        <div class="mt-6"><ColoringDownload client:visible src={p.src} slug={p.slug} title={p.title} /></div>
+        <div class="mt-6"><ColoringDownload client:load src={p.src} slug={p.slug} title={p.title} /></div>
         <p class="mt-4 text-[14px] text-muted">Free for personal and classroom use.</p>
       </div>
     </div>
