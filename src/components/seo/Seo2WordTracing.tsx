@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
-import type { LineSize, Paper, Practice } from '../../lib/sheet';
+import { useHydrated } from '../../lib/hydrated';
+import { toLatin, type LineSize, type Paper, type Practice } from '../../lib/sheet';
 import { buildWordPages, cleanTraceText } from '../../lib/rowSheet';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
@@ -29,10 +30,11 @@ export default function Seo2WordTracing(props: { source?: string; preset?: strin
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState(false);
   const member = useMember();
+  const ready = useHydrated();
   const credit = !member.member;
 
   const lines = useMemo(() => text.split(/\r?\n/).map((l) => l.slice(0, MAX_CHARS)).filter((l) => cleanTraceText(l)).slice(0, MAX_LINES), [text]);
-  const dropped = useMemo(() => /[^A-Za-z0-9 '’‘`.,?!\-\r\n]/.test(text), [text]);
+  const dropped = useMemo(() => /[^A-Za-z0-9 '.,?!:;\-\r\n]/.test(toLatin(text)), [text]);
   const pages = useMemo(() => buildWordPages({ lines, size, paper, practice, startDots, model, credit }), [lines, size, paper, practice, startDots, model, credit]);
   const svg = useMemo(() => pageToSvg(pages[0]), [pages]);
   const empty = lines.length === 0;
@@ -73,8 +75,8 @@ export default function Seo2WordTracing(props: { source?: string; preset?: strin
           ))}
         </div>
         <Segmented legend="Line size" name="word-size" value={size} onChange={setSize} options={[
-          { v: 'large', label: 'Large', sub: 'ages 3–4' },
-          { v: 'medium', label: 'Medium', sub: 'ages 5–6' },
+          { v: 'large', label: 'Large', sub: 'ages 3 to 4' },
+          { v: 'medium', label: 'Medium', sub: 'ages 5 to 6' },
           { v: 'small', label: 'Small', sub: 'ages 6+' },
         ]} />
         <Segmented legend="Practice" name="word-practice" value={practice} onChange={setPractice} options={[
@@ -93,8 +95,8 @@ export default function Seo2WordTracing(props: { source?: string; preset?: strin
         </div>
         <Segmented legend="Paper" name="word-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
         {empty && <p class="mb-3 text-[14px] text-[#b4232c]" role="alert">Type at least one word to make a sheet.</p>}
-        <button type="submit" disabled={busy || empty} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : `Download PDF (${pages.length} ${pages.length === 1 ? 'page' : 'pages'})`}
+        <button type="submit" disabled={!ready || busy || empty} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : `Download PDF (${pages.length} ${pages.length === 1 ? 'page' : 'pages'})`}
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}
         <div class="mt-4 rounded-lg border border-dashed border-rule/60 bg-white/70 p-3 text-[14px] leading-snug text-muted">

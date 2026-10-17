@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../../lib/seo';
 import Base from '../../../layouts/Base.astro';
 import MathSampler from '../../../components/MathSampler.tsx';
 import Faqs from '../../../components/homeschool/Faqs.astro';
@@ -48,7 +49,7 @@ const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
   },
 ];
 ---
@@ -73,7 +74,7 @@ const schema = [
         {makers.map((m) => (
           <li>
             <a href={m.href} class="flex h-full gap-4 rounded-xl border border-hairline bg-white p-5 hover:border-rule">
-              {P[m.k] && <img src={P[m.k].src} width={P[m.k].width} height={P[m.k].height} alt={P[m.k].alt} loading="lazy" decoding="async" class="w-[92px] shrink-0 self-start h-auto rounded border border-hairline" />}
+              {P[m.k] && <img src={P[m.k].src.replace('/previews/', '/previews/sm/')} width={P[m.k].width} height={P[m.k].height} alt={P[m.k].alt} loading="lazy" decoding="async" class="w-[92px] shrink-0 self-start h-auto rounded border border-hairline" />}
               <span class="block">
                 <span class="block text-xl font-bold text-ink">{m.title}</span>
                 <span class="mt-2 block text-muted leading-relaxed">{m.body}</span>

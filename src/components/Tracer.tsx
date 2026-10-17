@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { buildSheet, rowKinds, styleName, type LetterStyle, type LineSize, type Page, type Paper, type Practice } from '../lib/sheet';
+import { useHydrated } from '../lib/hydrated';
+import { buildSheet, rowKinds, styleName, nameNote, type LetterStyle, type LineSize, type Page, type Paper, type Practice } from '../lib/sheet';
 import { pageToSvg, pagesToPdf } from '../lib/render';
 import { needsEmail, countDownload } from '../lib/gate';
 import EmailGate from './EmailGate';
@@ -12,8 +13,8 @@ type Mode = 'name' | 'letter' | 'number' | 'words';
 type Case = 'both' | 'upper' | 'lower';
 
 const SIZES: { v: LineSize; label: string; age: string }[] = [
-  { v: 'large', label: 'Large', age: 'ages 3–4' },
-  { v: 'medium', label: 'Medium', age: 'ages 5–6' },
+  { v: 'large', label: 'Large', age: 'ages 3 to 4' },
+  { v: 'medium', label: 'Medium', age: 'ages 5 to 6' },
   { v: 'small', label: 'Small', age: 'ages 6+' },
 ];
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -70,6 +71,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   const [chosen, setChosen] = useState<string[]>(() => allWords.slice(0, 8));
   const source = props.source ?? `${mode}-tracing`;
   const member = useMember();
+  const ready = useHydrated();
   const credit = !member.member;
   const [roster] = useRoster();
   const [useList, setUseList] = useState(false);
@@ -124,7 +126,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
   );
 
   const fileBase =
-    mode === 'name' ? `${styleName(name, 'lower').replace(/\s+/g, '-') || 'name'}-tracing-worksheet`
+    mode === 'name' ? `${styleName(name, 'lower').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'name'}-tracing-worksheet`
     : mode === 'letter' ? `letter-${value.toLowerCase()}-tracing-worksheet`
     : mode === 'words' ? `${props.value ? `${props.value}-` : ''}sight-words-tracing-worksheet`
     : `number-${value}-tracing-worksheet`;
@@ -175,7 +177,8 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
               onInput={(e) => setName((e.target as HTMLInputElement).value)}
               class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-2xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
             />
-            <span class="block text-[13px] text-muted mt-2">Stays on this device. Letters, numbers and spaces only.</span>
+            <span class="block text-[13px] text-muted mt-2">Stays on this device. Accents print as plain letters (José prints as Jose).</span>
+            {nameNote(name) && <span class="block text-[13px] text-[#b4232c] mt-1" role="status">{nameNote(name)}</span>}
           </label>
         )}
         {mode === 'name' && member.member && (
@@ -262,8 +265,8 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
         <Segmented legend="Paper" name="paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
         {noWords && <p class="mb-3 text-[14px] text-[#b4232c]" role="alert">Choose at least one word to make a sheet.</p>}
-        <button type="submit" disabled={busy || noWords} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : listNames.length ? `Download ${listNames.length} sheets` : 'Download PDF'}
+        <button type="submit" disabled={!ready || busy || noWords} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : listNames.length ? `Download ${listNames.length} sheets` : 'Download PDF'}
         </button>
         {done ? (
           <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>

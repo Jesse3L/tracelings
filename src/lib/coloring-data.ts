@@ -3,7 +3,8 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import plan from '../data/coloring-plan.json';
 
-export interface ColoringPage { slug: string; title: string; alt: string; description: string; src: string; thumb: string }
+/** src: the full-size PNG the PDF uses. view: an 880px copy for the page itself (scripts/make-image-variants.mjs). thumb: a 440px listing preview. */
+export interface ColoringPage { slug: string; title: string; alt: string; description: string; src: string; view: string; thumb: string }
 export interface ColoringCollection { slug: string; title: string; intro: string; primaryKeyword: string; season: string; pages: ColoringPage[] }
 
 const root = join(process.cwd(), 'public', 'coloring');
@@ -24,6 +25,7 @@ export function getCollections(): ColoringCollection[] {
           alt: p.alt,
           description: p.description,
           src: `/coloring/${c.slug}/${p.slug}.png`,
+          view: existsSync(join(root, c.slug, `${p.slug}-880.png`)) ? `/coloring/${c.slug}/${p.slug}-880.png` : `/coloring/${c.slug}/${p.slug}.png`,
           thumb: `/coloring/${c.slug}/${p.slug}-thumb.webp`,
         })),
     }))

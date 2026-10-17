@@ -107,7 +107,7 @@ export default function ClassPack() {
           { v: 'capital', label: 'Capital first', sub: 'Emma' }, { v: 'caps', label: 'ALL CAPS', sub: 'EMMA' }, { v: 'lower', label: 'lowercase', sub: 'emma' },
         ]} />
         <Segmented legend="Line size" name="cp-size" value={size} onChange={setSize} options={[
-          { v: 'large', label: 'Large', sub: 'ages 3–4' }, { v: 'medium', label: 'Medium', sub: 'ages 5–6' }, { v: 'small', label: 'Small', sub: 'ages 6+' },
+          { v: 'large', label: 'Large', sub: 'ages 3 to 4' }, { v: 'medium', label: 'Medium', sub: 'ages 5 to 6' }, { v: 'small', label: 'Small', sub: 'ages 6+' },
         ]} />
         {coloring && (
           <Segmented legend="Coloring page shapes" name="cp-theme" value={theme} onChange={setTheme} options={[

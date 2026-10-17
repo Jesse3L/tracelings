@@ -1,7 +1,21 @@
 // Name coloring pages: the child's name in big outlined bubble letters, with simple shapes to color around it.
-import { PAPER, COLORS, type Item, type Page, type Paper } from './sheet';
+import { PAPER, COLORS, cleanName, type Item, type Page, type Paper } from './sheet';
 import { shape, runBounds, toPagePath, type LoadedFont } from './fontshape';
 import { SITE } from '../config';
+
+/** Longest name or word the coloring pages take, the same as the name tracing box. */
+export const NAME_MAX = 24;
+
+/** Every way to break the words onto two or three lines, keeping word order. */
+function lineSplits(words: string[]): string[][] {
+  const out: string[][] = [];
+  const n = words.length;
+  for (let i = 1; i < n; i++) {
+    out.push([words.slice(0, i).join(' '), words.slice(i).join(' ')]);
+    for (let j = i + 1; j < n; j++) out.push([words.slice(0, i).join(' '), words.slice(i, j).join(' '), words.slice(j).join(' ')]);
+  }
+  return out;
+}
 
 export type Theme = 'stars' | 'hearts' | 'flowers' | 'bubbles' | 'plain';
 export interface ColoringOptions {
@@ -50,21 +64,28 @@ export function buildColoringPage(f: LoadedFont, o: ColoringOptions): Page {
   const { w, h } = PAPER[o.paper];
   const m = 40;
   const items: Item[] = [];
-  const raw = o.name.replace(/[^A-Za-z0-9 ]/g, '').replace(/\s+/g, ' ').trim().slice(0, 16) || 'Name';
+  const raw = cleanName(o.name, NAME_MAX) || 'Name';
   const text = o.caps ? raw.toUpperCase() : raw;
 
-  // One line for short names, two lines (split at a space or the middle) for long ones.
-  let lines = [text];
-  if (text.length > 7) {
-    const sp = text.indexOf(' ');
-    lines = sp > 0 ? [text.slice(0, sp), text.slice(sp + 1)] : [text.slice(0, Math.ceil(text.length / 2)), text.slice(Math.ceil(text.length / 2))];
-  }
-  const runs = lines.map((l) => shape(f, l));
-  const bounds = runs.map(runBounds);
-  const maxW = Math.max(...bounds.map((b) => b.maxX - b.minX));
-  const lineH = Math.max(...bounds.map((b) => b.maxY - b.minY));
+  // Lay the words out on one, two or three lines, whichever lets the letters be biggest. Lines break only between
+  // words; a single word too wide for the page shrinks instead of splitting.
   const availW = w - 2 * m - 70;
-  const s = Math.min(availW / maxW, 300 / lineH);
+  const maxBlockH = 2 * (h * 0.42 - m - 6);
+  const layout = (lines: string[]) => {
+    const runs = lines.map((l) => shape(f, l));
+    const bounds = runs.map(runBounds);
+    const maxW = Math.max(...bounds.map((b) => b.maxX - b.minX));
+    const lineH = Math.max(...bounds.map((b) => b.maxY - b.minY));
+    const units = lines.length * lineH + (lines.length - 1) * lineH * 0.2;
+    return { lines, runs, bounds, lineH, s: Math.min(availW / maxW, 300 / lineH, maxBlockH / units) };
+  };
+  let best = layout([text]);
+  for (const lines of lineSplits(text.split(' '))) {
+    const c = layout(lines);
+    // An extra line has to earn its place: letters at least 12% bigger.
+    if (c.s > best.s * (1 + 0.12 * (c.lines.length - best.lines.length))) best = c;
+  }
+  const { lines, runs, bounds, lineH, s } = best;
   const blockH = lines.length * lineH * s + (lines.length - 1) * lineH * s * 0.2;
   const blockTop = h * 0.42 - blockH / 2;
   const nameBoxes: { x1: number; y1: number; x2: number; y2: number }[] = [];

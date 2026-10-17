@@ -316,13 +316,10 @@ function blankFramePage(o: MathOptions): Page {
     tenFrame(items, x, y, cell, 0, 0, 2.2);
     tenFrame(items, x, y + cell * 2 + gap, cell, 0, 0, 2.2);
   } else {
+    // A plain counting mat: the frame alone, centered in the space (no answer box, since nothing is printed to count).
     const cell = Math.min(span / 5, (bottom - y0) / 2.6);
     const x = M + (span - cell * 5) / 2;
-    tenFrame(items, x, y0 + 20, cell, 0, 0, 2.4);
-    // Room under the mat to write the number when the frame is done.
-    const by = y0 + 20 + cell * 2 + 40;
-    say(items, 'How many?', M + span / 2 - 40, by + 34, 16, 'right');
-    items.push({ kind: 'path', d: box(M + span / 2 - 20, by, 80, 60, 8), color: INK, width: 1.6 });
+    tenFrame(items, x, y0 + Math.max(20, (bottom - y0 - cell * 2) / 2 - 30), cell, 0, 0, 2.4);
   }
   footer(items, w, h, o.credit, labelFor(o));
   return { w, h, items };

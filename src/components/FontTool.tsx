@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useHydrated } from '../lib/hydrated';
 import type { LineSize, Paper, Practice, Page } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { loadFont, type LoadedFont } from '../lib/fontshape';
 import { buildCursiveSheet, cleanCursiveText } from '../lib/cursive';
-import { buildColoringPage, type Theme } from '../lib/coloring';
+import { buildColoringPage, NAME_MAX, type Theme } from '../lib/coloring';
+import { nameNote } from '../lib/sheet';
 import { needsEmail } from '../lib/gate';
 import { savePdf } from '../lib/download';
 import { Segmented } from './Tracer';
@@ -40,6 +42,7 @@ export default function FontTool(props: {
   const [gate, setGate] = useState(false);
   const [done, setDone] = useState(false);
   const member = useMember();
+  const ready = useHydrated();
   const credit = !member.member;
   const [roster] = useRoster();
   const [useList, setUseList] = useState(false);
@@ -61,10 +64,11 @@ export default function FontTool(props: {
     if (!font) return null;
     return kind === 'cursive'
       ? buildCursiveSheet(font, { text: listNames[0] ?? text, size, paper, practice, modelRow, credit })
-      : buildColoringPage(font, { name: (listNames[0] ?? text).slice(0, 16), theme, paper, caps, credit });
+      : buildColoringPage(font, { name: listNames[0] ?? text, theme, paper, caps, credit });
   }, [font, text, size, paper, practice, modelRow, theme, caps, credit, listNames[0]]);
   const svg = useMemo(() => (page ? pageToSvg(page) : ''), [page]);
 
+  const note = nameNote(listNames[0] ?? text, kind === 'cursive' ? "'-.,!?" : "'-");
   const slug = cleanCursiveText(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || (kind === 'cursive' ? 'cursive' : 'name');
   const filename = kind === 'cursive' ? `${slug}-cursive-worksheet.pdf` : `${slug}-coloring-page.pdf`;
 
@@ -75,7 +79,7 @@ export default function FontTool(props: {
       if (listNames.length && font) {
         const pages = listNames.map((n) => kind === 'cursive'
           ? buildCursiveSheet(font, { text: n, size, paper, practice, modelRow, credit })
-          : buildColoringPage(font, { name: n.slice(0, 16), theme, paper, caps, credit }));
+          : buildColoringPage(font, { name: n, theme, paper, caps, credit }));
         await savePdf(pages, kind === 'cursive' ? 'class-cursive-worksheets.pdf' : 'class-name-coloring-pages.pdf', kind === 'cursive' ? 'Class cursive worksheets' : 'Class name coloring pages');
       } else {
         await savePdf([page], filename, kind === 'cursive' ? 'Cursive practice worksheet' : 'Name coloring page');
@@ -94,7 +98,7 @@ export default function FontTool(props: {
             id={`${kind}-text`}
             type="text"
             value={text}
-            maxLength={kind === 'cursive' ? 40 : 16}
+            maxLength={kind === 'cursive' ? 40 : NAME_MAX}
             autoComplete="off"
             spellcheck={false}
             placeholder={props.placeholder ?? (kind === 'cursive' ? 'Type a name or word' : 'Type a name')}
@@ -102,6 +106,7 @@ export default function FontTool(props: {
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-2xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none"
           />
           <span class="block text-[13px] text-muted mt-2">Stays on this device.</span>
+          {note && <span class="block text-[13px] text-[#b4232c] mt-1" role="status">{note}</span>}
         </label>
 
         {member.member && (
@@ -142,8 +147,8 @@ export default function FontTool(props: {
 
         <Segmented legend="Paper" name="paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
-        <button type="submit" disabled={busy || !page} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : listNames.length ? `Download ${listNames.length} ${kind === 'cursive' ? 'sheets' : 'pages'}` : 'Download PDF'}
+        <button type="submit" disabled={!ready || busy || !page} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : listNames.length ? `Download ${listNames.length} ${kind === 'cursive' ? 'sheets' : 'pages'}` : 'Download PDF'}
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">Downloaded. Check your downloads folder, then print at 100% size.</p>}
         <div class="mt-4 rounded-lg border border-dashed border-rule/60 bg-white/70 p-3 text-[14px] leading-snug text-muted">
