@@ -5,9 +5,9 @@ import { savePdf } from '../../lib/download';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import { loadFont, type LoadedFont } from '../../lib/fontshape';
-import type { ChildProfile, SkillId, SkillState, ThemeId } from '../../lib/program/types';
+import type { ChildProfile, FamilyResponse, SkillId, SkillState, ThemeId } from '../../lib/program/types';
 import { THEMES, THEME_IDS, coverUrl, loadThemeIcons } from '../../lib/program/themes';
-import { placeChild, weekTitle, SKILL_LABELS } from '../../lib/program/engine';
+import { placeChild, placeLevel, weekTitle, SKILL_LABELS } from '../../lib/program/engine';
 import { templateContentFor, weekBlurb } from '../../lib/program/templates';
 import { buildProgramWeek, showMePage } from '../../lib/program/pages';
 import { imagesIn, loadImages } from '../../lib/render';
@@ -37,6 +37,11 @@ const STEPS: { id: Step; label: string }[] = [
   { id: 'pace', label: 'Your week' },
   { id: 'plan', label: 'Their plan' },
 ];
+
+const STEP_KEY = 'tl-program-step';
+/** Where this tab was in the placement check, so a reload comes back to the same step (sessionStorage, this device). */
+interface Resume { id?: string; step?: Step; furthest?: number; ctx?: string; draft?: Partial<ChildProfile> & { name?: string } }
+const TRACK = { 'pre-k': 'Pre-K track', kindergarten: 'Kindergarten track' } as const;
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -69,6 +74,11 @@ export default function ProgramPlacement() {
   // ?return=/account/ (members adding a child) and &edit=<childId> (members changing one child) come from the dashboard.
   const [returnTo, setReturnTo] = useState('');
   const [editing, setEditing] = useState(false);
+  // The furthest step reached, so the step pills can jump back to it after "Change answers".
+  const [furthest, setFurthest] = useState(0);
+  // Members: what the account already has, to block a 5th child and to warn before a plan starts over.
+  const [fam, setFam] = useState<FamilyResponse | null>(null);
+  const [confirmRestart, setConfirmRestart] = useState(false);
 
   // Restore the child being edited, or the last child from this device. "Add a child" starts fresh.
   useEffect(() => {
@@ -78,11 +88,27 @@ export default function ProgramPlacement() {
     const ret = safeReturn(q?.get('return'));
     const editId = q?.get('edit') ?? '';
     setReturnTo(ret);
-    const c = editId ? saved.children.find((x) => x.id === editId) : ret ? undefined : saved.children[saved.children.length - 1];
+    // A reload mid-way returns to the step this tab was on, for the same child.
+    // The tab's draft (sessionStorage, this device only) holds answers not saved yet, like an age with no interests.
+    let back: Resume = {};
+    try { back = JSON.parse(sessionStorage.getItem(STEP_KEY) ?? '{}') ?? {}; } catch { /* storage unavailable */ }
+    const ctx = `${ret}|${editId}`;
+    const resume = back.ctx === ctx && typeof back.id === 'string' && (!editId || back.id === editId) ? back : null;
+    const draft = resume?.draft;
+    const c = editId ? saved.children.find((x) => x.id === editId)
+      : resume ? saved.children.find((x) => x.id === resume.id)
+      : ret ? undefined : saved.children[saved.children.length - 1];
     if (c) setEditing(Boolean(editId));
-    if (c) {
-      setId(c.id); setCreatedAt(c.createdAt); setAge(c.ageYears); setSkills(c.skills); setInterests(c.interests);
-      setDays(c.daysPerWeek); setMinutes(c.minutesPerDay); setFaith(c.faith); setName(saved.names[c.id] ?? '');
+    if (c || (resume && draft)) {
+      const src = { ...(c ?? {}), ...(draft ?? {}) } as Partial<ChildProfile>;
+      setId(resume?.id ?? c!.id); setCreatedAt(src.createdAt ?? new Date().toISOString());
+      setAge(src.ageYears ?? null); setSkills(src.skills ?? {}); setInterests(src.interests ?? []);
+      setDays(src.daysPerWeek ?? 5); setMinutes(src.minutesPerDay ?? 15); setFaith(Boolean(src.faith));
+      setName(draft?.name ?? (c ? saved.names[c.id] ?? '' : ''));
+      if (resume?.step && STEPS.some((x) => x.id === resume.step)) {
+        setStep(resume.step);
+        setFurthest(Math.max(0, Math.min(STEPS.length - 1, Number(resume.furthest) || 0)));
+      }
     } else {
       setId(newChildId());
       setCreatedAt(new Date().toISOString());
@@ -114,14 +140,37 @@ export default function ProgramPlacement() {
   useEffect(() => { if (bigBook) loadImages(imagesIn(pages)); }, [pages]);
   useEffect(() => { setShown(0); }, [JSON.stringify(profile)]);
 
+  // Members: what the account has (profiles only, no names), so a 5th child is stopped here and a track change is warned.
+  useEffect(() => {
+    if (!member.member) return;
+    fetch('/api/program/family/', { credentials: 'same-origin', cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null)).then((d: FamilyResponse | null) => setFam(d)).catch(() => setFam(null));
+  }, [member.member]);
+  const maxKids = fam?.limits.maxChildren ?? 4;
+  const onAccount = Boolean(fam?.children.some((c) => c.id === id));
+  const familyFull = Boolean(member.member && fam && !onAccount && fam.children.length >= maxKids);
+  const serverLevel = fam?.plans[id]?.level;
+  const newLevel = profile ? placeLevel(profile) : undefined;
+  const restartNeeded = Boolean(onAccount && serverLevel && newLevel && serverLevel !== newLevel);
+
+  // Remember the step (and answers not saved yet) for this tab, so a reload comes back here.
+  useEffect(() => {
+    if (!id) return;
+    const draft = { ageYears: age ?? undefined, skills, interests, daysPerWeek: days, minutesPerDay: minutes, faith, createdAt, name };
+    try { sessionStorage.setItem(STEP_KEY, JSON.stringify({ id, step, furthest, ctx: `${returnTo}|${editing ? id : ''}`, draft } satisfies Resume)); } catch { /* storage unavailable */ }
+  }, [id, step, furthest, returnTo, editing, age, JSON.stringify(skills), interests.join(','), days, minutes, faith, name]);
+
   function persist() {
-    if (profile) upsertLocalChild(profile, name);
+    // A child the account has no room for isn't kept on this device either, so it never pushes out a saved child's name.
+    if (profile && !familyFull) upsertLocalChild(profile, name, fam?.children.map((c) => c.id) ?? []);
   }
   function go(s: Step) {
     setError('');
+    setConfirmRestart(false);
     if (s !== 'about' && !age) { setStep('about'); setError('Pick your child\'s age to keep going.'); return; }
     if ((s === 'pace' || s === 'plan') && !interests.length) { setStep('interests'); setError('Pick at least one thing your child loves.'); return; }
     setStep(s);
+    setFurthest((f) => Math.max(f, STEPS.findIndex((x) => x.id === s)));
     persist();
     try { (window as any).gtag?.('event', 'program_step', { step: s }); } catch { /* analytics optional */ }
     requestAnimationFrame(() => top.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
@@ -146,13 +195,18 @@ export default function ProgramPlacement() {
   }
   const ask = (kind: 'week' | 'showme') => (!member.member && needsEmail() ? setGate(kind) : save(kind));
 
-  /** Members: save on this device, then go back to the account page, which saves the profile (never the name). */
-  function finish() {
+  /** Members: save on this device, then go back to the account page, which saves the profile (never the name).
+   *  When the new answers move the child to the other track, ask first: the plan would start over. */
+  function finish(restart = false) {
+    if (familyFull) return;
+    if (restartNeeded && !restart) { setConfirmRestart(true); return; }
     persist();
+    try { sessionStorage.removeItem(STEP_KEY); } catch { /* storage unavailable */ }
     const dest = returnTo || '/account/';
     const u = new URL(dest, location.origin);
     u.searchParams.set('sync', '1');
     u.searchParams.set('child', id);
+    if (restart) u.searchParams.set('restart', '1');
     location.href = u.pathname + u.search;
   }
   const isMember = member.member;
@@ -174,14 +228,19 @@ export default function ProgramPlacement() {
       <ol class="mb-6 flex flex-wrap gap-x-1 gap-y-2 text-[13px]" aria-label="Placement check steps">
         {STEPS.map((s, i) => (
           <li class="flex items-center gap-1">
-            <button type="button" onClick={() => (i <= stepIdx || (s.id !== 'plan' && age) ? go(s.id) : undefined)} aria-current={s.id === step ? 'step' : undefined}
-              class={`rounded-full px-3 py-1.5 font-bold ${s.id === step ? 'bg-ink text-white' : i < stepIdx ? 'bg-[#e4ecf9] text-ink' : 'bg-white text-muted border border-hairline'}`}>
+            <button type="button" onClick={() => (i <= Math.max(stepIdx, furthest) || (age && (s.id !== 'plan' || interests.length)) ? go(s.id) : undefined)} aria-current={s.id === step ? 'step' : undefined}
+              class={`rounded-full px-3 py-1.5 font-bold ${s.id === step ? 'bg-ink text-white' : i <= Math.max(stepIdx - 1, furthest) ? 'bg-[#e4ecf9] text-ink' : 'bg-white text-muted border border-hairline'}`}>
               <span class="mr-1 opacity-70">{i + 1}</span>{s.label}
             </button>
           </li>
         ))}
       </ol>
       {error && <p class="mb-4 rounded-lg bg-[#fdeeee] px-4 py-3 text-[15px] text-[#9c2a2a]" role="alert">{error}</p>}
+      {familyFull && (
+        <p class="mb-4 rounded-lg bg-[#fdeeee] px-4 py-3 text-[15px] text-[#9c2a2a]" role="alert">
+          <strong>Your plan covers up to {maxKids} kids, and your account has {fam!.children.length}.</strong> To add another child, remove one on <a href="/account/" class={link}>your account page</a> first. You can still look through the check here, but nothing is saved.
+        </p>
+      )}
 
       {step === 'about' && (
         <section class="rounded-xl border border-hairline bg-white p-5 sm:p-7" aria-labelledby="pc-about">
@@ -310,11 +369,19 @@ export default function ProgramPlacement() {
 
           <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] items-start">
             <div class="rounded-xl border border-hairline bg-[#eef2f8] p-5 sm:p-6">
-              {isMember && (
+              {isMember && familyFull && (
+                <div class="mb-5 rounded-lg border border-[#e7c3c3] bg-[#fdeeee] p-4">
+                  <p class="font-bold text-ink">Your account already has {maxKids} kids</p>
+                  <p class="mt-1 text-[14px] text-muted leading-snug">Your plan covers up to {maxKids}. Remove a child on <a href="/account/" class={link}>your account page</a> to add this one.</p>
+                </div>
+              )}
+              {isMember && !familyFull && (
                 <div class="mb-5 rounded-lg border border-[#9fd3b8] bg-[#eef8f2] p-4">
                   <p class="font-bold text-ink">{editing ? 'Save these answers to your account' : 'Add this child to your account'}</p>
-                  <p class="mt-1 text-[14px] text-muted leading-snug">Their weekly packs, stories and check-ins are on your account page. Only the profile is saved there, never the name.</p>
-                  <button type="button" onClick={finish} class="btn-pencil mt-3 w-full px-5 py-3 text-[16px]">{editing ? 'Save and go back to my account' : 'Save and go to my account'}</button>
+                  <p class="mt-1 text-[14px] text-muted leading-snug">{onAccount && !restartNeeded ? `${Who} keeps their place in the plan, and the weeks ahead follow the new answers.` : 'Their weekly packs, stories and check-ins are on your account page.'} Only the profile is saved there, never the name.</p>
+                  {confirmRestart && newLevel
+                    ? <RestartConfirm who={Who} level={newLevel} onYes={() => finish(true)} onNo={() => setConfirmRestart(false)} />
+                    : <button type="button" onClick={() => finish()} class="btn-pencil mt-3 w-full px-5 py-3 text-[16px]">{editing ? 'Save and go back to my account' : 'Save and go to my account'}</button>}
                 </div>
               )}
               <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">{isMember ? 'Included' : 'Free'}</p>
@@ -353,7 +420,7 @@ export default function ProgramPlacement() {
                 <p class="mt-1 text-muted">{isMember ? `Print each week from your account, with a fresh story and word problems made for ${who}.` : `Week 1 is free. The rest arrive one week at a time, with a fresh story and word problems made for ${who}.`}</p>
               </div>
               {isMember
-                ? <button type="button" onClick={finish} class="btn-pencil shrink-0 px-5 py-3 text-center text-[16px]">Save and go to my account</button>
+                ? (familyFull ? null : <button type="button" onClick={() => finish()} class="btn-pencil shrink-0 px-5 py-3 text-center text-[16px]">{editing ? 'Save and go back to my account' : 'Save and go to my account'}</button>)
                 : <a href="/membership/" class="btn-pencil shrink-0 px-5 py-3 text-center text-[16px]">Start the full program</a>}
             </div>
             <ol class="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -398,6 +465,20 @@ function safeReturn(raw: string | null | undefined): string {
     const u = new URL(raw, location.origin);
     return u.origin === location.origin ? u.pathname + u.search : '';
   } catch { return ''; }
+}
+
+/** Asked before saving answers that move a child to the other track: "This moves Maya to the Kindergarten track and starts the plan over. Continue?" */
+function RestartConfirm({ who, level, onYes, onNo }: { who: string; level: 'pre-k' | 'kindergarten'; onYes: () => void; onNo: () => void }) {
+  return (
+    <div class="mt-3 rounded-lg border border-[#e0b44c] bg-[#fff8e6] p-3" role="alert">
+      <p class="text-[15px] font-bold text-ink">This moves {who} to the {TRACK[level]} and starts the plan over. Continue?</p>
+      <p class="mt-1 text-[13px] text-muted">Check-ins so far stay on the progress report.</p>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button type="button" onClick={onYes} class="btn-pencil px-4 py-2.5 text-[15px]">Yes, start the new plan</button>
+        <button type="button" onClick={onNo} class="rounded-lg border border-hairline bg-white px-4 py-2.5 text-[15px] font-bold text-ink">Keep the current plan</button>
+      </div>
+    </div>
+  );
 }
 
 function LockIcon() {

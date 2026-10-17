@@ -31,7 +31,7 @@ const PROFILE_KEYS = new Set(['id', 'ageYears', 'skills', 'interests', 'daysPerW
 const NAME_KEYS = /^(name|names|first_?name|last_?name|full_?name|nick_?name|child_?name|kid_?name|display_?name|label)$/i;
 
 export class InvalidInput extends Error {
-  constructor(public code: string) { super(code); }
+  constructor(public code: string, public detail?: Record<string, unknown>) { super(code); }
 }
 
 export const childIdOk = (v: unknown): v is string => typeof v === 'string' && /^c_[a-z0-9]{4,24}$/.test(v);
@@ -190,6 +190,11 @@ export function setBackend(b: Backend | null) { backend = b; }
 export const storeConfigured = () => Boolean(backend || env('BLOB_READ_WRITE_TOKEN') || env('VERCEL_ENV') !== 'production');
 function store(): Backend {
   if (backend) return backend;
+  // QA only (scripts/qa): PROGRAM_STORE_DOWN=1 outside production makes every read and write fail, like a Blob outage.
+  if (env('PROGRAM_STORE_DOWN') === '1' && env('VERCEL_ENV') !== 'production') {
+    const down = async (): Promise<never> => { throw new Error('storage down (PROGRAM_STORE_DOWN)'); };
+    return { read: down, write: down };
+  }
   if (env('BLOB_READ_WRITE_TOKEN')) return (backend = blobBackend);
   if (env('VERCEL_ENV') === 'production') throw new Error('BLOB_READ_WRITE_TOKEN missing');
   console.warn('programStore: no BLOB_READ_WRITE_TOKEN, using memory storage (local only)');

@@ -43,16 +43,22 @@ export function cleanProfile(raw: unknown): ChildProfile | null {
   };
 }
 
+/** Most kids kept on one device. Higher than the account's 4 so a profile not yet saved never pushes out a saved one. */
+export const MAX_LOCAL_CHILDREN = 8;
+
+const dedupe = (list: ChildProfile[]) => list.filter((c, i) => list.findIndex((x) => x.id === c.id) === i);
+
 export function loadLocalProgram(): LocalProgram {
   try {
     const raw = localStorage.getItem(PROGRAM_KEY);
     if (!raw) return empty();
     const data = JSON.parse(raw) as Partial<LocalProgram>;
-    const children = (Array.isArray(data.children) ? data.children : []).map(cleanProfile).filter((c): c is ChildProfile => !!c).slice(0, 4);
+    const children = dedupe((Array.isArray(data.children) ? data.children : []).map(cleanProfile).filter((c): c is ChildProfile => !!c));
+    // Names are keyed by child id. Keep every non-empty name for a child we still have.
     const names: Record<string, string> = {};
     for (const c of children) {
       const n = data.names?.[c.id];
-      if (typeof n === 'string') names[c.id] = n.slice(0, 24);
+      if (typeof n === 'string' && n.trim()) names[c.id] = n.slice(0, 24);
     }
     return { children, names };
   } catch {
@@ -60,19 +66,52 @@ export function loadLocalProgram(): LocalProgram {
   }
 }
 
-export function saveLocalProgram(p: LocalProgram): void {
-  try { localStorage.setItem(PROGRAM_KEY, JSON.stringify({ children: p.children.slice(0, 4), names: p.names })); } catch { /* storage unavailable */ }
+/**
+ * Saves the device's kids and names. `keep` lists child ids that must never be dropped (the ones on the account):
+ * past MAX_LOCAL_CHILDREN the oldest profiles not in `keep` go first, never a kept one, so a name for a child
+ * who is on the account is never lost.
+ */
+export function saveLocalProgram(p: LocalProgram, keep: string[] = []): void {
+  let children = dedupe(p.children);
+  while (children.length > MAX_LOCAL_CHILDREN) {
+    const i = children.findIndex((c) => !keep.includes(c.id));
+    if (i < 0) break;
+    children = children.filter((_, j) => j !== i);
+  }
+  const names: Record<string, string> = {};
+  for (const c of children) {
+    const n = p.names[c.id];
+    if (typeof n === 'string' && n.trim()) names[c.id] = n.slice(0, 24);
+  }
+  try { localStorage.setItem(PROGRAM_KEY, JSON.stringify({ children, names })); } catch { /* storage unavailable */ }
 }
 
-/** Adds or replaces one child (by id), and their name on this device. */
-export function upsertLocalChild(profile: ChildProfile, name?: string): LocalProgram {
+/** Adds or replaces one child (by id), and their name on this device. An empty name removes the stored name. */
+export function upsertLocalChild(profile: ChildProfile, name?: string, keep: string[] = []): LocalProgram {
   const cur = loadLocalProgram();
-  const children = [...cur.children.filter((c) => c.id !== profile.id), profile].slice(-4);
+  const i = cur.children.findIndex((c) => c.id === profile.id);
+  const children = i >= 0 ? cur.children.map((c, j) => (j === i ? profile : c)) : [...cur.children, profile];
   const names = { ...cur.names };
-  if (name !== undefined) names[profile.id] = name.slice(0, 24);
-  const next = { children, names };
+  if (name !== undefined) {
+    const clean = name.replace(/\s+/g, ' ').trim().slice(0, 24);
+    if (clean) names[profile.id] = clean;
+    else delete names[profile.id];
+  }
+  saveLocalProgram({ children, names }, [profile.id, ...keep]);
+  return loadLocalProgram();
+}
+
+/** Removes children and their names from this device entirely (no blank stub left behind). */
+export function removeLocalChildren(ids: string[]): LocalProgram {
+  const cur = loadLocalProgram();
+  const next = { children: cur.children.filter((c) => !ids.includes(c.id)), names: Object.fromEntries(Object.entries(cur.names).filter(([k]) => !ids.includes(k))) };
   saveLocalProgram(next);
   return next;
+}
+
+/** Forgets every child and name on this device (sign-out with "Also remove kids' names from this device"). */
+export function clearLocalProgram(): void {
+  try { localStorage.removeItem(PROGRAM_KEY); } catch { /* storage unavailable */ }
 }
 
 /** A random child id made in the browser, e.g. "c_8f2k1x". */

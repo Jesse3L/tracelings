@@ -1,7 +1,7 @@
 // Tests for the personalized program's placement and rules engine.
 // Run: npx tsx scripts/test-program-engine.mts
 import assert from 'node:assert/strict';
-import { placeChild, applyCheckIn, weekTitle, baseWeekOf, mathTitle } from '../src/lib/program/engine';
+import { placeChild, applyCheckIn, rebasePlan, weekTitle, baseWeekOf, mathTitle } from '../src/lib/program/engine';
 import { templateContentFor, freeWeekContent } from '../src/lib/program/templates';
 import { littleBookPlan, problemIcon } from '../src/lib/program/pages';
 import { THEME_IDS, THEMES, mentionsIcon } from '../src/lib/program/themes';
@@ -14,6 +14,8 @@ function test(name: string, fn: () => void) {
 const profile = (p: Partial<ChildProfile>): ChildProfile => ({
   id: 'c_test', ageYears: 4, skills: {}, interests: ['dinosaurs'], daysPerWeek: 5, minutesPerDay: 15, faith: false, createdAt: '2026-10-16', ...p,
 });
+/** The plan with its current week moved to n (check-ins only count for the current week or the one before). */
+const at = (plan: ChildPlan, n: number): ChildPlan => ({ ...plan, current: n });
 const titles = (plan: ChildPlan) => plan.weeks.map(weekTitle);
 const show = (plan: ChildPlan, n = 8) => plan.weeks.slice(0, n).map((w) => `${w.index}:${weekTitle(w)} [${w.theme}, ${mathTitle(w.math)}]`).join(' | ');
 
@@ -56,16 +58,15 @@ test('5-year-old who knows letters but not sounds keeps the letter weeks', () =>
   assert.ok(plan.weeks.some((w) => w.extraReview));
 });
 
-test('a reader ready for word families skips to them and keeps one family per vowel', () => {
+test('a reader ready for word families skips to them and reads every family (no year of filler reviews)', () => {
   const plan = placeChild(profile({ ageYears: 6, skills: { 'name-writing': 'got-it', 'letter-names': 'got-it', 'letter-sounds': 'got-it', blending: 'got-it', 'word-families': 'got-it', 'sight-words': 'learning', 'count-20': 'got-it', numerals: 'got-it', 'count-10': 'got-it', 'add-5': 'got-it' } }));
   assert.equal(plan.level, 'kindergarten');
   const t = titles(plan);
   assert.equal(t[0], 'Word family -at');
-  // First pass: one family per vowel plus the vowel reviews, then a second pass of review weeks fills the year.
-  const first = t.slice(0, 10);
-  assert.deepEqual(first, ['Word family -at', 'Short a review', 'Word family -ig', 'Short i review', 'Word family -op', 'Short o review', 'Word family -ug', 'Short u review', 'Word family -en', 'Short e review']);
-  assert.equal(plan.weeks.length, 36);
-  assert.ok(plan.weeks.slice(10).every((w) => w.extraReview));
+  // Every word family week is real reading at their level; a few spaced review weeks, never most of the year.
+  const families = plan.weeks.filter((w) => !w.extraReview && baseWeekOf(w).kind === 'family').length;
+  assert.equal(families, 17);
+  assert.ok(plan.weeks.filter((w) => w.extraReview).length <= Math.floor(plan.weeks.length / 4));
   assert.ok(plan.weeks.every((w) => w.math?.addTo === 10), 'adds within 10 all year');
   console.log('     ', t.join(', '));
 });
@@ -91,7 +92,7 @@ test('placement is deterministic', () => {
 });
 
 test('check-in "still working" inserts one review week right after', () => {
-  const plan = placeChild(profile({ ageYears: 4, interests: ['dinosaurs', 'unicorns'] }));
+  const plan = at(placeChild(profile({ ageYears: 4, interests: ['dinosaurs', 'unicorns'] })), 2);
   const next = applyCheckIn(plan, { childId: plan.childId, weekIndex: 2, results: { 'letter-sounds': 'still-working', 'letter-names': 'got-it' }, at: '2026-10-20' });
   assert.equal(next.weeks.length, plan.weeks.length + 1);
   assert.equal(next.weeks[2].extraReview, true);
@@ -107,7 +108,7 @@ test('check-in "still working" inserts one review week right after', () => {
 });
 
 test('check-in "got it" skips upcoming review weeks', () => {
-  const plan = placeChild(profile({ ageYears: 3, skills: { 'letter-names': 'learning', 'letter-sounds': 'learning' } }));
+  const plan = at(placeChild(profile({ ageYears: 3, skills: { 'letter-names': 'learning', 'letter-sounds': 'learning' } })), 4);
   const reviews = plan.weeks.filter((w) => w.extraReview).length;
   // Week 4 is Letter T; the regular review week (S, A, T) comes right after it.
   const next = applyCheckIn(plan, { childId: plan.childId, weekIndex: 4, results: { 'letter-names': 'got-it', 'letter-sounds': 'got-it' }, at: '2026-10-20' });
@@ -118,7 +119,7 @@ test('check-in "got it" skips upcoming review weeks', () => {
 });
 
 test('check-in on math: still working holds the number, got it skips ahead', () => {
-  const plan = placeChild(profile({ ageYears: 4 }));
+  const plan = at(placeChild(profile({ ageYears: 4 })), 3);
   const held = applyCheckIn(plan, { childId: plan.childId, weekIndex: 3, results: { 'count-10': 'still-working' }, at: '2026-10-20' });
   assert.deepEqual(held.weeks[3].math, plan.weeks[2].math);
   assert.equal(held.weeks.length, plan.weeks.length);
@@ -129,6 +130,147 @@ test('check-in on math: still working holds the number, got it skips ahead', () 
 test('check-in for an unknown week changes nothing', () => {
   const plan = placeChild(profile({}));
   assert.equal(applyCheckIn(plan, { childId: plan.childId, weekIndex: 99, results: {}, at: '' }), plan);
+});
+
+// ---------- QA fixes (M2, M3, M9, M10, N1) ----------
+const ALL_SKILLS = ['name-writing', 'letter-names', 'letter-sounds', 'blending', 'word-families', 'sight-words', 'count-10', 'count-20', 'numerals', 'compare', 'add-5', 'add-10'] as const;
+const isRev = (w: ChildPlan['weeks'][number]) => Boolean(w.extraReview) || ['review', 'vowel-review'].includes(baseWeekOf(w).kind);
+/** No two review weeks side by side, no two adjacent weeks with the same title, indexes 1..n, current in range. */
+function assertShape(plan: ChildPlan, where: string) {
+  plan.weeks.forEach((w, i) => assert.equal(w.index, i + 1, `${where}: index`));
+  assert.ok(plan.current >= 1 && plan.current <= plan.weeks.length, `${where}: current`);
+  for (let i = 1; i < plan.weeks.length; i++) {
+    assert.ok(!(isRev(plan.weeks[i]) && isRev(plan.weeks[i - 1])), `${where}: reviews stacked at weeks ${i} and ${i + 1}: ${show({ ...plan, weeks: plan.weeks.slice(Math.max(0, i - 3), i + 2) }, 5)}`);
+    assert.notEqual(weekTitle(plan.weeks[i]), weekTitle(plan.weeks[i - 1]), `${where}: weeks ${i} and ${i + 1} share a title`);
+  }
+}
+const checkInNow = (plan: ChildPlan, results: Record<string, 'got-it' | 'still-working'>) =>
+  applyCheckIn(plan, { childId: plan.childId, weekIndex: plan.current, results, at: '2026-10-20' });
+
+test('M9: "still working" on the same skill again and again never stacks review weeks', () => {
+  let plan = placeChild(profile({ ageYears: 4 }));
+  for (let i = 0; i < 6; i++) {
+    const wk = plan.weeks[plan.current - 1];
+    plan = checkInNow(plan, Object.fromEntries(wk.focus.map((s) => [s, 'still-working'])));
+    assertShape(plan, `after ${i + 1} still-working`);
+  }
+  // Between any two teaching weeks there is at most one review week.
+  assert.ok(plan.weeks.filter((w) => w.extraReview).length <= 6);
+  console.log('     ', show(plan, 12));
+});
+
+test('M9: "still working" on a review week extends a review coming up soon instead of adding one', () => {
+  let plan = at(placeChild(profile({ ageYears: 4 })), 3); // Letter A
+  plan = checkInNow(plan, { 'letter-sounds': 'still-working' });
+  assert.ok(plan.weeks[plan.current - 1].extraReview, 'now on the review week');
+  const n = plan.weeks.length;
+  plan = checkInNow(plan, { 'letter-sounds': 'still-working' }); // still working on the review week itself
+  assertShape(plan, 'review then still');
+  // The plan's own review (S, A, T) is two weeks on, so it takes the skill; no new week.
+  assert.equal(plan.weeks.length, n);
+});
+
+test('M9: resubmitting the same check-in does not add another review', () => {
+  const plan = at(placeChild(profile({ ageYears: 4 })), 3);
+  const once = checkInNow(plan, { 'letter-sounds': 'still-working' });
+  // The parent changes or resends last week's check-in (a late check-in for the week before the current one).
+  const twice = applyCheckIn(once, { childId: plan.childId, weekIndex: 3, results: { 'letter-sounds': 'still-working' }, at: '2026-10-21' });
+  assert.equal(twice.weeks.length, once.weeks.length);
+  assert.equal(twice.current, once.current);
+  // Changing it to "got it" takes out the review it added.
+  const fixed = applyCheckIn(once, { childId: plan.childId, weekIndex: 3, results: { 'letter-sounds': 'got-it', 'letter-names': 'got-it' }, at: '2026-10-21' });
+  assert.equal(fixed.weeks.filter((w) => w.extraReview).length, 0);
+  assertShape(fixed, 'changed to got it');
+});
+
+test('M3: a check-in for a future week changes nothing; last week is allowed', () => {
+  const plan = placeChild(profile({ ageYears: 5 }));
+  assert.equal(applyCheckIn(plan, { childId: plan.childId, weekIndex: 30, results: { 'letter-names': 'still-working' }, at: '' }), plan);
+  assert.equal(applyCheckIn(plan, { childId: plan.childId, weekIndex: 2, results: { 'letter-names': 'still-working' }, at: '' }), plan);
+  const later = at(plan, 6);
+  assert.equal(applyCheckIn(later, { childId: plan.childId, weekIndex: 3, results: { 'letter-names': 'still-working' }, at: '' }), later, 'two weeks back is too late');
+  const late = applyCheckIn(later, { childId: plan.childId, weekIndex: 5, results: { 'letter-sounds': 'still-working' }, at: '' });
+  assert.equal(late.current, 6, 'a late check-in leaves the current week where it is');
+  assert.deepEqual(late.weeks.slice(0, 6), later.weeks.slice(0, 6), 'weeks done and the current week stay');
+  assertShape(late, 'late check-in');
+});
+
+test('M10: a 3 or 4 year old marked "got it" on everything gets real content, not filler reviews', () => {
+  for (const age of [3, 4] as const) {
+    const plan = placeChild(profile({ ageYears: age, skills: Object.fromEntries(ALL_SKILLS.map((s) => [s, 'got-it'])) }));
+    assert.equal(plan.level, 'kindergarten', `age ${age}`);
+    const extra = plan.weeks.filter((w) => w.extraReview).length;
+    assert.ok(extra <= 3, `age ${age}: ${extra} extra review weeks`);
+    assert.ok(plan.weeks.filter((w) => !isRev(w)).length >= 28, `age ${age}: teaching weeks`);
+    assertShape(plan, `age ${age} got it`);
+  }
+  // A Pre-K child who knows letters and sounds is on the Kindergarten track too.
+  assert.equal(placeChild(profile({ ageYears: 3, skills: { 'letter-names': 'got-it', 'letter-sounds': 'got-it' } })).level, 'kindergarten');
+});
+
+test('N1 and no stacking: every placement, and random check-ins on it, keep the plan well shaped', () => {
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2 ** 31) / 2 ** 31);
+  const states = ['not-yet', 'learning', 'got-it'] as const;
+  let n = 0;
+  for (let k = 0; k < 120; k++) {
+    const p = profile({ ageYears: (3 + (k % 5)) as ChildProfile['ageYears'], interests: ['dinosaurs', 'space'], skills: Object.fromEntries(ALL_SKILLS.map((s) => [s, states[Math.floor(rnd() * 3)]])) });
+    let plan = placeChild(p);
+    assertShape(plan, `placement ${k}`);
+    assert.ok(plan.weeks.filter((w) => w.extraReview).length <= Math.ceil(plan.weeks.length / 4), `placement ${k}: too many reviews`);
+    for (let c = 0; c < 20 && plan.current < plan.weeks.length; c++) {
+      const wk = plan.weeks[plan.current - 1];
+      const late = rnd() < 0.15 && plan.current > 1;
+      const results = Object.fromEntries(wk.focus.filter(() => rnd() < 0.7).map((s) => [s, rnd() < 0.5 ? 'still-working' : 'got-it'])) as Record<string, 'got-it' | 'still-working'>;
+      if (!Object.keys(results).length) continue;
+      plan = applyCheckIn(plan, { childId: p.id, weekIndex: late ? plan.current - 1 : plan.current, results, at: '' });
+      assertShape(plan, `placement ${k}, check-in ${c}`);
+      n++;
+    }
+  }
+  console.log(`      ${n} check-ins checked`);
+});
+
+test('M2: editing interests keeps the position, done weeks and check-in reviews', () => {
+  const before = profile({ ageYears: 5, interests: ['dinosaurs'] });
+  let plan = at(placeChild(before), 5);
+  plan = checkInNow(plan, { 'letter-sounds': 'still-working' });
+  const after = { ...before, interests: ['dinosaurs', 'ocean'] as ChildProfile['interests'] };
+  const { plan: next, restarted } = rebasePlan(plan, before, after);
+  assert.equal(restarted, false);
+  assert.equal(next.current, plan.current);
+  assert.equal(next.weeks.length, plan.weeks.length);
+  assert.deepEqual(next.weeks.slice(0, plan.current - 1), plan.weeks.slice(0, plan.current - 1));
+  assert.ok(plan.weeks.some((w) => w.extraReview), 'the check-in added a review');
+  assert.deepEqual(next.weeks.map((w) => [w.baseWeek, Boolean(w.extraReview)]), plan.weeks.map((w) => [w.baseWeek, Boolean(w.extraReview)]), 'same weeks, check-in review kept');
+  assert.ok(next.weeks.slice(plan.current).some((w) => w.theme === 'ocean'), 'new interest from the next week on');
+  assertShape(next, 'edit interests');
+});
+
+test('M2: editing skills on the same track rebuilds the weeks ahead from where the child is', () => {
+  const before = profile({ ageYears: 5, skills: { 'letter-names': 'learning' } });
+  const plan = at(placeChild(before), 8);
+  const after = { ...before, skills: { 'letter-names': 'got-it', 'letter-sounds': 'learning' } } as ChildProfile;
+  const { plan: next, restarted } = rebasePlan(plan, before, after);
+  assert.equal(restarted, false);
+  assert.equal(next.level, plan.level);
+  assert.equal(next.current, 8);
+  assert.deepEqual(next.weeks.slice(0, 8).map(weekTitle), plan.weeks.slice(0, 8).map(weekTitle));
+  // Nothing already done comes back, and the next week is a later teaching week (or a review of one).
+  const curBase = plan.weeks[7].baseWeek;
+  assert.ok(next.weeks.slice(8).every((w) => w.baseWeek >= curBase - 1), show({ ...next, weeks: next.weeks.slice(8) }, 4));
+  assertShape(next, 'edit skills');
+});
+
+test('M2: a change that moves the child to the other track starts over and says so', () => {
+  const before = profile({ ageYears: 4 });
+  const plan = at(placeChild(before), 6);
+  assert.equal(plan.level, 'pre-k');
+  const after = { ...before, skills: { 'letter-names': 'got-it', 'letter-sounds': 'got-it' } } as ChildProfile;
+  const { plan: next, restarted } = rebasePlan(plan, before, after);
+  assert.equal(restarted, true);
+  assert.equal(next.level, 'kindergarten');
+  assert.equal(next.current, 1);
 });
 
 test('template content exists for every theme, level and week, with the week words', () => {
