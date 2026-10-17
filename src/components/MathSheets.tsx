@@ -51,7 +51,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
       const r = Number(q.get('range'));
       if (r === 5 || r === 10 || r === 20) setRange(r);
       const n = Number(q.get('number'));
-      if (series === 'pre-k' && n >= 1 && n <= 20) { setNumber(n); setKind('count-color'); }
+      if (series === 'pre-k' && n >= 1 && n <= 20) { setNumber(n); if (k !== 'find-number') setKind('count-color'); }
       const nm = sessionStorage.getItem('tl-name');
       if (nm) setName(nm);
     } catch { /* storage or URL unavailable */ }
@@ -65,11 +65,12 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
   const svg = useMemo(() => pageToSvg(page), [page]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
   const kindLabel = KINDS.find((x) => x.v === kind)!.label;
-  const noRange = kind === 'count-color' || kind === 'make-ten' || kind === 'blank-frame';
+  const byNumber = kind === 'count-color' || kind === 'find-number'; // the page is about one number, picked below
+  const noRange = byNumber || kind === 'make-ten' || kind === 'blank-frame';
   const fixed = kind === 'count-color' || kind === 'blank-frame'; // nothing random on the page
   const blankLabel = BLANK_LAYOUTS.find((x) => x.v === blank)!.label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const what = kind === 'count-color' ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : series === 'k-addition' ? `within-${range}` : `1-to-${range}`;
+  const what = byNumber ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : series === 'k-addition' ? `within-${range}` : `1-to-${range}`;
   const fileKind = kind === 'blank-frame' ? 'blank' : slug(kindLabel);
 
   async function save(k: 'one' | 'set' | 'list') {
@@ -115,7 +116,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
           </div>
         </fieldset>
 
-        {kind === 'count-color' ? (
+        {byNumber ? (
           <label class="block mb-5">
             <span class="block text-[15px] font-bold mb-2">Number</span>
             <select id="math-number" value={String(number)} onChange={(e) => setNumber(Number((e.target as HTMLSelectElement).value))}
@@ -180,7 +181,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
               <div class="mt-3 grid gap-2">
                 {kind !== 'blank-frame' && (
                   <button type="button" disabled={busy} onClick={() => save('set')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
-                    {kind === 'count-color' ? `Numbers ${number} to ${((number + SET - 2) % 20) + 1} in one PDF` : `${SET} different pages in one PDF`}
+                    {byNumber ? `Numbers ${number} to ${((number + SET - 2) % 20) + 1} in one PDF` : `${SET} different pages in one PDF`}
                   </button>
                 )}
                 <button type="button" disabled={busy || listNames.length === 0} onClick={() => save('list')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
@@ -200,7 +201,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
 
       <figure class="lg:sticky lg:top-20">
         <div class="sheet-frame overflow-hidden" dangerouslySetInnerHTML={{ __html: svg }} />
-        <figcaption class="mt-3 text-[13px] text-muted">{kindLabel}{kind === 'count-color' ? `, number ${number}` : kind === 'blank-frame' ? `, ${blankLabel.toLowerCase()}` : kind === 'make-ten' ? '' : kind === 'tf-add' ? (range === 20 ? ', sums 11 to 20' : `, within ${range}`) : series === 'k-addition' ? `, within ${range}` : series === 'ten-frames' && range === 20 ? ', numbers 11 to 20' : `, numbers 1 to ${range}`}. This is exactly what prints.</figcaption>
+        <figcaption class="mt-3 text-[13px] text-muted">{kindLabel}{byNumber ? `, number ${number}` : kind === 'blank-frame' ? `, ${blankLabel.toLowerCase()}` : kind === 'make-ten' ? '' : kind === 'tf-add' ? (range === 20 ? ', sums 11 to 20' : `, within ${range}`) : series === 'k-addition' ? `, within ${range}` : series === 'ten-frames' && range === 20 ? ', numbers 11 to 20' : `, numbers 1 to ${range}`}. This is exactly what prints.</figcaption>
       </figure>
 
       <EmailGate open={gate !== null} source={source} onClose={() => setGate(null)} onDone={() => { const k = gate ?? 'one'; setGate(null); save(k); }} />

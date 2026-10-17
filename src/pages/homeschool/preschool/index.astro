@@ -18,6 +18,7 @@ const faqs = [
   { q: 'Do I need to buy anything?', a: 'No. The weekly packs are free to print. You only need paper, crayons, a pencil and a few small things to count.' },
   { q: 'What if my child already knows some letters?', a: 'Start at any week. Many families skip ahead to the first letter their child doesn’t know yet, or use the review weeks to check what has stuck.' },
   { q: 'What if my child can’t trace yet?', a: 'That’s common at 3. Let them trace with a finger, color the bubble letters, and do the hunt by pointing. Pencil control often comes somewhere between 3 and 5. If you have concerns, ask your child’s pediatrician.' },
+  { q: 'Is there a math curriculum in the preschool plan?', a: 'Yes. Every week has a number of the week, from 1 to 10 in the first 20 weeks and 11 to 20 after that. Thursday has a counting page, and you can tick the extra math page box for a second page on the same number. Both are free.' },
   { q: 'Is there a plan for kindergarten too?', a: 'Yes. The free kindergarten plan picks up with two letters a week, then word families, sight words and early addition.', html: 'Yes. The free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> picks up with two letters a week, then word families, sight words and early addition.' },
 ];
 
@@ -77,9 +78,31 @@ const schema = [
       <ul>
         <li><strong>Week 1, their name:</strong> name tracing, a coloring page of their name, and a hunt for the letters in it.</li>
         <li><strong>Weeks 2 to 36, letters:</strong> one letter a week in this order: {LETTER_ORDER.map((l) => l.toUpperCase()).join(', ')}. A review week follows every three letters.</li>
-        <li><strong>Numbers:</strong> numbers 1 to 10 in the first 20 weeks, then 11 to 20. Kids trace the number, count dots in a ten frame and color that many stars. For extra practice, make more <a href="/math-worksheets/pre-k/">pre-K math worksheets</a> for the same numbers, or print a <a href="/math-worksheets/ten-frames/">blank ten frame</a> to use with counters.</li>
+        <li><strong>Numbers:</strong> numbers 1 to 10 in the first 20 weeks, then 11 to 20, with a counting page every Thursday (more on that below). For extra practice, make more <a href="/math-worksheets/pre-k/">pre-K math worksheets</a> for the same numbers.</li>
         <li><strong>Fine motor work:</strong> coloring, circling and tracing every day, which builds the hand strength writing needs.</li>
       </ul>
+
+      <h2>The preschool math curriculum, one number a week</h2>
+      <p>
+        Thursday is math day. Each week has a number of the week, and the plan moves slowly on purpose: every number from 1 to 10 gets two
+        weeks, then weeks 21 to 36 work through 11 to 20. Thursday's page has kids trace the number, count dots in a ten frame and color
+        that many stars.
+      </p>
+      <p>
+        Want a second math page? Tick <strong>Extra math page</strong> in the pack maker above. It adds a free find the number page:
+        six boxes of shapes, and your child circles every box with the number of the week. The other boxes are one or two off, so each one
+        has to be counted, not guessed. It works on Thursday after the main page, or on any other day.
+      </p>
+      <ul>
+        <li><strong>Weeks 1 to 20, numbers 1 to 10:</strong> count small groups, touch each thing once, and say the last number as "how many."</li>
+        <li><strong>Weeks 21 to 36, numbers 11 to 20:</strong> a full ten frame plus some more. Point to the full frame and say "ten," then count on.</li>
+        <li><strong>Away from the paper:</strong> count spoons at dinner, steps on the stairs or cars in the toy bin, using the number of the week.</li>
+      </ul>
+      <p>
+        Many kids count 10 objects somewhere between 3 and 5, and the teen numbers often come later. If you have concerns, ask your child's
+        teacher or pediatrician. For more practice on the same number, make extra <a href="/math-worksheets/pre-k/?type=find-number">find the number worksheets</a> or
+        a <a href="/math-worksheets/ten-frames/">ten frame printable</a> to use with counters.
+      </p>
 
       <h2>A sample day</h2>
       <ol>

@@ -8,11 +8,13 @@ import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
 import { loadFont, type LoadedFont } from '../lib/fontshape';
 import { PLANS, buildWeekPack, type Level } from '../lib/homeschool';
+import { packFindNumberPage } from '../lib/mathSheets';
 import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
 
 const link = 'text-[#2f5fc4] underline underline-offset-2';
 const FAITH_KEY = 'tl-faith-track';
+const MATH_KEY = 'tl-prek-extra-math';
 
 /**
  * A personalized weekly homeschool pack: a plan page for the grown-up, then one printable for each day.
@@ -26,6 +28,7 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
   const [paper, setPaper] = useState<Paper>('letter');
   const [font, setFont] = useState<LoadedFont | null>(null);
   const [faith, setFaith] = useState(props.faith ?? false);
+  const [math, setMath] = useState(false); // Pre-K: extra math page for the number of the week (free, off by default)
   const [shown, setShown] = useState(0);
   const [busy, setBusy] = useState(false);
   const [gate, setGate] = useState<null | 'week' | 'list' | 'month'>(null);
@@ -49,12 +52,14 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
       if (n) setName(n);
       const f = localStorage.getItem(FAITH_KEY);
       if (props.faith === undefined && (f === '1' || f === '0')) setFaith(f === '1');
+      if (localStorage.getItem(MATH_KEY) === '1') setMath(true);
     } catch { /* storage or URL unavailable */ }
   }, []);
   // Keep the typed name for the other tools in this tab (never in the URL, never sent anywhere).
   useEffect(() => { try { if (name) sessionStorage.setItem('tl-name', name); } catch { /* ignore */ } }, [name]);
 
-  const pages = useMemo(() => buildWeekPack({ level, week, name, paper, credit, bubble: font, faith }), [level, week, name, paper, credit, font, faith]);
+  const extraMath = math && level === 'pre-k' ? packFindNumberPage : undefined;
+  const pages = useMemo(() => buildWeekPack({ level, week, name, paper, credit, bubble: font, faith, extraMath }), [level, week, name, paper, credit, font, faith, extraMath]);
   useEffect(() => { setShown(0); setDone(''); }, [level, weekN]);
   const svgs = useMemo(() => pages.map(pageToSvg), [pages]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
@@ -64,12 +69,12 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
     setBusy(true);
     try {
       if (kind === 'list') {
-        const all: Page[] = listNames.flatMap((n) => buildWeekPack({ level, week, name: n, paper, credit, bubble: font, faith }));
+        const all: Page[] = listNames.flatMap((n) => buildWeekPack({ level, week, name: n, paper, credit, bubble: font, faith, extraMath }));
         await savePdf(all, `${slug(plan.label)}-week-${week.n}-${listNames.length}-kids.pdf`, `${plan.label} at home, week ${week.n}`);
         setDone(`Downloaded week ${week.n} for ${listNames.length} kids.`);
       } else if (kind === 'month') {
         const weeks = plan.weeks.slice(week.n - 1, week.n + 3);
-        const all: Page[] = weeks.flatMap((w) => buildWeekPack({ level, week: w, name, paper, credit, bubble: font, faith }));
+        const all: Page[] = weeks.flatMap((w) => buildWeekPack({ level, week: w, name, paper, credit, bubble: font, faith, extraMath }));
         await savePdf(all, `${slug(plan.label)}-weeks-${weeks[0].n}-to-${weeks[weeks.length - 1].n}.pdf`, `${plan.label} at home, weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}`);
         setDone(`Downloaded weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}.`);
       } else {
@@ -131,6 +136,17 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
           }} />
           <span><span class="font-bold text-ink">Faith track</span> <span class="text-muted">(optional)</span><span class="block text-[13px] text-muted">Adds a Bible verse of the week (BSB) to the plan and a verse copywork page.</span></span>
         </label>
+
+        {level === 'pre-k' && (
+          <label class="mb-5 flex items-start gap-3 cursor-pointer rounded-lg border border-hairline bg-white px-3 py-3 text-[15px]">
+            <input id="pack-math" type="checkbox" class="mt-1 size-4 accent-[#5b86d9]" checked={math} onChange={(e) => {
+              const on = (e.target as HTMLInputElement).checked;
+              setMath(on);
+              try { localStorage.setItem(MATH_KEY, on ? '1' : '0'); } catch { /* storage unavailable */ }
+            }} />
+            <span><span class="font-bold text-ink">Extra math page</span> <span class="text-muted">(optional, free)</span><span class="block text-[13px] text-muted">Adds a "find the number" page for this week's number: circle every box with {week.number} {week.number === 1 ? 'shape' : 'shapes'}.</span></span>
+          </label>
+        )}
 
         <Segmented legend="Paper" name="pack-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
 
