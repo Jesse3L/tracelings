@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ChildProfile, ChildPlan, CheckIn, FamilyResponse, ProgramWeek, SkillId, WeekResponse } from '../lib/program/types';
 import type { Paper } from '../lib/sheet';
-import { loadLocalProgram, saveLocalProgram } from '../lib/program/local';
+import { loadLocalProgram, saveLocalProgram, removeLocalChildren } from '../lib/program/local';
+import { placeChild, placeLevel, weekTitle as engineWeekTitle } from '../lib/program/engine';
+import { templateContentFor } from '../lib/program/templates';
 import { buildProgramWeek } from '../lib/program/pages';
 import { loadThemeIcons } from '../lib/program/themes';
 import { loadFont, type LoadedFont } from '../lib/fontshape';
@@ -25,19 +27,22 @@ const profileOnly = (p: ChildProfile): ChildProfile => Object.fromEntries(PROFIL
 const same = (a: ChildProfile, b: ChildProfile) => JSON.stringify(profileOnly(a)) === JSON.stringify(profileOnly(b));
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-async function api<T>(path: string, body?: unknown): Promise<{ ok: true; data: T } | { ok: false; status: number; error: string }> {
+async function api<T>(path: string, body?: unknown): Promise<{ ok: true; data: T } | { ok: false; status: number; error: string; data?: any }> {
   try {
     const r = await fetch(path, body === undefined
       ? { credentials: 'same-origin', cache: 'no-store' }
       : { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const data = await r.json().catch(() => ({}));
-    return r.ok ? { ok: true, data: data as T } : { ok: false, status: r.status, error: (data as any).error ?? 'error' };
+    return r.ok ? { ok: true, data: data as T } : { ok: false, status: r.status, error: (data as any).error ?? 'error', data };
   } catch {
     return { ok: false, status: 0, error: 'network' };
   }
 }
 
-const weekTitle = (wk: ProgramWeek) => PLANS[wk.level].weeks[wk.baseWeek - 1]?.title ?? `Week ${wk.baseWeek}`;
+const TRACK: Record<string, string> = { 'pre-k': 'Pre-K track', kindergarten: 'Kindergarten track' };
+
+/** "Letter S", or for an extra review week "Review: S, A", so neighbouring weeks never read the same. */
+const weekTitle = (wk: ProgramWeek) => (PLANS[wk.level].weeks[wk.baseWeek - 1] ? engineWeekTitle(wk) : `Week ${wk.baseWeek}`);
 
 export default function ProgramDashboard() {
   const [book, setBook] = useState<Page[]>([]);
@@ -54,6 +59,7 @@ export default function ProgramDashboard() {
   const [nameDraft, setNameDraft] = useState('');
   const [confirmRemove, setConfirmRemove] = useState('');
   const [font, setFont] = useState<LoadedFont | null>(null);
+  const [restartFor, setRestartFor] = useState<{ profile: ChildProfile; level: string } | null>(null);
   const autoSynced = useRef(false);
 
   async function load() {
@@ -97,15 +103,16 @@ export default function ProgramDashboard() {
   // through the same sync() as the buttons below. Only the profile goes, never the name.
   useEffect(() => {
     if (autoSynced.current || !fam || !kids.length) return;
-    let want = '';
-    try { const q = new URLSearchParams(location.search); if (q.get('sync') === '1') want = q.get('child') ?? ''; } catch { /* ignore */ }
+    let want = '', restart = false;
+    try { const q = new URLSearchParams(location.search); if (q.get('sync') === '1') { want = q.get('child') ?? ''; restart = q.get('restart') === '1'; } } catch { /* ignore */ }
     autoSynced.current = true;
     if (!want) return;
-    try { const u = new URL(location.href); u.searchParams.delete('sync'); history.replaceState(null, '', u.pathname + u.search + u.hash); } catch { /* ignore */ }
+    try { const u = new URL(location.href); u.searchParams.delete('sync'); u.searchParams.delete('restart'); history.replaceState(null, '', u.pathname + u.search + u.hash); } catch { /* ignore */ }
     const k = kids.find((x) => x.profile.id === want);
     if (!k) return;
     if (!k.onServer && fam.children.length < (fam.limits.maxChildren ?? 4)) sync(k.profile);
-    else if (k.onServer && k.localDiffers && k.localProfile) sync(k.localProfile);
+    else if (!k.onServer) setMsg({ kind: 'error', text: `Your plan covers up to ${fam.limits.maxChildren ?? 4} kids, so this child wasn’t added. Remove a child first to add them.` });
+    else if (k.onServer && k.localDiffers && k.localProfile) sync(k.localProfile, restart);
   }, [fam, kids]);
 
   const kid = kids.find((k) => k.profile.id === sel);
@@ -117,14 +124,28 @@ export default function ProgramDashboard() {
   const maxKids = fam?.limits.maxChildren ?? 4;
   const lastCheck: CheckIn | undefined = plan && fam ? fam.checkIns.filter((c) => c.childId === plan.childId && c.weekIndex === plan.current).at(-1) : undefined;
 
-  async function sync(p: ChildProfile) {
+  /** Saves a profile. restart: the parent agreed that new answers which change the track start the plan over. */
+  async function sync(p: ChildProfile, restart = false) {
     setBusy('sync');
     setMsg(null);
-    const r = await api<FamilyResponse>('/api/program/family/', { children: [profileOnly(p)] });
+    setRestartFor(null);
+    const was = fam?.plans[p.id];
+    const r = await api<FamilyResponse>('/api/program/family/', { children: [profileOnly(p)], ...(restart ? { restart: [p.id] } : {}) });
     setBusy('');
-    if (r.ok) { setFam(r.data); setMsg({ kind: 'ok', text: 'Saved to your account. The name stays on this device.' }); }
-    else setMsg({ kind: 'error', text: r.error === 'too_many_children' ? `Your plan covers up to ${maxKids} kids. Remove one first.` : 'That didn’t save. Please try again in a minute.' });
+    if (r.ok) {
+      setFam(r.data);
+      const now = r.data.plans[p.id];
+      setMsg({ kind: 'ok', text: was && now && was.level !== now.level ? `Saved. The new plan on the ${TRACK[now.level]} starts at week 1. The name stays on this device.`
+        : was && now ? `Saved. You’re still on week ${now.current}, and the weeks ahead follow the new answers. The name stays on this device.`
+        : 'Saved to your account. The name stays on this device.' });
+      return;
+    }
+    if (r.error === 'restart_needed') { setRestartFor({ profile: p, level: r.data?.level ?? placeLevel(p) }); return; }
+    setMsg({ kind: 'error', text: r.error === 'too_many_children' ? `Your plan covers up to ${maxKids} kids. Remove one first.` : 'That didn’t save. Please try again in a minute.' });
   }
+
+  /** The child ids on the account: their names on this device are never dropped. */
+  const keepIds = () => fam?.children.map((c) => c.id) ?? [];
 
   function saveName(id: string, n: string) {
     const clean = n.replace(/\s+/g, ' ').trim().slice(0, 24);
@@ -133,8 +154,8 @@ export default function ProgramDashboard() {
     // Keep the profile locally too, so /program/ shows this child on this device.
     const p = kids.find((k) => k.profile.id === id)?.profile;
     if (p && !next.children.some((c) => c.id === id)) next.children = [...next.children, profileOnly(p)];
-    saveLocalProgram(next);
-    setLocal(next);
+    saveLocalProgram(next, keepIds());
+    setLocal(loadLocalProgram());
   }
 
   async function printWeek(wk: ProgramWeek, redo = false) {
@@ -202,9 +223,8 @@ export default function ProgramDashboard() {
     setBusy('');
     setConfirmRemove('');
     if (!r.ok) { setMsg({ kind: 'error', text: 'That didn’t work. Please try again in a minute.' }); return; }
-    const next = { children: local.children.filter((c) => c.id !== id), names: Object.fromEntries(Object.entries(local.names).filter(([k]) => k !== id)) };
-    saveLocalProgram(next);
-    setLocal(next);
+    // Gone from this device too: profile and name, no blank entry left behind.
+    setLocal(removeLocalChildren([id]));
     setFam(r.data);
   }
 
@@ -221,17 +241,20 @@ export default function ProgramDashboard() {
   function keepLocal(id: string) {
     const p = kids.find((k) => k.profile.id === id)?.profile;
     if (!p || local.children.some((c) => c.id === id)) return;
-    const next = { ...local, children: [...local.children, profileOnly(p)].slice(-4) };
-    saveLocalProgram(next);
-    setLocal(next);
+    saveLocalProgram({ ...local, children: [...local.children, profileOnly(p)] }, keepIds());
+    setLocal(loadLocalProgram());
   }
 
   if (loadErr) {
+    const signedOut = loadErr === 'signed_out' || loadErr === 'not_member';
     return (
-      <div class="rounded-xl border border-hairline bg-white p-6">
-        <h2 class="text-xl font-bold">Your program</h2>
-        <p class="mt-2 text-muted">{loadErr === 'signed_out' || loadErr === 'not_member' ? 'Sign in again to see your kids’ plans.' : 'We couldn’t load your kids’ plans just now.'}</p>
-        <button type="button" onClick={load} class={`${btn} mt-4`}>Try again</button>
+      <div class="grid gap-5">
+        <div class="rounded-xl border border-hairline bg-white p-6">
+          <h2 class="text-xl font-bold">Your program</h2>
+          <p class="mt-2 text-muted">{signedOut ? 'Sign in again to see your kids’ plans.' : 'Your saved plans are temporarily unavailable; here’s this week from the standard plan.'}</p>
+          <button type="button" onClick={load} class={`${btn} mt-4`}>Try again</button>
+        </div>
+        {!signedOut && <OfflineWeek local={local} paper={paper} setPaper={setPaper} font={font} />}
       </div>
     );
   }
@@ -279,9 +302,18 @@ export default function ProgramDashboard() {
             {fam.children.length >= maxKids && <p class="mt-2 text-[14px] text-muted">Your plan covers up to {maxKids} kids.</p>}
           </div>
         )}
-        {kid && kid.onServer && kid.localDiffers && kid.localProfile && (
+        {kid && restartFor && restartFor.profile.id === kid.profile.id ? (
+          <div class="mt-4 rounded-lg border border-[#e0b44c] bg-[#fff8e6] p-4 text-[15px]" role="alert">
+            <p class="font-bold text-ink">This moves {name || 'this child'} to the {TRACK[restartFor.level] ?? 'other track'} and starts the plan over. Continue?</p>
+            <p class="mt-1 text-[14px] text-muted">Check-ins so far stay on the progress report.</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button type="button" disabled={busy === 'sync'} onClick={() => sync(restartFor.profile, true)} class={btn}>{busy === 'sync' ? 'Saving…' : 'Yes, start the new plan'}</button>
+              <button type="button" onClick={() => setRestartFor(null)} class={btn}>Keep the current plan</button>
+            </div>
+          </div>
+        ) : kid && kid.onServer && kid.localDiffers && kid.localProfile && (
           <div class="mt-4 rounded-lg bg-[#fff8e6] p-4 text-[15px]">
-            <p class="text-ink">You changed this child’s answers on this device. Update your account to match? Their plan will be rebuilt from the new answers.</p>
+            <p class="text-ink">You changed this child’s answers on this device. Update your account to match? {placeLevel(kid.localProfile) === plan?.level ? `They keep their place (week ${plan.current}), and the weeks ahead follow the new answers.` : `The new answers move them to the ${TRACK[placeLevel(kid.localProfile)]}, so the plan would start over.`}</p>
             <button type="button" disabled={busy === 'sync'} onClick={() => sync(kid.localProfile!)} class={`${btn} mt-3`}>{busy === 'sync' ? 'Saving…' : 'Update profile'}</button>
           </div>
         )}
@@ -302,7 +334,7 @@ export default function ProgramDashboard() {
             <p class="text-[14px] text-muted">{PLANS[plan.level].label} plan, week {plan.current} of {plan.weeks.length}. {kid.profile.daysPerWeek} days a week, about {kid.profile.minutesPerDay} minutes a day. Loves {kid.profile.interests.map((t) => THEME_NAMES[t] ?? t).join(', ')}.</p>
             <div class="mt-3 rounded-xl border border-rule bg-[#f6f8fc] p-4 sm:p-5">
               <p class="text-[13px] font-bold uppercase tracking-wide text-muted">This week</p>
-              <p class="mt-1 text-lg font-bold text-ink">{weekTitle(week)}{week.extraReview ? ' (review)' : ''}, with {THEME_NAMES[week.theme] ?? week.theme}</p>
+              <p class="mt-1 text-lg font-bold text-ink">{weekTitle(week)}, with {THEME_NAMES[week.theme] ?? week.theme}</p>
               <div class="mt-3 flex flex-wrap gap-2">
                 <button type="button" disabled={Boolean(busy)} onClick={() => printWeek(week)} class="btn-pencil px-5 py-3 text-[16px] disabled:opacity-60">{busy === `week-${week.index}` ? 'Making the pack…' : 'Print this week’s pack'}</button>
                 <button type="button" disabled={Boolean(busy) || left <= 0} onClick={() => printWeek(week, true)} class={btn}>{busy === 'redo' ? 'Writing a new story…' : `Make a new story (${left} left)`}</button>
@@ -398,6 +430,71 @@ export default function ProgramDashboard() {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Saved plans can't be loaded (storage down): print a week from the profiles saved on this device, built from the
+ * standard plan with the ready-made themed story. No server call, so it works while the account storage is down.
+ */
+function OfflineWeek({ local, paper, setPaper, font }: { local: { children: ChildProfile[]; names: Record<string, string> }; paper: Paper; setPaper: (p: Paper) => void; font: LoadedFont | null }) {
+  const [sel, setSel] = useState('');
+  const [n, setN] = useState(1);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
+  const kids = local.children;
+  const kid = kids.find((c) => c.id === sel) ?? kids[0];
+  const plan = useMemo(() => (kid ? placeChild(kid) : null), [kid && JSON.stringify(kid)]);
+  if (!kid || !plan) {
+    return (
+      <div class="rounded-xl border border-hairline bg-white p-5 sm:p-6 text-[15px]">
+        <p class="text-muted">No kids are saved on this device yet. Meanwhile, the free <a href="/homeschool/" class={link}>36-week homeschool plans</a> have every week ready to print.</p>
+      </div>
+    );
+  }
+  const name = local.names[kid.id] ?? '';
+  const wk = plan.weeks[Math.min(n, plan.weeks.length) - 1];
+  async function print() {
+    setBusy(true);
+    setMsg(null);
+    try {
+      await loadThemeIcons([wk.theme]);
+      const pages = buildProgramWeek({ name, profile: kid, week: wk, content: templateContentFor(kid, wk), paper, credit: false, bubble: font, planLength: plan!.weeks.length });
+      await loadImages(imagesIn(pages));
+      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`);
+      setMsg({ kind: 'ok', text: 'Your PDF is downloading. It uses our ready-made themed story; personal stories come back when your saved plans do.' });
+    } catch {
+      setMsg({ kind: 'error', text: 'The PDF didn’t build. Please try again.' });
+    } finally { setBusy(false); }
+  }
+  return (
+    <div class="rounded-xl border border-rule bg-[#f6f8fc] p-5 sm:p-6 text-[15px]">
+      <h3 class="text-lg font-bold">Print a week from the standard plan</h3>
+      <p class="mt-1 text-muted">Built on this device from the answers saved here. If your child is further along, pick their week.</p>
+      {kids.length > 1 && (
+        <div class="mt-3 flex flex-wrap gap-2" role="tablist" aria-label="Choose a child">
+          {kids.map((c, i) => (
+            <button type="button" role="tab" aria-selected={c.id === kid.id} onClick={() => setSel(c.id)}
+              class={`rounded-full border px-4 py-2 text-[15px] font-bold ${c.id === kid.id ? 'border-rule bg-[#eef4ff] text-ink' : 'border-hairline bg-white text-muted'}`}>{local.names[c.id] || `Child ${i + 1}`}</button>
+          ))}
+        </div>
+      )}
+      <div class="mt-3 flex flex-wrap items-center gap-3">
+        <label class="text-[14px] text-muted">Week{' '}
+          <select value={String(wk.index)} onChange={(e) => setN(Number((e.target as HTMLSelectElement).value))} class="ml-1 max-w-[16rem] rounded-md border border-hairline bg-white px-2 py-1 text-ink">
+            {plan.weeks.map((w) => <option value={String(w.index)}>{`${w.index}: ${weekTitle(w)}`}</option>)}
+          </select>
+        </label>
+        <label class="text-[14px] text-muted">Paper{' '}
+          <select value={paper} onChange={(e) => setPaper((e.target as HTMLSelectElement).value as Paper)} class="ml-1 rounded-md border border-hairline bg-white px-2 py-1 text-ink">
+            <option value="letter">US Letter</option>
+            <option value="a4">A4</option>
+          </select>
+        </label>
+      </div>
+      <button type="button" disabled={busy} onClick={print} class="btn-pencil mt-4 px-5 py-3 text-[16px] disabled:opacity-60">{busy ? 'Making the pack…' : `Print week ${wk.index}`}</button>
+      {msg && <p class={`mt-3 text-[14px] ${msg.kind === 'error' ? 'text-[#b4232c]' : 'text-[#1f7a50]'}`} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
     </div>
   );
 }

@@ -37,28 +37,47 @@ export function readSession(cookies: AstroCookies): Session | null {
   }
 }
 
-// Short-lived proof that this browser started checkout for an email, so it can sign in right after paying without card digits.
+// Short-lived note that this browser opened a Square checkout for an email. It holds the id of that checkout's
+// Square order, so sign-in right after paying can skip the card digits only when THAT order was paid by a customer
+// with this email (see /api/member/signin). Anyone can start a checkout for any email, so the cookie on its own
+// never signs anyone in.
 const PENDING = 'tl_pending';
-export function setPending(cookies: AstroCookies, email: string) {
-  const body = b64(JSON.stringify({ email, exp: Math.floor(Date.now() / 1000) + 3 * 60 * 60 }));
-  cookies.set(PENDING, `${body}.${sign(body)}`, { path: '/', httpOnly: true, secure: true, sameSite: 'lax', maxAge: 3 * 60 * 60 });
+const PENDING_AGE = 3 * 60 * 60;
+export interface Pending { email: string; orderId: string; iat: number; exp: number }
+export function setPending(cookies: AstroCookies, email: string, orderId: string) {
+  const now = Math.floor(Date.now() / 1000);
+  const body = b64(JSON.stringify({ email, orderId, iat: now, exp: now + PENDING_AGE } satisfies Pending));
+  cookies.set(PENDING, `${body}.${sign(body)}`, { path: '/', httpOnly: true, secure: true, sameSite: 'lax', maxAge: PENDING_AGE });
 }
-export function hasPending(cookies: AstroCookies, email: string): boolean {
+/** The signed, unexpired pending checkout this browser holds for this email, or null. */
+export function readPending(cookies: AstroCookies, email: string): Pending | null {
   const raw = cookies.get(PENDING)?.value;
   const [body, sig] = raw?.split('.') ?? [];
-  if (!body || !sig) return false;
+  if (!body || !sig) return null;
   try {
     const good = Buffer.from(sign(body)), given = Buffer.from(sig);
-    if (good.length !== given.length || !timingSafeEqual(good, given)) return false;
-    const p = JSON.parse(Buffer.from(body, 'base64url').toString());
-    return p.email === email && p.exp > Date.now() / 1000;
+    if (good.length !== given.length || !timingSafeEqual(good, given)) return null;
+    const p = JSON.parse(Buffer.from(body, 'base64url').toString()) as Pending;
+    if (p.email !== email || !(p.exp > Date.now() / 1000) || typeof p.orderId !== 'string' || !p.orderId || !Number.isFinite(p.iat)) return null;
+    return p;
   } catch {
-    return false;
+    return null;
   }
+}
+export function clearPending(cookies: AstroCookies) {
+  cookies.delete(PENDING, { path: '/' });
 }
 
 export function clearSession(cookies: AstroCookies) {
   cookies.delete(COOKIE, { path: '/' });
+}
+
+/** State-changing POSTs must come from our own pages (Origin, or Sec-Fetch-Site when Origin is missing). */
+export function sameOrigin(request: Request, url: URL): boolean {
+  const origin = request.headers.get('origin');
+  if (origin) return origin === url.origin;
+  const site = request.headers.get('sec-fetch-site');
+  return site === 'same-origin';
 }
 
 export const json = (status: number, body: unknown) =>

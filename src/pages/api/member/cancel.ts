@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
 import { squareConfigured, activeMembership, cancelSubscription } from '../../../lib/server/square';
-import { json, readSession } from '../../../lib/server/session';
+import { json, readSession, sameOrigin } from '../../../lib/server/session';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ cookies }) => {
+export const POST: APIRoute = async ({ request, url, cookies }) => {
+  if (!sameOrigin(request, url)) return json(403, { error: 'bad_origin' });
   if (!squareConfigured()) return json(503, { error: 'not_configured' });
   const s = readSession(cookies);
   if (!s) return json(401, { error: 'signed_out' });

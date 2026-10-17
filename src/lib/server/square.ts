@@ -180,7 +180,9 @@ async function doEnsureProgramPlans(): Promise<EnsureResult> {
   }
 }
 
-export async function createCheckout(plan: ProgramPlanKey, email: string, redirectUrl: string): Promise<string> {
+export interface CheckoutLink { url: string; orderId: string }
+
+export async function createCheckout(plan: ProgramPlanKey, email: string, redirectUrl: string): Promise<CheckoutLink> {
   if (!isSellable(plan)) throw new Error(`Plan ${plan} is not for sale`);
   if (!(await variationFor(plan))) await ensureProgramPlans();
   const v = await variationFor(plan);
@@ -194,7 +196,30 @@ export async function createCheckout(plan: ProgramPlanKey, email: string, redire
       pre_populated_data: { buyer_email: email },
     },
   });
-  return r.payment_link.url;
+  // The link's order is what the buyer pays. Its id goes in this browser's pending cookie so sign-in right after
+  // checkout can check that this exact checkout was paid (see paidCheckoutCustomer).
+  const orderId = r.payment_link?.order_id ?? r.related_resources?.orders?.[0]?.id ?? '';
+  return { url: r.payment_link.url, orderId: String(orderId) };
+}
+
+/**
+ * The Square customer who paid for the checkout order created in this browser, or undefined when that order is
+ * not (yet) paid or has no customer. "Paid" means nothing is left to pay and there is a completed tender or the
+ * order is COMPLETED. Never throws for a missing order.
+ */
+export async function paidCheckoutCustomer(orderId: string): Promise<{ customerId: string; createdAt?: string } | undefined> {
+  if (!/^[A-Za-z0-9_-]{1,128}$/.test(orderId)) return undefined;
+  let r: any;
+  try { r = await sq<any>(`/v2/orders/${encodeURIComponent(orderId)}`); } catch (e) { if ((e as SquareError).status === 404) return undefined; throw e; }
+  const o = r?.order;
+  if (!o || o.state === 'CANCELED') return undefined;
+  const due = Number(o.net_amount_due_money?.amount ?? o.net_amounts?.total_money?.amount ?? NaN);
+  const total = Number(o.total_money?.amount ?? 0);
+  const tenders: any[] = Array.isArray(o.tenders) ? o.tenders : [];
+  const paid = total > 0 && (o.state === 'COMPLETED' || (due === 0 && tenders.length > 0));
+  if (!paid) return undefined;
+  const customerId = o.customer_id ?? tenders.find((t) => t.customer_id)?.customer_id;
+  return customerId ? { customerId: String(customerId), createdAt: o.created_at } : undefined;
 }
 
 export async function cancelSubscription(id: string): Promise<Sub> {

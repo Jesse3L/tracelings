@@ -5,7 +5,8 @@ import { updateFamily, cleanCheckIn, cleanPlan, childIdOk, InvalidInput } from '
 
 export const prerender = false;
 
-/** Body: { childId, weekIndex, results: { [skillId]: 'got-it' | 'still-working' } }. Saves it and returns the adjusted plan. */
+/** Body: { childId, weekIndex, results: { [skillId]: 'got-it' | 'still-working' } }. Saves it and returns the adjusted plan.
+ *  weekIndex must be the current week or the one before it (409 future_week / too_late otherwise). */
 export const POST: APIRoute = async ({ request, url, cookies }) => {
   if (!sameOrigin(request, url)) return json(403, { error: 'bad_origin' });
   const m = await requireMember(cookies);
@@ -21,6 +22,9 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
       const plan = doc.plans[body.childId];
       if (!child || !plan) throw new InvalidInput('unknown_child');
       const checkIn = cleanCheckIn(body, plan);
+      // Only this week, or last week (a late check-in), never a week ahead.
+      if (checkIn.weekIndex > plan.current) throw new InvalidInput('future_week');
+      if (checkIn.weekIndex < plan.current - 1) throw new InvalidInput('too_late');
       // One check-in per child-week: a second one replaces the first.
       doc.checkIns = doc.checkIns.filter((c) => !(c.childId === checkIn.childId && c.weekIndex === checkIn.weekIndex));
       doc.checkIns.push(checkIn);
@@ -31,8 +35,8 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     console.log('program checkin saved');
     return json(200, result);
   } catch (e) {
-    if (e instanceof InvalidInput) return json(e.code === 'unknown_child' ? 404 : 400, { error: e.code });
+    if (e instanceof InvalidInput) return json(e.code === 'unknown_child' ? 404 : e.code === 'future_week' || e.code === 'too_late' ? 409 : 400, { error: e.code });
     console.error('program checkin failed', (e as Error).message);
-    return json(502, { error: 'storage' });
+    return json(503, { error: 'storage_unavailable', retryAfter: 30 });
   }
 };
