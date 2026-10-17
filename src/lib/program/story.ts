@@ -54,6 +54,32 @@ export function readyScenes(theme: ThemeId): Scene[] {
 // ---------- Book size and story arc ----------
 
 export const BOOK_PAGES: Record<Level, number> = { 'pre-k': 6, kindergarten: 10 };
+
+/**
+ * How much text one book page may hold. The AI prompt (pageRuleText), the AI checker and the hand-written
+ * templates all use this one rule. A short exclamation of 1 to 3 words ending in "!" ("Oh no!", "Tap, tap, tap!")
+ * is not counted as a sentence, but its words count toward the page total.
+ */
+export const PAGE_RULES: Record<Level, { sentences: number; words: number; sentenceWords: number }> = {
+  'pre-k': { sentences: 2, words: 14, sentenceWords: 12 },
+  kindergarten: { sentences: 3, words: 30, sentenceWords: 12 },
+};
+/** The page rule in words, for the AI prompt. */
+export function pageRuleText(level: Level): string {
+  const r = PAGE_RULES[level];
+  return `Each page: 1 to ${r.sentences} short sentences, at most ${r.sentenceWords} words in a sentence and at most ${r.words} words on the whole page ({{name}} counts as one word). A tiny exclamation of 1 to 3 words ("Oh no!", "Yum!") does not count as a sentence, but its words count toward the ${r.words}.`;
+}
+export const pageWords = (s: string) => (s.replace(/\{\{name\}\}/g, ' kid ').toLowerCase().match(/[a-z0-9']+/g) ?? []).length;
+export const pageSentences = (s: string) => s.split(/(?<=[.!?]["”]?)\s+(?=["“]?[A-Z{0-9])/).map((x) => x.trim()).filter(Boolean);
+/** Why a page breaks the page rule for the level, or null. */
+export function pageLengthProblem(level: Level, text: string): string | null {
+  const r = PAGE_RULES[level];
+  const real = pageSentences(text).filter((x) => !(/!["”]?$/.test(x) && pageWords(x) <= 3));
+  if (real.length > r.sentences) return 'too many sentences for the level';
+  if (pageWords(text) > r.words) return 'too long for the level';
+  if (real.some((x) => pageWords(x) > r.sentenceWords)) return 'sentence too long';
+  return null;
+}
 export const BOOK_SHEETS: Record<Level, number> = { 'pre-k': 2, kindergarten: 3 };
 
 /** Where each beat sits in the arc. A story never steps back to an earlier rank. */
@@ -62,8 +88,8 @@ export const BEAT_RANK: Record<Beat, number> = { opening: 0, explore: 1, find: 1
 /**
  * Trims a scene list to n pages. Keeps the first scene, the problem, the first help and the first solve, and ends
  * on a celebration when it has to choose between that and a quiet last page. Removes, in this order: a rest that
- * isn't last, explore, a second celebrate, an ending that isn't last, a second try, a second find, try, find, then
- * the last page (only if a celebrate comes before it), then celebrate.
+ * isn't last, explore, a second celebrate, an ending that isn't last, a second try, a second find, try, the last
+ * page (only if a celebrate comes before it), find, then celebrate.
  */
 export function fitPath(theme: ThemeId, scenes: string[], n: number): string[] {
   const beat = (id: string) => SCENES[theme].scenes.find((s) => s.id === id)?.beat;
@@ -86,8 +112,10 @@ export function fitPath(theme: ThemeId, scenes: string[], n: number): string[] {
     (i) => beat(out[i]) === 'try' && nth(i) > 0,
     (i) => beat(out[i]) === 'find' && nth(i) > 0,
     (i) => beat(out[i]) === 'try',
-    (i) => beat(out[i]) === 'find',
+    // The find page sets up what the problem is about ("the egg", "the ball"), so a quiet last page goes before it
+    // whenever a celebration can close the book instead.
     (i) => i === last() && (beat(out[i]) === 'rest' || beat(out[i]) === 'ending') && out.some((x) => beat(x) === 'celebrate'),
+    (i) => beat(out[i]) === 'find',
     (i) => beat(out[i]) === 'celebrate',
     (i) => beat(out[i]) === 'help' || beat(out[i]) === 'solve',
   ];
@@ -135,6 +163,22 @@ export function readyPaths(theme: ThemeId, level: Level): ReadyPath[] {
     .filter((p) => p.level === level && ready.has(p.id))
     .map((p) => ({ ...p, fitted: fitPath(theme, p.scenes, n) }))
     .filter((p) => p.fitted.length === n && p.fitted.every((id) => sceneArt(theme, id)) && !arcProblem(theme, p.fitted));
+}
+
+/**
+ * The ready path a week's story uses, picked by code (never by the AI) so every story follows one drawn plot.
+ * Paths rotate by week (week 1 gets the first path, as the free week does). `avoid` holds path ids the child had in
+ * recent weeks; the rotation skips them while another path is left. `shift` moves on for a "new story" redo.
+ */
+export function pickPath(theme: ThemeId, level: Level, weekIndex: number, avoid: string[] = [], shift = 0): ReadyPath | null {
+  const paths = readyPaths(theme, level);
+  if (!paths.length) return null;
+  const start = (((weekIndex - 1 + shift) % paths.length) + paths.length) % paths.length;
+  for (let k = 0; k < paths.length; k++) {
+    const p = paths[(start + k) % paths.length];
+    if (!avoid.includes(p.id)) return p;
+  }
+  return paths[start];
 }
 
 /** True when a story can print as the picture book: it has scenes, the right number, and all of them have art. */

@@ -1,12 +1,13 @@
 import type { APIRoute } from 'astro';
 import type { WeekContent, WeekResponse } from '../../../lib/program/types';
 import { templateContentFor } from '../../../lib/program/templates';
-import { generateWeekContent } from '../../../lib/server/ai';
+import { generateWeekContent, type Caller } from '../../../lib/server/ai';
 import { requireMember, sameOrigin, readJson, rateLimited, json } from '../../../lib/server/programApi';
 import {
-  loadFamily, updateFamily, reserveGlobalAi, childIdOk, weekKey, InvalidInput,
-  REDOS_PER_WEEK, FAMILY_MONTHLY_CAP,
+  loadFamily, updateFamily, reserveGlobalAi, globalAiCount, childIdOk, weekKey, InvalidInput,
+  REDOS_PER_WEEK, FAMILY_MONTHLY_CAP, GLOBAL_MONTHLY_CAP,
 } from '../../../lib/server/programStore';
+import type { FamilyDoc } from '../../../lib/program/types';
 
 export const prerender = false;
 
@@ -14,6 +15,22 @@ export const prerender = false;
 // the plan gets there, so one family can't spend a year of generations in an afternoon.
 const AHEAD = 1;
 const inFlight = new Set<string>();
+/** Generations that came back but failed every check (or the call failed), per family per day. They don't use up
+ *  the monthly count, so this small separate cap stops anyone from running up the bill with failing requests. */
+export const FAILED_PER_DAY = Number(process.env.PROGRAM_FAILED_PER_DAY ?? '') || 10;
+const today = () => new Date().toISOString().slice(0, 10);
+/** The failed-attempt counter lives next to the monthly usage in the family doc (an extra field the store keeps). */
+type Failed = { day: string; n: number };
+const failedToday = (d: FamilyDoc): number => {
+  const f = (d.usage as unknown as { failed?: Failed }).failed;
+  return f && f.day === today() ? f.n : 0;
+};
+const addFailed = (d: FamilyDoc) => {
+  (d.usage as unknown as { failed?: Failed }).failed = { day: today(), n: failedToday(d) + 1 };
+};
+/** Story paths this child had in the 3 weeks before this one, from saved content, so a week doesn't repeat them. */
+const recentPaths = (d: FamilyDoc, childId: string, weekIndex: number): string[] =>
+  [1, 2, 3].map((k) => d.content[weekKey(childId, weekIndex - k)]?.story?.pathId).filter((x): x is string => Boolean(x));
 
 /**
  * Body: { childId, weekIndex, redo?: boolean }. POST only, same origin, members only.
@@ -33,11 +50,12 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
   if (!childIdOk(body.childId)) return json(400, { error: 'bad_child_id' });
   if (!Number.isInteger(body.weekIndex) || body.weekIndex < 1 || body.weekIndex > 60) return json(400, { error: 'bad_week' });
   if (body.redo !== undefined && typeof body.redo !== 'boolean') return json(400, { error: 'bad_redo' });
-  const childId: string = body.childId;
-  const weekIndex: number = body.weekIndex;
-  const redo = body.redo === true;
-  const wk = weekKey(childId, weekIndex);
+  return weekFor(key, body.childId, body.weekIndex, body.redo === true);
+};
 
+/** The week request after the checks above: returns the saved week or makes it. Exported for tests (caller). */
+export async function weekFor(key: string, childId: string, weekIndex: number, redo: boolean, opts: { caller?: Caller } = {}): Promise<Response> {
+  const wk = weekKey(childId, weekIndex);
   try {
     const { doc } = await loadFamily(key);
     const child = doc.children.find((c) => c.id === childId);
@@ -56,38 +74,43 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     if (cached && !redo) return reply(cached, true, used);
     if (redo && used >= REDOS_PER_WEEK) return reply(cached ?? template(), Boolean(cached), used, 'redo-limit');
     if (weekIndex > plan.current + AHEAD) return reply(template(), false, used, 'not-yet');
-    if (doc.usage.generations >= FAMILY_MONTHLY_CAP) return reply(cached ?? template(), Boolean(cached), used, 'limit');
+    if (doc.usage.generations >= FAMILY_MONTHLY_CAP || failedToday(doc) >= FAILED_PER_DAY) return reply(cached ?? template(), Boolean(cached), used, 'limit');
 
     if (inFlight.has(`${key}:${wk}`)) return json(409, { error: 'busy' });
     inFlight.add(`${key}:${wk}`);
     let capped = false;
     try {
-      // Every model call is counted before it is made: first the family's monthly count, then the global guard.
+      // Before each model call the caps are checked (not counted): the family's monthly count, its failed attempts
+      // today, and the global guard. A generation is counted once, only when it passed every check and is saved, so
+      // a run of bad model output never uses up a family's month.
       const reserve = async () => {
-        const { result: okFamily } = await updateFamily(key, (d) => {
-          if (d.usage.generations >= FAMILY_MONTHLY_CAP) return false;
-          d.usage.generations += 1;
-          return true;
-        });
-        if (!okFamily) { capped = true; return false; }
-        if (!(await reserveGlobalAi())) { capped = true; return false; }
+        const { doc: d } = await loadFamily(key);
+        if (d.usage.generations >= FAMILY_MONTHLY_CAP || failedToday(d) >= FAILED_PER_DAY) { capped = true; return false; }
+        if ((await globalAiCount()) >= GLOBAL_MONTHLY_CAP) { capped = true; return false; }
         return true;
       };
-      const gen = await generateWeekContent(child, week, { reserve });
-      console.log('program week', JSON.stringify({ source: gen.content.source, calls: gen.calls, reason: gen.reason ?? null, redo }));
+      const path = { avoid: recentPaths(doc, childId, weekIndex), shift: redo ? used + 1 : 0 };
+      const gen = await generateWeekContent(child, week, { reserve, path, caller: opts.caller });
+      console.log('program week', JSON.stringify({ source: gen.content.source, calls: gen.calls, failed: gen.failed, reason: gen.reason ?? null, redo }));
       if (gen.content.source !== 'ai') {
-        // Not saved, so the next try can still get an AI story (when the key is back or the month resets).
+        // One failed request counts once, however many tries it made inside. Not saved, so the next try can still
+        // get an AI story (when the key is back or the month resets).
+        if (gen.reason === 'invalid' || gen.reason === 'call-failed') await updateFamily(key, (d) => { addFailed(d); });
         return reply(cached ?? gen.content, Boolean(cached), used, capped || gen.reason === 'capped' ? 'limit' : 'fallback');
       }
       const { result } = await updateFamily(key, (d) => {
         const r = d.usage.redos[wk] ?? 0;
         // Someone else saved this week while we were generating: keep theirs unless this was a redo.
-        if (!redo && d.content[wk] && (d.contentFor?.[wk] ?? sig) === sig) return { content: d.content[wk], used: r };
+        if (!redo && d.content[wk] && (d.contentFor?.[wk] ?? sig) === sig) return { content: d.content[wk], used: r, saved: false };
         d.content[wk] = gen.content;
         d.contentFor = { ...(d.contentFor ?? {}), [wk]: sig };
+        d.usage.generations += 1;
         if (redo) d.usage.redos[wk] = r + 1;
-        return { content: gen.content, used: redo ? r + 1 : r };
+        return { content: gen.content, used: redo ? r + 1 : r, saved: true };
       });
+      // The global spend guard counts saved generations too (it can overshoot by a few under races; the Anthropic
+      // console spend limit is the hard stop).
+      if (result.saved) await reserveGlobalAi().catch((e) => console.error('program week: global count failed', (e as Error).message));
       return reply(result.content, false, result.used);
     } finally {
       inFlight.delete(`${key}:${wk}`);
@@ -97,4 +120,4 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     console.error('program week failed', (e as Error).message);
     return json(502, { error: 'storage' });
   }
-};
+}

@@ -68,6 +68,17 @@ Printed weeks showed pictures that didn't match the words and stories that jumpe
 - **Templates**: hand-written text for every path (`src/lib/program/storyTexts.ts`), with one slot for the week's word family, letter or name line.
 - Checks: `npx tsx scripts/test-story-v2.mts`, `npx tsx scripts/story-v2-lint.mts`, renders with `scripts/render-big-books.mts` (set `ART_DIR` to test with placeholder art).
 
+### Story fixes after QA (Oct 16, 2026)
+
+- **One drawn plot per week.** The server picks the story path (`pickPath` in story.ts): it rotates by week, skips the paths the child had in the 3 weeks before, and moves on for a redo. The AI gets only that path's pictures and must use them as given.
+- **Picture-truth check.** After a story passes the code checks, one cheap call to `PROGRAM_AI_MODEL` gets each page's words and what its picture shows and answers per page whether everything the words say is in the picture. Any "no" fails the story (one retry, then the template).
+- **More code checks:** the child only says, spots, points, cheers or has ideas (never swims, grabs, naps, rides); invented names at the start of a sentence; pet forms of cast names; crying; and the thing the problem is about is the thing that gets solved (`about` on each path in scenes.ts).
+- **One page-length rule** (`PAGE_RULES` in story.ts) for the prompt, the checker and the templates. Pre-K: 1 to 2 short sentences, at most 14 words a page.
+- **Caps count successes only.** A generation counts against the family and global monthly caps only when it passed every check and was saved. Failed requests count once each against a per-family daily cap (`PROGRAM_FAILED_PER_DAY`, default 10).
+- **Templates** pass the same validator as the AI, sight words included.
+- **Cost per AI week** (Sonnet 5.5 story plus the Haiku 5.5 check): about $0.035 Pre-K and $0.044 Kindergarten, about double when the retry runs (`estimateWeekCost()` in ai.ts).
+- QA scripts: `scripts/qa/` and `scripts/test-week-caps.mts`.
+
 ## After launch
 
 - Watch: placement checks started and finished, free week 1 downloads, checkouts started, paid.
