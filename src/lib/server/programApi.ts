@@ -22,13 +22,8 @@ export function rateLimited(bucket: string, id: string, max: number, windowMs: n
 }
 export const _resetRateLimits = () => hits.clear();
 
-/** POSTs must come from our own pages (Origin, or Sec-Fetch-Site when Origin is missing). */
-export function sameOrigin(request: Request, url: URL): boolean {
-  const origin = request.headers.get('origin');
-  if (origin) return origin === url.origin;
-  const site = request.headers.get('sec-fetch-site');
-  return site === 'same-origin';
-}
+/** POSTs must come from our own pages (shared with /api/member/*). */
+export { sameOrigin } from './session';
 
 export async function readJson(request: Request): Promise<{ ok: true; body: any } | { ok: false; res: Response }> {
   const len = Number(request.headers.get('content-length') ?? '0');

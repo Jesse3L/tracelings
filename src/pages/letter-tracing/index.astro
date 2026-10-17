@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../lib/seo';
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
 import SeoAlphabetSheet from '../../components/seo/SeoAlphabetSheet.tsx';
@@ -34,7 +35,7 @@ const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
   },
 ];
 const groups = [
@@ -59,7 +60,7 @@ const groups = [
     <section class="mt-14" aria-labelledby="a-to-z">
       <h2 id="a-to-z" class="text-[1.6rem] font-bold">Alphabet tracing worksheets: print A to Z in one PDF</h2>
       <p class="mt-2 mb-6 text-muted max-w-[68ch]">Every letter of the alphabet in order, one letter per row, with green dots where each stroke starts. Choose capital and lowercase pairs, capitals only or lowercase only.</p>
-      <SeoAlphabetSheet client:visible source="letter-tracing" />
+      <SeoAlphabetSheet client:load source="letter-tracing" />
     </section>
 
     <section class="mt-14" aria-labelledby="all-letters">

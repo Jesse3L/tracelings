@@ -53,7 +53,26 @@ export interface StoryPath {
   plot: string;            // one line: the one problem and how it gets solved
   level: Level;            // pre-k: 6 to 8 scenes; kindergarten: 10 to 12 scenes
   scenes: string[];        // scene ids in reading order
+  /** What the problem is about. The problem page and the solve page both name one of these, so the thing that
+   *  went wrong is the thing that gets fixed (a lost shell is found, not a ball). */
+  about: string[];
 }
+
+/** theme/pathId -> what the problem is about (see StoryPath.about). */
+const ABOUT: Record<string, string[]> = {
+  'dinosaurs/lost-egg': ['egg'], 'dinosaurs/egg-short': ['egg'], 'dinosaurs/high-leaves': ['leaves', 'leaf', 'branch'], 'dinosaurs/mud': ['mud', 'muddy', 'stuck', 'free'], 'dinosaurs/big-bone': ['bone'],
+  'trucks/mud': ['mud', 'muddy', 'stuck', 'free'], 'trucks/ball': ['ball'], 'trucks/rock': ['rock'], 'trucks/flat': ['tire'],
+  'unicorns/star': ['star'], 'unicorns/stream': ['stream', 'bridge', 'rainbow'], 'unicorns/kite': ['kite'], 'unicorns/flowers': ['flowers', 'flower'],
+  'ocean/shell': ['shell'], 'ocean/chest': ['chest', 'lid'], 'ocean/ball': ['ball'], 'ocean/gup': ['Gup'],
+  'space/ball': ['ball'], 'space/crater': ['crater', 'hole'], 'space/planet': ['planet'], 'space/seed': ['seed', 'sprout', 'pot'],
+  'farm/egg': ['egg'], 'farm/gate': ['gate'], 'farm/apples': ['apple', 'apples'], 'farm/bell': ['bell'],
+  'bugs/butterfly': ['leaf'], 'bugs/leaf-boat': ['leaf', 'boat'], 'bugs/crumb': ['crumb', 'cake'], 'bugs/lost-buzz': ['hive', 'home'],
+  'castles/crown': ['crown'], 'castles/ball': ['ball'], 'castles/gate': ['gate'], 'castles/party': ['door', 'party', 'fit'],
+  'trains/hill': ['hill'], 'trains/branch': ['branch', 'track'], 'trains/caboose': ['caboose'], 'trains/boxes': ['boxes', 'box', 'tunnel'],
+  'sports/tree': ['ball'], 'sports/tee': ['ball'], 'sports/sneaker': ['sneaker'], 'sports/hoop': ['hoop', 'ball'],
+  'pets/ball': ['ball'], 'pets/shelf': ['shelf', 'down'], 'pets/mud': ['mud', 'muddy', 'clean'], 'pets/nibs': ['Nibs'],
+  'jungle/bananas': ['bananas'], 'jungle/ball': ['ball'], 'jungle/hot': ['hot', 'cool'], 'jungle/hide': ['Zip'],
+};
 
 export interface ThemeScenes {
   theme: ThemeId;
@@ -71,7 +90,7 @@ export const SCENE_STYLE = 'Simple clean black and white coloring book line art 
 type Draft = Omit<Scene, 'drawPrompt'>;
 const s = (id: string, beat: Beat, shows: string, cast: string[], props: string[], words: string[]): Draft =>
   ({ id, beat, shows, cast, props, words });
-const path = (id: string, title: string, level: Level, plot: string, scenes: string[]): StoryPath => ({ id, title, plot, level, scenes });
+const path = (id: string, title: string, level: Level, plot: string, scenes: string[]): StoryPath => ({ id, title, plot, level, scenes, about: [] });
 
 function build(theme: ThemeId, setting: string, cast: CastMember[], drafts: Draft[], paths: StoryPath[]): ThemeScenes {
   const byName = new Map(cast.map((c) => [c.name, c]));
@@ -82,7 +101,7 @@ function build(theme: ThemeId, setting: string, cast: CastMember[], drafts: Draf
     }).join(' ');
     return { ...d, drawPrompt: `${SCENE_STYLE} Scene: ${d.shows}${who ? ` Characters: ${who}` : ''}` };
   });
-  return { theme, setting, cast, scenes, paths };
+  return { theme, setting, cast, scenes, paths: paths.map((p) => ({ ...p, about: ABOUT[`${theme}/${p.id}`] ?? [] })) };
 }
 
 // ---------- the 12 themes ----------
@@ -242,7 +261,7 @@ const unicorns = build('unicorns',
     s('rest-night', 'rest', "Puff sleeps on the grass under the stars, with her horn glowing softly.", ['Puff'], ['stars', 'grass'], ['sleep', 'night', 'stars', 'rest', 'shh']),
     s('rest-burrow', 'rest', "Bun sleeps in a cozy burrow lined with soft leaves.", ['Bun'], ['burrow', 'leaves'], ['sleep', 'burrow', 'bed', 'nap', 'cozy']),
     s('end-wave', 'ending', "Puff, Bun and Fluff wave goodbye toward the viewer.", ['Puff', 'Bun', 'Fluff'], ['hill'], ['bye', 'wave', 'friends', 'see you']),
-    s('end-rainbow-walk', 'ending', "Puff walks home along a rainbow path toward the hills and looks back toward the viewer.", ['Puff'], ['rainbow', 'hills'], ['home', 'walk', 'rainbow', 'bye']),
+    s('end-rainbow-walk', 'ending', "Puff walks home along a winding path toward the hills, with a rainbow in the sky, and looks back toward the viewer.", ['Puff'], ['rainbow', 'hills', 'path'], ['home', 'walk', 'rainbow', 'path', 'bye']),
     s('end-hug', 'ending', "Puff and Bun hug, and Fluff smiles down at them.", ['Puff', 'Bun', 'Fluff'], ['grass'], ['hug', 'friends', 'love', 'happy']),
   ],
   [
@@ -498,15 +517,15 @@ const castles = build('castles',
     s('find-party', 'find', "Princess Plum stands at a small door of the hall holding a cake, and Flap looks at the door.", ['Princess Plum', 'Flap'], ['small door', 'cake'], ['party', 'cake', 'door', 'come in', 'small']),
     s('prob-crown-splash', 'problem', "Princess Plum's crown has fallen into the pond and floats on a lily pad far from the edge. Flap watches nearby.", ['Princess Plum', 'Flap'], ['crown', 'lily pad', 'pond'], ['crown', 'splash', 'pond', 'far', 'oh no', 'float']),
     s('prob-ball-tower', 'problem', "The ball sits stuck on the pointy roof at the top of the tall tower, and Princess Plum and Flap look up at it.", ['Princess Plum', 'Flap'], ['ball', 'tower', 'roof'], ['stuck', 'ball', 'top', 'high', 'tower', 'up']),
-    s('prob-gate-stuck', 'problem', "Flap pushes the gate with both hands, but it will not move. Princess Plum and Sir Kip watch nearby.", ['Flap', 'Princess Plum', 'Sir Kip'], ['gate'], ['stuck', 'push', 'gate', 'can not', 'shut']),
+    s('prob-gate-stuck', 'problem', "Flap stands outside the shut castle gate and pushes the bars with both hands, but it will not move. Princess Plum and Sir Kip watch from inside, behind the bars.", ['Flap', 'Princess Plum', 'Sir Kip'], ['gate', 'bars'], ['stuck', 'push', 'gate', 'can not', 'shut', 'bars', 'inside', 'outside']),
     s('prob-too-big', 'problem', "Flap pokes his head through the small door, but his body and wings are too big to fit. Princess Plum watches nearby.", ['Flap', 'Princess Plum'], ['small door'], ['big', 'small', 'fit', 'can not', 'door']),
     s('try-crown-reach', 'try', "Princess Plum stretches her arm out over the pond from the edge, but the crown is too far. Flap watches nearby.", ['Princess Plum', 'Flap'], ['pond', 'crown', 'lily pad'], ['reach', 'far', 'arm', 'try', 'stretch']),
     s('try-stairs', 'try', "Sir Kip climbs the winding stairs inside the tower, and the top is still far up.", ['Sir Kip'], ['stairs', 'tower'], ['climb', 'stairs', 'up', 'try', 'steps']),
-    s('try-gate-push', 'try', "Sir Kip and Princess Plum push the gate from the inside while Flap pushes from the outside.", ['Sir Kip', 'Princess Plum', 'Flap'], ['gate'], ['push', 'gate', 'try', 'together', 'stuck']),
+    s('try-gate-push', 'try', "Sir Kip and Princess Plum push the shut gate from the inside while Flap pushes the same gate from the outside, and it stays shut.", ['Sir Kip', 'Princess Plum', 'Flap'], ['gate'], ['push', 'gate', 'try', 'together', 'stuck']),
     s('try-squeeze', 'try', "Flap tucks in his wings and squeezes, but he still does not fit through the small door.", ['Flap'], ['small door'], ['squeeze', 'tuck', 'try', 'wings', 'small']),
     s('help-flap-crown', 'help', "Flap flies low over the pond and picks up the crown from the lily pad. Princess Plum watches nearby.", ['Flap', 'Princess Plum'], ['crown', 'pond', 'lily pad'], ['fly', 'wings', 'crown', 'help', 'pick up']),
     s('help-flap-ball', 'help', "Flap flies up to the top of the tower and grabs the ball from the roof.", ['Flap'], ['ball', 'tower', 'roof'], ['fly', 'up', 'grab', 'help', 'top']),
-    s('help-kip-wheel', 'help', "Sir Kip turns a big wooden wheel with a rope, and the gate starts to lift. Flap watches nearby.", ['Sir Kip', 'Flap'], ['wheel', 'rope', 'gate'], ['turn', 'wheel', 'rope', 'up', 'help', 'lift']),
+    s('help-kip-wheel', 'help', "Inside the castle, Sir Kip turns a big wooden wheel with a rope, and the barred gate starts to lift. Flap waits outside, past the gate.", ['Sir Kip', 'Flap'], ['wheel', 'rope', 'gate'], ['turn', 'wheel', 'rope', 'up', 'help', 'lift', 'inside', 'outside']),
     s('help-carry-table', 'help', "Princess Plum and Sir Kip carry the party table with the cake out into the garden.", ['Princess Plum', 'Sir Kip'], ['table', 'cake', 'garden'], ['carry', 'table', 'out', 'help', 'garden']),
     s('solve-crown-on', 'solve', "Princess Plum wears her crown again and smiles at Flap.", ['Princess Plum', 'Flap'], ['crown'], ['crown', 'on', 'back', 'yes', 'smile']),
     s('solve-ball-back', 'solve', "Flap drops the ball into Princess Plum's hands.", ['Flap', 'Princess Plum'], ['ball'], ['ball', 'catch', 'back', 'got it', 'drop']),
@@ -531,7 +550,7 @@ const castles = build('castles',
     path('gate', 'The Stuck Gate', 'pre-k', 'Flap is shut outside the castle until Sir Kip turns the big wheel to lift the gate.',
       ['open-castle', 'exp-meadow', 'find-gate-shut', 'prob-gate-stuck', 'try-gate-push', 'help-kip-wheel', 'solve-gate-up', 'end-wave']),
     path('party', 'Too Big for the Door', 'kindergarten', 'Flap is too big to fit through the door to the party, so his friends bring the party outside.',
-      ['open-friends', 'exp-hall', 'find-party', 'prob-too-big', 'try-squeeze', 'help-carry-table', 'solve-party-garden', 'cel-cake', 'cel-parade', 'rest-garden-nap', 'end-window-moon']),
+      ['open-friends', 'exp-garden', 'find-party', 'prob-too-big', 'try-squeeze', 'help-carry-table', 'solve-party-garden', 'cel-cake', 'cel-parade', 'rest-garden-nap', 'end-window-moon']),
   ]);
 
 const trains = build('trains',
@@ -559,11 +578,11 @@ const trains = build('trains',
     s('try-hill-again', 'try', "Toot puffs big clouds of steam as it pushes up the hill, and Peep flaps her wings on the roof.", ['Toot', 'Peep'], ['steep hill', 'steam'], ['puff', 'try', 'push', 'chug', 'up', 'steam']),
     s('try-peep-tug', 'try', "Peep tugs on the big branch with her beak, and it does not move. Toot waits on the track behind her.", ['Peep', 'Toot'], ['branch', 'tracks'], ['tug', 'pull', 'beak', 'try', 'big']),
     s('try-back-up', 'try', "Toot rolls back along the track while Peep flies above, looking for the caboose.", ['Toot', 'Peep'], ['tracks', 'train cars'], ['back', 'look', 'roll', 'fly', 'try']),
-    s('try-peep-box', 'try', "Peep pushes on the top box with her wings, but the pile stays tall. Toot waits at the station.", ['Peep', 'Toot'], ['boxes', 'flatcar'], ['push', 'box', 'top', 'try', 'tall']),
+    s('try-peep-box', 'try', "In front of the tunnel, Peep stands on the tall pile of boxes on Toot's flatcar and pushes the top box with her wings, but the pile is still too tall.", ['Peep', 'Toot'], ['boxes', 'flatcar', 'tunnel'], ['push', 'box', 'top', 'try', 'tall', 'tunnel']),
     s('help-chug-push', 'help', "Chug pushes Toot's train up the hill from behind. Peep rides on Toot's cab roof.", ['Chug', 'Toot', 'Peep'], ['steep hill', 'train cars'], ['push', 'help', 'big', 'strong', 'up']),
     s('help-chug-rope', 'help', "Chug pulls the big branch off the track with a rope. Toot waits on the track, and Peep rides on its cab roof.", ['Chug', 'Toot', 'Peep'], ['branch', 'rope', 'tracks'], ['pull', 'rope', 'help', 'branch', 'strong']),
     s('help-peep-finds', 'help', "Peep flies over the trees and spots the caboose on the side track.", ['Peep'], ['caboose', 'trees', 'side track'], ['fly', 'see', 'find', 'help', 'there']),
-    s('help-chug-cars', 'help', "Chug waits beside Toot with an empty flatcar, and some of the boxes are now on Chug's flatcar. Peep rides on Toot's cab roof.", ['Chug', 'Toot', 'Peep'], ['flatcar', 'boxes'], ['help', 'share', 'boxes', 'some', 'two']),
+    s('help-chug-cars', 'help', "By the tunnel, Chug stands on the track beside Toot, and some of the boxes are now on Chug's flatcar, so both piles are low. Peep rides on Toot's cab roof.", ['Chug', 'Toot', 'Peep'], ['flatcar', 'boxes', 'tunnel'], ['help', 'share', 'boxes', 'some', 'two', 'low']),
     s('solve-top-hill', 'solve', "Toot and its two cars sit at the top of the hill, with Chug just behind. Peep rides on Toot's cab roof.", ['Toot', 'Chug', 'Peep'], ['hilltop', 'train cars'], ['top', 'did it', 'up', 'yes', 'hill']),
     s('solve-track-clear', 'solve', "The branch lies beside the track, and Toot rolls on past it. Peep rides on Toot's cab roof.", ['Toot', 'Peep'], ['branch', 'tracks'], ['go', 'clear', 'track', 'roll', 'yes']),
     s('solve-hook-caboose', 'solve', "The caboose is hooked back onto the end of Toot's train. Peep rides on Toot's cab roof.", ['Toot', 'Peep'], ['caboose', 'train cars'], ['caboose', 'back', 'hook', 'end', 'got it']),
@@ -609,7 +628,7 @@ const sports = build('sports',
     s('find-hoop', 'find', "Bop holds a basketball and looks up at a tall hoop.", ['Bop'], ['basketball', 'hoop'], ['hoop', 'tall', 'ball', 'up', 'look']),
     s('prob-ball-tree', 'problem', "The soccer ball is stuck in the branches of a tree beside the field. Bop and Zig watch nearby.", ['Bop', 'Zig'], ['soccer ball', 'tree'], ['stuck', 'tree', 'ball', 'high', 'oh no']),
     s('prob-miss', 'problem', "Bop swings the bat over the top of the ball, and the ball still sits on the tee.", ['Bop'], ['bat', 'baseball', 'tee'], ['miss', 'swing', 'ball', 'tee', 'oops']),
-    s('prob-sneaker-gone', 'problem', "Bop holds his sports bag open, and there is no sneaker inside.", ['Bop'], ['sports bag'], ['gone', 'sneaker', 'bag', 'where', 'oh no']),
+    s('prob-sneaker-gone', 'problem', "Bop stands on the grass by the goal and looks into his open sports bag with a puzzled face. The bag is empty. He has one sneaker on and one bare foot.", ['Bop'], ['sports bag', 'sneaker', 'goal'], ['gone', 'sneaker', 'bag', 'where', 'oh no', 'empty', 'foot']),
     s('prob-short-shot', 'problem', "Bop's basketball falls short below the hoop.", ['Bop'], ['basketball', 'hoop'], ['short', 'miss', 'hoop', 'high', 'ball']),
     s('try-zig-jump', 'try', "Zig jumps up under the tree reaching for the ball, but it is too high. Bop watches nearby.", ['Zig', 'Bop'], ['tree', 'soccer ball'], ['jump', 'reach', 'up', 'try', 'high']),
     s('try-swing-again', 'try', "Bop swings again, and the ball wobbles on the tee.", ['Bop'], ['bat', 'baseball', 'tee'], ['swing', 'try', 'again', 'wobble', 'bat']),
@@ -619,7 +638,7 @@ const sports = build('sports',
     s('help-hoot-shows', 'help', "Hoot shows Bop how to hold the bat, with his eyes on the ball.", ['Hoot', 'Bop'], ['bat', 'baseball', 'tee'], ['show', 'hold', 'help', 'coach', 'eyes']),
     s('help-zig-finds', 'help', "Zig finds the sneaker in the tall grass by the fence and holds it up. Bop watches nearby.", ['Zig', 'Bop'], ['sneaker', 'grass', 'fence'], ['find', 'sneaker', 'grass', 'help', 'here']),
     s('help-hoot-lower', 'help', "Hoot turns a crank on the hoop pole, and the hoop moves down lower. Bop watches nearby.", ['Hoot', 'Bop'], ['hoop', 'crank', 'pole'], ['crank', 'turn', 'down', 'help', 'lower']),
-    s('solve-ball-down', 'solve', "The soccer ball drops out of the tree and Bop catches it. Zig and Hoot watch nearby.", ['Bop', 'Zig', 'Hoot'], ['soccer ball', 'tree'], ['catch', 'down', 'got it', 'ball', 'drop']),
+    s('solve-ball-down', 'solve', "Under the tree, Bop holds the one soccer ball he just caught, and Zig and Hoot smile beside him.", ['Bop', 'Zig', 'Hoot'], ['soccer ball', 'tree'], ['catch', 'down', 'got it', 'ball', 'hold']),
     s('solve-hit', 'solve', "Bop hits the ball off the tee and it flies away over the field. Hoot watches nearby.", ['Bop', 'Hoot'], ['bat', 'baseball', 'tee'], ['hit', 'bat', 'fly', 'yes', 'pop']),
     s('solve-sneaker-on', 'solve', "Bop pulls the sneaker onto his foot and Zig gives a thumbs up.", ['Bop', 'Zig'], ['sneaker'], ['on', 'sneaker', 'ready', 'yes', 'foot']),
     s('solve-swish', 'solve', "Bop's basketball drops through the net of the hoop. Hoot watches nearby.", ['Bop', 'Hoot'], ['basketball', 'hoop', 'net'], ['in', 'swish', 'net', 'yes', 'shot']),
@@ -640,7 +659,7 @@ const sports = build('sports',
     path('tee', 'Bop Can Hit', 'kindergarten', 'Bop keeps missing the ball on the tee until Hoot shows him how to hold the bat.',
       ['open-field', 'exp-warmup', 'find-tee', 'prob-miss', 'try-swing-again', 'help-hoot-shows', 'solve-hit', 'cel-run-bases', 'rest-water', 'end-team-hug']),
     path('sneaker', 'The Lost Sneaker', 'kindergarten', 'Bop cannot find his sneaker on race day until Zig spots it in the grass.',
-      ['open-bag', 'exp-warmup', 'find-race-day', 'prob-sneaker-gone', 'try-look-bench', 'help-zig-finds', 'solve-sneaker-on', 'cel-medals', 'cel-high-five', 'rest-night']),
+      ['open-bag', 'exp-warmup', 'find-race-day', 'prob-sneaker-gone', 'try-look-bench', 'help-zig-finds', 'solve-sneaker-on', 'cel-medals', 'cel-high-five', 'rest-water']),
     path('hoop', 'The Tall Hoop', 'pre-k', 'The hoop is too high for Bop until Hoot lowers it.',
       ['open-team', 'exp-court', 'find-hoop', 'prob-short-shot', 'try-big-throw', 'help-hoot-lower', 'solve-swish', 'end-walk-home']),
   ]);
@@ -674,7 +693,7 @@ const pets = build('pets',
     s('help-mitt-under', 'help', "Mitt crawls under the couch, and only her striped tail sticks out. Wag watches nearby.", ['Mitt', 'Wag'], ['couch'], ['crawl', 'under', 'tail', 'help', 'small']),
     s('help-wag-pillows', 'help', "Wag pushes a big soft cushion and a box under the bookshelf like steps. Mitt watches nearby.", ['Wag', 'Mitt'], ['cushion', 'box', 'bookshelf'], ['push', 'steps', 'box', 'help', 'soft']),
     s('help-mitt-listen', 'help', "Mitt listens with her ears up next to a fuzzy slipper on the floor. Wag watches nearby.", ['Mitt', 'Wag'], ['slipper'], ['listen', 'ears', 'hear', 'help', 'slipper']),
-    s('help-tub', 'help', "Mitt pulls a fluffy towel to a bathtub full of bubbles, and Wag looks in.", ['Mitt', 'Wag'], ['bathtub', 'bubbles', 'towel'], ['tub', 'bath', 'bubbles', 'help', 'towel']),
+    s('help-tub', 'help', "Wag sits in a bathtub full of bubbles, and Mitt pulls a fluffy towel over to the tub.", ['Mitt', 'Wag'], ['bathtub', 'bubbles', 'towel'], ['tub', 'bath', 'bubbles', 'help', 'towel', 'in']),
     s('solve-ball-out', 'solve', "Mitt pushes the red ball out from under the couch to Wag.", ['Mitt', 'Wag'], ['ball', 'couch'], ['push', 'out', 'ball', 'got it', 'yes']),
     s('solve-mitt-down', 'solve', "Mitt hops down onto the box and then onto the soft cushion. Wag watches nearby.", ['Mitt', 'Wag'], ['box', 'cushion', 'bookshelf'], ['hop', 'down', 'safe', 'did it', 'soft']),
     s('solve-nibs-found', 'solve', "Nibs peeks out of the fuzzy slipper with full chubby cheeks. Mitt and Wag watch nearby.", ['Nibs', 'Mitt', 'Wag'], ['slipper'], ['found', 'peek', 'there', 'cheeks', 'yes']),

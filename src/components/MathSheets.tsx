@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import type { Page, Paper } from '../lib/sheet';
+import { useHydrated } from '../lib/hydrated';
+import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
 import { needsEmail } from '../lib/gate';
@@ -34,6 +35,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
   const [paper, setPaper] = useState<Paper>('letter');
   const [seed, setSeed] = useState(1);
   const [busy, setBusy] = useState(false);
+  const ready = useHydrated();
   const [gate, setGate] = useState<null | 'one' | 'set' | 'list'>(null);
   const [done, setDone] = useState('');
   const member = useMember();
@@ -66,7 +68,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
   const noRange = kind === 'count-color' || kind === 'make-ten' || kind === 'blank-frame';
   const fixed = kind === 'count-color' || kind === 'blank-frame'; // nothing random on the page
   const blankLabel = BLANK_LAYOUTS.find((x) => x.v === blank)!.label;
-  const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const what = kind === 'count-color' ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : series === 'k-addition' ? `within-${range}` : `1-to-${range}`;
   const fileKind = kind === 'blank-frame' ? 'blank' : slug(kindLabel);
 
@@ -156,6 +158,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
             onInput={(e) => setName((e.target as HTMLInputElement).value)}
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none" />
           <span class="block text-[13px] text-muted mt-2">Printed on the Name line. It stays on this device.</span>
+          {nameNote(name) && <span class="block text-[13px] text-[#b4232c] mt-1" role="status">{nameNote(name)}</span>}
         </label>
 
         <Segmented legend="Paper" name="math-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
@@ -165,8 +168,8 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
             New problems
           </button>
         )}
-        <button type="submit" disabled={busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
-          {busy ? 'Making your PDF…' : 'Download this worksheet'}
+        <button type="submit" disabled={!ready || busy} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {!ready ? 'Loading…' : busy ? 'Making your PDF…' : 'Download this worksheet'}
         </button>
         {done && <p class="mt-4 text-[14px] text-[#1f7a50]" role="status">{done}</p>}
 

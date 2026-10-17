@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../lib/seo';
 import Base from '../../layouts/Base.astro';
 import WeekPack from '../../components/WeekPack.tsx';
 import Faqs from '../../components/homeschool/Faqs.astro';
@@ -25,7 +26,7 @@ const schema = [
     { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
     { '@type': 'ListItem', position: 2, name: 'Letter of the Week', item: url },
   ] },
-  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })) },
 ];
 ---
 <Base title={title} description={description} schema={schema}>
@@ -53,7 +54,7 @@ const schema = [
     </section>
 
     <div id="pack" class="scroll-mt-24 mt-12">
-      <WeekPack client:visible level="pre-k" week={2} fixedLevel source="letter-of-the-week" heading="Or pick any week of the plan here" />
+      <WeekPack client:load level="pre-k" week={2} fixedLevel source="letter-of-the-week" heading="Or pick any week of the plan here" />
     </div>
 
     <article class="prose-tl max-w-[68ch] mt-14">

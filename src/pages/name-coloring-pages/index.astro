@@ -1,4 +1,5 @@
 ---
+import { faqText } from '../../lib/seo';
 import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import FontTool from '../../components/FontTool.tsx';
@@ -9,7 +10,7 @@ const description = 'Make free name coloring pages with any name in big bubble l
 const url = new URL('/name-coloring-pages/', SITE.url).href;
 const faqs: { q: string; a: string; html?: string }[] = [
   { q: 'Is it free?', a: 'Yes. Type a name and download the name coloring page as a PDF for free. Your first page needs nothing at all, and after that we ask for an email once per device.' },
-  { q: 'Can I add a last name?', a: 'Yes. You can type up to 16 characters, so a short first and last name fits. Longer names split onto two lines automatically so the letters stay big enough to color.' },
+  { q: 'Can I add a last name?', a: 'Yes. You can type up to 24 characters, so most first and last names fit. Longer names break onto two or three lines between words, so the letters stay big enough to color.' },
   { q: 'Can I make name coloring pages for a whole class?', a: 'Yes. Anyone can make pages one name at a time for free, for as many names as you need. Members save their kids’ names once and print a page for each child in one PDF.', html: 'Yes. Anyone can make pages one name at a time for free, for as many names as you need. <a href="/membership/">Members</a> save their kids’ names once and print a page for each child in one PDF.' },
   { q: 'Is my child’s name stored anywhere?', a: 'No. The page is built in your browser and the name never leaves your device.' },
 ];
@@ -19,7 +20,7 @@ const schema = [
     { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
     { '@type': 'ListItem', position: 2, name: 'Name Coloring Pages', item: url },
   ] },
-  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })) },
 ];
 ---
 <Base title={title} description={description} schema={schema}>

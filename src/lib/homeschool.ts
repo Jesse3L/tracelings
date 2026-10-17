@@ -1,7 +1,7 @@
 // Tracelings at Home: the 36-week Pre-K and Kindergarten plans, and the printable pages in each weekly pack.
 // Plans are plain data so the static pages can list every week. Pages are built with the same glyphs as the
 // tracing tools, so everything runs in the browser and the child's name never leaves the device.
-import { PAPER, COLORS, buildSheet, styleName, layoutWord, type Item, type Page, type Paper } from './sheet';
+import { PAPER, COLORS, buildSheet, styleName, cleanName, layoutWord, type Item, type Page, type Paper } from './sheet';
 import { drawText, drawCell, buildWordPages, wrapToWidth, cleanTraceText } from './rowSheet';
 import { buildColoringPage } from './coloring';
 import type { LoadedFont } from './fontshape';
@@ -235,8 +235,27 @@ function planPage(o: PackOptions, plan: Planned[], label: string): Page {
   const P = PLANS[o.level];
   const who = styleName(o.name, 'capital');
   items.push({ kind: 'text', x: M, y: 58, size: 11, text: `${P.label} at home, week ${o.week.n} of ${P.weeks.length}`, color: COLORS.quiet, align: 'left' });
-  items.push({ kind: 'text', x: M, y: 92, size: 26, text: who ? `${who}'s week: ${o.week.title}` : `This week: ${o.week.title}`, color: INK, align: 'left' });
-  let y = para(items, 'About 15 minutes a day. Do one page each day, and stop while it is still fun. Tick each box when you finish.', M, 116, 12, w - 2 * M, COLORS.quiet) + 10;
+  // A long name (up to 24 letters) would run the title off the page: wrap it to two lines and shrink (to 18 pt at
+  // most) until it fits. A single word too wide even then is split with a hyphen.
+  const title = who ? `${who}'s week: ${o.week.title}` : `This week: ${o.week.title}`;
+  const maxW = w - 2 * M;
+  const fitLines = (size: number) => wrap(title, size, maxW).flatMap((line) => {
+    const out: string[] = [];
+    let rest = line;
+    while (textW(rest, size) > maxW && rest.length > 1) {
+      let cut = rest.length - 1;
+      while (cut > 1 && textW(`${rest.slice(0, cut)}-`, size) > maxW) cut--;
+      out.push(`${rest.slice(0, cut)}-`); rest = rest.slice(cut);
+    }
+    return [...out, rest];
+  });
+  let ts = 26;
+  let lines = wrap(title, ts, maxW);
+  while (ts > 18 && (lines.length > 2 || lines.some((l) => textW(l, ts) > maxW))) { ts -= 1; lines = wrap(title, ts, maxW); }
+  if (lines.some((l) => textW(l, ts) > maxW)) lines = fitLines(ts);
+  let ty = 92;
+  for (const l of lines) { items.push({ kind: 'text', x: M, y: ty, size: ts, text: l, color: INK, align: 'left' }); ty += ts * 1.15; }
+  let y = para(items, 'About 15 minutes a day. Do one page each day, and stop while it is still fun. Tick each box when you finish.', M, ty - ts * 1.15 + 24, 12, w - 2 * M, COLORS.quiet) + 10;
 
   for (const d of plan) {
     items.push({ kind: 'path', d: box(M, y - 14, 16, 16, 3), color: INK, width: 1.2 });
@@ -269,7 +288,19 @@ function planPage(o: PackOptions, plan: Planned[], label: string): Page {
 }
 
 const letterInfo = (l: string) => (lettersData as { letter: string; words: string[]; tip: string }[]).find((x) => x.letter === l)!;
-const shortWords = (l: string) => letterInfo(l).words.filter((w) => /^[a-z]+$/.test(w) && w.length <= 7 && w.startsWith(l));
+/** Short picture words for a letter. Few words start with x, so x uses words that end in it (box, fox, six). */
+const shortWords = (l: string) => letterInfo(l).words.filter((w) => /^[a-z]+$/.test(w) && w.length <= 7 && (l === 'x' ? w.endsWith(l) : w.startsWith(l)));
+/** The sound a letter stands for, written between slashes. x says /ks/ and q (with u) says /kw/. */
+const soundOf = (l: string) => (l === 'x' ? '/ks/' : l === 'q' ? '/kw/' : `/${l}/`);
+/** "start with /b/ or /c/", or for x "have the /ks/ sound of x, like box and fox". */
+const soundPhrase = (ls: string[]) => {
+  const st = ls.filter((l) => l !== 'x');
+  const parts = st.length ? [`start with ${st.map(soundOf).join(' or ')}`] : [];
+  if (ls.includes('x')) parts.push('have the /ks/ sound of x, like box and fox');
+  return parts.join(', or ');
+};
+/** ": cat, cup, cow" when there are words to list, otherwise nothing. */
+const listAfter = (words: string[]) => (words.length ? `: ${words.join(', ')}` : '');
 
 function offPageIdeas(w: Week): string[] {
   if (w.kind === 'name') return [
@@ -280,9 +311,9 @@ function offPageIdeas(w: Week): string[] {
   if (w.kind === 'letter' || w.kind === 'review') {
     const ls = w.letters;
     const l = ls[0];
-    const words = shortWords(l).slice(0, 3);
+    const words = l === 'x' ? [] : shortWords(l).slice(0, 3);
     const out = [
-      `Go on a sound hunt around the house for things that start with ${ls.map((x) => `/${x}/`).join(' or ')}${words.length ? `, like ${words.join(', ')}` : ''}.`,
+      `Go on a sound hunt around the house for things that ${soundPhrase(ls)}${words.length ? `, like ${words.join(', ')}` : ''}.`,
       `Write a big ${ls.map((x) => x.toUpperCase()).join(', ')} in a tray of salt, rice or shaving cream and trace it with one finger.`,
     ];
     if (w.kind === 'letter' && ls.length === 1) out.push(letterInfo(l).tip);
@@ -483,7 +514,7 @@ function planFor(level: Level, w: Week, labelOverride?: string): Planned[] {
   if (w.kind === 'name') return [
     { day: 0, title: 'Trace their name', how: 'Say each letter as they trace it. Green dots show where each stroke starts.', page: namePage(label) },
     { day: 1, title: 'Find the letters in their name', how: 'Circle every letter from their name. Say the letter name each time.', page: (o) => {
-      const letters = [...new Set(o.name.toLowerCase().replace(/[^a-z]/g, '').split(''))];
+      const letters = [...new Set(cleanName(o.name).toLowerCase().replace(/[^a-z]/g, '').split(''))];
       const targets = letters.length ? letters.flatMap(both) : ['A', 'a'];
       const pool = ALPHA.filter((x) => !letters.includes(x)).flatMap(both);
       return huntPage(o, targets, pool, 'Find the letters in my name', letters.length ? `Circle every ${letters.map((l) => l.toUpperCase()).join(', ')}.` : 'Type a name above to fill this page with the letters in it.', label, `name-${o.name}`);
@@ -496,9 +527,9 @@ function planFor(level: Level, w: Week, labelOverride?: string): Planned[] {
   if (w.kind === 'letter' && level === 'pre-k') {
     const l = w.letters[0];
     return [
-      { day: 0, title: `Trace ${l.toUpperCase()} and ${l}`, how: `Say the sound /${l}/ each time they trace. Green dots show where to start.`, page: letterTracePage(l, label) },
+      { day: 0, title: `Trace ${l.toUpperCase()} and ${l}`, how: `Say the sound ${soundOf(l)} each time they trace. Green dots show where to start.`, page: letterTracePage(l, label) },
       { day: 1, title: `Find ${l.toUpperCase()} and ${l}`, how: `Circle every ${l.toUpperCase()} and ${l}. Point to each one and say its sound.`, page: (o) => huntPage(o, both(l), distractors([l]).flatMap(both), `Find ${l.toUpperCase()} and ${l}`, `Circle every capital ${l.toUpperCase()} and lowercase ${l}.`, label, `pk-${w.n}`) },
-      { day: 2, title: `Color ${l.toUpperCase()} and ${l}`, how: `Color the bubble letters. Name things that start with /${l}/ while they color: ${shortWords(l).slice(0, 3).join(', ')}.`, page: coloringPage(`${l.toUpperCase()}${l}`, label, false) },
+      { day: 2, title: `Color ${l.toUpperCase()} and ${l}`, how: l === 'x' ? 'Color the bubble letters. Name things with the /ks/ sound of x while they color, like box, fox and six.' : `Color the bubble letters. Name things that start with ${soundOf(l)} while they color${listAfter(shortWords(l).slice(0, 3))}.`, page: coloringPage(`${l.toUpperCase()}${l}`, label, false) },
       mathDay,
       { day: 4, title: 'Trace their name', how: `Trace their name, then look for ${l.toUpperCase()} or ${l} in it together.`, page: namePage(label) },
     ];
@@ -507,10 +538,13 @@ function planFor(level: Level, w: Week, labelOverride?: string): Planned[] {
   if (w.kind === 'letter') {
     const [a, b] = w.letters;
     const words = [...shortWords(a).slice(0, 3), ...shortWords(b).slice(0, 3)];
+    const traceHow = (l: string) => l === 'x'
+      ? 'Say /ks/ as they trace. Few words start with x, so think of words that end in it, like box, fox and six.'
+      : `Say ${soundOf(l)} as they trace. Then think of three words that start with it.`;
     return [
-      { day: 0, title: `Trace ${a.toUpperCase()} ${a}`, how: `Say /${a}/ as they trace. Then think of three words that start with it.`, page: letterTracePage(a, label) },
-      { day: 1, title: `Trace ${b.toUpperCase()} ${b}`, how: `Say /${b}/ as they trace. Then think of three words that start with it.`, page: letterTracePage(b, label) },
-      { day: 2, title: 'Letter hunt and words', how: `Circle every ${a} and ${b} on the hunt page, then trace the words that start with them.`, page: (o) => [huntPage(o, [...both(a), ...both(b)], distractors([a, b]).flatMap(both), `Find ${a.toUpperCase()} ${a} and ${b.toUpperCase()} ${b}`, `Circle every ${a.toUpperCase()}, ${a}, ${b.toUpperCase()} and ${b}.`, label, `k-${w.n}`), ...wordsPage(words, label)(o)] },
+      { day: 0, title: `Trace ${a.toUpperCase()} ${a}`, how: traceHow(a), page: letterTracePage(a, label) },
+      { day: 1, title: `Trace ${b.toUpperCase()} ${b}`, how: traceHow(b), page: letterTracePage(b, label) },
+      { day: 2, title: 'Letter hunt and words', how: `Circle every ${a} and ${b} on the hunt page, then trace the words ${a === 'x' || b === 'x' ? 'that have their sounds' : 'that start with them'}.`, page: (o) => [huntPage(o, [...both(a), ...both(b)], distractors([a, b]).flatMap(both), `Find ${a.toUpperCase()} ${a} and ${b.toUpperCase()} ${b}`, `Circle every ${a.toUpperCase()}, ${a}, ${b.toUpperCase()} and ${b}.`, label, `k-${w.n}`), ...wordsPage(words, label)(o)] },
       mathDay,
       { day: 4, title: 'Sight words and name', how: `Trace ${w.sightWords.join(', ')}, then trace their name.`, page: (o) => [...wordsPage(w.sightWords, label)(o), namePage(label)(o)] },
     ];

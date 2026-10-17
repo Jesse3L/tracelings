@@ -7,7 +7,8 @@ import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from '../program
 import { templateContentFor } from '../program/templates';
 import { THEMES, mentionsIcon, countedIcon } from '../program/themes';
 import { SCENES, sceneById, type Scene } from '../program/scenes';
-import { BOOK_PAGES, arcProblem, castTerms, readyPaths, readyScenes, sceneArt } from '../program/story';
+import { BOOK_PAGES, arcProblem, castTerms, pickPath, readyPaths, pageLengthProblem, pageRuleText, sceneArt } from '../program/story';
+import { PROPER_NAMES } from './properNames';
 import { PLANS as BASE_PLANS, FAMILIES, type Level, type Week } from '../homeschool';
 
 const env = (k: string): string | undefined => ((import.meta.env ?? {}) as Record<string, string | undefined>)[k] ?? process.env[k];
@@ -97,7 +98,7 @@ const BIG_NUM_WORDS = /\b(thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred
 /** The word problem, tracing sentence and parent note rules, shared by both prompts. */
 const REST_PARTS = [
   '- wordProblems: 4 to 6 short problems about the theme, each one or two sentences read aloud by the grown-up. Use only the numbers allowed for the week. Each problem lists a, b, op, an answer, and icon (the id of the picture the child counts). op "+" means a plus b. op "-" means a minus b, with a at least b. op "compare" asks which number is more, with a and b different; the answer is the bigger number. Write a and b as digits in the text. Do not put the answer in the text. Do not use any other numbers.',
-  '- tracingSentence: one short sentence for the child to trace, 3 to 7 words and at most 36 letters, about the theme. It may use {{name}}. Letters, spaces and a final period or exclamation mark only.',
+  '- tracingSentence: one short sentence for the child to trace, 3 to 7 words and at most 36 letters, about the theme. It may use {{name}}. Letters, spaces, one hyphen inside a word (T-rex) and a final period or exclamation mark only.',
   '- parentNote: written to the grown-up. teaches: one or two sentences on what this week teaches. why: one or two sentences on why it helps right now. activities: exactly 2 off-paper activity ideas tied to the theme, each one sentence, using things most homes have. Do not talk to the child here.',
 ];
 
@@ -196,7 +197,8 @@ const tidy = (s: unknown, max: number, what: string): string => {
   return t;
 };
 const words = (s: string) => s.replace(/\{\{name\}\}/g, ' ').toLowerCase().match(/[a-z']+/g) ?? [];
-const sentences = (s: string) => s.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter(Boolean);
+/** Sentences, including the sentences inside a quote ("Cat, bat, hat! Up we go!" gives two). */
+const sentences = (s: string) => s.split(/(?<=[.!?,]["”])\s+|(?<=[.!?])\s+|["“](?=[A-Z])/).map((x) => x.replace(/^["“”\s]+/, '').trim()).filter(Boolean);
 const hasPhrase = (text: string, phrase: string) => new RegExp(`(^|[^a-z])${phrase.replace(/[.*+?^${}()|[\]\\']/g, (c) => (c === "'" ? "['’]" : `\\${c}`))}([^a-z]|$)`, 'i').test(text);
 
 function checkText(t: string, what: string) {
@@ -279,7 +281,7 @@ export function validateContent(raw: unknown, f: WeekFacts, sf?: StoryFacts | nu
   const tracingSentence = tidy(r.tracingSentence, 60, 'tracing sentence');
   checkText(tracingSentence, 'tracing sentence');
   checkCaps(tracingSentence, 'tracing sentence', themeCaps);
-  if (!/^[A-Za-z' ]+[.!]?$/.test(tracingSentence.replace(/\{\{name\}\}/g, 'Kid'))) fail('tracing sentence characters');
+  if (!/^[A-Za-z' ]+(-[A-Za-z]+)?[A-Za-z' ]*[.!]?$/.test(tracingSentence.replace(/\{\{name\}\}/g, 'Kid'))) fail('tracing sentence characters');
   if (tracingSentence.replace(/\{\{name\}\}/g, '').replace(/[^A-Za-z]/g, '').length > 36) fail('tracing sentence too long');
   const tw = tracingSentence.split(/\s+/).length;
   if (tw < 2 || tw > 8) fail('tracing sentence word count');
@@ -296,7 +298,8 @@ export function validateContent(raw: unknown, f: WeekFacts, sf?: StoryFacts | nu
     return t;
   });
   for (const t of [teaches, why, ...activities]) checkCaps(t, 'parent note', themeCaps);
-  if (/should be able to|\bmust\b|\bbehind\b|\bdelay/i.test(`${teaches} ${why}`)) fail('parent note pressure words');
+  // Sight word lists ("Sight words: like, must.") name the words; they are not pressure on the child.
+  if (/should be able to|\bmust\b|\bbehind\b|\bdelay/i.test(`${teaches} ${why}`.replace(/Sight words?:[^.]*\./gi, ""))) fail('parent note pressure words');
 
   return { source: 'ai', story, wordProblems, tracingSentence, parentNote: { teaches, why, activities } };
 }
@@ -351,8 +354,11 @@ export interface StoryFacts {
   pages: number;                                  // story pages in the book (6 Pre-K, 10 Kindergarten)
   cast: { name: string; kind: string; pronoun: string; describe: string }[];
   setting: string;
-  paths: { id: string; title: string; plot: string; scenes: string[] }[];   // ready paths, trimmed to the book
-  scenes: Scene[];                                // every scene with reviewed art
+  /** The one ready path this week's story must use, picked by code (pickPath), trimmed to the book. */
+  path: { id: string; title: string; plot: string; scenes: string[] };
+  /** Kept for callers that list paths: just the picked one. */
+  paths: { id: string; title: string; plot: string; scenes: string[] }[];
+  scenes: Scene[];                                // the picked path's scenes, in reading order
   letters: string[];
   family?: string;
   familyWords: string[];
@@ -360,17 +366,29 @@ export interface StoryFacts {
   nameWeek: boolean;
 }
 
+export interface PathChoice {
+  /** The plan's week number (rotates the path). */
+  weekIndex?: number;
+  /** Path ids this child had in recent weeks (from cached content), skipped while another path is left. */
+  avoid?: string[];
+  /** Moves the rotation on (a "make a new story" redo). */
+  shift?: number;
+  /** Use this ready path (tests and the template check). */
+  id?: string;
+}
+
 /** The facts the story writer needs, or null when the theme has no picture book ready for this level. */
-export function storyFacts(f: WeekFacts): StoryFacts | null {
+export function storyFacts(f: WeekFacts, choice: PathChoice = {}): StoryFacts | null {
   const theme = f.theme as ThemeId;
   const T = SCENES[theme];
-  const paths = readyPaths(theme, f.level);
-  if (!T || !paths.length) return null;
+  const p = !T ? null : choice.id ? readyPaths(theme, f.level).find((x) => x.id === choice.id) ?? null : pickPath(theme, f.level, choice.weekIndex ?? 1, choice.avoid ?? [], choice.shift ?? 0);
+  if (!T || !p) return null;
+  const path = { id: p.id, title: p.title, plot: p.plot, scenes: p.fitted };
   return {
     theme, level: f.level, pages: BOOK_PAGES[f.level], setting: T.setting,
     cast: T.cast.map((c) => ({ name: c.name, kind: c.kind, pronoun: c.pronoun, describe: c.describe })),
-    paths: paths.map((p) => ({ id: p.id, title: p.title, plot: p.plot, scenes: p.fitted })),
-    scenes: readyScenes(theme),
+    path, paths: [path],
+    scenes: p.fitted.map((id) => sceneById(theme, id)!),
     letters: f.letters, family: f.family, familyWords: f.familyWords, sightWords: f.sightWords, nameWeek: f.base.kind === 'name',
   };
 }
@@ -378,7 +396,7 @@ export function storyFacts(f: WeekFacts): StoryFacts | null {
 function storySystemPrompt(): string {
   return [
     'You are a children\'s picture book author writing for Tracelings, a site of printables for kids ages 3 to 7. A parent prints the book, cuts it out, and reads it aloud with their child, who then colors the pictures.',
-    'The pictures are already drawn. Each one is a scene from a small library, and you are told exactly what each picture shows. You choose the scenes and write the words for each page. Return only JSON that matches the schema.',
+    'The pictures are already drawn, in order, and you are told exactly what each picture shows. You write the words for each page. Return only JSON that matches the schema.',
     '',
     'How to write it:',
     '- Write one connected story with a beginning, a middle and an end. Each page follows from the page before, so a child can retell it: who, what went wrong, how friends helped, and the happy ending.',
@@ -387,14 +405,17 @@ function storySystemPrompt(): string {
     '- Sound words and simple feelings are welcome. End warm: a celebration, a cozy rest or a happy goodbye.',
     '',
     'The pictures (follow every rule):',
-    '- Every sentence on a page must be true of that page\'s picture. Name only what the picture shows: its characters and its things. Never say a character does something the picture does not show.',
+    '- Every sentence on a page must be true of that page\'s picture. Name only what the picture shows: its characters and its things. Never say a character does something the picture does not show, and never add a thing, a place or an animal that is not in the picture.',
     '- Each page names at least one character or thing that is in its picture, using the given words for that scene where they fit.',
     '- Do not name a cast member on a page whose picture does not show them.',
+    '- The thing that goes wrong is the thing that gets fixed: if the shell is lost, the shell is found; if the ball is stuck, the ball comes down.',
+    '- Introduce each character and each important thing (the egg, the ball) the first time it is named, so a child who sees only this book can follow it.',
     '',
     'The cast and the child:',
-    '- Use the cast names exactly as given, the same on every page. Do not invent any other names for anyone.',
-    '- The child is always the exact placeholder {{name}}. {{name}} is a friend in the story who is there the whole time but is never in the pictures, as if standing where the reader stands. {{name}} can see, say, point, cheer, count, have an idea or call for help, but never climbs, rides, carries or does anything that would have to be drawn.',
-    '- {{name}} helps solve the problem, for example by spotting where something went, or by saying the idea that works. Put {{name}} on at least two pages, and on at least one page between the problem and the solve.',
+    '- Use the cast names exactly as given, the same on every page. No pet forms or nicknames ("Snippy", "Stompy"). Do not invent any other names for anyone or anything.',
+    '- The child is always the exact placeholder {{name}}. {{name}} is a friend in the story who is there the whole time but is never in the pictures, as if standing where the reader stands.',
+    '- {{name}} may only say, spot, see, point, cheer, clap, count, or have an idea ("Look by the rocks!" says {{name}}). {{name}} never swims, climbs, rides, carries, grabs, holds, pushes, pulls, jumps, naps, eats, hugs, walks or does anything else that would have to be drawn.',
+    '- {{name}} helps solve the problem with an idea or by spotting something. Put {{name}} on at least two pages, and on at least one page between the problem and the solve.',
     '- Write in the third person. Never use "you" or "your".',
     '',
     'House style:',
@@ -404,7 +425,7 @@ function storySystemPrompt(): string {
     '- Faith neutral: no God, prayer, church, angels, or religious holidays. No brand names or real people.',
     '',
     'The book:',
-    '- scenes: the scene ids in reading order. Use one of the ready story paths as given (preferred), or build your own sequence from the listed scenes only, in this beat order: opening, then explore or find, then exactly one problem, then try and help, then solve, then celebrate, rest or ending. Never repeat a scene. Set pathId to the path id you used, or "" for your own sequence.',
+    '- scenes: copy the given scene ids exactly, in the given order. Do not add, drop, swap or reorder scenes. pathId: the given path id.',
     '- pages: one string per scene, the same count and order as scenes.',
     '- title: 2 to 6 words. It may include {{name}}.',
   ].join('\n');
@@ -415,9 +436,10 @@ function storyUserPrompt(s: StoryFacts): string {
   const lines = [
     `Reader: ${pre ? 'Pre-K (age 3 to 5). The grown-up reads it aloud.' : 'Kindergarten (age 5 to 6). A beginning reader reads some words with a grown-up.'}`,
     `Book length: exactly ${s.pages} pages (${s.pages} scenes).`,
+    pageRuleText(s.level),
     pre
-      ? 'Each page: one short sentence of at most 10 words, plus at most one tiny exclamation ("Oh no!", "Yum!"). Mostly 3 and 4 letter words a child can sound out, and very common words.'
-      : 'Each page: 1 to 3 short sentences, at most 10 words each and at most 26 words on the page. Lean on short words a beginning reader can sound out (cat, hop, sun) and the sight words.',
+      ? 'Mostly 3 and 4 letter words a child can sound out, and very common words.'
+      : 'Lean on short words a beginning reader can sound out (cat, hop, sun) and the sight words.',
     '',
     `Setting: ${s.setting}`,
     'Cast (use these names, the same on every page):',
@@ -431,10 +453,9 @@ function storyUserPrompt(s: StoryFacts): string {
   if (s.sightWords.length) lines.push(`- Sight words: ${s.sightWords.join(', ')}. Use each one.`);
   if (s.nameWeek) lines.push('- This is the name week: {{name}} can say or spell their own name in the story.');
   if (!s.letters.length && !s.familyWords.length && !s.sightWords.length && !s.nameWeek) lines.push('- Nothing extra this week. Keep the words short and friendly.');
-  lines.push('', 'Ready story paths (use one as is, preferred):');
-  for (const p of s.paths) lines.push(`- ${p.id} "${p.title}": ${p.plot} Scenes: ${p.scenes.join(', ')}.`);
-  lines.push('', 'Every scene picture you may use (id [beat] what the picture shows | who is in it | things in it | words for it):');
-  for (const sc of s.scenes) lines.push(`- ${sc.id} [${sc.beat}] ${sc.shows} | ${sc.cast.join(', ') || 'no cast'} | ${sc.props.join(', ')} | ${sc.words.join(', ')}`);
+  lines.push('', `This week's story (pathId "${s.path.id}"), working title "${s.path.title}": ${s.path.plot}`);
+  lines.push('Its pictures, one per page, in this order (page: id [beat] what the picture shows | who is in it | things in it | words for it):');
+  s.scenes.forEach((sc, i) => lines.push(`${i + 1}. ${sc.id} [${sc.beat}] ${sc.shows} | ${sc.cast.join(', ') || 'no cast'} | ${sc.props.join(', ')} | ${sc.words.join(', ')}`));
   return lines.join('\n');
 }
 
@@ -486,6 +507,39 @@ function sceneTerms(theme: ThemeId, sc: Scene): string[] {
   return [...new Set([...cast, ...things, ...parts])];
 }
 
+/** Things the child ({{name}}) may do: talk, look, cheer, think. Anything else would have to be drawn. */
+const CHILD_OK = new Set(['says', 'said', 'say', 'asks', 'asked', 'calls', 'called', 'shouts', 'shouted', 'yells', 'sings', 'sang', 'whispers', 'cheers', 'cheered', 'claps', 'clapped',
+  'spots', 'spotted', 'sees', 'saw', 'see', 'looks', 'looked', 'watches', 'watched', 'points', 'pointed', 'counts', 'counted', 'thinks', 'thought', 'has', 'had', 'knows', 'knew',
+  'smiles', 'smiled', 'laughs', 'laughed', 'giggles', 'helps', 'helped', 'hears', 'heard', 'finds', 'found', 'is', 'was', 'can', 'cheer', 'clap', 'spot', 'point', 'count',
+  'gets', 'got', 'likes', 'loves', 'waves', 'waved', 'nods', 'reads', 'spells', 'guesses', 'wonders', 'listens', 'and', 'too', 'will', 'did', 'does', 'gasps', 'grins', 'idea']);
+/** Actions that would need the child in the picture. */
+const CHILD_DRAWN = /\b(swims?|swam|climbs?|climbed|rides?|rode|grabs?|grabbed|naps?|napped|sleeps?|slept|carries|carried|carry|holds?|held|pushes|pushed|pulls|pulled|jumps?|jumped|hops?|hopped|runs?|ran|walks?|walked|eats?|ate|hugs?|hugged|kicks?|kicked|throws?|threw|catches|caught|picks?|lifts?|lifted|digs?|dug|wades?|waded|splash(es|ed)?|dances?|danced|sits?|sat|stands?|stood|tugs?|tugged|flies|flew|drives?|drove|rolls?|rolled|pets?|petted|feeds?|fed|tosses|tossed|hides?|hid|reaches|reached|gives?|gave|takes?|took|brings?|brought|puts?|wears?|washes|scrubs?|plays?|played|goes|went|steps?|stepped|crawls?|crawled|bounces?|slides?|trots?|paddles?|follows?|followed)\b/i;
+const CRYING = /\b(cry|cries|cried|crying|tears?|sob|sobs|sobbed|weep|weeps|wept|wail|wails)\b/i;
+/** Words that start a sentence and are not names (checked against invented names at sentence start). */
+const START_OK = new Set(['the', 'a', 'an', 'and', 'but', 'so', 'then', 'now', 'oh', 'no', 'yes', 'look', 'up', 'down', 'in', 'out', 'at', 'on', 'it', 'he', 'she', 'they', 'we', 'i', 'his', 'her', 'its', 'their',
+  'here', 'there', 'where', 'what', 'who', 'how', 'why', 'when', 'one', 'two', 'three', 'four', 'five', 'all', 'hi', 'hello', 'bye', 'good', 'what', 'wow', 'yay', 'yum', 'hooray', 'hip', 'tap', 'pop', 'splash',
+  'come', 'let', 'lets', 'get', 'go', 'stop', 'big', 'little', 'next', 'back', 'soon', 'later', 'today', 'at', 'with', 'off', 'over', 'away', 'thank', 'thanks', 'shh', 'ah', 'uh', 'ding', 'clink', 'crack',
+  'swish', 'thump', 'hiss', 'zoom', 'beep', 'toot', 'puff', 'chug', 'bump', 'bam', 'whee', 'wheee', 'push', 'pull', 'tug', 'spin', 'hop', 'step', 'run', 'jump', 'kick', 'scrub', 'drip', 'swing',
+  'roll', 'turn', 'make', 'have', 'ask', 'call', 'try', 'use', 'take', 'this', 'that', 'these', 'those', 'some', 'every', 'each', 'not', 'very', 'so', 'too', 'just', 'still', 'again', 'first', 'last', 'more']);
+
+/** Sentences of a page with the child's name in them. */
+function childSentences(p: string): string[] { return sentences(p).filter((x) => x.includes('{{name}}')); }
+
+/** Why a sentence has the child doing something that would have to be drawn, or null. Speech in quotes is fine
+ *  ("Swim to it!" says {{name}}), and so are the verbs in CHILD_OK right after the name. */
+export function childActionProblem(sentence: string): string | null {
+  const bare = sentence.replace(/["“][^"”]*["”]/g, ' QUOTE ');
+  if (!bare.includes('{{name}}')) return null;
+  // "{{name}} swims", "{{name}} and Flip swim", "Flip and {{name}} swim", "{{name}} can climb".
+  const m = bare.match(/\{\{name\}\}((?:\s+(?:and|with)\s+[A-Za-z]+(?:\s+[A-Za-z]+)?)?)\s+(?:(?:can|will|gets? to|tries to|wants to|starts to|helps(?:\s+[A-Z][a-z]+)?)\s+)?([a-z]+)/);
+  const before = bare.match(/\b(?:[A-Z][a-z]+|the [a-z]+)\s+and\s+\{\{name\}\}\s+([a-z]+)/);
+  for (const verb of [m?.[2], before?.[1]]) {
+    if (verb && !CHILD_OK.has(verb) && CHILD_DRAWN.test(verb)) return `{{name}} ${verb}, which would need {{name}} in the picture`;
+  }
+  // "{{name}} ... too" after a drawn action by someone else: "Snip naps, and {{name}} naps too" is caught above.
+  return null;
+}
+
 /**
  * Validates a scene story against the week (also used on the templates). Throws ContentInvalid.
  * teaching=false skips the week's letters, word family and sight word checks (templates fill those in where they fit).
@@ -501,25 +555,27 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
   const title = tidy(r.title, 60, 'title');
   checkText(title, 'title');
 
-  // Scenes: known, reviewed art, the right count, and a real arc.
+  // Scenes: exactly the path the server picked. No self-built sequences, so the plot can't jump.
   if (!Array.isArray(r.scenes) || !r.scenes.every((x: unknown) => typeof x === 'string')) fail('scenes missing');
   const scenes: string[] = r.scenes;
   for (const id of scenes) if (!sceneById(s.theme, id) || !sceneArt(s.theme, id)) fail(`unknown scene "${id}"`);
   if (scenes.length !== s.pages) fail(`needs ${s.pages} pages, got ${scenes.length}`);
   const arc = arcProblem(s.theme, scenes);
   if (arc) fail(`story arc: ${arc}`);
-  const pathId = typeof r.pathId === 'string' && s.paths.some((p) => p.id === r.pathId) ? r.pathId : undefined;
+  if (scenes.join(',') !== s.path.scenes.join(',')) fail(`scenes are not the given story path (${s.path.id})`);
+  const pathId = s.path.id;
 
   if (!Array.isArray(r.pages)) fail('story pages missing');
   const pages: string[] = r.pages.map((p: unknown, i: number) => tidy(p, 220, `page ${i + 1}`));
   if (pages.length !== scenes.length) fail('pages and scenes differ in count');
 
-  const pre = s.level === 'pre-k';
   const allTerms = castTerms(s.theme);
   pages.forEach((p, i) => {
     const what = `page ${i + 1}`;
     checkText(p, what);
     checkCaps(p, what, okCaps);
+    checkStartNames(p, what, okCaps);
+    if (CRYING.test(p)) fail(`${what}: crying`);
     const sc = sceneById(s.theme, scenes[i])!;
     // True of the picture: names something in it, and no cast member who isn't in it.
     if (!sceneTerms(s.theme, sc).some((t) => hasPhrase(p, t))) fail(`${what}: does not name anything in its picture (${sc.id})`);
@@ -535,10 +591,10 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
         if (named) fail(`${what}: names ${c.name}, who is not in the picture (${sc.id})`);
       }
     }
-    const real = sentences(p).filter((x) => !isExclaim(x));
-    const n = words(p).length + (p.match(/\{\{name\}\}/g) ?? []).length;
-    if (pre ? real.length > 2 || n > 16 : real.length > 3 || n > 32) fail(`${what}: too long for the level`);
-    for (const x of real) if (words(x).length + (x.match(/\{\{name\}\}/g) ?? []).length > (pre ? 12 : 13)) fail(`${what}: sentence too long`);
+    // The child is never drawn, so the child only talks, looks, cheers and has ideas.
+    for (const sent of childSentences(p)) { const why = childActionProblem(sent); if (why) fail(`${what}: ${why}`); }
+    const len = pageLengthProblem(s.level, p);
+    if (len) fail(`${what}: ${len}`);
   });
 
   const text = pages.join(' ');
@@ -549,10 +605,20 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
   const p0 = beats.indexOf('problem'), s0 = beats.indexOf('solve');
   if (!withName.some((i) => i >= p0 && i <= s0)) fail('{{name}} does not help with the problem');
   if (/\byou\b|\byour\b/i.test(text)) fail('story speaks to the reader');
-  // Cast names stay as given: no pet forms ("Stompy", "Dottie"). checkCaps already catches brand new names.
+  // Cast names stay as given: no pet forms ("Stompy", "Snippy", "Dottie"), anywhere in a sentence.
   for (const c of T.cast) {
     const short = c.name.split(' ').pop()!;
-    if (new RegExp(`\\b${short}(y|ie|ey|o|a|i|ster)\\b`).test(text)) fail(`cast name changed (${c.name})`);
+    // Capitalized only: "Bun" may meet a "bunny", and "Bump" may drive a "bumpy" road.
+    for (const m of text.matchAll(new RegExp(`\\b${short}${short.slice(-1)}?(y|ie|ey|o|a|i|ster|kins|sy)\\b`, 'g'))) {
+      if (!okCaps.has(m[0].toLowerCase())) fail(`cast name changed (${c.name})`);
+    }
+  }
+  const about = T.paths.find((p) => p.id === pathId)?.about ?? [];
+  // The thing that went wrong is the thing that gets fixed: the problem page and the solve page both name it.
+  if (about.length) {
+    const hit = (pg: string) => about.some((w) => (/^[A-Z]/.test(w) ? pg.includes(w) : hasPhrase(pg, w) || hasPhrase(pg, `${w}s`) || hasPhrase(pg, `${w}es`)));
+    if (!hit(pages[p0])) fail(`the problem page does not name what the problem is about (${about.join(' or ')})`);
+    if (!hit(pages[s0])) fail(`the solve page does not fix the same thing (${about.join(' or ')})`);
   }
 
   if (opts.teaching !== false) {
@@ -563,7 +629,18 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
     const hits = letters.filter((l) => [...sw].some((w) => w.startsWith(l))).length;
     if (hits < Math.ceil((letters.length * 2) / 3)) fail('story misses the week\'s letters');
   }
-  return { title, pages, scenes, ...(pathId ? { pathId } : {}) };
+  return { title, pages, scenes, pathId };
+}
+
+/** A capitalized word starting a sentence that is not a known word is an invented name ("Rosie waves too."). */
+function checkStartNames(t: string, what: string, extraOk: Set<string>) {
+  for (const s of sentences(t.replace(/\{\{name\}\}/g, 'Kid'))) {
+    const first = s.replace(/^["“'(]+/, '').match(/^[A-Z][a-z']+/)?.[0];
+    if (!first) continue;
+    const lw = first.toLowerCase().replace(/'s$/, '');
+    if (first === 'Kid' || START_OK.has(lw) || extraOk.has(lw) || OK_CAPS.has(first)) continue;
+    if (FIRST_NAMES.has(lw) || PROPER_NAMES.has(first)) fail(`${what}: possible name "${first}"`);
+  }
 }
 
 /** Pulls the JSON object out of a Messages API response body. */
@@ -577,13 +654,65 @@ export function parseResponse(body: any): unknown {
   try { return JSON.parse(text.slice(start, end + 1)); } catch { return fail('bad JSON'); }
 }
 
+// ---------- Picture-truth check (a second, cheap model call) ----------
+// Code checks words against the scene's lists, but it can't tell "Snip climbs a palm tree" is not in a picture that
+// shows a crab holding a shell. So after a story passes the code checks, the cheap model (PROGRAM_AI_MODEL) gets each
+// page's words and the description of its picture and answers, per page, whether everything the words say happens or
+// appears is in the picture. Any "no" fails the story (it gets the same one retry as any other failed rule).
+
+export const CHECK_SCHEMA = {
+  type: 'object',
+  properties: {
+    pages: { type: 'array', items: { type: 'object', properties: {
+      page: { type: 'integer' }, matches: { type: 'boolean' }, missing: { type: 'string' },
+    }, required: ['page', 'matches', 'missing'], additionalProperties: false } },
+  },
+  required: ['pages'],
+  additionalProperties: false,
+} as const;
+
+function checkSystemPrompt(): string {
+  return [
+    'You check a children\'s picture book before it is printed. Each page has words and one picture, and you are told exactly what the picture shows.',
+    'For each page, answer whether every action, object, animal and character the words say is happening or is there can be seen in the picture as described.',
+    'Rules:',
+    '- {{name}} is the child reading the book. {{name}} is never in the pictures. {{name}} saying, seeing, pointing, cheering, clapping, counting or having an idea is fine. {{name}} doing anything else (swimming, climbing, holding, napping, riding) does not match.',
+    '- Words spoken in quotes are fine when they are an idea or a call ("Look by the rocks!"), even if the thing said has not happened yet.',
+    '- Sound words ("Splash!", "Tap, tap!") and feelings ("He is happy") are fine when nothing in the picture contradicts them.',
+    '- A page does not match when it names a character who is not in the picture, says a character does something the picture does not show, adds a thing or place that is not there, or says something is missing that the picture shows (or the other way round).',
+    '- Count things: "two balls" does not match a picture with one ball.',
+    'Answer for every page. matches: true or false. missing: empty when it matches, else a few words on what is not in the picture.',
+  ].join('\n');
+}
+function checkUserPrompt(story: WeekContent['story'], theme: ThemeId): string {
+  const lines = ['Pages:'];
+  story.pages.forEach((p, i) => {
+    const sc = sceneById(theme, story.scenes![i])!;
+    lines.push(`Page ${i + 1}. Words: ${p}`, `Picture: ${sc.shows} (characters in it: ${sc.cast.join(', ') || 'none'})`);
+  });
+  return lines.join('\n');
+}
+/** Reads the checker's answer. Throws ContentInvalid naming the first page that does not match its picture. */
+export function readPictureCheck(body: unknown, pages: number): void {
+  const r = parseResponse(body) as { pages?: { page?: number; matches?: boolean; missing?: string }[] };
+  if (!r || !Array.isArray(r.pages)) fail('picture check: no answer');
+  const seen = new Set<number>();
+  for (const x of r.pages!) {
+    if (!Number.isInteger(x?.page) || x.page! < 1 || x.page! > pages) continue;
+    seen.add(x.page!);
+    if (x.matches !== true) fail(`page ${x.page}: the words say something the picture does not show${x.missing ? ` (${String(x.missing).slice(0, 80)})` : ''}`);
+  }
+  if (seen.size < pages) fail('picture check: not every page was checked');
+}
+
 // ---------- The call ----------
 
-export interface CallRequest { system: string; user: string; signal: AbortSignal; mode: 'book' | 'classic' }
+export interface CallRequest { system: string; user: string; signal: AbortSignal; mode: 'book' | 'classic' | 'check' }
 export type Caller = (req: CallRequest) => Promise<unknown>;
 
 /** The Messages API body for a call. Book mode: the story model writes the week in one call, with the story as a
- *  picture book. Classic: the cheap model and the old little book (themes without scene art yet). Never a name. */
+ *  picture book. Classic: the cheap model and the old little book (themes without scene art yet). Check: the cheap
+ *  model checks each page against its picture. Never a name. */
 export function requestBody(req: Pick<CallRequest, 'system' | 'user' | 'mode'>): Record<string, unknown> {
   if (req.mode === 'book') {
     return {
@@ -600,12 +729,12 @@ export function requestBody(req: Pick<CallRequest, 'system' | 'user' | 'mode'>):
   return {
     model: PROGRAM_AI_MODEL,
     // Haiku 5.5 rejects temperature values other than 1 (400), so no sampling parameters are sent. Its adaptive
-    // thinking would count toward max_tokens; this is a short structured job, so thinking is turned off.
-    max_tokens: 3000,
+    // thinking would count toward max_tokens; these are short structured jobs, so thinking is turned off.
+    max_tokens: req.mode === 'check' ? 1500 : 3000,
     thinking: { type: 'disabled' },
     system: req.system,
     messages: [{ role: 'user', content: req.user }],
-    output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } },
+    output_config: { format: { type: 'json_schema', schema: req.mode === 'check' ? CHECK_SCHEMA : OUTPUT_SCHEMA } },
   };
 }
 
@@ -623,63 +752,99 @@ const anthropicCaller: Caller = async ({ system, user, signal, mode }) => {
   return res.json();
 };
 
+// ---------- Cost ----------
+
+/** USD per million tokens (input, output), from the Anthropic pricing page (Oct 2026). Haiku 5.5 prompts here are
+ *  far under 100k tokens, so its base price applies. */
+export const PRICES: Record<string, { input: number; output: number }> = {
+  'claude-sonnet-5-5': { input: 2, output: 10 },
+  'claude-haiku-5-5': { input: 0.1, output: 0.5 },
+};
+/** Rough token counts for one week (measured from the prompts; output includes Sonnet's adaptive thinking). */
+export function estimateWeekCost(level: Level = 'kindergarten', attempts = 1): { usd: number; parts: { call: string; model: string; input: number; output: number; usd: number }[] } {
+  const k = level === 'kindergarten';
+  const calls = [
+    { call: 'story and week (book)', model: PROGRAM_STORY_MODEL, input: k ? 4200 : 3600, output: k ? 3500 : 2800 },
+    { call: 'picture-truth check', model: PROGRAM_AI_MODEL, input: k ? 1500 : 1000, output: k ? 350 : 220 },
+  ];
+  const parts = calls.map((c) => {
+    const p = PRICES[c.model] ?? PRICES['claude-sonnet-5-5'];
+    return { ...c, input: c.input * attempts, output: c.output * attempts, usd: ((c.input * p.input + c.output * p.output) / 1e6) * attempts };
+  });
+  return { usd: parts.reduce((a, b) => a + b.usd, 0), parts };
+}
+
 export interface GenerateOptions {
-  /** Called before every model call. Return false to stop (caps reached). */
+  /** Called before every model call (including the picture check). Return false to stop (caps reached). It only
+   *  checks the caps: generations are counted by the caller once one succeeds and is saved. */
   reserve?: () => Promise<boolean>;
   caller?: Caller;
   timeoutMs?: number;
+  /** Which ready path to use: the plan week, recent paths to skip, and a shift for redos. */
+  path?: PathChoice;
 }
-export interface GenerateResult { content: WeekContent; calls: number; reason?: 'no-key' | 'capped' | 'call-failed' | 'invalid' }
+export interface GenerateResult {
+  content: WeekContent;
+  /** Model calls made, the picture checks included. */
+  calls: number;
+  /** Story attempts that came back but failed a check (0, 1 or 2). */
+  failed: number;
+  reason?: 'no-key' | 'capped' | 'call-failed' | 'invalid';
+}
 
 /** AI content for a child-week, or the template when anything goes wrong. Never throws. */
 export async function generateWeekContent(profile: ChildProfile, week: ProgramWeek, opts: GenerateOptions = {}): Promise<GenerateResult> {
   const template = (): WeekContent => ({ ...templateContentFor(profile, week), source: 'template' });
   const caller = opts.caller ?? (aiConfigured() ? anthropicCaller : null);
-  if (!caller) return { content: template(), calls: 0, reason: 'no-key' };
+  if (!caller) return { content: template(), calls: 0, failed: 0, reason: 'no-key' };
   let facts: WeekFacts;
-  try { facts = weekFacts(profile, week); } catch { return { content: template(), calls: 0, reason: 'invalid' }; }
+  try { facts = weekFacts(profile, week); } catch { return { content: template(), calls: 0, failed: 0, reason: 'invalid' }; }
   // The picture book when this theme has ready scene art for the level, else the old little book.
-  const sf = storyFacts(facts);
+  const sf = storyFacts(facts, { weekIndex: week.index, ...(opts.path ?? {}) });
   const mode: CallRequest['mode'] = sf ? 'book' : 'classic';
   const system = sf ? bookSystemPrompt() : systemPrompt();
   const user = sf ? bookUserPrompt(facts, sf) : userPrompt(facts);
   let retryNote = '';
-  let calls = 0;
+  let calls = 0, failed = 0;
+  const call = async (req: Omit<CallRequest, 'signal'>, timeout: number): Promise<unknown> => {
+    let ok = true;
+    try { ok = opts.reserve ? await opts.reserve() : true; } catch (e) { console.error('program ai: reserve failed', (e as Error).message); ok = false; }
+    if (!ok) throw new Capped();
+    calls++;
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(Object.assign(new Error('timeout'), { name: 'TimeoutError' })), opts.timeoutMs ?? timeout);
+    try { return await caller({ ...req, signal: ctl.signal }); } catch (e) {
+      console.error('program ai: call failed', ctl.signal.aborted ? 'timeout' : (e as Error).message);
+      throw new CallFailed();
+    } finally { clearTimeout(timer); }
+  };
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      if (opts.reserve && !(await opts.reserve())) return { content: template(), calls, reason: 'capped' };
+      const body = await call({ system, user: user + retryNote, mode }, sf ? STORY_TIMEOUT_MS : AI_TIMEOUT_MS);
+      const content = validateContent(parseResponse(body), facts, sf);
+      if (sf) readPictureCheck(await call({ system: checkSystemPrompt(), user: checkUserPrompt(content.story, sf.theme), mode: 'check' }, AI_TIMEOUT_MS), content.story.pages.length);
+      return { content, calls, failed };
     } catch (e) {
-      console.error('program ai: reserve failed', (e as Error).message);
-      return { content: template(), calls, reason: 'capped' };
-    }
-    calls++;
-    let body: unknown;
-    const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(Object.assign(new Error('timeout'), { name: 'TimeoutError' })), opts.timeoutMs ?? (sf ? STORY_TIMEOUT_MS : AI_TIMEOUT_MS));
-    try {
-      body = await caller({ system, user: user + retryNote, signal: ctl.signal, mode });
-    } catch (e) {
-      console.error('program ai: call failed', ctl.signal.aborted ? 'timeout' : (e as Error).message);
-      return { content: template(), calls, reason: 'call-failed' };
-    } finally {
-      clearTimeout(timer);
-    }
-    try {
-      return { content: validateContent(parseResponse(body), facts, sf), calls };
-    } catch (e) {
+      if (e instanceof Capped) return { content: template(), calls, failed, reason: 'capped' };
+      if (e instanceof CallFailed) return { content: template(), calls, failed, reason: 'call-failed' };
       if (!(e instanceof ContentInvalid)) throw e;
-      const why = e.message.replace(/"[^"]*"/g, '"…"');
+      failed++;
+      const why = e.message.replace(/"[^"]*"/g, '"…"').replace(/\([^)]*\)$/, '').trim();
       console.warn('program ai: invalid output', why, `(attempt ${attempt + 1})`);
       // The retry is told which rule failed (never any quoted text), so it can fix that one thing.
       retryNote = `\n\nAn earlier answer was not used because of this rule: ${why}. Follow every rule this time.`;
     }
   }
-  return { content: template(), calls, reason: 'invalid' };
+  return { content: template(), calls, failed, reason: 'invalid' };
 }
+class Capped extends Error {}
+class CallFailed extends Error {}
 
 /** For tests: the prompts the model would see for a week. Contains no name. */
-export const _prompts = (profile: ChildProfile, week: ProgramWeek) => {
+export const _prompts = (profile: ChildProfile, week: ProgramWeek, path: PathChoice = {}) => {
   const f = weekFacts(profile, week);
-  const sf = storyFacts(f);
-  return sf ? { mode: 'book' as const, system: bookSystemPrompt(), user: bookUserPrompt(f, sf) } : { mode: 'classic' as const, system: systemPrompt(), user: userPrompt(f) };
+  const sf = storyFacts(f, { weekIndex: week.index, ...path });
+  return sf ? { mode: 'book' as const, system: bookSystemPrompt(), user: bookUserPrompt(f, sf), pathId: sf.path.id } : { mode: 'classic' as const, system: systemPrompt(), user: userPrompt(f) };
 };
+/** For tests: the picture check prompt for a story. */
+export const _checkPrompts = (story: WeekContent['story'], theme: ThemeId) => ({ system: checkSystemPrompt(), user: checkUserPrompt(story, theme) });

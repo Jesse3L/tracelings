@@ -77,7 +77,7 @@ const schema = [
     <section class="mt-14" aria-labelledby="cards">
       <h2 id="cards" class="text-[1.6rem] font-bold">Printable sight word flash cards</h2>
       <p class="mt-2 mb-6 text-muted max-w-[68ch]">Big, clear letters in the same style as the worksheets. Print the whole list or only the words your child is working on.</p>
-      <FlashCards client:visible words={L.words} slug={L.slug} label={L.short} source="sight-words" />
+      <FlashCards client:load words={L.words} slug={L.slug} label={L.short} source="sight-words" />
     </section>
 
     <article class="prose-tl max-w-[68ch] mt-12">

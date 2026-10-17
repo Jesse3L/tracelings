@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks';
+import { useHydrated } from '../../lib/hydrated';
 import type { Paper } from '../../lib/sheet';
 import { buildCursiveChart } from '../../lib/alphabetChart';
 import { loadFont } from '../../lib/fontshape';
@@ -15,6 +16,7 @@ export default function Seo2ChartButton(props: { source?: string }) {
   const [done, setDone] = useState(false);
   const [failed, setFailed] = useState(false);
   const member = useMember();
+  const ready = useHydrated();
 
   async function save() {
     setBusy(true);
@@ -32,8 +34,8 @@ export default function Seo2ChartButton(props: { source?: string }) {
 
   return (
     <div class="flex flex-wrap items-center gap-3">
-      <button type="button" disabled={busy} class="btn-pencil px-5 py-3 text-lg disabled:opacity-60" onClick={() => (!member.member && needsEmail() ? setGate(true) : save())}>
-        {busy ? 'Making your PDF…' : 'Download the chart (PDF)'}
+      <button type="button" disabled={!ready || busy} class="btn-pencil px-5 py-3 text-lg disabled:opacity-60" onClick={() => (!member.member && needsEmail() ? setGate(true) : save())}>
+        {!ready ? 'Loading…' : busy ? 'Making your PDF…' : 'Download the chart (PDF)'}
       </button>
       <label class="text-[15px] text-muted flex items-center gap-2">
         Paper
