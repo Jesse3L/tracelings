@@ -18,9 +18,9 @@ for (const theme of THEME_IDS) for (const level of ['pre-k', 'kindergarten'] as 
   for (const bw of weeks[level]) {
     const pw: ProgramWeek = { index: bw, level, baseWeek: bw, theme, focus: [] };
     const st = sceneStoryFor(theme, level, PLANS[level].weeks[bw - 1], pw, k)!;
-    const facts = storyFacts(weekFacts({ id: 'c_x', ageYears: level === 'pre-k' ? 4 : 5, skills: {}, interests: [theme], daysPerWeek: 5, minutesPerDay: 15, faith: false, createdAt: '2026-10-16' }, pw))!;
+    const facts = storyFacts(weekFacts({ id: 'c_x', ageYears: level === 'pre-k' ? 4 : 5, skills: {}, interests: [theme], daysPerWeek: 5, minutesPerDay: 15, faith: false, createdAt: '2026-10-16' }, pw), { id: path.id })!;
     n++;
-    try { validateStory(st, facts, { teaching: false }); } catch (e) { bad++; console.log(`${theme}/${path.id} ${level} week ${bw}: ${(e as Error).message}`); }
+    try { validateStory(st, facts); } catch (e) { bad++; console.log(`${theme}/${path.id} ${level} week ${bw}: ${(e as Error).message}`); }
     if (print && bw === weeks[level][1]) console.log(`\n# ${theme}/${path.id} (${level}) ${st.title}\n${st.pages.map((p, i) => `${i + 1}. ${p}`).join('\n')}`);
   }
 });

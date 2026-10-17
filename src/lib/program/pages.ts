@@ -493,7 +493,7 @@ export function bookSlot(p: number): { sheet: number; strip: 0 | 1; face: 'front
 /** How to put the big book together, for the plan page. */
 export const BIG_BOOK_HOW = 'Cut each sheet on the dashed line. Fold every strip in half on the dotted line with the pictures outside. Stack them by page number, cover on top, and staple along the folds.';
 
-export interface BigBookPlan { title: string; who: string; cover: string; pages: { scene: string; text: string }[] }
+export interface BigBookPlan { title: string; who: string; first: string; cover: string; pages: { scene: string; text: string; short: string }[] }
 
 /** The words and pictures of the big book, with the name swapped in. The cover shows the first page with the most cast. */
 export function bigBookPlan(o: Pick<ThemedOptions, 'name' | 'theme'>, story: WeekContent['story']): BigBookPlan {
@@ -503,19 +503,36 @@ export function bigBookPlan(o: Pick<ThemedOptions, 'name' | 'theme'>, story: Wee
   // else the story page with the most of the cast.
   const castOf = (id: string) => sceneById(o.theme, id)?.cast.length ?? 0;
   const full = SCENES[o.theme].cast.length;
-  const spare = readyScenes(o.theme).find((s) => (s.beat === 'opening' || s.beat === 'ending') && s.cast.length === full && !scenes.includes(s.id));
-  const cover = spare?.id ?? scenes.reduce((best, id) => (castOf(id) > castOf(best) ? id : best), scenes[0] ?? '');
-  return { title: personalize(story.title, o.name), who, cover, pages: story.pages.map((t, i) => ({ scene: scenes[i], text: personalize(t, o.name) })) };
+  // Prefer a whole-cast opening or ending; else any whole-cast scene not in the story (rest or celebrate, never a
+  // problem); else the story page with the most cast that isn't page 1.
+  const ready = readyScenes(o.theme).filter((s) => !scenes.includes(s.id) && s.cast.length === full);
+  const spare = ready.find((s) => s.beat === 'opening' || s.beat === 'ending') ?? ready.find((s) => s.beat === 'rest') ?? ready.find((s) => s.beat === 'celebrate');
+  const inStory = scenes.slice(1).reduce((best, id) => (castOf(id) > castOf(best) ? id : best), scenes[1] ?? scenes[0] ?? '');
+  const cover = spare?.id ?? inStory;
+  // The first name, for tight spots: a long full name never shrinks the story words below their size.
+  const first = who.split(/\s+/)[0] || who;
+  return {
+    title: personalize(story.title, o.name), who, first, cover,
+    pages: story.pages.map((t, i) => ({ scene: scenes[i], text: personalize(t, o.name), short: personalize(t, first) })),
+  };
 }
 
 /** Wraps text to fit a box, shrinking from `start` down to `min` points. */
-function fitText(text: string, start: number, min: number, maxW: number, maxH: number, lead = 1.3): { size: number; lines: string[] } {
+function fitText(text: string, start: number, min: number, maxW: number, maxH: number, lead = 1.3): { size: number; lines: string[]; fits: boolean } {
   for (let size = start; size >= min; size -= 0.5) {
-    const lines = text.split('\n').flatMap((para) => wrap(para, size, maxW));
-    if (lines.length * size * lead <= maxH && lines.every((l) => textW(l, size) <= maxW)) return { size, lines };
+    const lines = text.split('\n').flatMap((para) => wrapHard(para, size, maxW));
+    if (lines.length * size * lead <= maxH && lines.every((l) => textW(l, size) <= maxW)) return { size, lines, fits: true };
   }
-  const lines = text.split('\n').flatMap((para) => wrap(para, min, maxW));
-  return { size: min, lines };
+  const lines = text.split('\n').flatMap((para) => wrapHard(para, min, maxW));
+  return { size: min, lines, fits: false };
+}
+/** The best fit of the full-name text or the first-name text: the full name unless the first name prints larger
+ *  (or is the only one that fits). */
+function fitEither(full: string, short: string, start: number, min: number, maxW: number, maxH: number, lead = 1.3) {
+  const a = fitText(full, start, min, maxW, maxH, lead);
+  if (full === short || (a.fits && a.size >= start - 2)) return a;
+  const b = fitText(short, start, min, maxW, maxH, lead);
+  return (b.fits && !a.fits) || b.size > a.size ? b : a;
 }
 
 /**
@@ -570,13 +587,13 @@ export function bigBookPages(o: ThemedOptions, level: 'pre-k' | 'kindergarten', 
       let y = center(items, t.lines, mid, y0 + top + t.size, t.size, INK, 1.18);
       const ih = plan.cover ? picture(items, plan.cover, cx0 + 8, y + 2, cw - 16, ph - (y - y0) - 66) : 0;
       y += ih + 26;
-      const s = fitText(`A story for ${plan.who}`, 15, 10, cw, 20);
+      const s = fitEither(`A story for ${plan.who}`, `A story for ${plan.first}`, 15, 10, cw, 34);
       center(items, s.lines, mid, y, s.size, INK);
     } else if (p === total - 1) {
       let y = center(items, ['The end'], mid, y0 + top + 46, 36);
       y += 10;
-      center(items, [`Well read, ${plan.who}!`].flatMap((t) => fitText(t, 15, 10, cw, 20).lines), mid, y + 6, 15);
-      y += 30;
+      const wr = fitEither(`Well read, ${plan.who}!`, `Well read, ${plan.first}!`, 15, 10, cw, 34);
+      y = center(items, wr.lines, mid, y + 6, wr.size) - wr.size * 1.3 + 30;
       // A small box to draw a favorite part of the story.
       const bh = Math.min(170, ph - (y - y0) - 62), bw = Math.min(cw - 40, bh * 1.3);
       items.push({ kind: 'path', d: box(mid - bw / 2, y, bw, bh, 10), color: COLORS.quiet, width: 1, dash: [4, 3] });
@@ -590,7 +607,7 @@ export function bigBookPages(o: ThemedOptions, level: 'pre-k' | 'kindergarten', 
       const ih = picture(items, page.scene, cx0, y0 + top, cw, picMax);
       const ty = y0 + top + ih + 16;
       const avail = y0 + ph - 30 - ty;
-      const t = fitText(page.text, pre ? 24 : 19, pre ? 15 : 12, cw - 6, avail, 1.3);
+      const t = fitEither(page.text, page.short, pre ? 24 : 19, pre ? 15 : 12, cw - 6, avail, 1.3);
       // Center the block of words in the space under the picture.
       const blockH = t.lines.length * t.size * 1.3;
       center(items, t.lines, mid, ty + Math.max(0, (avail - blockH) / 2) + t.size * 0.9, t.size);
@@ -668,15 +685,58 @@ export interface PlanPageInput {
   verse?: { ref: string; text: string };
 }
 
-/** The grown-up's page: what this week teaches and why, the day by day plan, and ideas away from the paper. Shrinks to fit one page. */
+/**
+ * A name for tight spots: the full name when it fits `maxW` at `size`, else the first name (a long full name such as
+ * "Maximiliana Christabel" becomes "Maximiliana"), else "" so the caller can wrap or drop it.
+ */
+export function shortName(name: string, size: number, maxW: number): string {
+  const full = styleName(name, 'capital');
+  if (!full || textW(full, size) <= maxW) return full;
+  const first = full.split(/\s+/)[0];
+  return first;
+}
+
+/**
+ * The grown-up's page: what this week teaches and why, the day by day plan, and ideas away from the paper.
+ * Measured, then shrunk in small steps until the last line sits above the footer. A long name is shortened to the
+ * first name first, so the type stays as large as it can.
+ */
 export function programPlanPage(p: PlanPageInput): Page {
   const { w, h } = PAPER[p.paper];
-  const limit = h - M - 22;
-  for (const k of [1, 0.94, 0.88, 0.82, 0.76]) {
-    const pg = planAt(p, k, w, h);
-    if (pg.bottom <= limit || k === 0.76) return pg.page;
+  // The footer's baseline is h - M + 14 with 8 pt type; leave a clear gap above it.
+  const limit = h - M - 6;
+  const first = styleName(p.name, 'capital').split(/\s+/)[0] ?? '';
+  const names = first && first !== styleName(p.name, 'capital') ? [p.name, first] : [p.name];
+  let last: { page: Page; bottom: number } | null = null;
+  for (let k = 1; k >= 0.6 - 1e-9; k -= 0.03) {
+    for (const nm of names) {
+      const pg = planAt({ ...p, name: nm }, k, w, h);
+      if (pg.bottom <= limit) return pg.page;
+      last = pg;
+    }
   }
-  throw new Error('unreachable');
+  return last!.page;
+}
+
+/** wrap(), but a single word wider than maxW is split so no line runs past the edge. */
+function wrapHard(t: string, size: number, maxW: number): string[] {
+  const out: string[] = [];
+  for (const line of wrap(t, size, maxW)) {
+    let rest = line;
+    while (textW(rest, size) > maxW && rest.length > 1) {
+      let cut = rest.length - 1;
+      while (cut > 1 && textW(`${rest.slice(0, cut)}-`, size) > maxW) cut--;
+      out.push(`${rest.slice(0, cut)}-`);
+      rest = rest.slice(cut);
+    }
+    out.push(rest);
+  }
+  return out;
+}
+/** para() with wrapHard: draws wrapped text and returns the y below it. */
+function paraHard(items: Item[], t: string, x: number, y: number, size: number, maxW: number, color: string = INK): number {
+  for (const line of wrapHard(t, size, maxW)) { items.push({ kind: 'text', x, y, size, text: line, color, align: 'left' }); y += size * 1.35; }
+  return y;
 }
 
 function planAt(p: PlanPageInput, k: number, w: number, h: number): { page: Page; bottom: number } {
@@ -685,18 +745,24 @@ function planAt(p: PlanPageInput, k: number, w: number, h: number): { page: Page
   const who = styleName(p.name, 'capital');
   const sz = (n: number) => Math.round(n * k * 10) / 10;
   const textW2 = w - 2 * M - 92;
+  // Activity text carries {{name}}; "your child" when no name was typed.
+  const named = (t: string) => t.replace(/\{\{name\}\}/g, who || 'your child');
   items.push({ kind: 'text', x: M, y: 56, size: sz(11), text: p.heading, color: COLORS.quiet, align: 'left' });
-  const titleLines = wrap(who ? `${who}'s week: ${p.title}` : `This week: ${p.title}`, sz(24), textW2);
+  // The title shrinks (to 16 pt at most) until every wrapped line fits; a single word too wide even then is split.
+  const title = who ? `${who}'s week: ${p.title}` : `This week: ${p.title}`;
+  let ts = sz(24);
+  let titleLines = wrapHard(title, ts, textW2);
+  while (ts > 16 && (titleLines.length > 2 || titleLines.some((l) => textW(l, ts) > textW2))) { ts -= 1; titleLines = wrapHard(title, ts, textW2); }
   let y = 88;
-  for (const l of titleLines) { items.push({ kind: 'text', x: M, y, size: sz(24), text: l, color: INK, align: 'left' }); y += sz(24) * 1.15; }
+  for (const l of titleLines) { items.push({ kind: 'text', x: M, y, size: ts, text: l, color: INK, align: 'left' }); y += ts * 1.15; }
   drawIcon(items, p.theme, T.cover, w - M - 40, 84, 80);
-  y = para(items, `${T.label} theme. About ${p.minutes} minutes a day. Tick each box when you finish, and stop while it's still fun.`, M, y + 2, sz(11.5), textW2, COLORS.quiet) + 8;
+  y = paraHard(items, `${T.label} theme. About ${p.minutes} minutes a day. Tick each box when you finish, and stop while it's still fun.`, M, y + 2, sz(11.5), textW2, COLORS.quiet) + 8;
 
   // What this week teaches, and why, in a soft box.
   const noteTop = y;
   items.push({ kind: 'text', x: M + 14, y: noteTop + 20, size: sz(9.5), text: 'WHAT THIS WEEK TEACHES, AND WHY', color: COLORS.quiet, align: 'left' });
-  y = para(items, personalize(p.note.teaches, p.name), M + 14, noteTop + 20 + sz(17), sz(11.5), w - 2 * M - 28) + 2;
-  y = para(items, personalize(p.note.why, p.name), M + 14, y, sz(11.5), w - 2 * M - 28, COLORS.quiet) - sz(4);
+  y = paraHard(items, personalize(p.note.teaches, p.name), M + 14, noteTop + 20 + sz(17), sz(11.5), w - 2 * M - 28) + 2;
+  y = paraHard(items, personalize(p.note.why, p.name), M + 14, y, sz(11.5), w - 2 * M - 28, COLORS.quiet) - sz(4);
   items.unshift({ kind: 'path', d: box(M, noteTop, w - 2 * M, y - noteTop + 6, 10), color: COLORS.desc, width: 1.2, fill: '#f5f8fd' });
   y += 14;
 
@@ -706,8 +772,9 @@ function planAt(p: PlanPageInput, k: number, w: number, h: number): { page: Page
     y += sz(13) + sz(9);
     for (const part of d.parts) {
       items.push({ kind: 'path', d: box(M + 4, y - 1, sz(12), sz(12), 2.5), color: INK, width: 1.1 });
-      items.push({ kind: 'text', x: M + 4 + sz(20), y: y + sz(10), size: sz(11.5), text: part.title, color: INK, align: 'left' });
-      y = para(items, part.how, M + 4 + sz(20), y + sz(10) + sz(14), sz(10.5), w - 2 * M - 30, COLORS.quiet) + sz(3);
+      // Title on the checkbox line (wraps if long), then the how-to text one line below the title's last line.
+      const afterTitle = paraHard(items, named(part.title), M + 4 + sz(20), y + sz(10), sz(11.5), w - 2 * M - 30, INK);
+      y = paraHard(items, named(part.how), M + 4 + sz(20), afterTitle - sz(11.5) * 1.35 + sz(14), sz(10.5), w - 2 * M - 30, COLORS.quiet) + sz(3);
     }
   }
 
@@ -715,7 +782,7 @@ function planAt(p: PlanPageInput, k: number, w: number, h: number): { page: Page
     y += sz(8);
     items.push({ kind: 'line', x1: M, y1: y, x2: w - M, y2: y, color: COLORS.desc, width: 1 });
     items.push({ kind: 'text', x: M, y: y + sz(18), size: sz(12.5), text: `Verse of the week (${p.verse.ref}, BSB)`, color: INK, align: 'left' });
-    y = para(items, `"${p.verse.text}"`, M, y + sz(36), sz(11.5), w - 2 * M) + 2;
+    y = paraHard(items, `"${p.verse.text}"`, M, y + sz(36), sz(11.5), w - 2 * M) + 2;
   }
 
   if (p.note.activities.length) {
@@ -725,7 +792,7 @@ function planAt(p: PlanPageInput, k: number, w: number, h: number): { page: Page
     y += sz(18) + sz(18);
     for (const a of p.note.activities.slice(0, 3)) {
       drawIcon(items, p.theme, smallIcons(p.theme)[0].id, M + 6, y - sz(4), sz(12));
-      y = para(items, personalize(a, p.name), M + 18, y, sz(11), w - 2 * M - 18) + sz(4);
+      y = paraHard(items, personalize(a, p.name), M + 18, y, sz(11), w - 2 * M - 18) + sz(4);
     }
   }
   footer(items, w, h, p.credit, p.label);
@@ -844,7 +911,7 @@ export function buildProgramWeek(opts: ProgramWeekOptions): Page[] {
   const T: ThemedOptions = { name, theme, paper, credit, label, seed: `${profile.id}-${week.index}` };
   const po: PackOptions = { level, week: base, name, paper, credit, bubble: opts.bubble ?? null, faith: profile.faith, label, coloring: themedColoring(opts.bubble ?? null, theme, paper) };
   const days = weekDays(po);
-  const who = styleName(name, 'capital') || 'your child';
+  const who = '{{name}}'; // swapped for the name (or its first name when space is tight) on the plan page
   const n = step.number ?? 0;
 
   const mathMain: Activity = step.addTo

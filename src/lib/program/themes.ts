@@ -8,6 +8,10 @@ export interface ThemeIcon {
   one: string;       // "T-rex"
   many: string;      // "T-rexes"
   small?: boolean;   // simple enough to read clearly when printed small (ten frames, groups of 10 or more)
+  /** What kind of thing the picture is, so word problems use verbs that fit (see iconKind):
+   *  'animal' (anything that moves by itself: animals, characters, vehicles), 'object' (a thing someone can hold,
+   *  give or carry), 'place' (a fixed thing such as a volcano, barn, tunnel, sun or footprint; never taken away). */
+  kind?: IconKind;
   /** Other words a story or word problem may use for this picture: plurals, spellings, simple aliases
    *  ("t rex", "brachiosaurus"). `one` and `many` always count too. Only words a child would agree match the picture. */
   words?: string[];
@@ -174,6 +178,30 @@ export const THEMES: Record<ThemeId, ThemeInfo> = {
 };
 
 export const THEME_IDS = Object.keys(THEMES) as ThemeId[];
+
+// ---------- What kind of thing each picture is ----------
+
+export type IconKind = 'animal' | 'object' | 'place';
+/** Pictures that are objects (held, given, carried) or places and fixed things (counted, never taken away).
+ *  Everything else is an animal, a character or a vehicle that can move by itself. */
+const ICON_KINDS: Partial<Record<ThemeId, Record<string, IconKind>>> = {
+  dinosaurs: { egg: 'object', bone: 'object', footprint: 'place', volcano: 'place', 'palm-tree': 'place' },
+  trucks: { cone: 'object', 'traffic-light': 'place' },
+  unicorns: { star: 'object', heart: 'object', gem: 'object', wand: 'object', flower: 'object', rainbow: 'place', cloud: 'place' },
+  ocean: { shell: 'object' },
+  space: { planet: 'place', moon: 'place', star: 'place', sun: 'place', telescope: 'object', satellite: 'place' },
+  farm: { barn: 'place' },
+  bugs: { leaf: 'object' },
+  castles: { crown: 'object', shield: 'object', wand: 'object', ring: 'object', castle: 'place' },
+  trains: { 'conductor-hat': 'object', ticket: 'object', tunnel: 'place', crossing: 'place' },
+  sports: { 'soccer-ball': 'object', basketball: 'object', football: 'object', 'bat-and-ball': 'object', tennis: 'object', trophy: 'object', medal: 'object', sneaker: 'object', goal: 'place' },
+  pets: { 'food-bowl': 'object', yarn: 'object' },
+  jungle: { bananas: 'object' },
+};
+export const iconKind = (theme: ThemeId, ic: ThemeIcon | string): IconKind => {
+  const id = typeof ic === 'string' ? ic : ic.id;
+  return (typeof ic !== 'string' && ic.kind) || ICON_KINDS[theme]?.[id] || 'animal';
+};
 
 // ---------- Which picture goes with some words ----------
 // Used by the little book and the word problems page to pick a picture, by the AI validator to check the pictures

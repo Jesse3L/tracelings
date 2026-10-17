@@ -10,7 +10,8 @@ import { templateContentFor, freeWeekContent, sceneStoryFor, PLANS } from '../sr
 import { bigBookPages, bookSlot, buildProgramWeek } from '../src/lib/program/pages';
 import { THEME_IDS } from '../src/lib/program/themes';
 import { placeChild } from '../src/lib/program/engine';
-import { validateStory, validateContent, storyFacts, weekFacts, generateWeekContent, requestBody, _prompts, ContentInvalid, BOOK_SCHEMA, PROGRAM_STORY_MODEL, type Caller, type StoryFacts } from '../src/lib/server/ai';
+import { validateStory, validateContent, storyFacts, weekFacts, generateWeekContent, requestBody, _prompts, ContentInvalid, BOOK_SCHEMA, CHECK_SCHEMA, PROGRAM_STORY_MODEL, PROGRAM_AI_MODEL, estimateWeekCost, type Caller, type StoryFacts } from '../src/lib/server/ai';
+import { pickPath, PAGE_RULES, pageLengthProblem, pageRuleText } from '../src/lib/program/story';
 
 let passed = 0;
 const test = async (name: string, fn: () => void | Promise<void>) => {
@@ -34,8 +35,8 @@ const kWeek: ProgramWeek = { index: 3, level: 'kindergarten', baseWeek: 15, them
 const pkWeek: ProgramWeek = { index: 2, level: 'pre-k', baseWeek: 2, theme: 'dinosaurs', focus: ['letter-names'] };
 
 setSceneArt(fullArt());
-const kFacts = storyFacts(weekFacts(profile(), kWeek))!;
-const pkFacts = storyFacts(weekFacts(profile({ ageYears: 4 }), pkWeek))!;
+const kFacts = storyFacts(weekFacts(profile(), kWeek), { id: 'lost-egg' })!;
+const pkFacts = storyFacts(weekFacts(profile({ ageYears: 4 }), pkWeek), { id: 'egg-short' })!;
 
 // A good Kindergarten story on the dinosaur lost-egg path, with the -at words and sight words "am" and "are".
 const goodK = () => ({
@@ -109,7 +110,7 @@ await test('validator: dashes, banned words, scary words', () => {
 });
 await test('validator: page too long for the level', () => {
   const g = goodK(); g.pages[1] = 'Stomp and Tops walk on the path. They step and step. They hop and hop. They go and go and go.';
-  rejects(() => validateStory(g, kFacts), /too long/);
+  rejects(() => validateStory(g, kFacts), /too long|too many sentences/);
 });
 await test('validator: teaching words are checked (word family)', () => {
   const g = goodK(); g.pages[9] = 'Stomp, Dot and Tops wave bye. What fun, {{name}}!'; g.pages[0] = g.pages[0].replace('sat', 'stood'); g.pages[8] = g.pages[8].replace('sat', 'is');
@@ -119,7 +120,7 @@ await test('validator: a Pre-K story of 6 pages passes, with short pages', () =>
   const t = sceneStoryFor('dinosaurs', 'pre-k', PLANS['pre-k'].weeks[1], pkWeek, 0)!;
   validateStory(t, pkFacts, { teaching: false });
   const long = { ...t, pages: t.pages.map((p, i) => (i === 1 ? `${p} The egg rolls and rolls and rolls down the big hill.` : p)) };
-  rejects(() => validateStory(long, pkFacts, { teaching: false }), /too long/);
+  rejects(() => validateStory(long, pkFacts, { teaching: false }), /too long|too many sentences/);
 });
 
 // ---------- Full content, the call and the fallback ----------
@@ -134,10 +135,20 @@ const rest = () => ({
   parentNote: { teaches: 'This week covers -at words like cat, hat and mat.', why: 'Word families help many kids see that one new sound makes a new word.', activities: ['Hide 5 toy dinosaurs and count them as they are found.', 'Write at on a card and add letters to make cat, hat and mat.'] },
 });
 const reply = (o: unknown) => ({ stop_reason: 'end_turn', content: [{ type: 'text', text: JSON.stringify(o) }] });
+/** The picture check's answer: every page matches, except the listed ones. */
+const checkOk = (pages = 10, no: number[] = []) => reply({ pages: Array.from({ length: pages }, (_, i) => ({ page: i + 1, matches: !no.includes(i + 1), missing: no.includes(i + 1) ? 'a thing' : '' })) });
+/** A scripted model: book calls take the next story reply, check calls the next check reply (all match by default). */
 const seq = (...rs: unknown[]): Caller & { n: number; modes: string[]; users: string[] } => {
-  const f = (async (req: any) => { f.modes.push(req.mode); f.users.push(req.user); return rs[Math.min(f.n++, rs.length - 1)]; }) as any;
+  let b = 0, c = 0;
+  const books = rs.filter((r: any) => !(r && r.__check)), checks = rs.filter((r: any) => r && r.__check).map((r: any) => r.v);
+  const f = (async (req: any) => {
+    f.modes.push(req.mode); f.users.push(req.user); f.n++;
+    if (req.mode === 'check') return checks.length ? checks[Math.min(c++, checks.length - 1)] : checkOk();
+    return books[Math.min(b++, books.length - 1)];
+  }) as any;
   f.n = 0; f.modes = []; f.users = []; return f;
 };
+const check = (v: unknown) => ({ __check: true, v });
 
 await test('content: full book-mode output validates, cast names allowed in word problems', () => {
   const c = validateContent({ story: goodK(), ...rest() }, weekFacts(profile(), kWeek), kFacts);
@@ -146,24 +157,57 @@ await test('content: full book-mode output validates, cast names allowed in word
 });
 await test('generate: picture book mode uses the story model, one call when valid', async () => {
   const c = seq(reply({ story: goodK(), ...rest() }));
-  const r = await generateWeekContent(profile(), kWeek, { caller: c });
-  assert.equal(r.content.source, 'ai'); assert.equal(r.calls, 1); assert.deepEqual(c.modes, ['book']);
+  const r = await generateWeekContent(profile(), kWeek, { caller: c, path: { id: 'lost-egg' } });
+  assert.equal(r.content.source, 'ai'); assert.equal(r.calls, 2); assert.deepEqual(c.modes, ['book', 'check']); assert.equal(r.failed, 0);
   assert.ok(storyHasArt('dinosaurs', r.content.story));
 });
 await test('generate: a mismatched picture retries once (told the rule), then falls back to the template book', async () => {
   const bad = goodK(); bad.pages[2] = 'Dot finds a nest with one big egg.';
   const c = seq(reply({ story: bad, ...rest() }), reply({ story: bad, ...rest() }));
-  const r = await generateWeekContent(profile(), kWeek, { caller: c });
-  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 2);
+  const r = await generateWeekContent(profile(), kWeek, { caller: c, path: { id: 'lost-egg' } });
+  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 2); assert.equal(r.failed, 2);
   assert.ok(c.users[1].includes('not in the picture') && !c.users[1].includes('Dot finds'), 'retry names the rule, not the text');
   assert.ok(storyHasArt('dinosaurs', r.content.story), 'template fallback is a picture book too');
 });
 await test('generate: caps and reserve are unchanged (one reserve per call)', async () => {
   let n = 0; const c = seq(reply('x'), reply({ story: goodK(), ...rest() }));
-  const r = await generateWeekContent(profile(), kWeek, { caller: c, reserve: async () => { n++; return true; } });
-  assert.equal(n, 2); assert.equal(r.calls, 2);
+  const r = await generateWeekContent(profile(), kWeek, { caller: c, reserve: async () => { n++; return true; }, path: { id: 'lost-egg' } });
+  // Bad JSON (1 call), then a good story (1) and its picture check (1): each call checks the caps first.
+  assert.equal(n, 3); assert.equal(r.calls, 3); assert.equal(r.failed, 1); assert.equal(r.content.source, 'ai');
   const capped = await generateWeekContent(profile(), kWeek, { caller: seq(), reserve: async () => false });
   assert.equal(capped.reason, 'capped'); assert.equal(capped.calls, 0);
+});
+await test('picture check: a "no" on any page fails the story, retries once, then the template', async () => {
+  const c = seq(reply({ story: goodK(), ...rest() }), check(checkOk(10, [3])), check(checkOk(10, [7])));
+  const r = await generateWeekContent(profile(), kWeek, { caller: c, path: { id: 'lost-egg' } });
+  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.deepEqual(c.modes, ['book', 'check', 'book', 'check']);
+  assert.ok(c.users[2].includes('the words say something the picture does not show'), 'retry names the failed rule');
+  const ok = seq(reply({ story: goodK(), ...rest() }), check(checkOk(10, [3])), check(checkOk(10)));
+  const r2 = await generateWeekContent(profile(), kWeek, { caller: ok, path: { id: 'lost-egg' } });
+  assert.equal(r2.content.source, 'ai'); assert.equal(r2.failed, 1);
+  const body = requestBody({ system: 's', user: 'u', mode: 'check' }) as any;
+  assert.equal(body.model, PROGRAM_AI_MODEL); assert.equal(body.output_config.format.schema, CHECK_SCHEMA); assert.equal(body.thinking.type, 'disabled');
+});
+await test('paths: the server picks the path; the AI must use it as given', () => {
+  const g = goodK(); rejects(() => validateStory(g, storyFacts(weekFacts(profile(), kWeek), { id: 'mud' })!), /not the given story path/);
+  const a = pickPath('dinosaurs', 'kindergarten', 1)!.id, b = pickPath('dinosaurs', 'kindergarten', 2)!.id;
+  assert.notEqual(a, b, 'rotates by week');
+  assert.notEqual(pickPath('dinosaurs', 'kindergarten', 1, [a])!.id, a, 'skips recent paths');
+  assert.notEqual(pickPath('dinosaurs', 'kindergarten', 1, [], 1)!.id, a, 'a redo moves on');
+  const p = _prompts(profile(), kWeek, { id: 'lost-egg' });
+  assert.ok(p.user.includes('pathId "lost-egg"') && !p.user.includes('Ready story paths') && !p.user.includes('prob-stuck'), 'only the picked path is in the prompt');
+});
+await test('page rule: one rule for the prompt, the checker and the templates', () => {
+  assert.deepEqual(PAGE_RULES['pre-k'], { sentences: 2, words: 14, sentenceWords: 12 });
+  assert.ok(pageRuleText('pre-k').includes('at most 14 words'));
+  assert.ok(_prompts(profile({ ageYears: 4 }), pkWeek).user.includes(pageRuleText('pre-k')));
+  assert.equal(pageLengthProblem('pre-k', 'Oh no! The egg rolls down, down, down the hill.'), null);
+  assert.ok(pageLengthProblem('pre-k', 'Snip finds a big shell in the sand by the sea, and it is so very pretty.'));
+});
+await test('cost: the estimate counts the picture check', () => {
+  const k = estimateWeekCost('kindergarten');
+  assert.equal(k.parts.length, 2); assert.ok(k.parts[1].call.includes('picture'));
+  assert.ok(k.usd > 0.03 && k.usd < 0.1, String(k.usd));
 });
 await test('request: book mode is the story model with adaptive thinking and no sampling params; classic unchanged', () => {
   const b = requestBody({ system: 's', user: 'u', mode: 'book' }) as any;
@@ -174,7 +218,7 @@ await test('request: book mode is the story model with adaptive thinking and no 
   assert.equal(c.thinking.type, 'disabled'); assert.ok(c.model.includes('haiku') || process.env.PROGRAM_AI_MODEL);
 });
 await test('prompt: names never sent, scenes and cast listed, no dashes', () => {
-  const p = _prompts(profile(), kWeek);
+  const p = _prompts(profile(), kWeek, { id: 'lost-egg' });
   assert.equal(p.mode, 'book');
   assert.ok(p.system.includes('{{name}}') && p.user.includes('Stomp') && p.user.includes('lost-egg') && p.user.includes('prob-egg-rolls'));
   assert.ok(p.user.includes('-at') && p.user.includes('am, are'));
@@ -242,8 +286,9 @@ await test('template coverage: every theme x level x ready path x kind of week g
         const pw: ProgramWeek = { index: bw, level, baseWeek: bw, theme, focus: [] };
         const st = sceneStoryFor(theme, level, w, pw, k)!;
         assert.equal(st.pathId, path.id);
-        const facts = storyFacts(weekFacts(profile({ ageYears: level === 'pre-k' ? 4 : 5, interests: [theme] }), pw))!;
-        try { validateStory(st, facts, { teaching: false }); } catch (e) { throw new Error(`${theme}/${path.id} week ${bw}: ${(e as Error).message}`); }
+        const facts = storyFacts(weekFacts(profile({ ageYears: level === 'pre-k' ? 4 : 5, interests: [theme] }), pw), { id: path.id })!;
+        // The templates pass the same checks as the AI, the week's words included.
+        try { validateStory(st, facts); } catch (e) { throw new Error(`${theme}/${path.id} week ${bw}: ${(e as Error).message}`); }
         assert.ok(!st.pages.some((p) => p.includes('{W}')));
         n++;
       }
@@ -268,9 +313,23 @@ await test('templates: weeks rotate through the paths', () => {
 });
 await test('templates: week teaching line lands ({W})', () => {
   const at = sceneStoryFor('dinosaurs', 'kindergarten', PLANS.kindergarten.weeks[14], { index: 15, level: 'kindergarten', baseWeek: 15, theme: 'dinosaurs', focus: [] }, 0)!;
-  assert.ok(at.pages.join(' ').includes('"Cat, bat, hat!" sings {{name}}.'), at.pages.join(' | '));
+  assert.ok(at.pages.join(' ').includes('sings, "Cat, bat, hat!'), at.pages.join(' | '));
   const s = sceneStoryFor('trucks', 'pre-k', PLANS['pre-k'].weeks[1], { index: 2, level: 'pre-k', baseWeek: 2, theme: 'trucks', focus: [] }, 0)!;
-  assert.match(s.pages.join(' '), /"S is for [a-z]+!" says \{\{name\}\}\./);
+  assert.match(s.pages.join(' '), /says, "S is for [a-z]+!/);
+  // X is an ending sound; C uses a hard c; U has a word; review weeks name every letter; the child isn't named twice.
+  const x = sceneStoryFor('trucks', 'pre-k', PLANS['pre-k'].weeks[33], { index: 34, level: 'pre-k', baseWeek: 34, theme: 'trucks', focus: [] }, 0)!;
+  assert.match(x.pages.join(' '), /ends with x!/);
+  for (const theme of THEME_IDS) {
+    const c = sceneStoryFor(theme, 'pre-k', PLANS['pre-k'].weeks[9], { index: 10, level: 'pre-k', baseWeek: 10, theme, focus: [] }, 0)!;
+    const m = c.pages.join(' ').match(/C is for ([a-z]+)/); assert.ok(m && !/^c[hei]/.test(m[1]), `${theme}: ${m?.[0]}`);
+    const u = sceneStoryFor(theme, 'pre-k', PLANS['pre-k'].weeks[21], { index: 22, level: 'pre-k', baseWeek: 22, theme, focus: [] }, 0)!;
+    assert.match(u.pages.join(' '), /U is for [a-z]+/, theme);
+    const k9 = sceneStoryFor(theme, 'kindergarten', PLANS.kindergarten.weeks[8], { index: 9, level: 'kindergarten', baseWeek: 9, theme, focus: [] }, 0)!;
+    assert.ok(/O is for/.test(k9.pages.join(' ')) && /U is for/.test(k9.pages.join(' ')), `${theme} K week 9: ${k9.pages.join(' ')}`);
+    const r = sceneStoryFor(theme, 'pre-k', PLANS['pre-k'].weeks[4], { index: 5, level: 'pre-k', baseWeek: 5, theme, focus: [] }, 0)!;
+    assert.match(r.pages.join(' '), /S, A, T!/, theme);
+    for (const pg of [...c.pages, ...u.pages, ...k9.pages, ...r.pages]) assert.ok((pg.match(/\{\{name\}\}/g) ?? []).length <= 1, `name twice: ${pg}`);
+  }
   const nm = freeWeekContent('farm', 'pre-k').story;
   assert.ok(nm.pages.join(' ').includes('Hip, hip, hooray for {{name}}!'));
 });

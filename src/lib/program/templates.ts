@@ -5,10 +5,10 @@
 import { PLANS, FAMILIES, type Level, type Week } from '../homeschool';
 import lettersData from '../../data/letters.json';
 import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from './types';
-import { THEMES, storyIcon, type ThemeIcon } from './themes';
+import { THEMES, storyIcon, iconKind, type ThemeIcon } from './themes';
 import { baseWeekOf, reviewLetters, type MathStep } from './engine';
 import { SCENES } from './scenes';
-import { readyPaths } from './story';
+import { readyPaths, pageLengthProblem } from './story';
 import { STORY_TEXTS } from './storyTexts';
 
 type Problem = WeekContent['wordProblems'][number];
@@ -154,7 +154,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
       ], icons: ['unicorn', 'gem', 'unicorn', 'gem', 'gem', 'unicorn'] },
       problems: [
         add('{{name}} has 3 gems. The unicorn gives 2 more. How many gems now?', 3, 2, 'gem'),
-        sub('There are 6 clouds in the sky. 2 float away. How many clouds are left?', 6, 2, 'cloud'),
+        sub('The unicorn has 6 hearts. She gives 2 to {{name}}. How many hearts does the unicorn have left?', 6, 2, 'heart'),
         add('4 flowers grow by the rainbow and 3 more pop up. How many flowers?', 4, 3, 'flower'),
         sub('The unicorn has 5 stars. It gives 1 star to {{name}}. How many stars does it have left?', 5, 1, 'star'),
         cmp('{{name}} counts 8 hearts. A friend counts 6. Write the bigger number.', 8, 6, 'heart'),
@@ -248,7 +248,7 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
         add('{{name}} sees 5 stars and then 2 more. How many stars in all?', 5, 2, 'star'),
         sub('There are 6 rockets on the pad. 4 blast off. How many rockets are left?', 6, 4, 'rocket'),
         add('An alien has 3 moons. It finds 3 more. How many moons?', 3, 3, 'moon'),
-        sub('8 planets spin around. 1 hides behind the sun. How many can {{name}} see?', 8, 1, 'planet'),
+        sub('8 aliens wave from the moon. 1 alien hops into a rocket. How many aliens are still on the moon?', 8, 1, 'alien'),
         cmp('{{name}} sees 4 rockets. The alien sees 7 rockets. Write the bigger number.', 4, 7, 'rocket'),
       ],
       sentence: 'A rocket and a moon.',
@@ -584,30 +584,124 @@ const FREE: Record<ThemeId, Record<Level, Free>> = {
 
 // ---------- Picture book stories (scene paths) ----------
 
-/** A thing named in the story that starts with a letter, for "S is for sun!": a one-word prop of the story's
- *  scenes that the text uses (never a cast name or a little word like "and"). */
-function storyWordFor(letter: string, pages: string[], theme: ThemeId, scenes: string[]): string | undefined {
-  const seen = new Set(pages.join(' ').toLowerCase().match(/[a-z]+/g) ?? []);
-  const things = scenes.flatMap((id) => SCENES[theme].scenes.find((s) => s.id === id)?.props ?? []).filter((p) => /^[a-z]{3,6}$/.test(p));
-  return things.find((w) => w.startsWith(letter) && seen.has(w));
-}
+// ---------- The week's teaching line ({W}) ----------
 
-/** The one line that carries the week's teaching into a template story ({W}), or '' when there is none. */
-function teachLine(level: Level, w: Week, pw: ProgramWeek, pages: string[], scenes: string[]): string {
-  if (w.kind === 'name') return 'Hip, hip, hooray for {{name}}!';
-  if (w.kind === 'family' || w.kind === 'vowel-review') {
+/** Words whose FIRST SOUND is the sound each letter is taught with (short vowels, hard c and g, no ch, sh, th, wh,
+ *  kn or ph). X has none a child would hear, so x is taught as an ending sound ("Box ends with x!"). */
+const SOUND_WORDS: Record<string, string[]> = {
+  a: ['ant', 'apple', 'ax', 'alligator'], b: ['bus', 'bag', 'ball', 'bed'], c: ['cat', 'cup', 'cap', 'cow'], d: ['dog', 'dot', 'duck', 'dig'],
+  e: ['egg', 'elf', 'elephant', 'end'], f: ['fan', 'fox', 'fish', 'fun'], g: ['gum', 'goat', 'gift', 'gate'], h: ['hat', 'hen', 'hop', 'hill'],
+  i: ['inch', 'igloo', 'insect', 'in'], j: ['jet', 'jam', 'jump', 'jug'], k: ['kit', 'kite', 'king', 'kick'], l: ['log', 'lid', 'leaf', 'lamp'],
+  m: ['map', 'mug', 'moon', 'mud'], n: ['net', 'nut', 'nest', 'nap'], o: ['ox', 'octopus', 'otter', 'on'], p: ['pig', 'pan', 'pot', 'pup'],
+  q: ['queen', 'quilt', 'quack'], r: ['rug', 'rock', 'red', 'run'], s: ['sun', 'sock', 'sand', 'six'], t: ['tent', 'tub', 'top', 'ten'],
+  u: ['up', 'umbrella', 'under', 'us'], v: ['van', 'vest', 'vine', 'vet'], w: ['web', 'wig', 'wet', 'wagon'], y: ['yak', 'yarn', 'yes', 'yard'],
+  z: ['zebra', 'zip', 'zoo', 'zigzag'], x: ['box', 'fox', 'six', 'wax'],
+};
+/** Short vowels can't be told from spelling alone, so a story word only stands in for a vowel when it is here. */
+const SHORT_VOWEL_OK = new Set(['ant', 'ants', 'apple', 'apples', 'ax', 'egg', 'eggs', 'elf', 'end', 'inch', 'in', 'ox', 'on', 'off', 'up', 'under', 'umbrella', 'octopus', 'otter', 'insect', 'igloo']);
+/** True when a word starts with the sound the letter is taught with. */
+export function startsWithSound(letter: string, word: string): boolean {
+  const w = word.toLowerCase();
+  if (letter === 'x') return w.endsWith('x');
+  if (!w.startsWith(letter)) return false;
+  if ('aeiou'.includes(letter)) return SHORT_VOWEL_OK.has(w) || (SOUND_WORDS[letter] ?? []).includes(w);
+  if (/^(ch|sh|th|wh|kn|ph|wr)/.test(w)) return false;
+  if ((letter === 'c' || letter === 'g') && /^[cg][eiy]/.test(w)) return false;
+  return true;
+}
+/** "S is for sun" with a thing from the story when one fits the sound, else a plain word (never a cast name). */
+function letterPhrase(l: string, pages: string[], theme: ThemeId, scenes: string[], castNames: string[] = []): string {
+  const seen = new Set(pages.join(' ').toLowerCase().match(/[a-z]+/g) ?? []);
+  const things = scenes.flatMap((id) => SCENES[theme].scenes.find((s) => s.id === id)?.props ?? []).filter((p) => /^[a-z]{3,8}$/.test(p) && seen.has(p));
+  const word = things.find((t) => startsWithSound(l, t) && !castNames.includes(t)) ?? (SOUND_WORDS[l] ?? [l]).find((x) => !castNames.includes(x)) ?? l;
+  return l === 'x' ? `${cap1(word)} ends with x` : `${l.toUpperCase()} is for ${word}`;
+}
+/** A tiny quote for each sight word, true on any page (no "you": stories never speak to the reader). */
+const SIGHT_SAY: Record<string, string> = {
+  a: 'What a day!', and: 'Hop and clap!', away: 'Away we go!', big: 'That is big!', blue: 'I like blue!', can: 'We can do it!', come: 'Come and see!',
+  down: 'Sit down!', find: 'We can find it!', for: 'This is for me!', funny: 'That is funny!', go: 'Go, go, go!', help: 'We can help!', here: 'Look here!',
+  I: 'I can do it!', in: 'Hop in!', is: 'It is fun!', it: 'We did it!', jump: 'Jump, jump!', little: 'A little one!', look: 'Look, look!', make: 'Make a wish!',
+  me: 'Look at me!', my: 'My, oh my!', not: 'Not yet!', one: 'One more time!', play: "Let's play!", red: 'Red is fun!', run: 'Run, run, run!',
+  said: 'Hi!', see: 'I see it!', the: 'The best day!', three: 'One, two, three!', to: 'Off to play!', two: 'One, two!', up: 'Up, up, up!', we: 'We did it!',
+  where: 'Where to now?', yellow: 'Yellow is fun!', all: 'We all did it!', am: 'I am so glad!', are: 'We are friends!', at: 'Look at that!', ate: 'We ate a snack!',
+  be: 'Be happy!', black: 'Black and white!', brown: 'Brown is fun!', but: 'Slow, but sure!', came: 'We came to play!', did: 'We did it!', do: 'We can do it!',
+  eat: 'Time to eat!', four: 'One, two, three, four!', get: 'Get set, go!', good: 'Good job!', have: 'We have fun!', he: 'He is my pal!', into: 'Hop into bed!',
+  like: 'I like it!', must: 'We must try!', new: 'A new day!', no: 'Oh, no!', now: 'Now we go!', on: 'Hop on!', our: 'Our best day!', out: 'Look out!',
+  please: 'Yes, please!', pretty: 'So pretty!', ran: 'We ran and ran!', ride: 'Ride on!', saw: 'I saw it!', say: 'Say hi!', she: 'She is my pal!', so: 'So much fun!',
+};
+const wordsIn = (t: string) => new Set((t.replace(/\{\{name\}\}/g, ' ').toLowerCase().match(/[a-z']+/g) ?? []));
+
+/** A short exclamation for a vowel review week, so the story has a word that starts with the vowel. */
+const VOWEL_SAY: Record<string, string> = { a: 'Away we go!', e: 'Every one!', i: 'In we go!', o: 'On we go!', u: 'Up, up, up!' };
+
+/**
+ * Puts the week's teaching into a template story and returns the new pages. The teaching line goes on the {W} page as
+ * speech (true of any picture): the child says it, or, when that page already names the child, a cast member who is
+ * in the picture says it, so the child is never named twice on one page. Letter weeks use words whose first sound is
+ * the letter's sound and name every letter of a review week; word family weeks chant the family. The week's sight
+ * words the story is missing are added as tiny exclamations ("Look here!"), on the {W} page while it has room and then
+ * on other pages that have room. Every page keeps to PAGE_RULES, the same rule the AI is held to.
+ */
+function placeTeaching(level: Level, w: Week, pw: ProgramWeek, raw: string[], scenes: string[], at: number): string[] {
+  const pages = raw.map((p) => p.replace(/\s*\{W\}/, '').trim());
+  const fits = (t: string) => !pageLengthProblem(level, t);
+  const castNames = SCENES[pw.theme].cast.map((c) => c.name.toLowerCase().replace(/^(princess|sir) /, ''));
+  const speakerAt = (i: number): { who: string; it: boolean } | null => {
+    if (!pages[i].includes('{{name}}')) return { who: '{{name}}', it: false };
+    const c = SCENES[pw.theme].scenes.find((s) => s.id === scenes[i])?.cast[0];
+    if (!c) return null;
+    const member = SCENES[pw.theme].cast.find((x) => x.name === c)!;
+    return { who: c.replace(/^(Princess|Sir) /, ''), it: member.pronoun === 'it' };
+  };
+  const story = () => wordsIn(pages.join(' '));
+  // The teaching quote, as short pieces (each one a sentence inside the quote).
+  const pieces: string[] = [];
+  let sing = false;
+  if (w.kind === 'name') {
+    const sp = speakerAt(at);
+    const line = sp?.who === '{{name}}' ? 'Hip, hip, hooray for {{name}}!' : sp ? `${sp.who} cheers, "Hip, hip, hooray!"` : 'Hip, hip, hooray!';
+    if (fits(`${pages[at]} ${line}`)) pages[at] = `${pages[at]} ${line}`;
+  } else if (w.kind === 'family' || w.kind === 'vowel-review') {
     const fams = w.kind === 'family' ? [w.family!] : (w.families ?? []);
-    const list = fams.length === 1 ? (FAMILIES[fams[0]] ?? []).slice(0, 3) : fams.slice(0, 3).map((f) => (FAMILIES[f] ?? [])[0]).filter(Boolean);
-    return list.length ? `"${list.map((x, i) => (i ? x : cap1(x))).join(', ')}!" sings {{name}}.` : '';
+    const list = fams.length === 1 ? (FAMILIES[fams[0]] ?? []).slice(0, 3) : fams.slice(0, 4).map((f) => (FAMILIES[f] ?? [])[0]).filter(Boolean);
+    if (list.length) { pieces.push(`${list.map((x, i) => (i ? x : cap1(x))).join(', ')}!`); sing = true; }
+    if (w.kind === 'vowel-review' && w.letters[0] && VOWEL_SAY[w.letters[0]]) pieces.push(VOWEL_SAY[w.letters[0]]);
+  } else {
+    const ls = (pw.extraReview ? reviewLetters(pw) : w.letters).filter((l) => /^[a-z]$/.test(l));
+    const word = (l: string) => letterPhrase(l, raw, pw.theme, scenes, castNames);
+    if (ls.length > 2) {
+      // A review week names every letter, then a word for each: "S, A, T! Sun, ant, tent!"
+      pieces.push(`${ls.map((l) => l.toUpperCase()).join(', ')}!`, `${ls.map((l, i) => { const x = word(l).split(' ').pop()!; return i ? x : cap1(x); }).join(', ')}!`);
+    } else {
+      for (const l of ls) pieces.push(`${word(l)}!`);
+    }
   }
-  const ls = (pw.extraReview ? reviewLetters(pw) : w.letters).filter((l) => /^[a-z]$/.test(l));
-  if (!ls.length) return '';
-  // "S is for sun!" for each letter (up to 2), with a word from the story when one starts with it.
-  const parts = ls.slice(0, level === 'pre-k' ? 1 : 2).map((l) => {
-    const word = storyWordFor(l, pages, pw.theme, scenes) ?? (CVC_NOUNS[l] ?? []).find((x) => x.length <= 5);
-    return word ? `${l.toUpperCase()} is for ${word}` : '';
-  }).filter(Boolean);
-  return parts.length ? `"${parts.join(', ')}!" says {{name}}.` : '';
+  // Sight words the story doesn't use yet, so the week's words are in the book (the AI is held to the same rule).
+  const sw = (w.sightWords ?? []).filter((x) => x.toLowerCase() !== 'you');
+  const need = Math.ceil((w.sightWords ?? []).length / 2);
+  const extra: string[] = [];
+  const has = (x: string) => story().has(x.toLowerCase()) || [...pieces, ...extra].some((p) => wordsIn(p).has(x.toLowerCase()));
+  for (const x of sw) {
+    if (sw.filter(has).length >= need) break;
+    if (!has(x) && SIGHT_SAY[x]) extra.push(SIGHT_SAY[x]);
+  }
+  const verbFor = (sp: { who: string; it: boolean }) => (sw.includes('said') && !story().has('said') ? 'said' : sing && !sp.it ? 'sings' : 'says');
+  const quoteLine = (sp: { who: string; it: boolean } | null, ps: string[]) => (sp ? `${sp.who} ${verbFor(sp)}, "${ps.join(' ')}"` : ps.join(' '));
+  if (pieces.length || extra.length) {
+    // As much as fits on the {W} page: the teaching pieces first, then sight word exclamations.
+    const sp = speakerAt(at);
+    const all = [...pieces, ...extra];
+    let n = all.length;
+    while (n > 0 && !fits(`${pages[at]} ${quoteLine(sp, all.slice(0, n))}`)) n--;
+    if (n > 0) pages[at] = `${pages[at]} ${quoteLine(sp, all.slice(0, n))}`;
+    // The rest go on other pages with room, as tiny exclamations (true of any picture), later pages first.
+    for (const piece of all.slice(n)) {
+      for (const i of pages.map((_, k) => k).filter((k) => k !== 0).reverse()) {
+        if (fits(`${pages[i]} ${piece}`)) { pages[i] = `${pages[i]} ${piece}`; break; }
+      }
+    }
+  }
+  return pages.map((p) => p.replace(/\s+/g, ' ').trim());
 }
 
 /**
@@ -622,9 +716,16 @@ export function sceneStoryFor(theme: ThemeId, level: Level, w: Week | null, pw: 
   if (!text) return null;
   const byScene = new Map(text.pages);
   if (!path.fitted.every((id) => byScene.has(id))) return null;
+  // A page whose scene a shorter book drops still has its words in the catalog text; the first page of a trimmed
+  // book uses its `intro` form when one is written (it introduces a character the dropped page used to).
   const raw = path.fitted.map((id) => byScene.get(id)!);
-  const line = w && pw ? teachLine(level, w, pw, raw, path.fitted) : '';
-  const pages = raw.map((p) => (line ? p.replace('{W}', line) : p.replace(/\s*\{W\}/, '')).replace(/\s+/g, ' ').trim());
+  // {W} sits on one page; when that page was trimmed away, it moves to the solve page.
+  let at = raw.findIndex((p) => p.includes('{W}'));
+  if (at < 0) {
+    at = path.fitted.findIndex((id) => SCENES[theme].scenes.find((s) => s.id === id)?.beat === 'solve');
+    raw[at] = `${raw[at]} {W}`;
+  }
+  const pages = w && pw ? placeTeaching(level, w, pw, raw, path.fitted, at) : raw.map((p) => p.replace(/\s*\{W\}/, '').replace(/\s+/g, ' ').trim());
   return { title: text.title, pages, scenes: [...path.fitted], pathId: path.id };
 }
 
@@ -645,7 +746,7 @@ export function freeWeekContent(theme: ThemeId, level: Level): WeekContent {
 // ---------- Any week: built from theme words and the week's skills ----------
 
 const LETTERS = lettersData as { letter: string; words: string[]; tip: string }[];
-const art = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+const art = (w: string) => (/^(uni|use|eu)/i.test(w) ? 'a' : /^[aeiou]/i.test(w) ? 'an' : 'a');
 const cap1 = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string) => s.split(' ').map((w) => (/^(and|the|a|of|in|on)$/.test(w) ? w : cap1(w))).join(' ');
 
@@ -713,24 +814,37 @@ function makeProblems(theme: ThemeId, level: Level, step: MathStep, seed: string
   const { max, subtract } = problemRange(level, step);
   // The buddy is a character in the problems, so it isn't also something to count.
   const icons = T.icons.filter((i) => i.id !== 'palm-tree' && i.id !== T.buddy.icon && i.one !== T.buddy.one.replace('little ', ''));
-  const pickIcon = (k: number) => icons[(Math.floor(rand() * icons.length) + k) % icons.length];
+  const pickIcon = (k: number, from = icons) => from[(Math.floor(rand() * from.length) + k) % from.length];
+  // Take-away problems never use places or fixed things (a volcano, a barn, a tunnel, the sun can't "go away").
+  const takeAway = icons.filter((i) => iconKind(theme, i) !== 'place');
   const count = level === 'pre-k' ? 4 : 5;
   const out: Problem[] = [];
   const seen = new Set<string>();
+  // Two cast members from the story world give objects to each other ("Stomp has 4 eggs. Stomp gives 1 to Dot.").
+  const cast = SCENES[theme].cast;
+  const giver = cast[0]?.name.replace(/^(Princess|Sir) /, '') ?? '{{name}}';
+  const taker = cast[1]?.name ?? `the ${T.buddy.one}`;
   const addFrames = [
     (a: number, b: number, ic: ThemeIcon) => `{{name}} counts ${a} ${ofIcon(a, ic)} ${T.place}. Then {{name}} spots ${b} more. How many ${ic.many} now?`,
     (a: number, b: number, ic: ThemeIcon) => `The ${T.buddy.one} sees ${a} ${ofIcon(a, ic)}, and then ${b} more. How many ${ic.many} in all?`,
     (a: number, b: number, ic: ThemeIcon) => `There ${a === 1 ? 'is' : 'are'} ${a} ${ofIcon(a, ic)} and ${b} more ${ofIcon(b, ic)}. How many ${ic.many} altogether?`,
   ];
-  const subFrames = [
-    (a: number, b: number, ic: ThemeIcon) => `There are ${a} ${ic.many} ${T.place}. ${b} ${b === 1 ? 'goes' : 'go'} away. How many ${ic.many} are left?`,
-    (a: number, b: number, ic: ThemeIcon) => (ic.small
-      ? `{{name}} has ${a} ${ic.many} and gives ${b} to the ${T.buddy.one}. How many does {{name}} have left?`
-      : `${a} ${ic.many} are playing. ${b} ${b === 1 ? 'goes' : 'go'} home for a nap. How many are still playing?`),
-  ];
+  const subFrames: Record<'animal' | 'object', ((a: number, b: number, ic: ThemeIcon) => string)[]> = {
+    // Animals, characters and vehicles move by themselves.
+    animal: [
+      (a, b, ic) => `There are ${a} ${ic.many} ${T.place}. ${b} ${b === 1 ? 'goes' : 'go'} away. How many ${ic.many} are left?`,
+      (a, b, ic) => `${a} ${ic.many} wait ${T.place}. ${b} ${b === 1 ? 'goes' : 'go'} home. How many ${ic.many} are still there?`,
+    ],
+    // Objects are held and given.
+    object: [
+      (a, b, ic) => `${giver} has ${a} ${ic.many}. ${giver} gives ${b} to ${taker}. How many ${ic.many} does ${giver} have left?`,
+      (a, b, ic) => `{{name}} has ${a} ${ic.many} and gives ${b} to the ${T.buddy.one}. How many ${ic.many} does {{name}} have left?`,
+    ],
+  };
   for (let t = 0; out.length < count && t < 200; t++) {
     const i = out.length;
-    const ic = pickIcon(i);
+    const takes = subtract && i % 2 === 1 && i !== count - 1;
+    const ic = takes && takeAway.length ? pickIcon(i, takeAway) : pickIcon(i);
     if (i === count - 1) {
       // Last problem compares two groups.
       const a = 1 + Math.floor(rand() * max), b0 = 1 + Math.floor(rand() * max);
@@ -739,12 +853,13 @@ function makeProblems(theme: ThemeId, level: Level, step: MathStep, seed: string
       out.push(cmp(`{{name}} counts ${a} ${ofIcon(a, ic)}. The ${T.buddy.one} counts ${b}. Write the bigger number.`, a, b, ic.id));
       break;
     }
-    if (subtract && i % 2 === 1) {
+    if (takes && takeAway.length) {
       const a = 3 + Math.floor(rand() * (max - 2)), b = 1 + Math.floor(rand() * (a - 1));
       const key = `-${a}-${b}`;
       if (a > max || seen.has(key)) continue;
       seen.add(key);
-      out.push(sub(subFrames[i % subFrames.length](a, b, ic), a, b, ic.id));
+      const frames = subFrames[iconKind(theme, ic) === 'object' ? 'object' : 'animal'];
+      out.push(sub(frames[Math.floor(i / 2) % frames.length](a, b, ic), a, b, ic.id));
     } else {
       const a = 1 + Math.floor(rand() * (max - 1)), b = 1 + Math.floor(rand() * (max - a));
       const key = `+${a}-${b}`;
@@ -839,13 +954,39 @@ function storyText(level: Level, w: Week, pw: ProgramWeek): { title: string; pag
   return { title: titleCase(`{{name}} and the ${B}`), pages: pages.slice(0, 8) };
 }
 
+/** Short decodable tracing sentences about each theme, rotated by week (all fit the AI rules: 2 to 8 words, letters only). */
+const THEME_SENTENCES: Record<ThemeId, string[]> = {
+  dinosaurs: ['I see a big T-rex.', 'The egg can crack.', 'A dino can stomp.', 'I dig up a bone.', 'The T-rex is red.', 'Dinos run in the sun.', 'A big egg is in a nest.', 'I like the long neck.'],
+  trucks: ['I see a big truck.', 'The truck can dig.', 'The truck can go beep.', 'A red bus can stop.', 'The digger can lift.', 'Trucks go up a hill.', 'I see a tow truck.', 'The van is in the mud.'],
+  unicorns: ['I see a unicorn.', 'A unicorn can hop.', 'I see a rainbow.', 'The gem is pink.', 'A star is up high.', 'The cloud is soft.', 'I hug my unicorn.', 'Hop over the rainbow.'],
+  ocean: ['I see a fish.', 'A crab can dig.', 'The fish can swim.', 'A shell is on the sand.', 'The turtle swims.', 'A wave is big.', 'I see a red crab.', 'Fish swim in the sea.'],
+  space: ['I see a rocket.', 'The rocket can zoom.', 'A star is up high.', 'The moon is big.', 'I see a planet.', 'Up goes the rocket.', 'An alien can hop.', 'Stars at night.'],
+  farm: ['I see a pig.', 'A hen sat on an egg.', 'The cow says moo.', 'A pig is in the mud.', 'The red barn is big.', 'I see a duck.', 'A hen can peck.', 'The pig can run.'],
+  bugs: ['I see a bug.', 'A bee can buzz.', 'The ant can dig.', 'A bug is on a leaf.', 'The ladybug has spots.', 'I see a red bug.', 'A snail is slow.', 'Bugs hop in the sun.'],
+  castles: ['I see a castle.', 'The dragon can fly.', 'A crown is on top.', 'The castle is big.', 'A dragon naps.', 'I see a red flag.', 'The gate is up.', 'The knight has a shield.'],
+  trains: ['I see a train.', 'The train can go.', 'The train can toot.', 'The train is on the track.', 'A train went up a hill.', 'I see a red engine.', 'The train can stop.', 'The tunnel is dark.'],
+  sports: ['I can kick a ball.', 'I can hit the ball.', 'The ball is in the net.', 'I run fast.', 'We win a medal.', 'The team can run.', 'I can jump up.', 'Kick it in the goal.'],
+  pets: ['I love my pup.', 'The cat can nap.', 'My pup can sit.', 'The pup has a ball.', 'A cat sat on a mat.', 'I pet my cat.', 'The pup can run.', 'My fish can swim.'],
+  jungle: ['I see a lion.', 'A monkey can swing.', 'The hippo is big.', 'I see an elephant.', 'A monkey has a banana.', 'The lion naps in the sun.', 'A zebra can run.', 'The parrot can sing.'],
+};
+
+/** Kindergarten word family sentences that also name the interest ("The cat sat by the T-rex."). */
+const FAMILY_WITH: Record<ThemeId, string> = {
+  dinosaurs: 'T-rex', trucks: 'truck', unicorns: 'unicorn', ocean: 'crab', space: 'rocket', farm: 'pig',
+  bugs: 'bug', castles: 'castle', trains: 'train', sports: 'ball', pets: 'pup', jungle: 'monkey',
+};
+
 function sentenceFor(level: Level, w: Week, pw: ProgramWeek): string {
-  const T = THEMES[pw.theme];
+  const list = THEME_SENTENCES[pw.theme];
+  const pick = list[(Math.max(1, pw.index) - 1) % list.length];
   const fams = w.kind === 'family' ? [w.family!] : (w.families ?? []);
   const nouns = fams.flatMap((f) => FAMILY_NOUNS[f] ?? []);
-  if (level === 'kindergarten' && nouns.length) return nouns[1] ? `I see a ${nouns[0]} and a ${nouns[1]}.` : `I see a ${nouns[0]}.`;
-  const icon = T.icons.find((i) => i.one.split(' ').length === 1 && i.one.length <= 9) ?? T.icons[0];
-  return level === 'pre-k' ? `I like ${icon.many}.` : `I see ${art(icon.one)} ${icon.one}.`;
+  // Kindergarten family weeks: the family word and the interest together, so the sentence teaches both.
+  if (level === 'kindergarten' && nouns.length) {
+    const n = nouns[(Math.max(1, pw.index) - 1) % nouns.length];
+    return `I see ${art(n)} ${n} and ${art(FAMILY_WITH[pw.theme])} ${FAMILY_WITH[pw.theme]}.`;
+  }
+  return pick;
 }
 
 function noteFor(level: Level, w: Week, pw: ProgramWeek): WeekContent['parentNote'] {
