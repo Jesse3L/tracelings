@@ -7,9 +7,10 @@ import { M, rng, header, footer, instruction, circlePath, starPath, heartPath, b
 export type MathKind = 'count-color' | 'find-number' | 'ten-frame' | 'count-circle' | 'more-less' | 'missing'
   | 'make-ten' | 'tf-add' | 'show-number' | 'blank-frame'
   | 'compare-numbers' | 'compare-symbols' | 'one-more-less'
-  | 'add-pictures' | 'add-number-line' | 'add-facts' | 'subtract-pictures';
+  | 'add-pictures' | 'add-number-line' | 'add-facts' | 'subtract-pictures'
+  | 'subtract-cross' | 'subtract-number-line' | 'subtract-facts';
 export type BlankLayout = 'one' | 'double' | 'six';
-export type MathSeries = 'pre-k' | 'ten-frames' | 'more-less' | 'k-addition';
+export type MathSeries = 'pre-k' | 'ten-frames' | 'more-less' | 'k-addition' | 'k-subtraction';
 export type MathRange = 5 | 10 | 20;
 export type Compare = 'more' | 'fewer';
 
@@ -60,11 +61,20 @@ export const ADDITION_KINDS: { v: MathKind; label: string; sub: string }[] = [
   { v: 'subtract-pictures', label: 'Subtraction with pictures', sub: 'Some pictures are crossed out. How many are left?' },
 ];
 
+/** Kindergarten subtraction worksheets (/math-worksheets/kindergarten-subtraction/). */
+export const SUBTRACTION_KINDS: { v: MathKind; label: string; sub: string }[] = [
+  { v: 'subtract-pictures', label: 'Subtraction with pictures', sub: 'Some pictures are crossed out. How many are left?' },
+  { v: 'subtract-cross', label: 'Cross out and subtract', sub: 'Your child crosses out the pictures, then counts what is left' },
+  { v: 'subtract-number-line', label: 'Number line subtraction', sub: 'Start on the dot, hop back, write where you land' },
+  { v: 'subtract-facts', label: 'Subtraction facts', sub: 'Twelve number sentences, no pictures' },
+];
+
 export const KINDS_FOR: Record<MathSeries, { v: MathKind; label: string; sub: string }[]> = {
   'pre-k': MATH_KINDS,
   'ten-frames': TEN_FRAME_KINDS,
   'more-less': MORE_LESS_KINDS,
   'k-addition': ADDITION_KINDS,
+  'k-subtraction': SUBTRACTION_KINDS,
 };
 
 export const BLANK_LAYOUTS: { v: BlankLayout; label: string; sub: string }[] = [
@@ -114,6 +124,10 @@ const labelFor = (o: MathOptions) => {
   }
   if (o.series === 'k-addition') {
     const k = ADDITION_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
+    return `Kindergarten math: ${k}, within ${o.range}`;
+  }
+  if (o.series === 'k-subtraction') {
+    const k = SUBTRACTION_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
     return `Kindergarten math: ${k}, within ${o.range}`;
   }
   const k = MATH_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
@@ -595,6 +609,27 @@ function addPairs(rand: () => number, count: number, range: MathRange): [number,
   return out;
 }
 
+/**
+ * Subtraction problems [a, b] with a - b: within 5 and 10, a runs 2 to the range; within 20, a runs 8 to 20
+ * and b stays at 10 or less, so the answer is never below 0 and kids take away a group they can count.
+ * Only within 5 can b equal a (an answer of 0).
+ */
+function subPairs(rand: () => number, count: number, range: MathRange): [number, number][] {
+  const out: [number, number][] = [];
+  const used = new Set<string>();
+  for (let guard = 0; out.length < count && guard < 600; guard++) {
+    const lo = range === 20 ? 8 : 2;
+    const a = lo + Math.floor(rand() * (range - lo + 1));
+    // Within 5 a few answers can be 0 (5 - 5), which kindergarten covers and which keeps 12 facts from repeating.
+    const b = 1 + Math.floor(rand() * (range === 5 ? a : Math.min(10, a - 1)));
+    const k = `${a}-${b}`;
+    if (used.has(k) && guard < 500) continue;
+    used.add(k);
+    out.push([a, b]);
+  }
+  return out;
+}
+
 /** Plus and equals signs drawn as lines (bigger and clearer than text at this size). */
 function plus(items: Item[], cx: number, cy: number, s = 11) {
   items.push({ kind: 'line', x1: cx - s, y1: cy, x2: cx + s, y2: cy, color: INK, width: 3 });
@@ -640,15 +675,19 @@ function addPicturesPage(o: MathOptions): Page {
   return { w, h, items };
 }
 
-/** Number line addition: start on the dot, hop forward, write where you land. */
-function numberLinePage(o: MathOptions): Page {
+/** Number line addition (or subtraction): start on the dot, hop forward (or back), write where you land. */
+function numberLinePage(o: MathOptions, sub = false): Page {
   const { w, h } = PAPER[o.paper];
   const items: Item[] = [];
   top(items, w, o.name);
-  const y0 = instruction(items, w, `Number line addition within ${o.range}`, 'Put a finger on the first number (the blue dot). Hop forward the second number, one jump at a time. Write the number you land on.') + 6;
-  const rand = rng(`nl-${o.range}-${o.seed}`);
+  const y0 = instruction(items, w, `Number line ${sub ? 'subtraction' : 'addition'} within ${o.range}`, sub
+    ? 'Put a finger on the first number (the blue dot). Hop back the second number, one jump at a time. Write the number you land on.'
+    : 'Put a finger on the first number (the blue dot). Hop forward the second number, one jump at a time. Write the number you land on.') + 6;
+  const rand = rng(`${sub ? 'snl' : 'nl'}-${o.range}-${o.seed}`);
   const rows = 5;
-  const list = addPairs(rand, rows, o.range);
+  const list = sub ? subPairs(rand, rows, o.range) : addPairs(rand, rows, o.range);
+  const op = sub ? '-' : '+';
+  const wide = list.some(([a, b]) => a >= 10 || b >= 10);
   const bottom = h - M - 30;
   const rowH = (bottom - y0) / rows;
   const max = o.range;
@@ -659,8 +698,8 @@ function numberLinePage(o: MathOptions): Page {
     const yT = y0 + i * rowH;
     if (i > 0) items.push({ kind: 'line', x1: M, y1: yT, x2: w - M, y2: yT, color: COLORS.desc, width: 1 });
     const ty = yT + 36;
-    say(items, `${a}  +  ${b}  =`, M, ty, 24);
-    items.push({ kind: 'path', d: box(M + (a >= 10 || b >= 10 ? 118 : 104), ty - 32, 58, 44, 8), color: INK, width: 1.5 });
+    say(items, `${a}  ${op}  ${b}  =`, M, ty, 24);
+    items.push({ kind: 'path', d: box(M + (wide ? 118 : 104), ty - 32, 58, 44, 8), color: INK, width: 1.5 });
     // The line sits low in the row, leaving room above it to draw the hops.
     const ly = yT + rowH - 40;
     items.push({ kind: 'line', x1: x0 - 6, y1: ly, x2: x1 + 6, y2: ly, color: INK, width: 1.6 });
@@ -676,14 +715,16 @@ function numberLinePage(o: MathOptions): Page {
   return { w, h, items };
 }
 
-/** Addition facts: twelve number sentences in two columns. */
-function factsPage(o: MathOptions): Page {
+/** Addition (or subtraction) facts: twelve number sentences in two columns. */
+function factsPage(o: MathOptions, sub = false): Page {
   const { w, h } = PAPER[o.paper];
   const items: Item[] = [];
   top(items, w, o.name);
-  const y0 = instruction(items, w, `Addition facts within ${o.range}`, 'Solve each one. Fingers, counters or a number line are all fine to use.') + 8;
-  const rand = rng(`af-${o.range}-${o.seed}`);
-  const list = addPairs(rand, 12, o.range);
+  const y0 = instruction(items, w, `${sub ? 'Subtraction' : 'Addition'} facts within ${o.range}`, 'Solve each one. Fingers, counters or a number line are all fine to use.') + 8;
+  const rand = rng(`${sub ? 'sf' : 'af'}-${o.range}-${o.seed}`);
+  const list = sub ? subPairs(rand, 12, o.range) : addPairs(rand, 12, o.range);
+  const op = sub ? '-' : '+';
+  const wide = list.some(([a, b]) => a >= 10 || b >= 10);
   const rows = 6;
   const bottom = h - M - 30;
   const rowH = (bottom - y0) / rows;
@@ -693,33 +734,29 @@ function factsPage(o: MathOptions): Page {
     const x = M + col * colW + 14;
     const cy = y0 + row * rowH + rowH / 2;
     if (row > 0 && col === 0) items.push({ kind: 'line', x1: M, y1: y0 + row * rowH, x2: w - M, y2: y0 + row * rowH, color: COLORS.desc, width: 1 });
-    say(items, `${a}  +  ${b}  =`, x, cy + 10, 28);
-    const bx = x + (a >= 10 || b >= 10 ? 138 : 122);
+    say(items, `${a}  ${op}  ${b}  =`, x, cy + 10, 28);
+    const bx = x + (wide ? 138 : 122);
     items.push({ kind: 'path', d: box(bx, cy - 27, 62, 54, 8), color: INK, width: 1.5 });
   });
   footer(items, w, h, o.credit, labelFor(o));
   return { w, h, items };
 }
 
-/** Subtraction with pictures: some pictures are crossed out; write how many are left. */
-function subtractPicturesPage(o: MathOptions): Page {
+/**
+ * Subtraction with pictures: some pictures are crossed out; write how many are left.
+ * With `self`, nothing is crossed out yet: the child reads the number sentence, draws an X on that many pictures, then counts what is left.
+ */
+function subtractPicturesPage(o: MathOptions, self = false): Page {
   const { w, h } = PAPER[o.paper];
   const items: Item[] = [];
   top(items, w, o.name);
-  const y0 = instruction(items, w, `Subtraction within ${o.range}`, 'Count all the pictures. The ones with an X are taken away. Count the pictures that are left and write the number.') + 8;
-  const rand = rng(`sp-${o.range}-${o.seed}`);
+  const y0 = self
+    ? instruction(items, w, `Cross out and subtract within ${o.range}`, 'Read the number sentence. Draw an X on that many pictures, starting from the end. Count the pictures that are left and write the number.') + 8
+    : instruction(items, w, `Subtraction within ${o.range}`, 'Count all the pictures. The ones with an X are taken away. Count the pictures that are left and write the number.') + 8;
+  const rand = rng(`${self ? 'sx' : 'sp'}-${o.range}-${o.seed}`);
   const rows = 6;
-  const list: [number, number][] = [];
-  const used = new Set<string>();
-  for (let guard = 0; list.length < rows && guard < 500; guard++) {
-    const lo = o.range === 20 ? 8 : 2;
-    const a = lo + Math.floor(rand() * (o.range - lo + 1));
-    const b = 1 + Math.floor(rand() * (a - 1));
-    const k = `${a}-${b}`;
-    if (used.has(k) && guard < 400) continue;
-    used.add(k);
-    list.push([a, b]);
-  }
+  const list = subPairs(rand, rows, o.range);
+  const wide = list.some(([a, b]) => a >= 10 || b >= 10); // one column of answer boxes per page
   const bottom = h - M - 30;
   const rowH = (bottom - y0) / rows;
   const span = w - 2 * M;
@@ -743,7 +780,7 @@ function subtractPicturesPage(o: MathOptions): Page {
       const x = cx - spanG / 2 + c * gap + (c >= 5 ? split : 0);
       const y = cy - ((rowsN - 1) * gap) / 2 + r * gap;
       shape(items, s, x, y, gap * 0.4);
-      if (k >= a - b) {
+      if (!self && k >= a - b) {
         const d = gap * 0.33;
         items.push({ kind: 'line', x1: x - d, y1: y - d, x2: x + d, y2: y + d, color: CROSS, width: 2.2 });
         items.push({ kind: 'line', x1: x - d, y1: y + d, x2: x + d, y2: y - d, color: CROSS, width: 2.2 });
@@ -751,7 +788,7 @@ function subtractPicturesPage(o: MathOptions): Page {
     }
     const sx = M + gw + 22;
     say(items, `${a}  -  ${b}  =`, sx, cy + 9, 24);
-    items.push({ kind: 'path', d: box(sx + (a >= 10 || b >= 10 ? 118 : 104), cy - 26, 58, 52, 8), color: INK, width: 1.5 });
+    items.push({ kind: 'path', d: box(sx + (wide ? 118 : 104), cy - 26, 58, 52, 8), color: INK, width: 1.5 });
   });
   footer(items, w, h, o.credit, labelFor(o));
   return { w, h, items };
@@ -844,6 +881,9 @@ export function buildMathPage(o: MathOptions): Page {
   if (o.kind === 'add-number-line') return numberLinePage(o);
   if (o.kind === 'add-facts') return factsPage(o);
   if (o.kind === 'subtract-pictures') return subtractPicturesPage(o);
+  if (o.kind === 'subtract-cross') return subtractPicturesPage(o, true);
+  if (o.kind === 'subtract-number-line') return numberLinePage(o, true);
+  if (o.kind === 'subtract-facts') return factsPage(o, true);
   return missingPage(o);
 }
 

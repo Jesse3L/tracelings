@@ -326,7 +326,7 @@
     },
     {
       "id": "k-subtraction-worksheets",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "k-addition-worksheets"
       ],
@@ -337,24 +337,80 @@
           2900,
           23
         ],
+        "subtraction worksheets for kindergarten": [
+          2400,
+          25
+        ],
         "kindergarten subtraction worksheets free": [
           320,
           22
+        ],
+        "math subtraction worksheets for kindergarten": [
+          260,
+          23
+        ],
+        "kindergarten subtraction worksheets free printable": [
+          110,
+          22
+        ],
+        "subtraction worksheets for kindergarten pdf": [
+          110,
+          24
         ],
         "kindergarten subtraction worksheets with pictures": [
           70,
           25
         ]
       },
-      "buildOn": "subtractPicturesPage() and numberLinePage() in src/lib/mathSheets.ts; add a 'k-subtraction' series. Link from /math-worksheets/kindergarten/ and the addition page."
+      "buildOn": "subtractPicturesPage() and numberLinePage() in src/lib/mathSheets.ts; add a 'k-subtraction' series. Link from /math-worksheets/kindergarten/ and the addition page.",
+      "done": "2026-10-19",
+      "urls": [
+        "/math-worksheets/kindergarten-subtraction/"
+      ],
+      "notes": "Ubersuggest US, 2026-10-19. New series 'k-subtraction' on the math maker with four types: subtraction with pictures (shared with the addition page), cross out and subtract (child draws the X marks), number line subtraction (hop back) and subtraction facts. New subPairs(): within 20 never takes away more than 10, within 5 allows answers of 0 so 12 facts don't repeat. Answer boxes now line up in one column per page (also on addition facts and number line addition). Preview kindergarten-subtraction-worksheet-with-pictures.webp."
+    },
+    {
+      "id": "k-mixed-add-subtract",
+      "status": "todo",
+      "needs": [
+        "k-subtraction-worksheets"
+      ],
+      "title": "Mixed addition and subtraction worksheets for kindergarten: a type on the addition and subtraction makers that mixes + and - on one page (pictures and facts), so kids read the sign",
+      "suggestedUrl": "(no new URL; a type on /math-worksheets/kindergarten-addition/ and /kindergarten-subtraction/, or its own page if volume holds)",
+      "keywords": {
+        "addition and subtraction worksheets for kindergarten": [
+          1000,
+          24
+        ],
+        "mixed addition and subtraction worksheets for kindergarten": [
+          170,
+          23
+        ],
+        "free addition and subtraction worksheets for kindergarten": [
+          110,
+          24
+        ]
+      },
+      "buildOn": "addPairs() and subPairs() in src/lib/mathSheets.ts; factsPage() and the picture pages already take an operator."
+    },
+    {
+      "id": "subtraction-word-problems-k",
+      "status": "todo",
+      "needs": [
+        "k-subtraction-worksheets"
+      ],
+      "title": "Kindergarten addition and subtraction word problems: short read-aloud story problems with pictures to count (within 5 and 10), as a type on the math maker; check volume first",
+      "keywords": {},
+      "buildOn": "The personalized program's word problem pages (src/lib/program/templates.ts problemRange) for wording; draw with the math maker's shapes."
     },
     {
       "id": "k-math-in-pack",
       "status": "todo",
       "needs": [
-        "k-addition-worksheets"
+        "k-addition-worksheets",
+        "k-subtraction-worksheets"
       ],
-      "title": "Kindergarten weekly pack: optional extra math page that matches the week (compare numbers in weeks 1 to 21, picture addition or number line in weeks 22 to 36), a free checkbox in the pack maker",
+      "title": "Kindergarten weekly pack: optional extra math page that matches the week (compare numbers in weeks 1 to 21; in weeks 22 to 36 alternate picture addition and subtraction with pictures at the week's range), a free checkbox in the pack maker",
       "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'more-less' | 'k-addition' }). Pairs with ten-frames-in-k-pack; keep it free."
     },
     {
