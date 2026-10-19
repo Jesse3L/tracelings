@@ -1,0 +1,139 @@
+---
+import { faqText } from '../../../lib/seo';
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import MathSheets from '../../../components/MathSheets.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/math-worksheets/kindergarten-subtraction/', SITE.url).href;
+const title = `Free Kindergarten Subtraction Worksheets | ${SITE.name}`;
+const description = 'Free kindergarten subtraction worksheets within 5, 10 and 20: subtraction with pictures, cross out and subtract, number line subtraction and facts.';
+
+const faqs = [
+  { q: 'What subtraction should a kindergartner know?', a: 'Many kindergarten programs work on taking away within 10 using objects, pictures and fingers, and on knowing the facts within 5 quickly by the end of the year. Subtracting within 20 is usually a first grade goal. Kids develop at different speeds. If you have concerns, ask your child’s teacher or pediatrician.' },
+  { q: 'Which subtraction worksheet should we start with?', a: 'Start with subtraction with pictures within 5. The pictures that were taken away already have an X, so your child only has to count what is left. Next, try cross out and subtract, where your child draws the X marks. Number line subtraction and subtraction facts come after a few weeks of picture pages.' },
+  { q: 'Should kids learn addition or subtraction first?', a: 'Most kids start with addition, then add subtraction a few weeks later, and then practice both side by side. They are two views of the same idea: 3 and 2 make 5, so 5 take away 2 is 3. Showing both with the same toys helps kids see that link.' },
+  { q: 'What does within 5 mean on a subtraction worksheet?', a: 'It means no number on the page is bigger than 5. Within 5 pages also include a few problems like 4 - 4, where the answer is 0. Within 10 goes up to 10, and within 20 starts from numbers between 8 and 20 and never takes away more than 10.' },
+  { q: 'Are these kindergarten subtraction worksheets free?', a: 'Yes. Every page type, every range and the New problems button are free, one page at a time. Members can also print five different pages in one PDF, or one page for every child on their list, with no footer line.', html: 'Yes. Every page type, every range and the New problems button are free, one page at a time. <a href="/membership/">Members</a> can also print five different pages in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. Every page is drawn in your browser. The name you type goes on the Name line and stays on your device. It is never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Kindergarten subtraction worksheets (free generator)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Kindergarten',
+    teaches: 'Subtraction within 5, 10 and 20 with pictures, crossing out and a number line, subtraction facts',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Kindergarten math worksheets', item: SITE.url + '/math-worksheets/kindergarten/' },
+      { '@type': 'ListItem', position: 3, name: 'Kindergarten subtraction worksheets', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/math-worksheets/kindergarten/" class="hover:text-ink">Kindergarten math</a> <span aria-hidden="true">/</span> <span aria-current="page">Subtraction</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Kindergarten subtraction worksheets</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes free printable kindergarten subtraction worksheets within 5, 10 or 20: subtraction with pictures, cross out and subtract, number line subtraction and subtraction facts. Pick a page, tap New problems for a fresh set, and print as many as you need.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <MathSheets client:load source="kindergarten-subtraction" series="k-subtraction" />
+    </div>
+    <Preview k="k-subtraction" caption="Example: subtraction with pictures within 10." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        Kindergarten subtraction starts with taking things away: five crackers, eat two, how many are left? These worksheets follow that
+        path, from pictures that are already crossed out to pictures your child crosses out, then a number line, then plain number
+        sentences. Every page is made in your browser with fresh problems, and the child's name on the page never leaves your device.
+      </p>
+
+      <h2>Four kinds of kindergarten subtraction pages</h2>
+      <ul>
+        <li><strong>Subtraction with pictures:</strong> a group of pictures with some already crossed out. Count what is left and write it in the box.</li>
+        <li><strong>Cross out and subtract:</strong> the same pictures with no X marks yet. Your child reads the number sentence, crosses out that many, and counts the rest.</li>
+        <li><strong>Number line subtraction:</strong> a number line under each problem with a dot on the first number. Hop back the second number and write where you land.</li>
+        <li><strong>Subtraction facts:</strong> twelve number sentences, no pictures. Good for practice once the picture pages feel easy.</li>
+      </ul>
+
+      <h2>Kindergarten subtraction worksheets with pictures</h2>
+      <p>
+        Start here. The pictures sit in rows of five, and the ones that were taken away have a red X. Your child only has to count the
+        pictures without an X. Read the number sentence out loud together first: "seven take away three." Saying "take away" before
+        "minus" helps the idea stick, because it matches what is happening on the page.
+      </p>
+      <p>
+        Once that feels easy, switch to <strong>cross out and subtract</strong>. Now your child does the taking away. Cross out from the
+        end of the group, so the pictures that are left stay together and are easy to count. Kids who rush often cross out one too many,
+        so have them count the X marks before they count what is left.
+      </p>
+
+      <h2>Number line subtraction</h2>
+      <p>
+        The number line shows subtraction as counting back. Put a finger on the blue dot, then hop one space to the left for each number
+        you take away, saying the numbers as you go: "nine... eight, seven." Drawing a little arc for each hop helps kids keep track.
+        Counting back is harder than counting on for many kids, so expect this page to take a bit longer than the picture pages.
+      </p>
+
+      <h2>Within 5, within 10 or within 20?</h2>
+      <p>
+        <strong>Within 5</strong> keeps every number at 5 or less, so each problem fits on one hand. It also has a few problems like 3 - 3,
+        where nothing is left. Move to <strong>within 10</strong> when your child can do within 5 without counting every picture twice.
+        Last, <strong>within 20</strong> is a stretch for kindergarten: it starts from numbers between 8 and 20 and never takes away more than 10.
+      </p>
+      <p>
+        Many kids take away within 10 with pictures or fingers somewhere between ages 5 and 6, and subtracting without pictures often comes
+        later than adding without them. Kids develop at different speeds. If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>Subtraction alongside the kindergarten plan</h2>
+      <p>
+        Our free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> works on adding within 5 from week 22 and within 10
+        from week 29. A good fit is one subtraction page a week in those weeks, at the same range as the adding, after your child has
+        done the week's addition page. The <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> come in the
+        same three ranges, so you can print one of each and talk about how they match.
+      </p>
+
+      <h2>More kindergarten math</h2>
+      <p>
+        Ten frames make subtraction from 10 easy to see, and the <a href="/math-worksheets/ten-frames/">ten frame printables</a> include blank
+        frames to use with counters. Every math maker is listed on our <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a> page,
+        with a free 6-page sampler to print.
+      </p>
+
+      <h2>A 10-minute subtraction routine</h2>
+      <ol>
+        <li><strong>3 minutes:</strong> act out two problems with toys or snacks. Line up six cars, drive two away, and ask how many are still parked.</li>
+        <li><strong>5 minutes:</strong> one worksheet side by side. Do the first problem together, then let your child do the next two alone.</li>
+        <li><strong>2 minutes:</strong> a finger game. Hold up five fingers, fold some down, and ask how many are still up.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about kindergarten subtraction</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

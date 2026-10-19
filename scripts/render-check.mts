@@ -19,6 +19,10 @@ const cases: [MathSeries, MathKind, MathRange[], ('more' | 'fewer')[]][] = [
   ['k-addition', 'add-number-line', [5, 10, 20], ['more']],
   ['k-addition', 'add-facts', [5, 10, 20], ['more']],
   ['k-addition', 'subtract-pictures', [5, 10, 20], ['more']],
+  ['k-subtraction', 'subtract-pictures', [5, 10, 20], ['more']],
+  ['k-subtraction', 'subtract-cross', [5, 10, 20], ['more']],
+  ['k-subtraction', 'subtract-number-line', [5, 10, 20], ['more']],
+  ['k-subtraction', 'subtract-facts', [5, 10, 20], ['more']],
 ];
 
 let n = 0;
@@ -37,7 +41,7 @@ for (const [series, kind, ranges, compares] of cases) {
     const svg = pageToSvg(page)
       .replace('width="100%"', `width="${page.w}" height="${page.h}"`)
       .replace(/font-family="[^"]*"/g, 'font-family="Helvetica, Arial, Liberation Sans, DejaVu Sans, sans-serif"');
-    const file = path.join(out, `${kind}-${range}-${compare}-${paper}-s${seed}.png`);
+    const file = path.join(out, `${series}-${kind}-${range}-${compare}-${paper}-s${seed}.png`);
     await writeFile(file, await sharp(Buffer.from(svg), { density: 110 }).flatten({ background: '#ffffff' }).png().toBuffer());
     n++;
   }

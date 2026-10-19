@@ -12,13 +12,13 @@ import EmailGate from './EmailGate';
 
 const link = 'text-[#2f5fc4] underline underline-offset-2';
 const SET = 5;
-const PREFIX: Record<MathSeries, string> = { 'pre-k': 'Pre-K math', 'ten-frames': 'Ten frames', 'more-less': 'More or less', 'k-addition': 'Kindergarten math' };
-const FILE_PREFIX: Record<MathSeries, string> = { 'pre-k': 'pre-k-math', 'ten-frames': 'ten-frame', 'more-less': 'more-or-less', 'k-addition': 'kindergarten' };
-const FIRST: Record<MathSeries, MathKind> = { 'pre-k': 'ten-frame', 'ten-frames': 'blank-frame', 'more-less': 'more-less', 'k-addition': 'add-pictures' };
+const PREFIX: Record<MathSeries, string> = { 'pre-k': 'Pre-K math', 'ten-frames': 'Ten frames', 'more-less': 'More or less', 'k-addition': 'Kindergarten math', 'k-subtraction': 'Kindergarten math' };
+const FILE_PREFIX: Record<MathSeries, string> = { 'pre-k': 'pre-k-math', 'ten-frames': 'ten-frame', 'more-less': 'more-or-less', 'k-addition': 'kindergarten', 'k-subtraction': 'kindergarten' };
+const FIRST: Record<MathSeries, MathKind> = { 'pre-k': 'ten-frame', 'ten-frames': 'blank-frame', 'more-less': 'more-less', 'k-addition': 'add-pictures', 'k-subtraction': 'subtract-pictures' };
 
 /**
  * Math worksheet maker, used on /math-worksheets/pre-k/ (series 'pre-k'), /math-worksheets/ten-frames/ (series 'ten-frames'),
- * /math-worksheets/more-or-less/ (series 'more-less') and /math-worksheets/kindergarten-addition/ (series 'k-addition'). Free: any worksheet type, one page at a time, with fresh problems whenever you like.
+ * /math-worksheets/more-or-less/ (series 'more-less'), /math-worksheets/kindergarten-addition/ (series 'k-addition') and /math-worksheets/kindergarten-subtraction/ (series 'k-subtraction'). Free: any worksheet type, one page at a time, with fresh problems whenever you like.
  * Members also print a set of five different pages at once, or one page for every kid on their saved list.
  */
 export default function MathSheets(props: { kind?: MathKind; source?: string; series?: MathSeries }) {
@@ -70,7 +70,8 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
   const fixed = kind === 'count-color' || kind === 'blank-frame'; // nothing random on the page
   const blankLabel = BLANK_LAYOUTS.find((x) => x.v === blank)!.label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const what = byNumber ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : series === 'k-addition' ? `within-${range}` : `1-to-${range}`;
+  const within = series === 'k-addition' || series === 'k-subtraction';
+  const what = byNumber ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : within ? `within-${range}` : `1-to-${range}`;
   const fileKind = kind === 'blank-frame' ? 'blank' : slug(kindLabel);
 
   async function save(k: 'one' | 'set' | 'list') {
@@ -132,7 +133,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
             { v: '10', label: 'Within 10', sub: 'one frame' },
             { v: '20', label: '11 to 20', sub: 'two frames' },
           ]} />
-        ) : series === 'k-addition' ? (
+        ) : within ? (
           <Segmented legend="Numbers" name="math-range" value={String(range) as '5' | '10' | '20'} onChange={(v) => setRange(Number(v) as MathRange)} options={[
             { v: '5', label: 'Within 5', sub: 'just starting' },
             { v: '10', label: 'Within 10', sub: 'most of K' },
@@ -201,7 +202,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
 
       <figure class="lg:sticky lg:top-20">
         <div class="sheet-frame overflow-hidden" dangerouslySetInnerHTML={{ __html: svg }} />
-        <figcaption class="mt-3 text-[13px] text-muted">{kindLabel}{byNumber ? `, number ${number}` : kind === 'blank-frame' ? `, ${blankLabel.toLowerCase()}` : kind === 'make-ten' ? '' : kind === 'tf-add' ? (range === 20 ? ', sums 11 to 20' : `, within ${range}`) : series === 'k-addition' ? `, within ${range}` : series === 'ten-frames' && range === 20 ? ', numbers 11 to 20' : `, numbers 1 to ${range}`}. This is exactly what prints.</figcaption>
+        <figcaption class="mt-3 text-[13px] text-muted">{kindLabel}{byNumber ? `, number ${number}` : kind === 'blank-frame' ? `, ${blankLabel.toLowerCase()}` : kind === 'make-ten' ? '' : kind === 'tf-add' ? (range === 20 ? ', sums 11 to 20' : `, within ${range}`) : within ? `, within ${range}` : series === 'ten-frames' && range === 20 ? ', numbers 11 to 20' : `, numbers 1 to ${range}`}. This is exactly what prints.</figcaption>
       </figure>
 
       <EmailGate open={gate !== null} source={source} onClose={() => setGate(null)} onDone={() => { const k = gate ?? 'one'; setGate(null); save(k); }} />

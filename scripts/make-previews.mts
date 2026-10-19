@@ -137,6 +137,9 @@ jobs.push(render('more-or-less', 'kindergarten-greater-than-less-than-worksheet'
 // Kindergarten addition: picture addition within 10 (the maker's default page).
 jobs.push(render('k-addition', 'kindergarten-picture-addition-worksheet', buildMathPage({ kind: 'add-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-addition' }),
   'Kindergarten picture addition worksheet within 10: count two groups of shapes, then write how many in all'));
+// Kindergarten subtraction: subtraction with pictures within 10 (the maker's default page).
+jobs.push(render('k-subtraction', 'kindergarten-subtraction-worksheet-with-pictures', buildMathPage({ kind: 'subtract-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-subtraction' }),
+  'Kindergarten subtraction worksheet with pictures within 10: some shapes are crossed out, count how many are left and write the number'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));
