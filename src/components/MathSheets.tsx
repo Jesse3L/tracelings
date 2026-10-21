@@ -12,13 +12,13 @@ import EmailGate from './EmailGate';
 
 const link = 'text-[#2f5fc4] underline underline-offset-2';
 const SET = 5;
-const PREFIX: Record<MathSeries, string> = { 'pre-k': 'Pre-K math', 'ten-frames': 'Ten frames', 'more-less': 'More or less', 'k-addition': 'Kindergarten math', 'k-subtraction': 'Kindergarten math' };
-const FILE_PREFIX: Record<MathSeries, string> = { 'pre-k': 'pre-k-math', 'ten-frames': 'ten-frame', 'more-less': 'more-or-less', 'k-addition': 'kindergarten', 'k-subtraction': 'kindergarten' };
-const FIRST: Record<MathSeries, MathKind> = { 'pre-k': 'ten-frame', 'ten-frames': 'blank-frame', 'more-less': 'more-less', 'k-addition': 'add-pictures', 'k-subtraction': 'subtract-pictures' };
+const PREFIX: Record<MathSeries, string> = { 'pre-k': 'Pre-K math', 'ten-frames': 'Ten frames', 'more-less': 'More or less', 'k-addition': 'Kindergarten math', 'k-subtraction': 'Kindergarten math', 'k-mixed': 'Kindergarten math' };
+const FILE_PREFIX: Record<MathSeries, string> = { 'pre-k': 'pre-k-math', 'ten-frames': 'ten-frame', 'more-less': 'more-or-less', 'k-addition': 'kindergarten', 'k-subtraction': 'kindergarten', 'k-mixed': 'kindergarten' };
+const FIRST: Record<MathSeries, MathKind> = { 'pre-k': 'ten-frame', 'ten-frames': 'blank-frame', 'more-less': 'more-less', 'k-addition': 'add-pictures', 'k-subtraction': 'subtract-pictures', 'k-mixed': 'mixed-pictures' };
 
 /**
  * Math worksheet maker, used on /math-worksheets/pre-k/ (series 'pre-k'), /math-worksheets/ten-frames/ (series 'ten-frames'),
- * /math-worksheets/more-or-less/ (series 'more-less'), /math-worksheets/kindergarten-addition/ (series 'k-addition') and /math-worksheets/kindergarten-subtraction/ (series 'k-subtraction'). Free: any worksheet type, one page at a time, with fresh problems whenever you like.
+ * /math-worksheets/more-or-less/ (series 'more-less'), /math-worksheets/kindergarten-addition/ (series 'k-addition') and /math-worksheets/kindergarten-subtraction/ (series 'k-subtraction') and /math-worksheets/kindergarten-addition-and-subtraction/ (series 'k-mixed'). Free: any worksheet type, one page at a time, with fresh problems whenever you like.
  * Members also print a set of five different pages at once, or one page for every kid on their saved list.
  */
 export default function MathSheets(props: { kind?: MathKind; source?: string; series?: MathSeries }) {
@@ -70,7 +70,7 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
   const fixed = kind === 'count-color' || kind === 'blank-frame'; // nothing random on the page
   const blankLabel = BLANK_LAYOUTS.find((x) => x.v === blank)!.label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const within = series === 'k-addition' || series === 'k-subtraction';
+  const within = series === 'k-addition' || series === 'k-subtraction' || series === 'k-mixed';
   const what = byNumber ? `number-${number}` : kind === 'blank-frame' ? slug(blankLabel) : kind === 'make-ten' ? 'to-10' : within ? `within-${range}` : `1-to-${range}`;
   const fileKind = kind === 'blank-frame' ? 'blank' : slug(kindLabel);
 

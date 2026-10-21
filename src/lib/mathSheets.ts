@@ -8,9 +8,10 @@ export type MathKind = 'count-color' | 'find-number' | 'ten-frame' | 'count-circ
   | 'make-ten' | 'tf-add' | 'show-number' | 'blank-frame'
   | 'compare-numbers' | 'compare-symbols' | 'one-more-less'
   | 'add-pictures' | 'add-number-line' | 'add-facts' | 'subtract-pictures'
-  | 'subtract-cross' | 'subtract-number-line' | 'subtract-facts';
+  | 'subtract-cross' | 'subtract-number-line' | 'subtract-facts'
+  | 'mixed-pictures' | 'mixed-number-line' | 'mixed-facts' | 'plus-minus';
 export type BlankLayout = 'one' | 'double' | 'six';
-export type MathSeries = 'pre-k' | 'ten-frames' | 'more-less' | 'k-addition' | 'k-subtraction';
+export type MathSeries = 'pre-k' | 'ten-frames' | 'more-less' | 'k-addition' | 'k-subtraction' | 'k-mixed';
 export type MathRange = 5 | 10 | 20;
 export type Compare = 'more' | 'fewer';
 
@@ -69,12 +70,21 @@ export const SUBTRACTION_KINDS: { v: MathKind; label: string; sub: string }[] = 
   { v: 'subtract-facts', label: 'Subtraction facts', sub: 'Twelve number sentences, no pictures' },
 ];
 
+/** Mixed addition and subtraction worksheets (/math-worksheets/kindergarten-addition-and-subtraction/). */
+export const MIXED_KINDS: { v: MathKind; label: string; sub: string }[] = [
+  { v: 'mixed-pictures', label: 'Mixed picture problems', sub: 'Put together or take away: read the sign, then count' },
+  { v: 'mixed-number-line', label: 'Mixed number line', sub: 'Hop forward for +, hop back for -' },
+  { v: 'mixed-facts', label: 'Mixed facts', sub: 'Twelve + and - number sentences, no pictures' },
+  { v: 'plus-minus', label: 'Plus or minus?', sub: 'Write + or - to make each number sentence true' },
+];
+
 export const KINDS_FOR: Record<MathSeries, { v: MathKind; label: string; sub: string }[]> = {
   'pre-k': MATH_KINDS,
   'ten-frames': TEN_FRAME_KINDS,
   'more-less': MORE_LESS_KINDS,
   'k-addition': ADDITION_KINDS,
   'k-subtraction': SUBTRACTION_KINDS,
+  'k-mixed': MIXED_KINDS,
 };
 
 export const BLANK_LAYOUTS: { v: BlankLayout; label: string; sub: string }[] = [
@@ -128,6 +138,10 @@ const labelFor = (o: MathOptions) => {
   }
   if (o.series === 'k-subtraction') {
     const k = SUBTRACTION_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
+    return `Kindergarten math: ${k}, within ${o.range}`;
+  }
+  if (o.series === 'k-mixed') {
+    const k = MIXED_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
     return `Kindergarten math: ${k}, within ${o.range}`;
   }
   const k = MATH_KINDS.find((x) => x.v === o.kind)?.label ?? 'Worksheet';
@@ -794,6 +808,179 @@ function subtractPicturesPage(o: MathOptions, self = false): Page {
   return { w, h, items };
 }
 
+// ---------- Kindergarten mixed addition and subtraction ----------
+
+type Problem = { a: number; b: number; op: '+' | '-' };
+
+/**
+ * A mix of addition and subtraction problems: half of each (the odd one out is random), shuffled so the sign
+ * never stays the same more than twice in a row. Kids have to read the sign on every problem.
+ */
+function mixedProblems(rand: () => number, count: number, range: MathRange): Problem[] {
+  const nAdd = Math.floor(count / 2) + (count % 2 && rand() < 0.5 ? 1 : 0);
+  const adds = addPairs(rand, nAdd, range).map(([a, b]) => ({ a, b, op: '+' as const }));
+  const subs = subPairs(rand, count - nAdd, range).map(([a, b]) => ({ a, b, op: '-' as const }));
+  const all: Problem[] = [...adds, ...subs];
+  for (let guard = 0; guard < 200; guard++) {
+    for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
+    const runs = all.some((p, i) => i >= 2 && p.op === all[i - 1].op && p.op === all[i - 2].op);
+    if (!runs && all[0].op === '+') break; // start with adding, the easier of the two
+  }
+  return all;
+}
+const answer = (p: Problem) => (p.op === '+' ? p.a + p.b : p.a - p.b);
+
+/** Mixed picture problems: adding rows show two groups, taking away rows show crossed-out pictures. */
+function mixedPicturesPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Add or subtract within ${o.range}`, 'Look at the sign first. A plus sign (+) means put the two groups together and count them all. A minus sign (-) means the pictures with an X are taken away, so count the ones that are left. Write the answer in the box.') + 8;
+  const rand = rng(`mp-${o.range}-${o.seed}`);
+  const rows = 6;
+  const list = mixedProblems(rand, rows, o.range);
+  const wide = list.some((p) => p.a >= 10 || p.b >= 10);
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const span = w - 2 * M;
+  const gw = span * 0.58;
+  list.forEach((p, i) => {
+    const yT = y0 + i * rowH + 5;
+    const gh = rowH - 10;
+    const cy = yT + gh / 2;
+    const s = SHAPES[(i + o.seed) % SHAPES.length];
+    if (p.op === '+') {
+      // Two boxes with a plus between them, filling the same width as one take-away box.
+      const sign = 26;
+      const bw = (gw - sign) / 2;
+      const gap = Math.min(28, gh / (Math.max(p.a, p.b) > 5 ? 2.2 : 1.3), (bw - 10) / 5.2);
+      items.push({ kind: 'path', d: box(M, yT, bw, gh, 10), color: COLORS.desc, width: 1.4 });
+      shapeGroup(items, s, p.a, M + bw / 2, cy, gap, 5);
+      plus(items, M + bw + sign / 2, cy, 8);
+      items.push({ kind: 'path', d: box(M + bw + sign, yT, bw, gh, 10), color: COLORS.desc, width: 1.4 });
+      shapeGroup(items, s, p.b, M + bw + sign + bw / 2, cy, gap, 5);
+    } else {
+      const perRow = o.range === 20 ? 10 : 5;
+      const gap = Math.min(28, gh / (p.a > perRow ? 2.2 : 1.3), (gw - 20) / (perRow + 0.9));
+      items.push({ kind: 'path', d: box(M, yT, gw, gh, 10), color: COLORS.desc, width: 1.4 });
+      const rowsN = Math.ceil(p.a / perRow);
+      const cols = Math.min(perRow, p.a);
+      const split = gap * 0.45;
+      const spanG = (cols - 1) * gap + (cols > 5 ? split : 0);
+      const cx = M + gw / 2;
+      for (let k = 0; k < p.a; k++) {
+        const c = k % perRow, r = Math.floor(k / perRow);
+        const x = cx - spanG / 2 + c * gap + (c >= 5 ? split : 0);
+        const y = cy - ((rowsN - 1) * gap) / 2 + r * gap;
+        shape(items, s, x, y, gap * 0.4);
+        if (k >= p.a - p.b) {
+          const d = gap * 0.33;
+          items.push({ kind: 'line', x1: x - d, y1: y - d, x2: x + d, y2: y + d, color: CROSS, width: 2.2 });
+          items.push({ kind: 'line', x1: x - d, y1: y + d, x2: x + d, y2: y - d, color: CROSS, width: 2.2 });
+        }
+      }
+    }
+    const sx = M + gw + 18;
+    say(items, `${p.a}  ${p.op}  ${p.b}  =`, sx, cy + 9, 24);
+    items.push({ kind: 'path', d: box(sx + (wide ? 118 : 104), cy - 26, 58, 52, 8), color: INK, width: 1.5 });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Mixed number line: hop forward for +, back for -. */
+function mixedNumberLinePage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Number line, add or subtract within ${o.range}`, 'Put a finger on the first number (the blue dot). Read the sign. For a plus sign (+) hop forward, and for a minus sign (-) hop back, one jump at a time. Write the number you land on.') + 6;
+  const rand = rng(`mnl-${o.range}-${o.seed}`);
+  const rows = 5;
+  const list = mixedProblems(rand, rows, o.range);
+  const wide = list.some((p) => p.a >= 10 || p.b >= 10);
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const max = o.range;
+  const x0 = M + 10, x1 = w - M - 10;
+  const step = (x1 - x0) / max;
+  const label = o.range === 20 ? 11 : 14;
+  list.forEach((p, i) => {
+    const yT = y0 + i * rowH;
+    if (i > 0) items.push({ kind: 'line', x1: M, y1: yT, x2: w - M, y2: yT, color: COLORS.desc, width: 1 });
+    const ty = yT + 36;
+    say(items, `${p.a}  ${p.op}  ${p.b}  =`, M, ty, 24);
+    items.push({ kind: 'path', d: box(M + (wide ? 118 : 104), ty - 32, 58, 44, 8), color: INK, width: 1.5 });
+    const ly = yT + rowH - 40;
+    items.push({ kind: 'line', x1: x0 - 6, y1: ly, x2: x1 + 6, y2: ly, color: INK, width: 1.6 });
+    for (let n = 0; n <= max; n++) {
+      const x = x0 + n * step;
+      const tall = n % 5 === 0;
+      items.push({ kind: 'line', x1: x, y1: ly - (tall ? 8 : 5), x2: x, y2: ly + (tall ? 8 : 5), color: INK, width: tall ? 1.6 : 1.1 });
+      say(items, String(n), x, ly + 23, label, 'center');
+    }
+    items.push({ kind: 'dot', cx: x0 + p.a * step, cy: ly, r: 5.5, color: DOT });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Mixed facts: twelve number sentences, six adding and six taking away, in two columns. */
+function mixedFactsPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, `Addition and subtraction facts within ${o.range}`, 'Read the sign before you solve each one. A plus sign (+) means add and a minus sign (-) means take away. Fingers, counters or a number line are all fine to use.') + 8;
+  const rand = rng(`mf-${o.range}-${o.seed}`);
+  const list = mixedProblems(rand, 12, o.range);
+  const wide = list.some((p) => p.a >= 10 || p.b >= 10);
+  const rows = 6;
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const colW = (w - 2 * M) / 2;
+  list.forEach((p, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const x = M + col * colW + 14;
+    const cy = y0 + row * rowH + rowH / 2;
+    if (row > 0 && col === 0) items.push({ kind: 'line', x1: M, y1: y0 + row * rowH, x2: w - M, y2: y0 + row * rowH, color: COLORS.desc, width: 1 });
+    say(items, `${p.a}  ${p.op}  ${p.b}  =`, x, cy + 10, 28);
+    items.push({ kind: 'path', d: box(x + (wide ? 138 : 122), cy - 27, 62, 54, 8), color: INK, width: 1.5 });
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
+/** Plus or minus?: the answer is given; write + or - in the circle so the number sentence is true. */
+function plusMinusPage(o: MathOptions): Page {
+  const { w, h } = PAPER[o.paper];
+  const items: Item[] = [];
+  top(items, w, o.name);
+  const y0 = instruction(items, w, 'Plus or minus?', 'Read each number sentence. Did the first number get bigger or smaller? Write a plus sign (+) in the circle if it got bigger and a minus sign (-) if it got smaller.') + 8;
+  const rand = rng(`pm-${o.range}-${o.seed}`);
+  const list = mixedProblems(rand, 10, o.range);
+  const rows = 5;
+  const bottom = h - M - 30;
+  const rowH = (bottom - y0) / rows;
+  const colW = (w - 2 * M) / 2;
+  const size = 26;
+  const digit = size * 0.62; // a little more than one digit is wide in the page font, so two-digit numbers never touch the = sign
+  list.forEach((p, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const x = M + col * colW + 12;
+    const cy = y0 + row * rowH + rowH / 2;
+    if (row > 0 && col === 0) items.push({ kind: 'line', x1: M, y1: y0 + row * rowH, x2: w - M, y2: y0 + row * rowH, color: COLORS.desc, width: 1 });
+    // Fixed columns so every circle, = sign and answer lines up down the page: [a] (circle) [b] = [answer]
+    const aw = 2 * digit;
+    say(items, String(p.a), x + aw, cy + size * 0.35, size, 'right');
+    const ccx = x + aw + 30;
+    items.push({ kind: 'path', d: circlePath(ccx, cy, 20), color: INK, width: 1.5 });
+    say(items, String(p.b), ccx + 30, cy + size * 0.35, size);
+    say(items, '=', ccx + 30 + aw + 22, cy + size * 0.35, size);
+    say(items, String(answer(p)), ccx + 30 + aw + 52, cy + size * 0.35, size);
+  });
+  footer(items, w, h, o.credit, labelFor(o));
+  return { w, h, items };
+}
+
 /**
  * Find the number: a key at the top shows the number and that many dots in a ten frame, then six boxes of shapes.
  * Two or three boxes hold exactly that many; the rest hold one or two more or fewer. Kids circle every match,
@@ -884,6 +1071,10 @@ export function buildMathPage(o: MathOptions): Page {
   if (o.kind === 'subtract-cross') return subtractPicturesPage(o, true);
   if (o.kind === 'subtract-number-line') return numberLinePage(o, true);
   if (o.kind === 'subtract-facts') return factsPage(o, true);
+  if (o.kind === 'mixed-pictures') return mixedPicturesPage(o);
+  if (o.kind === 'mixed-number-line') return mixedNumberLinePage(o);
+  if (o.kind === 'mixed-facts') return mixedFactsPage(o);
+  if (o.kind === 'plus-minus') return plusMinusPage(o);
   return missingPage(o);
 }
 

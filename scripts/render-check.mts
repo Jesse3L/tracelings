@@ -23,6 +23,10 @@ const cases: [MathSeries, MathKind, MathRange[], ('more' | 'fewer')[]][] = [
   ['k-subtraction', 'subtract-cross', [5, 10, 20], ['more']],
   ['k-subtraction', 'subtract-number-line', [5, 10, 20], ['more']],
   ['k-subtraction', 'subtract-facts', [5, 10, 20], ['more']],
+  ['k-mixed', 'mixed-pictures', [5, 10, 20], ['more']],
+  ['k-mixed', 'mixed-number-line', [5, 10, 20], ['more']],
+  ['k-mixed', 'mixed-facts', [5, 10, 20], ['more']],
+  ['k-mixed', 'plus-minus', [5, 10, 20], ['more']],
 ];
 
 let n = 0;
