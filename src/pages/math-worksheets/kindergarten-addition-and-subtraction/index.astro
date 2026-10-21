@@ -1,0 +1,131 @@
+---
+import { faqText } from '../../../lib/seo';
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import MathSheets from '../../../components/MathSheets.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/math-worksheets/kindergarten-addition-and-subtraction/', SITE.url).href;
+const title = `Addition and Subtraction Worksheets for Kindergarten | ${SITE.name}`;
+const description = 'Free mixed addition and subtraction worksheets for kindergarten within 5, 10 and 20: picture problems, a number line, mixed facts and plus or minus.';
+
+const faqs = [
+  { q: 'When should kindergartners do mixed addition and subtraction?', a: 'Once your child can do picture addition and subtraction with pictures on their own, usually a few weeks after starting subtraction. Mixed pages are harder than they look, because the child has to stop and read the sign on every problem. Start with mixed picture problems within 5. Kids develop at different speeds. If you have concerns, ask your child’s teacher or pediatrician.' },
+  { q: 'My child adds every problem, even the minus ones. What helps?', a: 'That is very common on a first mixed page. Before your child solves anything, have them go down the page and circle every minus sign with a crayon. Then say each problem out loud as "put together" or "take away" before working it. After a few pages, most kids start checking the sign on their own.' },
+  { q: 'What is on the plus or minus page?', a: 'Each number sentence has the answer filled in and an empty circle where the sign goes, like 7 ( ) 3 = 4. Your child decides whether the first number got bigger or smaller and writes + or - in the circle. It is a short page, but it shows if your child knows what each sign does.' },
+  { q: 'What does within 10 mean on these worksheets?', a: 'No number on the page is bigger than 10. Within 5 keeps every number at 5 or less, and a few take away problems have an answer of 0. Within 20 has sums up to 20 and starts take away problems from 8 to 20, but never adds or takes away more than 10 at once.' },
+  { q: 'Are these addition and subtraction worksheets free?', a: 'Yes. Every page type, every range and the New problems button are free, one page at a time. Members can also print five different pages in one PDF, or one page for every child on their list, with no footer line.', html: 'Yes. Every page type, every range and the New problems button are free, one page at a time. <a href="/membership/">Members</a> can also print five different pages in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. Every page is drawn in your browser. The name you type goes on the Name line and stays on your device. It is never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Addition and subtraction worksheets for kindergarten (free generator)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Kindergarten',
+    teaches: 'Mixed addition and subtraction within 5, 10 and 20 with pictures and a number line, reading the + and - signs',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Kindergarten math worksheets', item: SITE.url + '/math-worksheets/kindergarten/' },
+      { '@type': 'ListItem', position: 3, name: 'Addition and subtraction worksheets', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/math-worksheets/kindergarten/" class="hover:text-ink">Kindergarten math</a> <span aria-hidden="true">/</span> <span aria-current="page">Addition and subtraction</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Addition and subtraction worksheets for kindergarten</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes free mixed addition and subtraction worksheets for kindergarten within 5, 10 or 20. Plus and minus problems share one page, so your child has to read the sign before solving. Pick a page type, tap New problems for a fresh set, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <MathSheets client:load source="kindergarten-addition-and-subtraction" series="k-mixed" />
+    </div>
+    <Preview k="k-mixed" caption="Example: mixed picture problems within 10." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        On a page of only adding, a child can get every answer right without ever looking at the + sign. Mixing the two is how kids learn
+        that the sign tells them what to do. These worksheets put adding and taking away side by side, with about half of each and never
+        more than two of the same sign in a row.
+      </p>
+
+      <h2>Four kinds of mixed addition and subtraction pages</h2>
+      <ul>
+        <li><strong>Mixed picture problems:</strong> adding rows show two groups of pictures with a plus between them. Taking away rows show one group with some pictures crossed out.</li>
+        <li><strong>Mixed number line:</strong> a number line under each problem with a dot on the first number. Hop forward for a plus sign and back for a minus sign.</li>
+        <li><strong>Mixed facts:</strong> twelve number sentences, six of each, with no pictures. Good once the picture pages feel easy.</li>
+        <li><strong>Plus or minus:</strong> the answer is already there, and your child writes + or - in the circle to make each number sentence true.</li>
+      </ul>
+
+      <h2>Mixed addition and subtraction worksheets for kindergarten, step by step</h2>
+      <p>
+        Start with <strong>mixed picture problems within 5</strong>. The pictures give a second clue: two boxes means put together, and
+        red X marks mean take away. Before your child starts, go down the page together and say each sign out loud, "plus, minus, plus."
+        That one habit prevents most mistakes on mixed pages.
+      </p>
+      <p>
+        Next comes the <strong>mixed number line</strong>, where the pictures are gone and only the sign says which way to hop. Then <strong>mixed facts</strong>, and last the <strong>plus or minus</strong> page. That last one turns the question around: instead
+        of finding the answer, your child looks at whether the number got bigger or smaller and picks the sign that fits.
+      </p>
+
+      <h2>Within 5, within 10 or within 20?</h2>
+      <p>
+        Use the same range your child already uses on single-sign pages. <strong>Within 5</strong> fits on one hand and is the best start. <strong>Within 10</strong> covers most of kindergarten. <strong>Within 20</strong> is a stretch: sums go up to 20, and take away
+        problems start from numbers between 8 and 20 without taking away more than 10.
+      </p>
+      <p>
+        Many kids add and take away within 10 with pictures or fingers somewhere between ages 5 and 6, and mixing the two signs often takes
+        a little longer to feel easy. Kids develop at different speeds. If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>Mixed pages alongside the kindergarten plan</h2>
+      <p>
+        Our free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> adds within 5 from week 22 and within 10 from
+        week 29. A good fit is one mixed page a week from about week 26, once your child has done a few weeks of separate adding and taking
+        away. Keep the range the same as that week's adding. If the mixed page feels hard, go back to one page each from
+        the <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> and
+        the <a href="/math-worksheets/kindergarten-subtraction/">kindergarten subtraction worksheets</a> for another week.
+      </p>
+
+      <h2>More kindergarten math</h2>
+      <p>
+        Ten frames show both adding and taking away in one picture, and the <a href="/math-worksheets/ten-frames/">ten frame printables</a> include
+        blank frames to use with counters. Every math maker is listed on our <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a> page,
+        with a free 6-page sampler to print.
+      </p>
+
+      <h2>A 10-minute mixed math routine</h2>
+      <ol>
+        <li><strong>2 minutes:</strong> a sign hunt. Your child circles every minus sign on the page with a crayon before solving anything.</li>
+        <li><strong>3 minutes:</strong> act out one plus and one minus problem with toys. Five blocks, add two more. Five blocks, take two away. Talk about why the answers are different.</li>
+        <li><strong>5 minutes:</strong> the worksheet side by side. Your child says "put together" or "take away" out loud before each problem.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about addition and subtraction worksheets</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

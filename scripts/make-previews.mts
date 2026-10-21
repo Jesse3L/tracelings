@@ -140,6 +140,9 @@ jobs.push(render('k-addition', 'kindergarten-picture-addition-worksheet', buildM
 // Kindergarten subtraction: subtraction with pictures within 10 (the maker's default page).
 jobs.push(render('k-subtraction', 'kindergarten-subtraction-worksheet-with-pictures', buildMathPage({ kind: 'subtract-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-subtraction' }),
   'Kindergarten subtraction worksheet with pictures within 10: some shapes are crossed out, count how many are left and write the number'));
+// Kindergarten addition and subtraction: mixed picture problems within 10 (the maker's default page).
+jobs.push(render('k-mixed', 'addition-and-subtraction-worksheet-kindergarten', buildMathPage({ kind: 'mixed-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-mixed' }),
+  'Kindergarten addition and subtraction worksheet within 10: some rows add two groups of shapes, some rows have shapes crossed out to take away'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

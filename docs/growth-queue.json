@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-17",
+  "updated": "2026-10-21",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13.",
   "items": [
     {
@@ -371,7 +371,7 @@
     },
     {
       "id": "k-mixed-add-subtract",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "k-subtraction-worksheets"
       ],
@@ -382,16 +382,33 @@
           1000,
           24
         ],
-        "mixed addition and subtraction worksheets for kindergarten": [
+        "mixed addition and subtraction worksheets": [
+          590,
+          26
+        ],
+        "kindergarten mixed addition and subtraction worksheets": [
           170,
-          23
+          25
         ],
         "free addition and subtraction worksheets for kindergarten": [
           110,
           24
+        ],
+        "addition and subtraction worksheets for kindergarten pdf": [
+          50,
+          30
+        ],
+        "free printable addition and subtraction worksheets for kindergarten": [
+          50,
+          21
         ]
       },
-      "buildOn": "addPairs() and subPairs() in src/lib/mathSheets.ts; factsPage() and the picture pages already take an operator."
+      "buildOn": "addPairs() and subPairs() in src/lib/mathSheets.ts; factsPage() and the picture pages already take an operator.",
+      "done": "2026-10-21",
+      "urls": [
+        "/math-worksheets/kindergarten-addition-and-subtraction/"
+      ],
+      "notes": "Ubersuggest US, 2026-10-21. Volume held (1,000 / SD 24 plus 590 / 26 for the mixed phrasing), so it got its own page instead of a type on the addition and subtraction pages. New series 'k-mixed' on the math maker with four types: mixed picture problems (adding rows show two groups, take away rows show crossed-out pictures), mixed number line, mixed facts (six of each) and plus or minus (write the sign). mixedProblems(): half and half, starts with adding, never three of the same sign in a row. Preview addition-and-subtraction-worksheet-kindergarten.webp."
     },
     {
       "id": "subtraction-word-problems-k",
@@ -470,6 +487,36 @@
       ],
       "title": "Kindergarten weekly pack: optional make 10 or ten frame addition page for the week's number or sum (checkbox in the pack maker, free for everyone)",
       "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'ten-frames' }). Pairs with prek-math-in-pack; keep it free."
+    },
+    {
+      "id": "mixed-in-k-pack",
+      "status": "todo",
+      "needs": [
+        "k-mixed-add-subtract",
+        "k-math-in-pack"
+      ],
+      "title": "Kindergarten weekly pack: in weeks 26 to 36, let the optional extra math page be a mixed picture problems page at the week's range (alternating with the single-sign page), free checkbox",
+      "buildOn": "buildMathPage({ series: 'k-mixed', kind: 'mixed-pictures' }) inside the k-math-in-pack checkbox; keep it free."
+    },
+    {
+      "id": "fact-families-worksheets",
+      "status": "todo",
+      "needs": [
+        "k-mixed-add-subtract"
+      ],
+      "title": "Fact family worksheets (a fact family house or triangle: 3, 4, 7 gives 3 + 4, 4 + 3, 7 - 3, 7 - 4) within 10 and 20, as a type on the mixed page or its own page if volume holds; check volume first",
+      "keywords": {},
+      "buildOn": "mixedProblems() and the plus-minus layout in src/lib/mathSheets.ts; the word family house drawing in src/lib/wordFamilies.ts for the house shape."
+    },
+    {
+      "id": "missing-addend-worksheets",
+      "status": "todo",
+      "needs": [
+        "k-mixed-add-subtract"
+      ],
+      "title": "Missing number addition and subtraction (3 + __ = 7, __ - 2 = 4) within 10 and 20 for late kindergarten and first grade, a type on the mixed page; check volume first",
+      "keywords": {},
+      "buildOn": "factsPage() layout with the answer box moved; feeds the first-grade-plan item."
     },
     {
       "id": "word-family-pages",
