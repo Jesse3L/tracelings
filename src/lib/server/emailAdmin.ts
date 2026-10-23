@@ -107,8 +107,14 @@ export async function setup(opts: SetupOptions = {}) {
     report.properties[p.key] = 'created';
   }
 
-  // 2. Segments
-  const segs = await listAll<{ id: string; name: string }>('/segments');
+  // 2. Segments. The free Resend plan allows 3, so first remove the two we used to make ('everyone', 'homeschool')
+  // if they are still empty; never touch any other segment.
+  let segs = await listAll<{ id: string; name: string }>('/segments');
+  for (const old of segs.filter((x) => x.name === 'everyone' || x.name === 'homeschool')) {
+    const members = await listAll(`/segments/${enc(old.id)}/contacts`, 5);
+    if (members.length === 0) { await rs(`/segments/${enc(old.id)}`, { method: 'DELETE' }); report.segments[`removed:${old.name}`] = { id: old.id, status: 'removed' }; }
+  }
+  segs = await listAll<{ id: string; name: string }>('/segments');
   for (const k of Object.keys(SEGMENTS) as SegmentKey[]) {
     const hit = segs.find((s) => s.name === SEGMENTS[k]);
     if (hit) { report.segments[k] = { id: hit.id, status: 'exists' }; continue; }
