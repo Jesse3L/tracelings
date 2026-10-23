@@ -255,5 +255,7 @@ export async function stats() {
   }
   const autos = await listAll<{ id: string; name: string; status: string }>('/automations');
   const automations = Object.fromEntries(WELCOME_VARIANTS.map((v) => [v, autos.find((a) => a.name === automationName(v))?.status ?? 'missing']));
-  return { segments, members: segments.members?.contacts ?? null, broadcasts: recent, automations };
+  // Every segment on the Resend account (names only), so the plan's segment limit is easy to sort out.
+  const all_segments = (await listAll<{ name: string }>('/segments')).map((x) => x.name);
+  return { segments, members: segments.members?.contacts ?? null, broadcasts: recent, automations, all_segments };
 }
