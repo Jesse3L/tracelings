@@ -155,7 +155,6 @@ export async function markMember(email: string, timeoutMs = 2500): Promise<'tagg
     if (!c) return 'missing';
     if (prop(c, 'member') !== 'true') await rs(`/contacts/${enc(c.id)}`, { method: 'PATCH', timeoutMs, body: { properties: { member: 'true' } } });
     const ids = await segmentIds();
-    if (ids.members) await rs(`/contacts/${enc(c.id)}/segments/${enc(ids.members)}`, { method: 'POST', timeoutMs }).catch(() => {});
     if (ids.prospects) await rs(`/contacts/${enc(c.id)}/segments/${enc(ids.prospects)}`, { method: 'DELETE', timeoutMs }).catch(() => {});
     return 'tagged';
   } catch {
