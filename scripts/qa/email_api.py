@@ -69,7 +69,7 @@ s, b = http('POST', f'{BASE}/api/admin/email/', raw=b'{bad', headers={'Authoriza
 
 # ---------- domain ----------
 s, b = admin({'action': 'domain-status'}); ok(s == 200 and b.get('found') is False, f'domain-status before create {b}')
-s, b = admin({'action': 'domain-create'}); ok(s == 200 and b.get('name') == 'mail.tracelings.com' and len(b.get('records', [])) == 3, f'domain-create {s} {b}')
+s, b = admin({'action': 'domain-create'}); ok(s == 200 and b.get('name') == 'tracelings.com' and len(b.get('records', [])) == 3, f'domain-create {s} {b}')
 ok(all(set(r) <= {'record', 'type', 'name', 'value', 'ttl', 'priority', 'status'} for r in b.get('records', [])), 'domain records have no extra fields')
 ok(state()['domains'][0]['open_tracking'] is False and state()['domains'][0]['click_tracking'] is False, 'tracking off by default')
 s, b = admin({'action': 'domain-create'}); ok(s == 200 and b.get('existed') is True, 'domain-create is idempotent')
@@ -88,7 +88,7 @@ ok(sorted(x['name'] for x in st['segments']) == sorted(['everyone', 'homeschool'
 ok([t['name'] for t in st['topics']] == ['Tracelings emails'] and st['topics'][0]['default_subscription'] == 'opt_in' and st['topics'][0]['visibility'] == 'public', 'topic created')
 ok(len(st['events']) == 7, f"7 trigger events ({len(st['events'])})")
 ok(len(st['templates']) == 16 and all(t['status'] == 'published' for t in st['templates']), f"16 published templates ({len(st['templates'])})")
-ok(all('{{{RESEND_UNSUBSCRIBE_URL}}}' in t['html'] and t['from'] == 'Tracelings <hello@mail.tracelings.com>' and t['reply_to'] == ['hello@tracelings.com'] for t in st['templates']), 'templates have unsubscribe, from, reply_to')
+ok(all('{{{RESEND_UNSUBSCRIBE_URL}}}' in t['html'] and t['from'] == 'Tracelings <hello@tracelings.com>' and t['reply_to'] == ['hello@tracelings.com'] for t in st['templates']), 'templates have unsubscribe, from, reply_to')
 ok(len(st['automations']) == 7 and all(a['status'] == 'disabled' for a in st['automations']), 'automations created disabled')
 s, b = admin({'action': 'setup'}); st2 = state()
 ok(s == 200 and len(st2['segments']) == 5 and len(st2['templates']) == 16 and len(st2['automations']) == 7 and len(st2['props']) == 6, 'setup is idempotent')
@@ -160,7 +160,7 @@ bid = b.get('id')
 st = state(); bc = next(x for x in st['broadcasts'] if x['id'] == bid)
 seg_id = {x['name']: x['id'] for x in st['segments']}
 ok(bc['status'] == 'draft' and not bc.get('send') and bc['segment_id'] == seg_id['prospects'] and bc['topic_id'] == st['topics'][0]['id'], 'draft on prospects with topic')
-ok('{{{RESEND_UNSUBSCRIBE_URL}}}' in bc['html'] and bc['preview_text'] and bc['reply_to'] == ['hello@tracelings.com'] and bc['from'] == 'Tracelings <hello@mail.tracelings.com>', 'broadcast content fields')
+ok('{{{RESEND_UNSUBSCRIBE_URL}}}' in bc['html'] and bc['preview_text'] and bc['reply_to'] == ['hello@tracelings.com'] and bc['from'] == 'Tracelings <hello@tracelings.com>', 'broadcast content fields')
 s, b = admin({'action': 'broadcast-create', 'template': 'launch-a-teacher'}); ok(s == 200 and b.get('segment') == 'teachers', 'teacher variant -> teachers')
 for k in ('launch-b', 'launch-c'):
     s, b = admin({'action': 'broadcast-create', 'template': k}); ok(s == 200 and b.get('segment') == 'prospects', f'{k} draft')

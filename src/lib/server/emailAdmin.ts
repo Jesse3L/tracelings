@@ -6,7 +6,7 @@ import { SEGMENTS, PROPERTIES, TOPIC_NAME, TOPIC_DESCRIPTION, INTERESTS, welcome
 import { allTemplates, FROM, LAUNCH, WELCOME_DAYS, withUnsubscribe, type LaunchKey } from '../email/templates';
 import { SITE } from '../../config';
 
-export const SENDING_DOMAIN = 'mail.tracelings.com';
+export const SENDING_DOMAIN = 'tracelings.com';
 const REPLY_TO = SITE.email;
 
 // ---------- domain ----------
