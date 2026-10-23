@@ -110,7 +110,7 @@ export async function setup(opts: SetupOptions = {}) {
   // 2. Segments. The free Resend plan allows 3, so first remove the two we used to make ('everyone', 'homeschool')
   // if they are still empty; never touch any other segment.
   let segs = await listAll<{ id: string; name: string }>('/segments');
-  for (const old of segs.filter((x) => x.name === 'everyone' || x.name === 'homeschool')) {
+  for (const old of segs.filter((x) => x.name === 'everyone' || x.name === 'homeschool' || x.name === 'members')) {
     const members = await listAll(`/segments/${enc(old.id)}/contacts`, 5);
     if (members.length === 0) { await rs(`/segments/${enc(old.id)}`, { method: 'DELETE' }); report.segments[`removed:${old.name}`] = { id: old.id, status: 'removed' }; }
   }
@@ -237,6 +237,13 @@ export async function testSend(templateKey: string, to: string) {
 }
 
 // ---------- stats ----------
+async function countMembers(): Promise<number | null> {
+  try {
+    const all = await listAll<{ properties?: Record<string, unknown> }>('/contacts', 5000);
+    return all.filter((c) => String(c.properties?.member ?? '') === 'true').length;
+  } catch { return null; }
+}
+
 export async function stats() {
   const ids = await segmentIds(true);
   const segments: Record<string, { contacts: number; subscribed: number; unsubscribed: number } | null> = {};
@@ -263,5 +270,5 @@ export async function stats() {
   const automations = Object.fromEntries(WELCOME_VARIANTS.map((v) => [v, autos.find((a) => a.name === automationName(v))?.status ?? 'missing']));
   // Every segment on the Resend account (names only), so the plan's segment limit is easy to sort out.
   const all_segments = (await listAll<{ name: string }>('/segments')).map((x) => x.name);
-  return { segments, members: segments.members?.contacts ?? null, broadcasts: recent, automations, all_segments };
+  return { segments, members: await countMembers(), broadcasts: recent, automations, all_segments };
 }
