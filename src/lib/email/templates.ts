@@ -10,7 +10,7 @@ import type { Interest } from './audience';
 export interface EmailContent { subject: string; preview: string; html: string; text: string }
 
 export const SITE_URL = 'https://tracelings.com';
-export const FROM = 'Tracelings <hello@mail.tracelings.com>';
+export const FROM = 'Tracelings <hello@tracelings.com>';
 export const MAILING_ADDRESS = 'Tracelings, 17350 State Hwy 249, Ste 220 #35878, Houston, TX 77064, US';
 export const UNSUB = '{{{RESEND_UNSUBSCRIBE_URL}}}';
 
