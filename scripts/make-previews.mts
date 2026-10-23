@@ -16,6 +16,8 @@ import { loadFont } from '../src/lib/fontshape';
 import { PLANS, buildWeekPack, preKWeekForLetter } from '../src/lib/homeschool';
 import { buildMathPage } from '../src/lib/mathSheets';
 import { FAMILY_INFO, buildFamilyPage } from '../src/lib/wordFamilies';
+import { loadThemeIcons } from '../src/lib/program/themes';
+import { buildWordProblemPage } from '../src/lib/wordProblems';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'public/previews');
@@ -143,6 +145,10 @@ jobs.push(render('k-subtraction', 'kindergarten-subtraction-worksheet-with-pictu
 // Kindergarten addition and subtraction: mixed picture problems within 10 (the maker's default page).
 jobs.push(render('k-mixed', 'addition-and-subtraction-worksheet-kindergarten', buildMathPage({ kind: 'mixed-pictures', range: 10, number: 5, compare: 'more', name: '', paper: 'letter', credit: true, seed: 1, series: 'k-mixed' }),
   'Kindergarten addition and subtraction worksheet within 10: some rows add two groups of shapes, some rows have shapes crossed out to take away'));
+// Kindergarten word problems: addition within 5 with farm animals (the maker's default page).
+await loadThemeIcons(['farm'], (u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
+jobs.push(render('k-word-problems', 'kindergarten-word-problems-worksheet', buildWordProblemPage({ kind: 'wp-add', range: 5, theme: 'farm', name: '', paper: 'letter', credit: true, seed: 1 }),
+  'Kindergarten word problems worksheet within 5: short farm animal stories to read aloud, with pictures to count and a number sentence to fill in'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

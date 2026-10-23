@@ -1,0 +1,142 @@
+---
+import { faqText } from '../../../lib/seo';
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import WordProblemSheets from '../../../components/WordProblemSheets.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/math-worksheets/kindergarten-word-problems/', SITE.url).href;
+const title = `Kindergarten Word Problems: Free Worksheets | ${SITE.name}`;
+const description = 'Free kindergarten word problems within 5 and 10: short read-aloud addition and subtraction stories with pictures to count, in farm, dinosaur and more themes.';
+
+const faqs = [
+  { q: 'What are word problems in kindergarten?', a: 'They are tiny math stories read out loud: "There are 4 ducks on the farm. 2 more come along. How many ducks are there now?" Your child listens, counts the pictures (or draws them), and answers. Kindergarten word problems usually stay within 10 and only use adding and taking away.' },
+  { q: 'Can my child do word problems before they can read?', a: 'Yes. These pages are made to be read aloud by a grown-up. Your child does the thinking and the counting. The pictures match each story, so a child who can count to 10 can solve them without reading a word.' },
+  { q: 'What do the boxes at the end of each problem mean?', a: 'They make a number sentence, like 4 + 2 = 6. Your child writes the first number from the story, the second number, and then the answer in the last, darker box. If writing three numbers is too much at first, have your child fill in only the answer box and you write the other two.' },
+  { q: 'My child adds on every problem, even take away ones. What helps?', a: 'That is common. Before solving, ask "Will there be more or fewer at the end?" and act it out with toys. Use the subtraction page for a week or two, where the pictures that go away have an X, and then come back to the add or subtract page.' },
+  { q: 'Why does the draw and solve page have no pictures?', a: 'Drawing the story is the next step after counting given pictures. Your child draws circles or quick shapes for each thing in the story, crosses out the ones that go away, and counts. It shows you whether they understand the story, not only the counting.' },
+  { q: 'Are these kindergarten word problems free?', a: 'Yes. Every page type, every theme, both ranges and the New problems button are free, one page at a time. Members can also print five different pages in one PDF, or one page for every child on their list, with no footer line.', html: 'Yes. Every page type, every theme, both ranges and the New problems button are free, one page at a time. <a href="/membership/">Members</a> can also print five different pages in one PDF, or one page for every child on their list, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. Every page is drawn in your browser, including the stories with your child’s name in them. The name stays on your device. It is never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Kindergarten word problems (free worksheet generator)',
+    url,
+    learningResourceType: 'Worksheet',
+    educationalLevel: 'Kindergarten',
+    teaches: 'Addition and subtraction word problems within 5 and 10, read aloud, with pictures to count and a number sentence to fill in',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Kindergarten math worksheets', item: SITE.url + '/math-worksheets/kindergarten/' },
+      { '@type': 'ListItem', position: 3, name: 'Kindergarten word problems', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/math-worksheets/kindergarten/" class="hover:text-ink">Kindergarten math</a> <span aria-hidden="true">/</span> <span aria-current="page">Word problems</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Kindergarten word problems</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes free kindergarten word problems within 5 or 10: short addition and subtraction stories you read aloud, with matching pictures to count and a number sentence to fill in. Pick a page type and a theme your child likes, type their name to put them in the stories, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <WordProblemSheets client:load source="kindergarten-word-problems" />
+    </div>
+    <Preview k="k-word-problems" caption="Example: addition word problems within 5, farm animals." />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        A word problem asks a child to turn a little story into math. That is a different skill from solving 3 + 2 on a page of facts,
+        and it is often the part kids find hardest. Short stories about things they care about, with pictures that match the words,
+        make it much easier to start.
+      </p>
+
+      <h2>Four kinds of kindergarten word problem worksheets</h2>
+      <ul>
+        <li><strong>Addition word problems:</strong> four stories where more join in or two groups go together. The pictures show both groups with a plus sign between them.</li>
+        <li><strong>Subtraction word problems:</strong> four stories where some go away or get given away. The ones that leave have a red X, so your child counts what is left.</li>
+        <li><strong>Add or subtract?</strong> A mix of both. There is no plus sign between the pictures, and the sign in the number sentence is an empty circle, so your child has to listen to the story and decide.</li>
+        <li><strong>Draw and solve:</strong> three stories with a big box instead of pictures. Your child draws the story, then writes the answer.</li>
+      </ul>
+      <p>
+        Each page comes in eight themes: farm animals, dinosaurs, under the sea, bugs, pets, jungle animals, trucks and cars, and space. Type
+        your child's name and the stories are about them: "Maya has 3 shells. Maya finds 2 more."
+      </p>
+
+      <h2>How to do word problems with a kindergartner</h2>
+      <p>
+        Read each story out loud slowly, then read it again. Ask "What is happening?" before asking for a number. Once your child can say
+        "some more ducks came" or "some cows went home", the math is the easy part.
+      </p>
+      <p>
+        Then count the pictures together. For an adding story, count the first group, the second group, then all of them. For a take away
+        story, count all the pictures, then the ones without an X. Last, fill in the number sentence. The first two boxes come straight from
+        the story, and the darker last box is the answer.
+      </p>
+
+      <h2>Within 5 or within 10?</h2>
+      <p>
+        Start <strong>within 5</strong>, where every number fits on one hand and the stories are quick. Move to <strong>within 10</strong> when
+        your child solves a within 5 page without help. Many state standards, including the Common Core standards that many states use, list
+        solving addition and subtraction word problems within 10 as a kindergarten goal. Goals vary by state and program, so check your school
+        or your state's kindergarten standards if you need to match a list.
+      </p>
+      <p>
+        Many kids can solve a picture word problem within 5 somewhere between ages 5 and 6, and stories without pictures often take longer.
+        Kids develop at different speeds. If you have concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>Word problems alongside the kindergarten plan</h2>
+      <p>
+        Our free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> adds within 5 from week 22 and within 10 from
+        week 29. One word problem page a week fits well from week 22: addition stories first, subtraction stories once your child has done
+        a few pages of the <a href="/math-worksheets/kindergarten-subtraction/">kindergarten subtraction worksheets</a>, and the add or
+        subtract page in the last weeks of the year. For extra practice on the same numbers without stories, use
+        the <a href="/math-worksheets/kindergarten-addition-and-subtraction/">addition and subtraction worksheets for kindergarten</a>.
+      </p>
+      <p>
+        If you would like new word problems every week about your child's favorite things, at their level, that is part of
+        our <a href="/program/">personalized homeschool program</a>. Week 1 is free to try.
+      </p>
+
+      <h2>More kindergarten math</h2>
+      <p>
+        Word problems use the same skills as the picture pages, so the <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> are
+        a good warm-up. Every math maker is listed on our <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a> page, with
+        a free 6-page sampler to print.
+      </p>
+
+      <h2>A 10-minute word problem routine</h2>
+      <ol>
+        <li><strong>3 minutes:</strong> act out one story with real things. Give your child 4 crackers, then 2 more, and ask how many there are now. Then they eat the answer.</li>
+        <li><strong>5 minutes:</strong> one worksheet side by side. Read each story twice, then count the pictures together.</li>
+        <li><strong>2 minutes:</strong> your child makes up a story for you to solve, using toys on the table. Get one wrong on purpose so they can fix it.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about kindergarten word problems</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>
