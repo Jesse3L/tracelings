@@ -1,13 +1,14 @@
 import type { APIRoute } from 'astro';
 import { notify, placeFrom } from '../../lib/server/notify';
+import { addSignup } from '../../lib/server/email';
 
 export const prerender = false;
 
-// Saves an email sign-up: always sent to the owner's webhook (NOTIFY_WEBHOOK_URL, e.g. Zapier → Google Sheets),
-// and also added to Kit (kit.com) if KIT_API_KEY is set.
-// Optional: KIT_FORM_ID (starts the welcome sequence) and KIT_TAG_WAITLIST (tags membership waitlist signups).
-// We only ever receive an email address and where it came from, never a child's name.
-const KIT = 'https://api.kit.com/v4';
+// Saves an email sign-up in two places at once:
+//  - the owner's webhook (NOTIFY_WEBHOOK_URL, Zapier -> Google Sheet), as before;
+//  - Resend (RESEND_API_KEY): a contact with source and signup_date, which starts the welcome emails.
+// The download goes ahead if either one saved it. We only ever receive an email address, the tool it came from
+// and an optional role, never a child's name.
 const SOURCES = { has: (v: string) => /^[a-z0-9-]{2,40}$/.test(v) }; // any tool slug, e.g. 'name-tracing'
 const ROLES = new Set(['own-kids', 'classroom', 'homeschool', 'other']);
 
@@ -23,39 +24,15 @@ export const POST: APIRoute = async ({ request }) => {
   const source = typeof data.source === 'string' && SOURCES.has(data.source) ? data.source : 'other';
   const role = typeof data.role === 'string' && ROLES.has(data.role) ? data.role : '';
   const place = placeFrom(request);
-  // The webhook (Zapier → Google Sheet) is the email list until an email service is connected.
-  const saved = await notify(
-    source === 'waitlist' ? 'New waitlist sign-up' : 'New email sign-up',
-    `${email}\nFrom the ${source} page${role ? ` (${role})` : ''}${place ? `\nPlace: ${place}` : ''}`,
-    'email',
-    { event: source === 'waitlist' ? 'waitlist_signup' : 'email_signup', email, source, role: role || null, place: place || null },
-  );
 
-  const key = import.meta.env.KIT_API_KEY ?? process.env.KIT_API_KEY;
-  if (!key) return saved ? json(200, { ok: true }) : json(503, { error: 'not_configured' });
-  const headers = { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Kit-Api-Key': key };
-
-  try {
-    const res = await fetch(`${KIT}/subscribers`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ email_address: email, state: 'active' }),
-    });
-    if (!res.ok) {
-      console.error('kit subscriber error', res.status);
-      return json(502, { error: 'upstream' });
-    }
-    const formId = import.meta.env.KIT_FORM_ID ?? process.env.KIT_FORM_ID;
-    if (formId) {
-      await fetch(`${KIT}/forms/${formId}/subscribers`, { method: 'POST', headers, body: JSON.stringify({ email_address: email }) });
-    }
-    const tagId = source === 'waitlist' ? (import.meta.env.KIT_TAG_WAITLIST ?? process.env.KIT_TAG_WAITLIST) : undefined;
-    if (tagId) {
-      await fetch(`${KIT}/tags/${tagId}/subscribers`, { method: 'POST', headers, body: JSON.stringify({ email_address: email }) });
-    }
-    return json(200, { ok: true });
-  } catch (err) {
-    console.error('kit request failed');
-    return json(502, { error: 'upstream' });
-  }
+  const [sheet, resend] = await Promise.all([
+    notify(
+      source === 'waitlist' ? 'New waitlist sign-up' : 'New email sign-up',
+      `${email}\nFrom the ${source} page${role ? ` (${role})` : ''}${place ? `\nPlace: ${place}` : ''}`,
+      'email',
+      { event: source === 'waitlist' ? 'waitlist_signup' : 'email_signup', email, source, role: role || null, place: place || null },
+    ),
+    addSignup(email, source, role || undefined).catch(() => ({ saved: false })),
+  ]);
+  return sheet || resend.saved ? json(200, { ok: true }) : json(503, { error: 'not_configured' });
 };

@@ -18,6 +18,19 @@ npx tsx scripts/qa/probe-plans.mts                      # print a few placement 
 bash scripts/qa/down.sh
 ```
 
+Email (Resend) QA, all against `resend-mock.mts` on $RESEND_PORT (4112); nothing reaches the real Resend API:
+
+```
+npx tsx scripts/test-email.mts                                   # audience rules, every template, automation graphs
+QA_EXTRA_ENV="$(bash scripts/qa/email-env.sh)" bash scripts/qa/up.sh
+python3 scripts/qa/email_api.py                                  # admin API, sign-ups, import, broadcasts, member tags
+python3 scripts/qa/email_ui.py                                   # program card after downloads, plan-page banner (390, 1280)
+bash scripts/qa/down.sh
+QA_EXTRA_ENV="RESEND_API_KEY=re_qa_mock_key RESEND_BASE_URL=http://127.0.0.1:4112" bash scripts/qa/up.sh
+NO_TOKEN=1 python3 scripts/qa/email_api.py                       # admin endpoint is a 404 without EMAIL_ADMIN_TOKEN
+npx tsx scripts/email-preview.mts <dir>                          # every email as HTML + text + 390/700 screenshots
+```
+
 Vite won't serve a symlinked `node_modules` from outside the project, so run the dev server from a checkout with a real
 `node_modules` (set `REPO`). Only one Astro dev server can run per project folder. The session cookie is `Secure`, so
 browser scripts call the API through a page, not Playwright's request context.

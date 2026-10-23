@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { squareConfigured, activeMembership, PLANS, MAX_CHILDREN } from '../../../lib/server/square';
 import { json, readSession } from '../../../lib/server/session';
+import { markMember } from '../../../lib/server/email';
 
 export const prerender = false;
 
@@ -12,6 +13,8 @@ export const GET: APIRoute = async ({ cookies }) => {
     const sub = await activeMembership(s.cids);
     if (!sub) return json(200, { member: false, available: true, email: s.email, lapsed: true });
     const plan = sub.plan;
+    // Tag the email-list contact as a member (once per instance every few hours; never fails the request).
+    await markMember(s.email, 1500);
     return json(200, {
       member: true,
       available: true,
