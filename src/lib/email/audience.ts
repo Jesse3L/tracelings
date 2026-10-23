@@ -36,8 +36,6 @@ export function isHomeschool(source: string, role?: string): boolean {
 
 /** Segment names, created by the admin `setup` action. Resend segments are plain lists, so code adds contacts. */
 export const SEGMENTS = {
-  everyone: 'everyone',
-  homeschool: 'homeschool',
   teachers: 'teachers',
   members: 'members',
   /** Families who are not members yet: everyone minus teachers minus members. Launch emails go here. */
@@ -46,9 +44,9 @@ export const SEGMENTS = {
 export type SegmentKey = keyof typeof SEGMENTS;
 
 export function segmentsFor(email: string, source: string, role?: string): SegmentKey[] {
-  const out: SegmentKey[] = ['everyone'];
+  // The free Resend plan allows 3 segments: prospects, teachers, members. Interest lives in the contact properties.
+  const out: SegmentKey[] = [];
   const teacher = isTeacher(email, source, role);
-  if (isHomeschool(source, role)) out.push('homeschool');
   if (teacher) out.push('teachers'); else out.push('prospects');
   return out;
 }

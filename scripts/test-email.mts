@@ -27,10 +27,10 @@ for (const d of ['a@austinisd.org', 'b@cfisd.net', 'c@lausd.net', 'd@students.k1
 for (const d of ['a@gmail.com', 'b@yahoo.com', 'c@icloud.com', 'd@outlook.com', 'e@hisdomain.com', 'f@paradise.net']) ok(!schoolDomain(d), `not school ${d}`);
 ok(isTeacher('x@gmail.com', 'waitlist', 'classroom'), 'classroom role is teacher');
 ok(isTeacher('x@gmail.com', 'class-pack'), 'class-pack is teacher');
-eq(segmentsFor('x@gmail.com', 'homeschool-prek'), ['everyone', 'homeschool', 'prospects'], 'homeschool segments');
-eq(segmentsFor('x@gmail.com', 'program-week1'), ['everyone', 'homeschool', 'prospects'], 'program segments');
-eq(segmentsFor('x@austinisd.org', 'name-tracing'), ['everyone', 'teachers'], 'teacher segments');
-eq(segmentsFor('x@gmail.com', 'coloring-pages'), ['everyone', 'prospects'], 'family segments');
+eq(segmentsFor('x@gmail.com', 'homeschool-prek'), ['prospects'], 'homeschool segments');
+eq(segmentsFor('x@gmail.com', 'program-week1'), ['prospects'], 'program segments');
+eq(segmentsFor('x@austinisd.org', 'name-tracing'), ['teachers'], 'teacher segments');
+eq(segmentsFor('x@gmail.com', 'coloring-pages'), ['prospects'], 'family segments');
 
 // ---------- templates ----------
 const BANNED = [/unlock/i, /seamless/i, /elevate/i, /dive in/i, /dive into/i, /deep dive/i, /whether you'?re/i, /in today'?s world/i, /game[- ]changer/i, /it'?s important to note/i,
