@@ -1,6 +1,7 @@
 ---
 import { faqText } from '../../../lib/seo';
 import Base from '../../../layouts/Base.astro';
+import ProgramBanner from '../../../components/site/ProgramBanner.astro';
 import Preview from '../../../components/site/Preview.astro';
 import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
 import Faqs from '../../../components/homeschool/Faqs.astro';
@@ -66,6 +67,7 @@ const k = PLANS.kindergarten.weeks;
       <WeekPack client:load faith source="homeschool-christian" />
     </div>
     <Preview k={'homeschool-faith'} caption={'Example: the verse page from week 4, Psalm 23:1.'} />
+    <ProgramBanner faith />
 
     <article class="prose-tl max-w-[68ch] mt-14">
       <p class="text-[1.15rem]!">

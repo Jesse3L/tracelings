@@ -2,6 +2,7 @@
 import { faqText } from '../../../lib/seo';
 import Preview from '../../../components/site/Preview.astro';
 import Base from '../../../layouts/Base.astro';
+import ProgramBanner from '../../../components/site/ProgramBanner.astro';
 import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
 import PlanWeeks from '../../../components/homeschool/PlanWeeks.astro';
 import Faqs from '../../../components/homeschool/Faqs.astro';
@@ -66,6 +67,7 @@ const schema = [
       <WeekPack client:load level="pre-k" fixedLevel source="homeschool-prek" />
     </div>
     <Preview k={'homeschool-prek'} caption={'Example: the plan page from week 2, letter S.'} />
+    <ProgramBanner />
 
     <article class="prose-tl max-w-[68ch] mt-14">
       <p class="text-[1.15rem]!">

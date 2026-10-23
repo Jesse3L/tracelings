@@ -1,0 +1,13 @@
+---
+// Slim offer for the personalized program, shown under the free weekly pack on the homeschool plan pages.
+interface Props { faith?: boolean }
+const { faith = false } = Astro.props;
+---
+<aside class="mt-8 flex max-w-3xl items-center gap-4 rounded-xl border border-hairline bg-white p-3 pr-4 sm:p-4" aria-label="Personalized program">
+  <img src="/program/scenes/dinosaurs/find-egg-thumb.webp" alt="A page from a Tracelings picture book: a little T-rex finds a spotted egg" width="480" height="360" loading="lazy" class="hidden h-16 w-auto shrink-0 rounded-md border border-hairline min-[420px]:block sm:h-[72px]" />
+  <p class="min-w-0 flex-1 text-[15px] leading-snug text-muted">
+    <span class="block font-bold text-ink">Want a week built around your child?</span>
+    Their level, themed on what they love, with a picture book starring them{faith ? ', and a faith track if you want it' : ''}. Week 1 is free.
+  </p>
+  <a href="/program/" class="btn-pencil shrink-0 px-3.5 py-2.5 text-[15px] text-center">Try it free</a>
+</aside>

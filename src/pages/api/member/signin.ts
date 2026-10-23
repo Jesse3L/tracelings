@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { squareConfigured, customersByEmail, activeMembership, cardLast4s, paidCheckoutCustomer, subscriptionsFor } from '../../../lib/server/square';
 import { json, cleanEmail, setSession, readPending, clearPending, sameOrigin } from '../../../lib/server/session';
+import { markMember } from '../../../lib/server/email';
 
 export const prerender = false;
 
@@ -58,6 +59,8 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     setSession(cookies, email, cids);
     clearPending(cookies);
     attempts.delete(email);
+    // Email list: mark them as a member so the welcome emails stop and launch offers skip them. Best effort, short timeout.
+    await markMember(email);
     return json(200, { ok: true });
   } catch (e) {
     console.error('signin failed', (e as Error).message);
