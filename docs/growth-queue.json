@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21",
+  "updated": "2026-10-23",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13.",
   "items": [
     {
@@ -412,13 +412,79 @@
     },
     {
       "id": "subtraction-word-problems-k",
-      "status": "todo",
+      "status": "done",
       "needs": [
         "k-subtraction-worksheets"
       ],
-      "title": "Kindergarten addition and subtraction word problems: short read-aloud story problems with pictures to count (within 5 and 10), as a type on the math maker; check volume first",
-      "keywords": {},
-      "buildOn": "The personalized program's word problem pages (src/lib/program/templates.ts problemRange) for wording; draw with the math maker's shapes."
+      "title": "Kindergarten word problems: read-aloud addition and subtraction story problems within 5 and 10, with theme pictures to count and a number sentence to fill in",
+      "keywords": {
+        "kindergarten word problems": [
+          720,
+          30
+        ],
+        "kindergarten word problems math": [
+          480,
+          35
+        ],
+        "addition word problems for kindergarten": [
+          260,
+          26
+        ],
+        "subtraction word problems for kindergarten": [
+          260,
+          23
+        ],
+        "kindergarten word problems addition": [
+          260,
+          29
+        ],
+        "addition and subtraction word problems for kindergarten": [
+          140,
+          26
+        ],
+        "kindergarten word problems worksheet": [
+          140,
+          21
+        ],
+        "kindergarten word problems pdf": [
+          50,
+          18
+        ]
+      },
+      "buildOn": "The personalized program's word problem pages (src/lib/program/templates.ts problemRange) for wording; draw with the math maker's shapes.",
+      "done": "2026-10-23",
+      "urls": [
+        "/math-worksheets/kindergarten-word-problems/"
+      ],
+      "notes": "Ubersuggest US, 2026-10-23. Volume held (720 / SD 30), so its own page instead of a type on the math maker. New maker src/lib/wordProblems.ts + src/components/WordProblemSheets.tsx: four types (addition, subtraction, add or subtract with an empty sign circle, draw and solve), within 5 and 10, eight themes using the program's line icons (farm, dinosaurs, ocean, bugs, pets, jungle, trucks, space). The child's name can be the story's main character (browser only). Story frames follow the program's rules: places are never taken away, objects are held and given, animals and vehicles come and go. Preview kindergarten-word-problems-worksheet.webp. Render check: scripts/render-word-problems.mts."
+    },
+    {
+      "id": "word-problems-in-k-pack",
+      "status": "todo",
+      "needs": [
+        "subtraction-word-problems-k"
+      ],
+      "title": "Kindergarten weekly pack: optional free word problem page from week 22 (addition stories within 5 in weeks 22 to 28, within 10 from week 29, add or subtract in weeks 33 to 36), a checkbox in the pack maker like the Pre-K extra math page",
+      "buildOn": "buildWordProblemPage() in src/lib/wordProblems.ts (needs loadThemeIcons before building the pack) and buildWeekPack() in src/lib/homeschool.ts. Keep it free; members already get themed word problems in the personalized program."
+    },
+    {
+      "id": "compare-word-problems",
+      "status": "todo",
+      "needs": [
+        "subtraction-word-problems-k"
+      ],
+      "title": "How many more? Compare word problems: a fifth type on /math-worksheets/kindergarten-word-problems/ (two groups side by side, match them up, how many more or fewer), within 10; check 'how many more word problems' and 'compare word problems' volume first, its own page only if volume holds",
+      "buildOn": "makeProblems() and fit() in src/lib/wordProblems.ts; the program's compare problem in src/lib/program/templates.ts."
+    },
+    {
+      "id": "word-problems-first-grade",
+      "status": "todo",
+      "needs": [
+        "first-grade-plan",
+        "subtraction-word-problems-k"
+      ],
+      "title": "First grade word problems within 20: add to, take from, put together and missing part stories, with a number line instead of pictures past 10; part of the first grade plan",
+      "buildOn": "src/lib/wordProblems.ts (add a range of 20 and new frames); keyword data for 'first grade word problems' came back empty in Ubersuggest on 2026-10-23, recheck with other phrasings ('word problems for 1st graders', '1st grade math word problems')."
     },
     {
       "id": "k-math-in-pack",
