@@ -84,14 +84,14 @@ ok(contact('early@example.com') is None, 'no contact before properties exist (mo
 s, b = admin({'action': 'setup'}); ok(s == 200, f'setup {s} {str(b)[:300]}')
 st = state()
 ok(sorted(p['key'] for p in st['props']) == sorted(['source', 'signup_date', 'member', 'interest', 'audience', 'welcome_status']), 'properties created')
-ok(sorted(x['name'] for x in st['segments']) == sorted(['everyone', 'homeschool', 'teachers', 'members', 'prospects']), 'segments created')
+ok(sorted(x['name'] for x in st['segments']) == sorted(['teachers', 'members', 'prospects']), 'segments created')
 ok([t['name'] for t in st['topics']] == ['Tracelings emails'] and st['topics'][0]['default_subscription'] == 'opt_in' and st['topics'][0]['visibility'] == 'public', 'topic created')
 ok(len(st['events']) == 7, f"7 trigger events ({len(st['events'])})")
 ok(len(st['templates']) == 16 and all(t['status'] == 'published' for t in st['templates']), f"16 published templates ({len(st['templates'])})")
 ok(all('{{{RESEND_UNSUBSCRIBE_URL}}}' in t['html'] and t['from'] == 'Tracelings <hello@tracelings.com>' and t['reply_to'] == ['hello@tracelings.com'] for t in st['templates']), 'templates have unsubscribe, from, reply_to')
 ok(len(st['automations']) == 7 and all(a['status'] == 'disabled' for a in st['automations']), 'automations created disabled')
 s, b = admin({'action': 'setup'}); st2 = state()
-ok(s == 200 and len(st2['segments']) == 5 and len(st2['templates']) == 16 and len(st2['automations']) == 7 and len(st2['props']) == 6, 'setup is idempotent')
+ok(s == 200 and len(st2['segments']) == 3 and len(st2['templates']) == 16 and len(st2['automations']) == 7 and len(st2['props']) == 6, 'setup is idempotent')
 ok(all(v == 'exists' for v in b['properties'].values()) and all(v['status'] == 'updated' for v in b['templates'].values()), 'second setup reports exists/updated')
 s, b = admin({'action': 'setup', 'rebuild_automations': True}); ok(s == 200 and all(v['action'] == 'rebuilt' for v in b['automations'].values()), 'rebuild disabled automations')
 s, b = admin({'action': 'automations-enable'}); ok(s == 200 and all(v == 'enabled' for v in b.values()), f'automations-enable {b}')
@@ -99,12 +99,12 @@ s, b = admin({'action': 'setup', 'rebuild_automations': True}); ok(s == 200 and 
 
 # ---------- sign-ups ----------
 cases = [
-    ('parent1@example.com', 'kindergarten-addition', None, 'tracelings.welcome.math', ['everyone', 'prospects'], 'math'),
-    ('hs@example.com', 'homeschool-prek', None, 'tracelings.welcome.homeschool', ['everyone', 'homeschool', 'prospects'], 'homeschool'),
-    ('prog@example.com', 'program-week1', None, 'tracelings.welcome.program', ['everyone', 'homeschool', 'prospects'], 'program'),
-    ('color@example.com', 'coloring-pages', None, 'tracelings.welcome.coloring', ['everyone', 'prospects'], 'coloring'),
-    ('Teach@AustinISD.org', 'name-tracing', None, 'tracelings.welcome.teacher', ['everyone', 'teachers'], 'letters'),
-    ('wait@example.com', 'waitlist', 'classroom', 'tracelings.welcome.teacher', ['everyone', 'teachers'], 'general'),
+    ('parent1@example.com', 'kindergarten-addition', None, 'tracelings.welcome.math', ['prospects'], 'math'),
+    ('hs@example.com', 'homeschool-prek', None, 'tracelings.welcome.homeschool', ['prospects'], 'homeschool'),
+    ('prog@example.com', 'program-week1', None, 'tracelings.welcome.program', ['prospects'], 'program'),
+    ('color@example.com', 'coloring-pages', None, 'tracelings.welcome.coloring', ['prospects'], 'coloring'),
+    ('Teach@AustinISD.org', 'name-tracing', None, 'tracelings.welcome.teacher', ['teachers'], 'letters'),
+    ('wait@example.com', 'waitlist', 'classroom', 'tracelings.welcome.teacher', ['teachers'], 'general'),
 ]
 for email, src, role, ev, segs, interest in cases:
     s, b, dt = subscribe(email, src, role)
@@ -147,7 +147,7 @@ s, b = admin({'action': 'import', 'emails': emails}); ok(s == 200, f'import {s} 
 ok(b.get('created') == 5 and b.get('existing') == 1 and b.get('unsubscribed') == 1 and b.get('invalid') == 1 and b.get('failed') == 0 and b.get('valid') == 7, f'import counts {b}')
 ok(contact('hs@example.com')['unsubscribed'] is True, 'import never re-subscribes')
 ok(contact('new1@example.com')['properties']['source'] == 'import-oct-2026' and events_for('new1@example.com') == [], 'import: source import-oct-2026, no welcome')
-ok(contact('new3@example.com')['properties']['signup_date'] == '2026-09-14' and 'homeschool' in seg_names('new3@example.com'), 'import: keeps date, segments from original source')
+ok(contact('new3@example.com')['properties']['signup_date'] == '2026-09-14' and contact('new3@example.com')['properties'].get('interest') == 'homeschool', 'import: keeps date, segments from original source')
 ok('teachers' in seg_names('teacher2@cfisd.net') and 'prospects' not in seg_names('teacher2@cfisd.net'), 'import: school domain -> teachers')
 ok('teachers' in seg_names('new4@example.com'), 'import: classroom role -> teachers')
 s, b = admin({'action': 'import', 'emails': emails}); ok(b.get('created') == 0, 'import again creates nothing')
@@ -184,7 +184,7 @@ em = state()['emails']
 ok(len(em) == 1 and em[0]['to'] == ['owner@example.com'] and em[0]['subject'].startswith('[Test] ') and 'RESEND_UNSUBSCRIBE_URL' not in em[0]['html'], 'one test email to owner, placeholder replaced')
 
 # ---------- stats ----------
-s, b = admin({'action': 'stats'}); ok(s == 200 and b['segments']['everyone']['contacts'] >= 10 and b['segments']['teachers']['contacts'] == 4, f'stats segments {b.get("segments")}')
+s, b = admin({'action': 'stats'}); ok(s == 200 and b['segments']['prospects']['contacts'] >= 6 and b['segments']['teachers']['contacts'] == 4, f'stats segments {b.get("segments")}')
 ok(any(x.get('delivered') is not None for x in b['broadcasts']) and all(v == 'enabled' for v in b['automations'].values()), 'stats broadcasts and automations')
 s, b = admin({'action': 'templates'}); ok(s == 200 and len(b['templates']) == 20, 'templates list')
 
