@@ -1,6 +1,6 @@
 // Minimal Resend REST client (server only). Needs RESEND_API_KEY. RESEND_BASE_URL points it at a mock in QA.
 // Never logs email addresses, keys or message bodies: errors log the method, a path with addresses masked, and status.
-const env = (k: string): string | undefined => (import.meta.env as Record<string, string | undefined>)[k] ?? process.env[k];
+const env = (k: string): string | undefined => ((import.meta as any).env as Record<string, string | undefined> | undefined)?.[k] ?? process.env[k];
 
 export const resendConfigured = () => Boolean(env('RESEND_API_KEY'));
 const base = () => (env('RESEND_BASE_URL') ?? 'https://api.resend.com').replace(/\/$/, '');
