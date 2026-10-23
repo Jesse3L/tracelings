@@ -34,7 +34,11 @@ export async function domainCreate(opts: { open_tracking?: boolean; click_tracki
 
 export async function domainStatus() {
   const found = await findDomain();
-  if (!found) return { found: false, name: SENDING_DOMAIN };
+  if (!found) {
+    // Show the other domains on the account (names and status only) so a plan's domain limit is easy to sort out.
+    const others = (await listAll<{ name: string; status: string }>('/domains')).map((x) => ({ name: x.name, status: x.status }));
+    return { found: false, name: SENDING_DOMAIN, others };
+  }
   const d = await rs<any>(`/domains/${enc(found.id)}`);
   return { found: true, id: d.id, name: d.name, status: d.status, open_tracking: d.open_tracking, click_tracking: d.click_tracking, records: publicRecords(d.records) };
 }
