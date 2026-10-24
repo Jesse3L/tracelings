@@ -13,6 +13,7 @@ const srv = createServer((req, res) => {
     res.setHeader('content-type', 'application/json');
     if (req.url?.startsWith('/emails/receiving/em1/attachments')) return res.end(JSON.stringify({ data: [] }));
     if (req.url?.startsWith('/emails/receiving/em1')) return res.end(JSON.stringify({ id: 'em1', from: 'Jane Parent <jane@example.org>', to: ['hello@tracelings.com'], subject: 'Question about week 2', html: '<p>Hi!</p>', text: 'Hi!', authentication: { spf: 'pass', dkim: 'pass' } }));
+    if (req.url?.startsWith('/emails/receiving/other')) return res.end(JSON.stringify({ id: 'other', from: 'info@x.com', to: ['someone@otherbusiness.com'], subject: 'code', html: '', text: '' }));
     if (req.url?.startsWith('/emails/receiving/loop')) return res.end(JSON.stringify({ id: 'loop', from: 'hello@tracelings.com', to: ['hello@tracelings.com'], subject: 'x', html: '', text: '' }));
     if (req.url === '/emails' && req.method === 'POST') { sent.push(JSON.parse(b)); return res.end(JSON.stringify({ id: 'out1' })); }
     res.statusCode = 404; res.end('{}');
@@ -34,6 +35,7 @@ ok((await forwardReceived('em1')) === 'forwarded', 'forwarded');
 const m = sent[0];
 ok(m?.to?.[0] === 'owner@example.com' && m.reply_to?.[0] === 'jane@example.org' && m.subject === 'Fwd: Question about week 2' && m.from.includes('hello@tracelings.com') && m.html.includes('<p>Hi!</p>'), 'forward fields');
 ok((await forwardReceived('loop')) === 'skipped' && sent.length === 1, 'own mail not forwarded (no loop)');
+ok((await forwardReceived('other')) === 'skipped' && sent.length === 1, 'other domains on the Resend account are never forwarded');
 srv.close();
 console.log(`${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
