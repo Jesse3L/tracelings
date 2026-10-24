@@ -39,6 +39,11 @@ export async function forwardReceived(emailId: string): Promise<'forwarded' | 's
   const owner = env('OWNER_EMAIL');
   if (!owner) return 'skipped';
   const e = await rs<any>(`/emails/receiving/${encodeURIComponent(emailId)}`);
+  // The Resend webhook fires for every receiving domain on the account (other businesses share it), so only mail
+  // addressed to tracelings.com is forwarded. Everything else is ignored without reading further.
+  const rcpts = [...(Array.isArray(e.to) ? e.to : []), ...(Array.isArray(e.cc) ? e.cc : []), ...(Array.isArray(e.received_for) ? e.received_for : [])]
+    .map((x: unknown) => addressOf(String(x)).toLowerCase());
+  if (!rcpts.some((a) => a.endsWith('@tracelings.com'))) return 'skipped';
   const sender = typeof e.from === 'string' ? e.from : '';
   // Never forward our own mail back to us (loops), or mail that failed both SPF and DKIM.
   if (/@tracelings\.com>?$/i.test(addressOf(sender))) return 'skipped';
