@@ -440,7 +440,7 @@ export function launchA(): EmailContent {
       '**Week 1 free.** Print the whole first week, themed and with their name. No card needed.',
     ] },
     { p: FREE_LINE },
-    { p: 'If you\'ve been printing our free Pre-K or kindergarten weeks, you can keep printing them free through November 30. That works on the device you\'ve been printing from.' },
+    { p: 'If you\'ve been printing our free Pre-K or kindergarten weeks, you can keep printing them free through November 30. That works on the device you\'ve been printing from. If your device doesn\'t let you print, just reply to this email and I\'ll sort it out.' },
     { button: { label: 'Get a free week built around your child', path: '/program/' } },
     { sign: true },
   ];
