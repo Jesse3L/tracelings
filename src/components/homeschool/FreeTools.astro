@@ -1,0 +1,28 @@
+---
+// The free one-page tools, listed on the homeschool pages. These stay free (Jesse, Oct 24, 2026).
+interface Props { title?: string; intro?: string }
+const { title = 'Free one-page printables', intro = 'These stay free for everyone, one page at a time. They pair well with any week of the plan.' } = Astro.props;
+const tools = [
+  { href: '/name-tracing/', t: 'Name tracing' },
+  { href: '/letter-tracing/', t: 'Letter tracing' },
+  { href: '/number-tracing/', t: 'Number tracing' },
+  { href: '/bubble-letters/', t: 'Bubble letters' },
+  { href: '/sight-words/', t: 'Sight words' },
+  { href: '/word-families/', t: 'Word families' },
+  { href: '/math-worksheets/pre-k/', t: 'Pre-K math' },
+  { href: '/math-worksheets/kindergarten/', t: 'Kindergarten math' },
+  { href: '/alphabet-chart/', t: 'Alphabet chart' },
+  { href: '/cursive/', t: 'Cursive' },
+  { href: '/coloring-pages/', t: 'Coloring pages' },
+  { href: '/word-tracing/', t: 'Word tracing' },
+];
+---
+<section class="mt-14 max-w-4xl" aria-labelledby="free-tools-h">
+  <h2 id="free-tools-h" class="text-[1.6rem] font-bold">{title}</h2>
+  <p class="mt-2 text-muted">{intro}</p>
+  <ul class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+    {tools.map((x) => (
+      <li><a href={x.href} class="block rounded-lg border border-hairline bg-white px-4 py-3 font-bold text-ink hover:border-rule">{x.t}</a></li>
+    ))}
+  </ul>
+</section>

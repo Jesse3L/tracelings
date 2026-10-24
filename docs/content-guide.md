@@ -87,9 +87,9 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Coloring pages | `/coloring-pages/` | live |
 | Coloring collections | `/coloring-pages/<collection>/` (see below) | live |
 | Homeschool hub | `/homeschool/` | live |
-| Pre-K homeschool plan (36 weeks) | `/homeschool/preschool/` | live |
-| Kindergarten homeschool plan (36 weeks) | `/homeschool/kindergarten/` | live |
-| Christian homeschool (faith track, BSB verses) | `/homeschool/christian/` | live |
+| Pre-K homeschool plan (36 weeks, members; week 1 free) | `/homeschool/preschool/` | live |
+| Kindergarten homeschool plan (36 weeks, members; week 1 free) | `/homeschool/kindergarten/` | live |
+| Christian homeschool (faith track, BSB verses; members, week 1 free) | `/homeschool/christian/` | live |
 | Pre-K math worksheets | `/math-worksheets/pre-k/` | live |
 | Ten frame printables and worksheets | `/math-worksheets/ten-frames/` | live |
 | Kindergarten math worksheets (hub, free sampler) | `/math-worksheets/kindergarten/` | live |
@@ -100,14 +100,14 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Kindergarten word problems (read-aloud addition and subtraction stories within 5 and 10, eight themes) | `/math-worksheets/kindergarten-word-problems/` | live |
 | Word family worksheets (hub) | `/word-families/` | live |
 | Single word family | `/word-families/at/`, `/an/`, `/ap/`, `/ag/`, `/ig/`, `/it/`, `/in/`, `/ip/`, `/op/`, `/ot/`, `/og/`, `/ug/`, `/un/`, `/ut/`, `/en/`, `/et/`, `/ed/` | live |
-| Letter of the week | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
+| Letter of the week (pages free, weekly packs for members) | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
 | Personalized homeschool program (paid, free placement check and week 1) | `/program/` | live |
 | Membership | `/membership/` | live |
 | Class packs | `/class-pack/` | members only |
 
 Coloring collections: `thanksgiving-coloring-pages`, `christmas-coloring-pages`, `dinosaur-coloring-pages`, `unicorn-coloring-pages`, `winter-coloring-pages`, `hanukkah-coloring-pages`, `simple-coloring-pages`, `car-and-truck-coloring-pages`, `new-years-coloring-pages`, `valentines-day-coloring-pages`, `st-patricks-day-coloring-pages`, `easter-coloring-pages`. Link the collection that matches the article's season or theme (a Thanksgiving article links `/coloring-pages/thanksgiving-coloring-pages/`).
 
-The paid product is **Tracelings at Home, Personalized** at `/membership/` ($14.99/month or $99/year, up to 4 kids in one family, week 1 free at `/program/`): a homeschool plan built for each child at their level and pace, weekly packs themed on their interests, a new story starring the child each week, word problems, a parent note, a weekly check-in and a progress report. Members also get sheets without the credit line, a saved list of names for the name tools, and batch printing. Older Family, Classroom and Founding plans are no longer sold; those members keep class lists and class packs. `/class-pack/` is a members-only page: never link it as a free resource or upsell it. When a homeschool or planning article needs it, mention the personalized program once and link `/membership/` (or the free week at `/program/`).
+The paid product is **Tracelings at Home, Personalized** at `/membership/` ($14.99/month or $99/year, up to 4 kids in one family, week 1 free at `/program/`): a homeschool plan built for each child at their level and pace, weekly packs themed on their interests, a new story starring the child each week, word problems, a parent note, a weekly check-in and a progress report. Since Oct 24, 2026 the full homeschool plans (36-week Pre-K and kindergarten, the faith track, weekly packs and letter of the week packs) are part of the membership; week 1 of each is free, and every one-page tool stays free. Never call the plans free in an article: say "week 1 is free" and link the plan page or `/program/`. Members also get sheets without the credit line, a saved list of names for the name tools, and batch printing. Older Family, Classroom and Founding plans are no longer sold; those members keep class lists and class packs. `/class-pack/` is a members-only page: never link it as a free resource or upsell it. When a homeschool or planning article needs it, mention the personalized program once and link `/membership/` (or the free week at `/program/`).
 
 - **Use descriptive anchor text** that includes a keyword: "a [free name tracing worksheet](/name-tracing/)" or "[letter B tracing page](/letter-tracing/b/)." Never use "click here."
 - **Link where the tool solves the problem being discussed,** not in a block at the end.

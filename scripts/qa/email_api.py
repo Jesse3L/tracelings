@@ -173,6 +173,17 @@ s, b = admin({'action': 'broadcast-send', 'id': bid, 'confirm': 'SEND', 'schedul
 s, b = admin({'action': 'broadcast-send', 'id': bid, 'confirm': 'SEND', 'scheduled_at': '2030-01-01T15:00:00Z'}); ok(s == 200 and b.get('scheduled_at'), f'scheduled {b}')
 ok(next(x for x in state()['broadcasts'] if x['id'] == bid)['status'] == 'scheduled', 'mock shows scheduled')
 s, b = admin({'action': 'broadcast-send', 'id': bid, 'confirm': 'SEND'}); ok(s == 409, f'cannot send a non-draft ({s})')
+# re-creating: a scheduled launch-a is refused, broadcast-cancel turns it back into a draft, then broadcast-create refreshes it
+s, b = admin({'action': 'broadcast-create', 'template': 'launch-a'}); ok(s == 409 and b.get('code') == 'scheduled_exists', f're-create while scheduled refused {s} {b}')
+s, b = admin({'action': 'broadcast-cancel'}); ok(s == 400, 'cancel needs id')
+s, b = admin({'action': 'broadcast-cancel', 'id': bid}); ok(s == 200 and b.get('was') == 'scheduled' and b.get('status') == 'draft', f'cancel scheduled -> draft {b}')
+s, b = admin({'action': 'broadcast-cancel', 'id': bid}); ok(s == 409, f'cancel a draft refused ({s})')
+n_before = len(state()['broadcasts'])
+s, b = admin({'action': 'broadcast-create', 'template': 'launch-a'}); ok(s == 200 and b.get('updated') is True and b.get('id') == bid, f're-create refreshes the draft {b}')
+ok(len(state()['broadcasts']) == n_before, 'no duplicate draft')
+bc = next(x for x in state()['broadcasts'] if x['id'] == bid)
+ok('November 30' in bc['text'] and 'both free homeschool plans' not in bc['text'], 'refreshed draft has the new copy')
+s, b = admin({'action': 'broadcast-create', 'template': 'launch-b', 'fresh': True}); ok(s == 200 and b.get('updated') is False and len(state()['broadcasts']) == n_before + 1, 'fresh makes a new draft')
 bid_c = [x for x in state()['broadcasts'] if x['name'].startswith('Launch C')][0]['id']
 s, b = admin({'action': 'broadcast-send', 'id': bid_c, 'confirm': 'SEND'}); ok(s == 200 and b.get('sent') is True, 'send now (mock only)')
 

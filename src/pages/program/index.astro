@@ -21,7 +21,7 @@ const inside = [
   { t: 'A picture book with your child in the story', p: 'A real story with the same friends every week (a little T-rex, a dump truck, a unicorn), where your child helps solve the problem. Every page has a big picture that shows exactly what the words say, ready to color. It uses that week\'s letters, word family and sight words, and prints on 2 sheets for Pre-K or 3 for kindergarten: cut, fold, stack and staple.' },
   { t: 'Word problems about what they love', p: '4 to 6 problems with pictures to count, at that week\'s math level. The numbers are checked by code, not guessed.' },
   { t: 'Counting, ten frames and adding with their pictures', p: 'Count and color pages, ten frames, more or fewer and picture addition, all drawn with their theme.' },
-  { t: 'Letters, word families and sight words', p: 'The same carefully ordered tracing, letter hunt and word family pages as our free plans, with their name on them.' },
+  { t: 'Letters, word families and sight words', p: 'The same carefully ordered tracing, letter hunt and word family pages as our 36-week Pre-K and kindergarten plans, with their name on them.' },
   { t: 'A note for you', p: 'What the week teaches, why it matters, and 2 ideas away from the paper tied to their interest.' },
   { t: 'A progress record', p: 'A printable record of what you covered and what they have got, handy for homeschool records.' },
 ];
@@ -34,7 +34,8 @@ const faqs = [
   { q: 'Is the story written by AI?', a: 'For paying members, yes: each week a short story, word problems, a tracing sentence and your parent note are written fresh for your child\'s level and interests, then checked by code for length, word choice and the week\'s words. The free week 1 uses stories we wrote by hand.' },
   { q: 'What if the plan is too easy or too hard?', a: 'Use the weekly check-in. "Still working" adds a review week; "got it" skips upcoming reviews. You can also redo the placement check anytime. Kids learn at very different speeds, and that\'s normal. If you have concerns, ask your child\'s teacher or pediatrician.' },
   { q: 'Is there a faith track?', a: 'Yes. Turn it on in the placement check to add a Bible verse each week from the Berean Standard Bible, an easy modern English translation, with a verse copywork page.' },
-  { q: 'Do the free plans stay free?', a: 'Yes. The free Pre-K and Kindergarten plans and every free worksheet stay free. The personalized program is a layer on top for families who want it built around one child.', html: 'Yes. The free <a href="/homeschool/preschool/">Pre-K plan</a>, the free <a href="/homeschool/kindergarten/">Kindergarten plan</a> and every free worksheet stay free. The personalized program is a layer on top for families who want it built around one child.' },
+  { q: 'What stays free?', a: 'Every one-page printable on Tracelings stays free: name tracing, letters, numbers, cursive, math worksheets, word families, sight words, bubble letters, coloring pages and the alphabet chart. The full homeschool plans, including the 36-week Pre-K and kindergarten plans, are part of the membership, and week 1 is always free to try.', html: 'Every one-page printable on Tracelings stays free: <a href="/name-tracing/">name tracing</a>, letters, numbers, cursive, <a href="/math-worksheets/kindergarten/">math worksheets</a>, <a href="/word-families/">word families</a>, sight words, bubble letters, coloring pages and the alphabet chart. The full homeschool plans, including the 36-week <a href="/homeschool/preschool/">Pre-K</a> and <a href="/homeschool/kindergarten/">kindergarten</a> plans, are part of the membership, and week 1 is always free to try.' },
+  { q: 'Do members also get the standard 36-week plans?', a: 'Yes. Members can print any week of the standard Pre-K, kindergarten and faith track plans too, for every child at once or a month of weeks in one PDF.' },
 ];
 
 const schema = [
@@ -154,6 +155,7 @@ const strip = ['dinosaurs', 'unicorns', 'trucks', 'ocean', 'space', 'farm'] as c
         <ul class="mt-5 space-y-2 text-[15px] text-ink">
           <li>Covers up to 4 kids in one family, each with their own plan.</li>
           <li>Week 1 of each child's plan is free, no card needed.</li>
+          <li>Every week of the standard Pre-K, kindergarten and faith track plans too.</li>
           <li>No footer line, no email prompts, and batch printing.</li>
           <li>Cancel anytime from your account.</li>
         </ul>
@@ -162,8 +164,8 @@ const strip = ['dinosaurs', 'unicorns', 'trucks', 'ocean', 'space', 'farm'] as c
       <div class="rounded-2xl border border-hairline bg-white p-6 sm:p-8">
         <h2 class="text-[1.6rem] font-bold">Private by design</h2>
         <p class="mt-3 text-muted leading-relaxed">Your child's name never leaves your device. Stories are written with a placeholder, and your browser fills in the name when it builds the PDF. If you become a member, we keep only what the plan needs: age, skills, interests, pace and the faith toggle. No name and no birthday.</p>
-        <h2 class="mt-8 text-[1.6rem] font-bold">Prefer the free plans?</h2>
-        <p class="mt-3 text-muted leading-relaxed">They stay free. The <a class="text-[#2f5fc4] underline underline-offset-2" href="/homeschool/preschool/">free Pre-K homeschool plan</a> and the <a class="text-[#2f5fc4] underline underline-offset-2" href="/homeschool/kindergarten/">free kindergarten homeschool plan</a> have all 36 weeks, with packs made with your child's name.</p>
+        <h2 class="mt-8 text-[1.6rem] font-bold">What stays free</h2>
+        <p class="mt-3 text-muted leading-relaxed">Every one-page printable on Tracelings stays free, like <a class="text-[#2f5fc4] underline underline-offset-2" href="/name-tracing/">name tracing</a>, <a class="text-[#2f5fc4] underline underline-offset-2" href="/letter-tracing/">letter tracing</a> and the <a class="text-[#2f5fc4] underline underline-offset-2" href="/math-worksheets/kindergarten/">math worksheets</a>. The full homeschool plans, including the <a class="text-[#2f5fc4] underline underline-offset-2" href="/homeschool/preschool/">Pre-K</a> and <a class="text-[#2f5fc4] underline underline-offset-2" href="/homeschool/kindergarten/">kindergarten</a> 36-week plans, are part of the membership. Week 1 is always free to try.</p>
       </div>
     </section>
 

@@ -1,10 +1,11 @@
 ---
 title: "Best kindergarten homeschool curriculum: how to choose the right fit"
 seoTitle: "Best Kindergarten Homeschool Curriculum | Tracelings"
-description: "The best kindergarten homeschool curriculum is short, phonics based and easy to teach. What to look for, what to skip, and a free 36-week plan to start with."
+description: "The best kindergarten homeschool curriculum is short, phonics based and easy to teach. What to look for, what to skip, and a simple routine to start with."
 primaryKeyword: "best kindergarten homeschool curriculum"
 published: 2026-10-13
 readingMinutes: 6
+updated: 2026-10-24
 ---
 
 The best kindergarten homeschool curriculum is the one that teaches letter sounds and early reading in a clear order, keeps lessons short, and is easy for you to teach without a lot of prep. For most families that means a phonics-based plan, simple math with real objects, and about 15 to 30 minutes of table work a day. The fanciest box on the shelf is rarely the one a five year old needs.
@@ -27,7 +28,7 @@ Science, art, music and social studies are lovely extras at this age. Nature wal
 
 Look closely at the order a curriculum teaches letters in. Plans that start with a few useful sounds (often s, a, t, i, p and n) let kids read real words within weeks. That early success keeps them interested.
 
-After single letters, many programs move to word families. A word family is a group of words with the same ending, like -at in hat, mat and sat. Once a child reads -at, swapping the first letter gives them a whole set of new words. Our free [kindergarten homeschool curriculum](/homeschool/kindergarten/) works this way: two letters a week for 13 weeks, then word families with a short vowel review after each vowel.
+After single letters, many programs move to word families. A word family is a group of words with the same ending, like -at in hat, mat and sat. Once a child reads -at, swapping the first letter gives them a whole set of new words. Our [kindergarten homeschool curriculum](/homeschool/kindergarten/) works this way: two letters a week for 13 weeks, then word families with a short vowel review after each vowel.
 
 ## Signs a curriculum is a good fit
 
@@ -73,9 +74,9 @@ Many kids reverse letters like b and d at this age, and that is usually part of 
 You can start a kindergarten homeschool routine tomorrow with a printer and a box of crayons. Here's a simple 20-minute start.
 
 1. **Read aloud (5 minutes).** Pick a picture book and read it together. Point to one word you see often, like the or and.
-2. **Letter sounds (5 minutes).** Print week 2 of the free [kindergarten plan](/homeschool/kindergarten/) and trace S and A together, saying the sounds /s/ and /a/ each time.
+2. **Letter sounds (5 minutes).** Print free [letter S](/letter-tracing/s/) and [letter A](/letter-tracing/a/) tracing pages and trace them together, saying the sounds /s/ and /a/ each time.
 3. **Sight words (5 minutes).** Trace two words from the [kindergarten sight words](/sight-words/kindergarten/) list and look for them in your book.
 4. **Math (5 minutes).** Count out 5 crackers, eat 2, and count what's left. Then trace a number on a [number tracing worksheet](/number-tracing/1-20/).
 5. **Stop while it's fun.** End on a win, even if you didn't finish the page.
 
-Do this four or five mornings a week, and add a new week each Monday. If your child isn't ready for kindergarten work yet, the free [preschool homeschool curriculum](/homeschool/preschool/) uses the same routine with one letter a week.
+Do this four or five mornings a week, and add a new week each Monday. If your child isn't ready for kindergarten work yet, the [preschool homeschool curriculum](/homeschool/preschool/) uses the same routine with one letter a week.

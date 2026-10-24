@@ -204,8 +204,13 @@ async function topicId(): Promise<string | undefined> {
   return topics.find((t) => t.name === TOPIC_NAME)?.id;
 }
 
-/** Creates a DRAFT broadcast from a built-in launch template. Never sends. */
-export async function broadcastCreate(template: LaunchKey, segmentOverride?: SegmentKey) {
+/**
+ * Creates a DRAFT broadcast from a built-in launch template. Never sends.
+ * Re-creating a launch draft after the copy changes: a draft with the same name is refreshed in place
+ * (PATCH /broadcasts/{id}) instead of piling up duplicates. A scheduled one is refused until it is cancelled
+ * with broadcast-cancel (which turns it back into a draft). `fresh: true` always makes a new draft.
+ */
+export async function broadcastCreate(template: LaunchKey, segmentOverride?: SegmentKey, opts: { fresh?: boolean } = {}) {
   const def = LAUNCH[template];
   const segment = segmentOverride ?? def.segment;
   const ids = await segmentIds(true);
@@ -213,11 +218,35 @@ export async function broadcastCreate(template: LaunchKey, segmentOverride?: Seg
   if (!segment_id) throw new ResendError(400, 'setup_needed', `Segment "${SEGMENTS[segment]}" not found. Run setup first.`);
   const tid = await topicId();
   const c = def.build();
-  const r = await rs<{ id: string }>('/broadcasts', { body: {
+  const content = {
     name: def.name, segment_id, from: FROM, reply_to: [REPLY_TO], subject: c.subject, preview_text: c.preview,
-    html: c.html, text: c.text, ...(tid ? { topic_id: tid } : {}), send: false,
-  } });
-  return { id: r.id, status: 'draft', template, segment, subject: c.subject, suggested_send: def.sendAfterDays ? `${def.sendAfterDays} days after launch-a` : 'first' };
+    html: c.html, text: c.text, ...(tid ? { topic_id: tid } : {}),
+  };
+  const out = { status: 'draft', template, segment, subject: c.subject, suggested_send: def.sendAfterDays ? `${def.sendAfterDays} days after launch-a` : 'first' };
+  if (!opts.fresh) {
+    const same = (await listAll<{ id: string; name: string; status: string }>('/broadcasts', 300)).filter((b) => b.name === def.name);
+    const scheduled = same.find((b) => b.status === 'scheduled');
+    if (scheduled) throw new ResendError(409, 'scheduled_exists', `"${def.name}" is scheduled (${scheduled.id}). Cancel it with broadcast-cancel first, then run broadcast-create again.`);
+    const draft = same.find((b) => b.status === 'draft');
+    if (draft) {
+      await rs(`/broadcasts/${enc(draft.id)}`, { method: 'PATCH', body: content });
+      return { id: draft.id, updated: true, ...out };
+    }
+  }
+  const r = await rs<{ id: string }>('/broadcasts', { body: { ...content, send: false } });
+  return { id: r.id, updated: false, ...out };
+}
+
+/**
+ * Cancels a broadcast (POST /broadcasts/{id}/cancel). Resend only cancels `scheduled` broadcasts (they go back to
+ * draft and nothing is sent) and `queued` ones (they become canceled; emails already sent stay sent).
+ */
+export async function broadcastCancel(id: string) {
+  const b = await rs<any>(`/broadcasts/${enc(id)}`);
+  if (b.status !== 'scheduled' && b.status !== 'queued') throw new ResendError(409, 'not_cancelable', `Broadcast is ${b.status ?? 'unknown'}. Only scheduled or queued broadcasts can be cancelled.`);
+  await rs(`/broadcasts/${enc(id)}/cancel`, { method: 'POST' });
+  const after = await rs<any>(`/broadcasts/${enc(id)}`).catch(() => null);
+  return { id, was: b.status, status: after?.status ?? (b.status === 'scheduled' ? 'draft' : 'canceled'), name: b.name, subject: b.subject };
 }
 
 export async function broadcastSend(id: string, scheduledAt?: string) {

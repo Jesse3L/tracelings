@@ -18,8 +18,8 @@ const at = LETTER_ORDER.indexOf(letter);
 const prev = LETTER_ORDER[(at + 25) % 26];
 const next = LETTER_ORDER[(at + 1) % 26];
 const url = new URL(`/letter-of-the-week/${letter}/`, SITE.url).href;
-const title = `Letter ${U} of the Week: Free Printable Pack | ${SITE.name}`;
-const description = `A letter ${U} of the week plan for preschool: trace ${U} and ${letter}, a letter hunt, a bubble ${U} to color and ${L.words.slice(0, 2).join(' and ')} activities. Free printable pack.`;
+const title = `Letter ${U} of the Week: Activities and Printables | ${SITE.name}`;
+const description = `A letter ${U} of the week plan for preschool: how to write ${U} and ${letter}, ${L.words.slice(0, 2).join(' and ')} words, daily activities, and free letter ${U} tracing and bubble letter pages.`;
 
 const schema = [
   {
@@ -30,7 +30,7 @@ const schema = [
     learningResourceType: 'Worksheet',
     educationalLevel: 'Preschool, Kindergarten',
     teaches: `Recognizing, writing and saying the sound of ${U} and ${letter}`,
-    isAccessibleForFree: true,
+    isAccessibleForFree: false,
     inLanguage: 'en-US',
     description,
   },
@@ -52,19 +52,33 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter {U} of the week</span></h1>
-      <p class="mt-4 text-lg text-muted">Five short days of {U} {letter} activities, printed as one pack with your child's name on it.</p>
+      <p class="mt-4 text-lg text-muted">Five short days of {U} {letter} activities, plus free one-page {U} printables to start today.</p>
     </header>
 
-    <div id="pack" class="scroll-mt-24">
+    <section class="max-w-4xl rounded-2xl border border-hairline bg-white p-5 sm:p-6" aria-labelledby="free-h">
+      <h2 id="free-h" class="text-[1.4rem] font-bold">Free letter {U} printables</h2>
+      <p class="mt-1 text-muted">One page at a time, free for everyone, with your child's name where it fits.</p>
+      <ul class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <li><a id="free-tracing" href={`/letter-tracing/${letter}/`} class="block h-full rounded-lg border border-hairline px-4 py-3 hover:border-rule"><span class="block font-bold text-ink">Letter {U} tracing</span><span class="block text-[14px] text-muted">Capital and lowercase rows</span></a></li>
+        <li><a href={`/bubble-letters/${letter}/`} class="block h-full rounded-lg border border-hairline px-4 py-3 hover:border-rule"><span class="block font-bold text-ink">Bubble letter {U}</span><span class="block text-[14px] text-muted">A big {U} to color</span></a></li>
+        <li><a href={`/math-worksheets/pre-k/?number=${week.number}`} class="block h-full rounded-lg border border-hairline px-4 py-3 hover:border-rule"><span class="block font-bold text-ink">Count and color {week.number}</span><span class="block text-[14px] text-muted">This week's number</span></a></li>
+        <li><a href="/name-tracing/" class="block h-full rounded-lg border border-hairline px-4 py-3 hover:border-rule"><span class="block font-bold text-ink">Name tracing</span><span class="block text-[14px] text-muted">Spot the {U} in their name</span></a></li>
+      </ul>
+    </section>
+
+    <section id="pack" class="mt-12 scroll-mt-24" aria-labelledby="pack-h">
+      <h2 id="pack-h" class="text-[1.4rem] font-bold">The full letter {U} week pack</h2>
+      <p class="mt-1 mb-6 max-w-2xl text-muted">A plan page and a page for every day, in one PDF with your child's name. The weekly packs are part of Tracelings at Home. Week 1 of the plan, the name week, is free to try.</p>
       <WeekPack client:load level="pre-k" week={week.n} fixedLevel source="letter-of-the-week" />
-    </div>
+    </section>
     <Preview k={`lotw-${letter}`} caption={`Example: the letter ${U} hunt page from this week's pack.`} />
 
     <article class="prose-tl max-w-[68ch] mt-14">
       <p class="text-[1.15rem]!">
-        This letter {U} of the week pack gives your preschooler one short activity a day: tracing capital {U} and lowercase {letter}, a letter
-        hunt, a bubble {U} to color, a counting page and their own name to trace. Print it once on Sunday and the week is planned. It's
-        week {week.n} of our free <a href="/homeschool/preschool/">homeschool preschool curriculum</a>.
+        A letter {U} of the week gives your preschooler one short activity a day: tracing capital {U} and lowercase {letter}, a letter
+        hunt, a bubble {U} to color, a counting page and their own name to trace. You can build the week from the free one-page
+        printables above, or print the whole pack at once as a member. It's week {week.n} of
+        our <a href="/homeschool/preschool/">homeschool preschool curriculum</a>.
       </p>
 
       <h2>Letter {U} week at a glance</h2>

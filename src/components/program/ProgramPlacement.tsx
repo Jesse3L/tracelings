@@ -112,6 +112,12 @@ export default function ProgramPlacement() {
     } else {
       setId(newChildId());
       setCreatedAt(new Date().toISOString());
+      // From the homeschool guide pages: ?level=pre-k or kindergarten picks a typical age for that level
+      // (the skills on the next step still decide the track), and ?faith=1 turns on the faith track.
+      const lv = q?.get('level');
+      if (lv === 'pre-k') setAge(4);
+      else if (lv === 'kindergarten') setAge(5);
+      if (q?.get('faith') === '1') setFaith(true);
     }
     loadThemeIcons(THEME_IDS.slice(0, 1)).then(() => setIconsOk((n) => n + 1));
   }, []);

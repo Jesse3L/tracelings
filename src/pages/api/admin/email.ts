@@ -4,7 +4,7 @@ import { json, cleanEmail } from '../../../lib/server/session';
 import { rateLimited } from '../../../lib/server/programApi';
 import { resendConfigured, ResendError } from '../../../lib/server/resend';
 import { importContacts, welcomeBackfill } from '../../../lib/server/email';
-import { domainCreate, domainStatus, domainVerify, setup, setAutomations, broadcastCreate, broadcastSend, testSend, stats, isLaunchKey } from '../../../lib/server/emailAdmin';
+import { domainCreate, domainStatus, domainVerify, setup, setAutomations, broadcastCreate, broadcastCancel, broadcastSend, testSend, stats, isLaunchKey } from '../../../lib/server/emailAdmin';
 import { SEGMENTS, type SegmentKey } from '../../../lib/email/audience';
 import { allTemplates } from '../../../lib/email/templates';
 import { ensureInboundWebhook } from '../../../lib/server/inbound';
@@ -76,7 +76,12 @@ export const POST: APIRoute = async ({ request }) => {
         if (!isLaunchKey(body.template)) return json(400, { error: 'unknown_template', templates: ['launch-a', 'launch-a-teacher', 'launch-b', 'launch-c'] });
         const seg = body.segment;
         if (seg !== undefined && !(typeof seg === 'string' && seg in SEGMENTS)) return json(400, { error: 'unknown_segment', segments: Object.keys(SEGMENTS) });
-        return json(200, await broadcastCreate(body.template, seg as SegmentKey | undefined));
+        return json(200, await broadcastCreate(body.template, seg as SegmentKey | undefined, { fresh: body.fresh === true }));
+      }
+      case 'broadcast-cancel': {
+        const id = typeof body.id === 'string' && /^[A-Za-z0-9-]{8,64}$/.test(body.id) ? body.id : '';
+        if (!id) return json(400, { error: 'id_required' });
+        return json(200, await broadcastCancel(id));
       }
       case 'broadcast-send': {
         if (body.confirm !== 'SEND') return json(400, { error: 'confirm_required', hint: 'Add "confirm": "SEND" to send to the whole segment.' });
@@ -109,7 +114,7 @@ export const POST: APIRoute = async ({ request }) => {
       case 'inbound-webhook':
         return json(200, await ensureInboundWebhook('https://tracelings.com/api/email/inbound/'));
       default:
-        return json(400, { error: 'unknown_action', actions: ['domain-create', 'domain-status', 'domain-verify', 'setup', 'automations-enable', 'automations-disable', 'import', 'broadcast-create', 'broadcast-send', 'test-send', 'templates', 'stats', 'inbound-webhook', 'welcome-backfill'] });
+        return json(400, { error: 'unknown_action', actions: ['domain-create', 'domain-status', 'domain-verify', 'setup', 'automations-enable', 'automations-disable', 'import', 'broadcast-create', 'broadcast-cancel', 'broadcast-send', 'test-send', 'templates', 'stats', 'inbound-webhook', 'welcome-backfill'] });
     }
   } catch (e) {
     if (e instanceof ResendError) return json(e.status >= 400 && e.status < 500 ? e.status : 502, { error: 'resend', code: e.code, status: e.status, message: e.message });

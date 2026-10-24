@@ -1,0 +1,20 @@
+---
+// A row of real pages from the plan (static preview images, indexable), with short captions.
+import previews from '../../data/previews.json';
+interface Props { items: { k: string; caption: string }[] }
+const all = previews as Record<string, { src: string; width: number; height: number; alt: string }>;
+const items = Astro.props.items.filter((i) => all[i.k]);
+---
+<ul class="mt-6 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3" aria-label="Sample pages">
+  {items.map((i) => {
+    const p = all[i.k];
+    return (
+      <li>
+        <figure>
+          <img src={p.src} width={p.width} height={p.height} alt={p.alt} loading="lazy" decoding="async" class="block h-auto w-full rounded-lg border border-hairline bg-white shadow-[0_10px_30px_-18px_rgba(30,42,68,.35)]" />
+          <figcaption class="mt-2 text-[14px] leading-snug text-muted">{i.caption}</figcaption>
+        </figure>
+      </li>
+    );
+  })}
+</ul>

@@ -51,6 +51,8 @@ for (const [key, t] of Object.entries(all)) {
   const visible = (t.subject + ' ' + t.preview + ' ' + t.text);
   ok(!/[—–]/.test(visible + t.html), `${key}: no em or en dashes`);
   for (const re of BANNED) ok(!re.test(visible), `${key}: banned ${re}`);
+  // Since Oct 24, 2026 the homeschool plans are part of the membership: no email may promise they stay free.
+  ok(!/(free homeschool plans?|homeschool plans? stay free|free plans stay free|free (pre-k|kindergarten) homeschool plan)/i.test(visible), `${key}: no "homeschool plans stay free" promise`);
   ok(t.subject.length <= 70, `${key}: subject length ${t.subject.length}`);
   ok(t.preview.length >= 20 && t.preview.length <= 110, `${key}: preview length ${t.preview.length}`);
   ok(t.html.includes(`href="${UNSUB}"`), `${key}: unsubscribe link in html`);
