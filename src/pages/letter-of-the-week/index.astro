@@ -8,15 +8,15 @@ import letters from '../../data/letters.json';
 import { LETTER_ORDER, preKWeekForLetter } from '../../lib/homeschool';
 
 const url = new URL('/letter-of-the-week/', SITE.url).href;
-const title = `Letter of the Week: Free Preschool Printables | ${SITE.name}`;
-const description = 'Free letter of the week printables for every letter A to Z: tracing, a letter hunt, a bubble letter to color and counting, in one pack with your child’s name.';
+const title = `Letter of the Week: Preschool Activities A to Z | ${SITE.name}`;
+const description = 'Letter of the week for every letter A to Z: how to teach each letter, words to say, daily activities, and free letter tracing and bubble letter pages.';
 const wordsFor = (l: string) => letters.find((x) => x.letter === l)!.words.slice(0, 2).join(', ');
 
 const faqs = [
   { q: 'What is letter of the week?', a: 'A simple way to teach the alphabet: you spend a week on one letter, with a few short activities each day for its shape, its sound and words that start with it. It suits many preschoolers ages 3 to 5.' },
   { q: 'What order should I teach the letters in?', a: 'A to Z works, but many teachers start with letters that make lots of short words, like s, a, t, i, p and n. Our plan uses that phonics order. You can open any letter in any order.' },
   { q: 'Is one letter a week too slow?', a: 'For many 3 and 4 year olds it is a comfortable pace, and it leaves time to play with each sound. Kids who already know their letters often move faster, and two letters a week is common in kindergarten.', html: 'For many 3 and 4 year olds it is a comfortable pace, and it leaves time to play with each sound. Kids who already know their letters often move faster, and two letters a week is common in our <a href="/homeschool/kindergarten/">kindergarten homeschool plan</a>.' },
-  { q: 'Are the printables free?', a: 'Yes. Every letter of the week pack is free to print. Add your email once and every pack on that device stays free, with no password.' },
+  { q: 'Are the printables free?', a: 'The one-page printables are free for every letter: letter tracing, bubble letters, counting pages and name tracing. The full weekly packs, with a plan page and a page for every day, are part of Tracelings at Home. Week 1 of the plan is free to try.', html: 'The one-page printables are free for every letter: <a href="/letter-tracing/">letter tracing</a>, <a href="/bubble-letters/">bubble letters</a>, <a href="/math-worksheets/pre-k/">counting pages</a> and <a href="/name-tracing/">name tracing</a>. The full weekly packs, with a plan page and a page for every day, are part of <a href="/membership/">Tracelings at Home</a>. Week 1 of the plan is free to try.' },
 ];
 
 const schema = [
@@ -36,7 +36,7 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter of the week printables</span></h1>
-      <p class="mt-4 text-lg text-muted">Pick a letter, type your child's name, and print a whole week of short activities in one PDF.</p>
+      <p class="mt-4 text-lg text-muted">Pick a letter for a week of short activities, words to say and free one-page printables.</p>
     </header>
 
     <section aria-labelledby="letters-h">
@@ -54,14 +54,14 @@ const schema = [
     </section>
 
     <div id="pack" class="scroll-mt-24 mt-12">
-      <WeekPack client:load level="pre-k" week={2} fixedLevel source="letter-of-the-week" heading="Or pick any week of the plan here" />
+      <WeekPack client:load level="pre-k" week={1} fixedLevel source="letter-of-the-week" heading="Try week 1 of the Pre-K plan free" />
     </div>
 
     <article class="prose-tl max-w-[68ch] mt-14">
       <p class="text-[1.15rem]!">
-        These free letter of the week printables turn the alphabet into 26 small, doable weeks. Each pack has a plan page for you, then one
-        page a day: trace the letter, hunt for it, color a big bubble letter, count to the number of the week, and trace your child's name.
-        Everything prints in one PDF with your child's name on it.
+        Letter of the week turns the alphabet into 26 small, doable weeks. Each letter page explains how to write the letter, gives you words
+        to say and a day by day plan, and links free one-page printables: letter tracing, a big bubble letter to color, counting and name
+        tracing. Members can also print each week as one pack, with a plan page and a page for every day.
       </p>
 
       <h2>Letter of the week in phonics order</h2>

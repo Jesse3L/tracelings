@@ -1,15 +1,17 @@
 ---
 import { faqText } from '../../lib/seo';
-import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import WeekPack, { WeeklyEmail } from '../../components/WeekPack.tsx';
+import StartCta from '../../components/homeschool/StartCta.tsx';
+import SamplePages from '../../components/homeschool/SamplePages.astro';
+import FreeTools from '../../components/homeschool/FreeTools.astro';
 import Faqs from '../../components/homeschool/Faqs.astro';
 import { SITE } from '../../config';
 import { PLANS } from '../../lib/homeschool';
 
 const url = new URL('/homeschool/', SITE.url).href;
-const title = `Free Homeschool Curriculum for Pre-K and K | ${SITE.name}`;
-const description = 'A free homeschool curriculum for preschool and kindergarten: 36 weeks of letters, numbers and early reading, with printable packs made with your child’s name.';
+const title = `Homeschool Curriculum for Pre-K and K: Week 1 Free | ${SITE.name}`;
+const description = 'A homeschool curriculum for preschool and kindergarten: 36 weeks of letters, numbers and early reading, made with your child’s name. Week 1 is free.';
 
 const week = [
   { day: 'Monday', p: 'Trace the letter of the week and say its sound.' },
@@ -20,25 +22,25 @@ const week = [
 ];
 
 const faqs = [
-  { q: 'Is this homeschool curriculum really free?', a: 'Yes. Every week of both plans is free to print for one child, one week at a time. Add your email once and every pack on that device stays free, with no password and no limit.' },
-  { q: 'What age is it for?', a: `The Pre-K plan suits many kids ${PLANS['pre-k'].ages}, and the Kindergarten plan suits many kids ${PLANS.kindergarten.ages}. Age is only a rough guide. Start where your child is comfortable, even if that means an earlier week.` },
-  { q: 'Is this a complete curriculum?', a: 'It covers letters, early phonics, handwriting, sight words and early math, about 15 minutes a day. Most families add read-aloud time, play, art and time outside. It is a free plan to build on, not an accredited program.' },
-  { q: 'Does it meet my state’s homeschool rules?', a: 'Homeschool laws vary a lot from state to state, and some states ask for records or specific subjects. Check your state education department or a statewide homeschool group for the rules where you live. The weekly plan pages can be kept as a simple record of what you covered.' },
+  { q: 'Is this homeschool curriculum free?', a: 'Week 1 of every plan is free to print, and every one-page printable on Tracelings stays free, like name tracing, letter tracing and the math worksheets. The full 36-week plans are part of Tracelings at Home, $14.99 a month or $99 a year for up to 4 kids.', html: 'Week 1 of every plan is free to print, and every one-page printable on Tracelings stays free, like <a href="/name-tracing/">name tracing</a>, <a href="/letter-tracing/">letter tracing</a> and the <a href="/math-worksheets/kindergarten/">math worksheets</a>. The full 36-week plans are part of <a href="/membership/">Tracelings at Home</a>, $14.99 a month or $99 a year for up to 4 kids.' },
+  { q: 'What age is it for?', a: `The Pre-K plan suits many kids ${PLANS['pre-k'].ages}, and the Kindergarten plan suits many kids ${PLANS.kindergarten.ages}. Age is only a rough guide. The free placement check looks at what your child can do and starts them at the right week.` },
+  { q: 'Is this a complete curriculum?', a: 'It covers letters, early phonics, handwriting, sight words and early math, about 15 minutes a day. Most families add read-aloud time, play, art and time outside. It is a plan to build on, not an accredited program.' },
+  { q: 'Does it meet my state’s homeschool rules?', a: 'Homeschool laws vary a lot from state to state, and some states ask for records or specific subjects. Check your state education department or a statewide homeschool group for the rules where you live. The weekly plan pages and the printable progress report can be kept as a simple record of what you covered.' },
   { q: 'Why does my child’s name go on the pages?', a: 'Kids tend to try harder when the word on the page is theirs. The name goes on the plan page, the name tracing page and, in week 1, a coloring page. It is built in your browser and never leaves your device.' },
-  { q: 'Is there a Christian version?', a: 'Yes. Tick the faith track box in the pack maker to add a Bible verse each week (Berean Standard Bible, in easy modern English), on the plan page and on a verse copywork page. It is optional and off by default.', html: 'Yes. Tick the faith track box in the pack maker to add a Bible verse each week (Berean Standard Bible, in easy modern English), on the plan page and on a verse copywork page. It is optional and off by default. See the <a href="/homeschool/christian/">Christian homeschool curriculum</a> page for all 36 verses.' },
-  { q: 'Can I print for more than one child?', a: 'Anyone can print one child at a time for free. Members can print a week for every child on their saved list in one PDF, or four weeks at once, with no footer line.', html: 'Anyone can print one child at a time for free. <a href="/membership/">Members</a> can print a week for every child on their saved list in one PDF, or four weeks at once, with no footer line.' },
+  { q: 'Is there a Christian version?', a: 'Yes. The faith track adds a Bible verse each week (Berean Standard Bible, in easy modern English), on the plan page and on a verse copywork page. It is optional and off by default.', html: 'Yes. The faith track adds a Bible verse each week (Berean Standard Bible, in easy modern English), on the plan page and on a verse copywork page. It is optional and off by default. See the <a href="/homeschool/christian/">Christian homeschool curriculum</a> page for all 36 verses.' },
+  { q: 'Can I teach more than one child?', a: 'Yes. One membership covers up to 4 kids in one family, each with their own plan at their own level, and members can print a week for every child in one PDF.', html: 'Yes. One <a href="/membership/">membership</a> covers up to 4 kids in one family, each with their own plan at their own level, and members can print a week for every child in one PDF.' },
 ];
 
 const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'LearningResource',
-    name: 'Tracelings at Home: free preschool and kindergarten homeschool curriculum',
+    name: 'Tracelings at Home: preschool and kindergarten homeschool curriculum',
     url,
     learningResourceType: 'Curriculum',
     educationalLevel: 'Preschool, Kindergarten',
     teaches: 'Letters and sounds, handwriting, sight words, counting and early addition',
-    isAccessibleForFree: true,
+    isAccessibleForFree: false,
     inLanguage: 'en-US',
     description,
   },
@@ -63,27 +65,13 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Homeschool</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free homeschool curriculum for preschool and kindergarten</span></h1>
-      <p class="mt-4 text-lg text-muted">Pick a level and a week, type your child's name, and print the whole week: a plan for you and one page for each day.</p>
+      <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Tracelings at Home</p>
+      <h1 class="mt-2 text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Homeschool curriculum for preschool and kindergarten</span></h1>
+      <p class="mt-4 text-lg text-muted">A 36-week plan at your child's level, with short daily pages made with their name and themed on what they love. Week 1 is free to print. The full plans are part of the membership.</p>
+      <div class="mt-6"><StartCta client:load /></div>
     </header>
 
-    <div id="pack" class="scroll-mt-24">
-      <WeekPack client:load source="homeschool" />
-    </div>
-    <Preview k={'homeschool-prek'} caption={'Example: the plan page from a Pre-K week.'} />
-
-    <aside class="mt-10 flex flex-col gap-4 rounded-2xl border border-hairline bg-white p-6 sm:flex-row sm:items-center sm:justify-between" aria-label="Personalized program">
-      <div class="flex items-center gap-4">
-        <img src="/program/icons/dinosaurs/t-rex.svg" alt="" width="64" height="64" class="size-16 shrink-0" />
-        <div>
-          <p class="font-bold text-lg text-ink">Want it built around your child?</p>
-          <p class="text-muted leading-relaxed">Our <a href="/program/" class="text-[#2f5fc4] underline underline-offset-2">personalized homeschool program</a> places your child at the right level and themes every week around what they love. The placement check and first week are free.</p>
-        </div>
-      </div>
-      <a href="/program/" class="btn-pencil shrink-0 px-5 py-3 text-center">Try the free placement check</a>
-    </aside>
-
-    <section class="mt-14" aria-labelledby="plans-h">
+    <section aria-labelledby="plans-h">
       <h2 id="plans-h" class="text-[1.6rem] font-bold">Pick a plan</h2>
       <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <li>
@@ -91,7 +79,7 @@ const schema = [
             <span class="block text-[13px] font-bold uppercase tracking-wider text-muted">{PLANS['pre-k'].ages}</span>
             <span class="mt-1 block text-xl font-bold text-ink">Pre-K at home</span>
             <span class="mt-2 block text-muted leading-relaxed">A name week, then one letter a week with a review week after every three. Numbers 1 to 20, counting with ten frames, and lots of coloring.</span>
-            <span class="mt-3 block font-bold text-[#2f5fc4]">See all 36 weeks</span>
+            <span class="mt-3 block font-bold text-[#2f5fc4]">See the 36-week outline</span>
           </a>
         </li>
         <li>
@@ -99,7 +87,7 @@ const schema = [
             <span class="block text-[13px] font-bold uppercase tracking-wider text-muted">{PLANS.kindergarten.ages}</span>
             <span class="mt-1 block text-xl font-bold text-ink">Kindergarten at home</span>
             <span class="mt-2 block text-muted leading-relaxed">Two letters a week, then word families like -at and -ig, Dolch sight words, numbers 0 to 20 and adding within 10.</span>
-            <span class="mt-3 block font-bold text-[#2f5fc4]">See all 36 weeks</span>
+            <span class="mt-3 block font-bold text-[#2f5fc4]">See the 36-week outline</span>
           </a>
         </li>
         <li>
@@ -115,24 +103,51 @@ const schema = [
 
     <article class="prose-tl max-w-[68ch] mt-14">
       <p class="text-[1.15rem]!">
-        Tracelings at Home is a free homeschool curriculum for preschool and kindergarten. Each of the 36 weeks comes as one printable pack
+        Tracelings at Home is a homeschool curriculum for preschool and kindergarten. Each of the 36 weeks comes as one printable pack
         made with your child's name: a plan page that tells you what to do each day, then a short page for Monday through Friday. Most days
         take about 15 minutes, which is plenty at this age.
       </p>
+
+      <h2>How to start homeschooling preschool or kindergarten</h2>
+      <p>You don't need a classroom or a box of books to start. Many families begin with four simple steps:</p>
+      <ol>
+        <li><strong>Check your state's rules.</strong> Homeschool laws vary by state. Your state education department or a statewide homeschool group can tell you what is needed where you live.</li>
+        <li><strong>Find your child's starting point.</strong> Notice what they can do today: name letters, say letter sounds, count to 10, write their name. Our free placement check walks you through it in about 5 minutes.</li>
+        <li><strong>Pick a small daily rhythm.</strong> 10 to 15 minutes at the table, at the same time each day, plus reading aloud and play.</li>
+        <li><strong>Print one week at a time.</strong> Print on Sunday, keep the pages in a folder, and repeat a week whenever it needs more time.</li>
+      </ol>
 
       <h2>How a week works</h2>
       <p>Here's a typical Pre-K week. Kindergarten weeks follow the same rhythm with two letters, word families and sight words.</p>
       <ul>{week.map((d) => <li><strong>{d.day}:</strong> {d.p}</li>)}</ul>
       <p>The plan page also lists a few ideas away from the paper, like a sound hunt around the house or writing the letter in a tray of salt. Those count just as much as the worksheets.</p>
+    </article>
+
+    <section class="mt-10" aria-labelledby="samples-h">
+      <h2 id="samples-h" class="text-[1.6rem] font-bold">Sample pages</h2>
+      <p class="mt-2 max-w-2xl text-muted">Real pages from the plans. Each one prints in black and white with your child's name.</p>
+      <SamplePages items={[
+        { k: 'homeschool-prek', caption: 'A Pre-K plan page: what to do each day.' },
+        { k: 'homeschool-k', caption: 'A kindergarten word family hunt.' },
+        { k: 'homeschool-faith', caption: 'A faith track verse page.' },
+      ]} />
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
+      <h2>What's free and what's in the membership</h2>
+      <ul>
+        <li><strong>Free for everyone:</strong> week 1 of each plan, the placement check, and every one-page printable on the site, one page at a time.</li>
+        <li><strong>With the membership:</strong> all 36 weeks of the Pre-K and kindergarten plans and the faith track, a plan built around each child (up to 4 kids), a new picture book each week, a weekly check-in and a progress report. $14.99 a month or $99 a year.</li>
+      </ul>
       <p>Want more counting between math days? Our free <a href="/math-worksheets/pre-k/">pre-K math worksheets</a> make ten frame, count and circle, more or fewer and missing number pages for numbers 1 to 20, and our <a href="/math-worksheets/ten-frames/">ten frame printables</a> add blank and double ten frames, make 10 and ten frame addition.</p>
-      <p>Teaching kindergarten at home? All of our <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a> are on one page with a free 6-page sampler, including <a href="/math-worksheets/more-or-less/">more or less worksheets</a> (with greater than and less than) and <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> and <a href="/math-worksheets/kindergarten-subtraction/">kindergarten subtraction worksheets</a> with pictures and a number line, and <a href="/math-worksheets/kindergarten-addition-and-subtraction/">mixed addition and subtraction worksheets</a> for later in the year, plus read-aloud <a href="/math-worksheets/kindergarten-word-problems/">kindergarten word problems</a> with pictures to count.</p>
-      <p>For reading, the kindergarten plan spends weeks 15 to 36 on short vowel word families. Each family has its own free <a href="/word-families/">word family worksheets</a> (list, tracing, word hunt, sort, a word family house and a slider), starting with the <a href="/word-families/at/">-at word family</a>.</p>
+      <p>Teaching kindergarten at home? All of our free <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a> are on one page with a 6-page sampler, including <a href="/math-worksheets/more-or-less/">more or less worksheets</a>, <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a>, <a href="/math-worksheets/kindergarten-subtraction/">kindergarten subtraction worksheets</a>, <a href="/math-worksheets/kindergarten-addition-and-subtraction/">mixed addition and subtraction worksheets</a> and read-aloud <a href="/math-worksheets/kindergarten-word-problems/">kindergarten word problems</a>.</p>
+      <p>For reading, every short vowel family has its own free <a href="/word-families/">word family worksheets</a> (list, tracing, word hunt, sort, a word family house and a slider), starting with the <a href="/word-families/at/">-at word family</a>.</p>
 
       <h2>Why the letters aren't in A to Z order</h2>
       <p>
         Both plans teach letters in a common phonics order that starts with s, a, t, i, p and n. Those few sounds already make real words
         (sat, pin, tap), so kids get to read something early. If you'd rather go A to Z, every <a href="/letter-of-the-week/">letter of the week</a> page
-        has its own pack, and our <a href="/letter-tracing/">letter tracing worksheets</a> cover the whole alphabet in order.
+        explains its letter, and our free <a href="/letter-tracing/">letter tracing worksheets</a> cover the whole alphabet in order.
       </p>
 
       <h2>What you'll need</h2>
@@ -151,6 +166,14 @@ const schema = [
       </p>
     </article>
 
+    <section id="pack" class="mt-14 scroll-mt-24" aria-labelledby="pack-h">
+      <h2 id="pack-h" class="text-[1.6rem] font-bold">Print week 1 free</h2>
+      <p class="mt-2 mb-6 max-w-2xl text-muted">Pick a level, type your child's name and print week 1 of the standard plan today.</p>
+      <WeekPack client:load source="homeschool" />
+    </section>
+
+    <FreeTools />
+
     <section class="mt-12 max-w-xl">
       <WeeklyEmail client:visible />
     </section>
@@ -158,6 +181,12 @@ const schema = [
     <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
       <h2 id="faq-h">Questions</h2>
       <Faqs faqs={faqs} />
+    </section>
+
+    <section class="mt-12 max-w-3xl rounded-2xl border border-hairline bg-white p-6 sm:p-8" aria-labelledby="start-h">
+      <h2 id="start-h" class="text-[1.5rem] font-bold">Start with a free week</h2>
+      <p class="mt-2 mb-5 text-muted">Take the 5-minute placement check, see your child's whole year, and print week 1 themed on what they love.</p>
+      <StartCta client:visible />
     </section>
   </div>
 </Base>

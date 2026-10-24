@@ -9,7 +9,7 @@ Decided with Jesse on 2026-10-16. This replaces the old membership (Family, Clas
 - **Price:** $14.99/month or $99/year. Covers every kid in one family (up to 4 child profiles).
 - **Free first week, no free trial.** A trial would let people download a whole year in 7 days. The free week is week 1 of their own personalized plan, fully themed and with their child's name, so they see exactly what they'd be paying for.
 - **Coffee tips stay** for free users.
-- **Free stays free.** Every existing free tool, the two free 36-week plans and their weekly packs keep working exactly as they do today. The paid program is the personalized layer on top.
+- **One-page tools stay free; the plans are paid (changed Oct 24, 2026, Jesse).** Every one-page tool stays free. Everything that is a homeschool sequence is part of the membership: the 36-week Pre-K and Kindergarten plans, the faith track, the weekly packs and the letter of the week packs. Week 1 stays free as the taste. The plan pages stay indexable guides (full outline as text, FAQ, sample pages); only the downloads are locked. Devices that were using the free plans keep printing them free until the end of Nov 30, 2026 (America/Chicago), with a banner.
 
 ## How it works for a parent
 
@@ -83,3 +83,10 @@ Printed weeks showed pictures that didn't match the words and stories that jumpe
 
 - Watch: placement checks started and finished, free week 1 downloads, checkouts started, paid.
 - The every-other-day growth builds keep going and now also feed the program (1st grade plan next, so kids past kindergarten have somewhere to go).
+
+## Paid homeschool plans (Oct 24, 2026)
+
+- **One product.** `/homeschool/`, `/homeschool/preschool/`, `/homeschool/kindergarten/` and `/homeschool/christian/` are guide pages for the program: what each level covers, the 36-week outline as text, time per day, sample pages, FAQ (with FAQ schema), and "Start with a free week", which opens the placement check on `/program/` (`?level=pre-k|kindergarten` presets the age, `?faith=1` turns on the faith track). Members see "Open your plan" (`/account/`).
+- **Weekly pack maker** (`WeekPack.tsx`, rules in `src/lib/homeschoolAccess.ts`): week 1 prints free (email gate as before). Weeks 2 to 36 show a members-only panel. Members print any week, every kid at once, or four weeks in one PDF. Letter of the week pages keep their content and free one-page links; the pack is locked the same way.
+- **Grace period:** a device counts as a past user of the free plans if, the first time the new code runs there, it already has `tl-faith-track` or `tl-prek-extra-math` (only the old pack maker wrote those) or a `tl-hs-used` marker from an earlier build. The answer is saved once in `tl-hs-grace`, so ticking a box later does not grant it. Those devices print every week free until Dec 1, 2026 06:00 UTC (end of Nov 30 in Chicago). This under-counts: a device that printed the free packs without ever touching those two checkboxes is not recognized. `tl-hs-used` is written on every pack download from now on.
+- **Known limit: the lock is in the browser.** The plan data and page builders ship in the JS bundle, so someone who edits the page script can print any week. Upgrade path when it matters: move week 2+ pack building behind `POST /api/program/pack` (member session required, like `/api/program/week`), ship only week 1's data in the public bundle, and have the server return the week's page model (or the plan data) for members.

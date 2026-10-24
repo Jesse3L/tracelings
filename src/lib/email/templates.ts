@@ -153,6 +153,7 @@ ${body}
 // ---------- shared copy ----------
 
 const WHY_SIGNUP = 'You are getting this because you gave your email to download a free printable on tracelings.com.';
+const FREE_LINE = 'Every one-page printable on Tracelings stays free. The full homeschool plans now live inside the membership, and week 1 is always free to try.';
 const PROGRAM_PITCH_SHORT = 'We also make Tracelings at Home, Personalized: a homeschool plan built around one child, at their level and pace, themed on what they love. The first week is free to print.';
 
 const DINO_PICTURES: { src: string; alt: string; caption: string }[] = [
@@ -184,9 +185,9 @@ const D0_INTRO: Record<Interest, { subject: string; preview: string; thanks: str
   },
   homeschool: {
     subject: 'Your homeschool week, and what comes next',
-    preview: 'The free plans stay free. Here is where to find the rest of the year.',
-    thanks: 'Thanks for downloading a homeschool week from Tracelings. The free plans stay free, with a printable pack for every week of the year.',
-    links: 'Bookmark the [free Pre-K homeschool plan](/homeschool/preschool/) and the [free kindergarten homeschool plan](/homeschool/kindergarten/). If you like a slower pace, [letter of the week](/letter-of-the-week/) pairs well with either one.',
+    preview: 'Week 1 is yours to print. Here is what the rest of the year looks like.',
+    thanks: `Thanks for downloading a homeschool week from Tracelings. ${FREE_LINE}`,
+    links: 'You can read the whole year on the [Pre-K homeschool plan](/homeschool/preschool/) and [kindergarten homeschool plan](/homeschool/kindergarten/) pages. For extra practice between weeks, the free [letter tracing pages](/letter-tracing/) and [word family worksheets](/word-families/) work with either plan.',
   },
   program: {
     subject: 'Your free week is ready whenever you are',
@@ -198,7 +199,7 @@ const D0_INTRO: Record<Interest, { subject: string; preview: string; thanks: str
     subject: 'Welcome to Tracelings',
     preview: 'Every free tool on Tracelings stays free. Here are a few worth bookmarking.',
     thanks: 'Thanks for joining Tracelings. Every free tool on the site stays free, so come back whenever you need another page.',
-    links: 'A few favorites: [name tracing worksheets](/name-tracing/), [free coloring pages](/coloring-pages/) and the [free Pre-K and kindergarten homeschool plans](/homeschool/).',
+    links: 'A few favorites: [name tracing worksheets](/name-tracing/), [free coloring pages](/coloring-pages/) and the [free kindergarten math worksheets](/math-worksheets/kindergarten/).',
   },
 };
 
@@ -279,7 +280,7 @@ const D2_TIP: Record<Interest, { subject: string; preview: string; intro: string
       '**Keep it short.** Short sessions often work better than long ones for 3 to 5 year olds.',
       '**Repeat when you need to.** Doing a week twice is completely fine.',
     ],
-    next: { label: 'See letter of the week', path: '/letter-of-the-week/', line: 'If you want a lighter add-on, [letter of the week](/letter-of-the-week/) fits right next to the plans.' },
+    next: { label: 'See letter of the week', path: '/letter-of-the-week/', line: 'If you want a lighter add-on, [letter of the week](/letter-of-the-week/) has a page for every letter, with free one-page tracing and bubble letter printables.' },
   },
   program: {
     subject: 'Getting the most out of week 1',
@@ -379,7 +380,7 @@ function offerBlocks(): Block[] {
       'A 1-minute check-in that adjusts the weeks ahead, and a progress report to print',
     ] },
     { p: 'You can cancel anytime from your account page. Not happy in the first 14 days? Email us for a full refund.' },
-    { p: 'Every free tool and both free homeschool plans stay free, whatever you decide.' },
+    { p: FREE_LINE },
   ];
 }
 
@@ -438,7 +439,8 @@ export function launchA(): EmailContent {
       '**Their plan.** We place them on the Pre-K or kindergarten track, skip what they already know and add review where they need it.',
       '**Week 1 free.** Print the whole first week, themed and with their name. No card needed.',
     ] },
-    { p: 'Every free tool and both free homeschool plans stay free. This is a layer on top for families who want it.' },
+    { p: FREE_LINE },
+    { p: 'If you\'ve been printing our free Pre-K or kindergarten weeks, you can keep printing them free through November 30. That works on the device you\'ve been printing from.' },
     { button: { label: 'Get a free week built around your child', path: '/program/' } },
     { sign: true },
   ];

@@ -1,39 +1,40 @@
 ---
 import { faqText } from '../../../lib/seo';
-import Preview from '../../../components/site/Preview.astro';
 import Base from '../../../layouts/Base.astro';
-import ProgramBanner from '../../../components/site/ProgramBanner.astro';
 import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
+import StartCta from '../../../components/homeschool/StartCta.tsx';
 import PlanWeeks from '../../../components/homeschool/PlanWeeks.astro';
+import SamplePages from '../../../components/homeschool/SamplePages.astro';
+import FreeTools from '../../../components/homeschool/FreeTools.astro';
 import Faqs from '../../../components/homeschool/Faqs.astro';
 import { SITE } from '../../../config';
 import { FAMILIES } from '../../../lib/homeschool';
 
 const url = new URL('/homeschool/kindergarten/', SITE.url).href;
-const title = `Free Kindergarten Homeschool Curriculum | ${SITE.name}`;
-const description = 'A free kindergarten homeschool curriculum: letters, word families, Dolch sight words and adding within 10, with weekly packs made with your child’s name.';
+const title = `Kindergarten Homeschool Curriculum: Week 1 Free | ${SITE.name}`;
+const description = 'A 36-week kindergarten homeschool curriculum: letters, word families, Dolch sight words and adding within 10, about 15 minutes a day. Week 1 is free.';
 const families = Object.keys(FAMILIES);
 
 const faqs = [
-  { q: 'Is this kindergarten homeschool curriculum really free?', a: 'Yes. All 36 weeks are free to print for one child, one week at a time. Add your email once and every pack on that device stays free, with no password.' },
+  { q: 'Is this kindergarten homeschool curriculum free?', a: 'Week 1 is free to print, and every one-page tool on Tracelings stays free, like the word family worksheets, sight words and kindergarten math worksheets. The full 36-week plan is part of Tracelings at Home, $14.99 a month or $99 a year, which also builds a plan around your child.', html: 'Week 1 is free to print, and every one-page tool on Tracelings stays free, like the <a href="/word-families/">word family worksheets</a>, <a href="/sight-words/kindergarten/">sight words</a> and <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a>. The full 36-week plan is part of <a href="/membership/">Tracelings at Home</a>, $14.99 a month or $99 a year, which also builds a plan around your child.' },
   { q: 'What does a kindergarten week include?', a: 'A plan page for you and one page per day: letter or word family tracing, a letter or word hunt, sight words, a math page and name tracing. Most days take about 15 minutes.' },
   { q: 'Which sight words are used?', a: 'The plan works through the Dolch pre-primer and primer lists, two or three words a week, starting with words like a, and, can and see.' },
-  { q: 'What if my child is already reading?', a: 'Jump to the word family weeks (from week 15) or the short vowel reviews to see what they know. You can also add the first grade sight words list.', html: 'Jump to the word family weeks (from week 15) or the short vowel reviews to see what they know. You can also add the <a href="/sight-words/first-grade/">first grade sight words</a> list.' },
+  { q: 'What if my child is already reading?', a: 'The free placement check looks at what your child can do and skips ahead, for example to the word family weeks. You can also add the first grade sight words list.', html: 'The free <a href="/program/?level=kindergarten#placement">placement check</a> looks at what your child can do and skips ahead, for example to the word family weeks. You can also add the <a href="/sight-words/first-grade/">first grade sight words</a> list.' },
   { q: 'Does this cover everything my state requires?', a: 'It covers reading readiness, handwriting and early math. Homeschool rules vary by state, and some states require other subjects or records. Check your state education department or a statewide homeschool group for the rules where you live.' },
-  { q: 'Can I use it for two kids at different levels?', a: 'Yes. Print the Pre-K pack for one child and the Kindergarten pack for the other. Members can print a week for every child on their saved list in one PDF.', html: 'Yes. Print the <a href="/homeschool/preschool/">Pre-K pack</a> for one child and the Kindergarten pack for the other. <a href="/membership/">Members</a> can print a week for every child on their saved list in one PDF.' },
+  { q: 'Can I use it for two kids at different levels?', a: 'Yes. One membership covers up to 4 kids, each with their own plan at their own level, so one child can be on the Pre-K plan and another on kindergarten.', html: 'Yes. One <a href="/membership/">membership</a> covers up to 4 kids, each with their own plan at their own level, so one child can be on the <a href="/homeschool/preschool/">Pre-K plan</a> and another on kindergarten.' },
 ];
 
 const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'LearningResource',
-    name: 'Free kindergarten homeschool curriculum (36 weeks)',
+    name: 'Kindergarten homeschool curriculum (36 weeks)',
     url,
     learningResourceType: 'Curriculum',
     educationalLevel: 'Kindergarten',
     teaches: 'Letter sounds, word families, Dolch sight words, handwriting, numbers 0 to 20, addition within 10',
     timeRequired: 'P36W',
-    isAccessibleForFree: true,
+    isAccessibleForFree: false,
     inLanguage: 'en-US',
     description,
   },
@@ -52,6 +53,12 @@ const schema = [
     mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
   },
 ];
+const facts = [
+  { k: 'Ages', v: '5 to 6' },
+  { k: 'Time', v: 'About 15 min a day' },
+  { k: 'Length', v: '36 weeks' },
+  { k: 'Try it', v: 'Week 1 free' },
+];
 ---
 <Base title={title} description={description} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -59,19 +66,24 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Kindergarten</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free kindergarten homeschool curriculum: a 36-week plan</span></h1>
-      <p class="mt-4 text-lg text-muted">Letters, word families, sight words and early math, about 15 minutes a day. Type your child's name and print the week.</p>
+      <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Tracelings at Home</p>
+      <h1 class="mt-2 text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Kindergarten homeschool curriculum: a 36-week plan</span></h1>
+      <p class="mt-4 text-lg text-muted">Letters, word families, sight words and early math, about 15 minutes a day, with your child's name on the pages. Week 1 is free. The full plan is part of the membership.</p>
+      <div class="mt-6"><StartCta client:load level="kindergarten" /></div>
     </header>
 
-    <div id="pack" class="scroll-mt-24">
-      <WeekPack client:load level="kindergarten" fixedLevel source="homeschool-k" />
-    </div>
-    <Preview k={'homeschool-k'} caption={'Example: a word family hunt from week 15.'} />
-    <ProgramBanner />
+    <dl class="grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+      {facts.map((f) => (
+        <div class="rounded-xl border border-hairline bg-white p-4">
+          <dt class="text-[13px] font-bold uppercase tracking-wider text-muted">{f.k}</dt>
+          <dd class="mt-1 font-bold text-ink">{f.v}</dd>
+        </div>
+      ))}
+    </dl>
 
-    <article class="prose-tl max-w-[68ch] mt-14">
+    <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
-        This free kindergarten homeschool curriculum takes your child from letter sounds to reading simple words in 36 weeks. Every week is a
+        This kindergarten homeschool curriculum takes your child from letter sounds to reading simple words in 36 weeks. Every week is a
         printable pack made with your child's name: a plan page for you, then a page for each day covering phonics, sight words, handwriting
         and math. It's open and go, so you can print Sunday night and start Monday morning.
       </p>
@@ -82,22 +94,33 @@ const schema = [
         <li><strong>Weeks 2 to 14, letters and sounds:</strong> two letters a week, with words that start with each sound.</li>
         <li><strong>Weeks 15 to 36, word families:</strong> {families.map((f, i) => <>{i > 0 && ', '}<a href={`/word-families/${f}/`} class="whitespace-nowrap">-{f}</a></>)}, with a short vowel review after each vowel.</li>
         <li><strong>Sight words:</strong> two or three Dolch words a week, from the pre-primer and primer lists.</li>
-        <li><strong>Math:</strong> numbers 0 to 20 with ten frames through week 21, then adding within 5 and within 10 with dot pictures. For extra practice, make <a href="/math-worksheets/ten-frames/">ten frame worksheets</a> for the teen numbers, make 10 and ten frame addition.</li>
+        <li><strong>Math:</strong> numbers 0 to 20 with ten frames through week 21, then adding within 5 and within 10 with dot pictures.</li>
       </ul>
 
-      <h2>Kindergarten math worksheets for extra practice</h2>
+      <h2>How much time it takes each day</h2>
+      <p>Most kindergarten days take about 15 minutes at the table, plus a few minutes of play. A typical day:</p>
+      <ol>
+        <li><strong>3 minutes:</strong> read the week's words or sight words out loud together.</li>
+        <li><strong>10 minutes:</strong> the day's page. Let them read each word before they trace or circle it.</li>
+        <li><strong>5 minutes:</strong> one idea from the plan page, like a rhyming game or acting out an addition problem with snacks.</li>
+      </ol>
       <p>
-        Every math maker is on one page, our free <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a>, with a 6-page
-        sampler you can print today. In the first half of the year, add a page from
-        the <a href="/math-worksheets/more-or-less/">more or less worksheets</a> to compare the week's numbers. From week 22,
-        the <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> give extra picture and number line problems
-        within 5 and 10, and the <a href="/math-worksheets/kindergarten-subtraction/">kindergarten subtraction worksheets</a> add one taking away
-        page a week at the same range. From about week 26, swap in a page from
-        the <a href="/math-worksheets/kindergarten-addition-and-subtraction/">addition and subtraction worksheets for kindergarten</a>, where
-        plus and minus problems share one page. For story problems read aloud, with pictures that match each story, add a page of
-        the <a href="/math-worksheets/kindergarten-word-problems/">kindergarten word problems</a> once a week from week 22.
+        Many kindergartners are ready for this pace, and some need a slower one. Repeat a week whenever you like. If you have concerns about
+        your child's reading or writing, ask your child's teacher or pediatrician.
       </p>
+    </article>
 
+    <section class="mt-10" aria-labelledby="samples-h">
+      <h2 id="samples-h" class="text-[1.6rem] font-bold">Sample pages</h2>
+      <p class="mt-2 max-w-2xl text-muted">Real pages from the plan. Each one prints in black and white with your child's name.</p>
+      <SamplePages items={[
+        { k: 'homeschool-k', caption: 'A word family hunt from week 15: circle the -at words.' },
+        { k: 'wf-at', caption: 'A word family page like the ones in weeks 15 to 36.' },
+        { k: 'k-addition', caption: 'Picture addition like the later math weeks.' },
+      ]} />
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
       <h2>Why word families work for new readers</h2>
       <p>
         A word family is a group of words that share an ending, like cat, hat and mat. Once a child can read -at, changing the first letter
@@ -109,39 +132,34 @@ const schema = [
         a word list with sentences, tracing, a word sort, a word family house and a word slider to cut out.
       </p>
 
-      <h2>A sample kindergarten day</h2>
-      <ol>
-        <li><strong>3 minutes:</strong> read the week's words or sight words out loud together.</li>
-        <li><strong>10 minutes:</strong> the day's page. Let them read each word before they trace or circle it.</li>
-        <li><strong>5 minutes:</strong> one idea from the plan page, like a rhyming game or acting out an addition problem with snacks.</li>
-      </ol>
+      <h2>Kindergarten math worksheets for extra practice</h2>
       <p>
-        Many kindergartners are ready for this pace, and some need a slower one. Repeat a week whenever you like. If you have concerns about
-        your child's reading or writing, ask your child's teacher or pediatrician.
-      </p>
-
-      <h2>More free practice</h2>
-      <p>
-        The full Dolch primer list is on the <a href="/sight-words/kindergarten/">kindergarten sight words</a> page, with flash cards.
-        The <a href="/word-tracing/">word tracing worksheet maker</a> turns any word or short sentence into a tracing sheet, and
-        the <a href="/number-tracing/1-20/">number tracing 1 to 20</a> sheet is handy for extra counting practice.
+        Every math maker is on one page, our free <a href="/math-worksheets/kindergarten/">kindergarten math worksheets</a>, with a 6-page
+        sampler you can print today. In the first half of the year, add a page from
+        the <a href="/math-worksheets/more-or-less/">more or less worksheets</a> to compare the week's numbers. From week 22,
+        the <a href="/math-worksheets/kindergarten-addition/">kindergarten addition worksheets</a> give extra picture and number line problems
+        within 5 and 10, and the <a href="/math-worksheets/kindergarten-subtraction/">kindergarten subtraction worksheets</a> add one taking away
+        page a week at the same range. From about week 26, swap in a page from
+        the <a href="/math-worksheets/kindergarten-addition-and-subtraction/">addition and subtraction worksheets for kindergarten</a>, where
+        plus and minus problems share one page. For story problems read aloud, add a page of
+        the <a href="/math-worksheets/kindergarten-word-problems/">kindergarten word problems</a> once a week from week 22.
       </p>
 
       <h2>Want a Bible verse each week?</h2>
-      <p>Tick the faith track box above to add a Bible verse to every week, in easy modern English, with a copywork page to trace and copy. See every verse on the <a href="/homeschool/christian/">Christian kindergarten homeschool curriculum</a> page.</p>
+      <p>The faith track adds a Bible verse to every week, in easy modern English, with a copywork page to trace and copy. See every verse on the <a href="/homeschool/christian/">Christian kindergarten homeschool curriculum</a> page.</p>
 
-      <h2>All 36 weeks</h2>
-      <p>Tap any week to open its pack above.</p>
+      <h2>All 36 weeks of the kindergarten plan</h2>
+      <p>Here is the whole year. Week 1 is free to print below. Weeks 2 to 36 come with the membership.</p>
     </article>
     <div class="max-w-4xl"><PlanWeeks level="kindergarten" /></div>
 
-    <aside class="mt-12 rounded-xl border border-hairline bg-white p-5 sm:p-6 max-w-3xl" aria-label="Personalized program">
+    <section id="pack" class="mt-14 scroll-mt-24" aria-labelledby="pack-h">
+      <h2 id="pack-h" class="text-[1.6rem] font-bold">Print week 1 free</h2>
+      <p class="mt-2 mb-6 max-w-2xl text-muted">Want to start today? Type your child's name and print week 1 of the standard plan. For a week themed on what your child loves, use the <a href="/program/?level=kindergarten#placement" class="text-[#2f5fc4] underline underline-offset-2">free placement check</a> instead.</p>
+      <WeekPack client:load level="kindergarten" fixedLevel source="homeschool-k" />
+    </section>
 
-      <p class="font-bold text-lg text-ink">Not sure where to start?</p>
-
-      <p class="mt-1 text-muted leading-relaxed">Take the free 5-minute placement check. It finds the right starting week, skips what your child already knows, and themes the pages around what they love, like dinosaurs or unicorns. See the <a href="/program/" class="text-[#2f5fc4] underline underline-offset-2">personalized homeschool program</a>.</p>
-
-    </aside>
+    <FreeTools />
 
     <section class="mt-12 max-w-xl">
       <WeeklyEmail client:visible level="kindergarten" />
@@ -150,6 +168,12 @@ const schema = [
     <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
       <h2 id="faq-h">Questions about the kindergarten plan</h2>
       <Faqs faqs={faqs} />
+    </section>
+
+    <section class="mt-12 max-w-3xl rounded-2xl border border-hairline bg-white p-6 sm:p-8" aria-labelledby="start-h">
+      <h2 id="start-h" class="text-[1.5rem] font-bold">Start with a free week</h2>
+      <p class="mt-2 mb-5 text-muted">Take the 5-minute placement check, see your child's whole year, and print week 1 themed on what they love.</p>
+      <StartCta client:visible level="kindergarten" />
     </section>
   </div>
 </Base>

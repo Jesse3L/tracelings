@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-23",
-  "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13.",
+  "updated": "2026-10-24",
+  "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
       "id": "month1-homeschool-foundation",
@@ -36,7 +36,8 @@
           720,
           18
         ]
-      }
+      },
+      "side": "program"
     },
     {
       "id": "prek-math-worksheets",
@@ -80,7 +81,8 @@
       "urls": [
         "/math-worksheets/pre-k/"
       ],
-      "notes": "Generator with 5 page types (count and color, ten frames, count and circle, more or fewer, missing numbers), ranges 1-5/1-10/1-20, name on the Name line. Members: 5-page set or one page per kid. Linked from /homeschool/, /homeschool/preschool/ and every letter-of-the-week page (?number=N)."
+      "notes": "Generator with 5 page types (count and color, ten frames, count and circle, more or fewer, missing numbers), ranges 1-5/1-10/1-20, name on the Name line. Members: 5-page set or one page per kid. Linked from /homeschool/, /homeschool/preschool/ and every letter-of-the-week page (?number=N).",
+      "side": "free"
     },
     {
       "id": "ten-frame-worksheets",
@@ -141,7 +143,8 @@
       "urls": [
         "/math-worksheets/ten-frames/"
       ],
-      "notes": "Renamed around 'ten frame printables' (2,900/SD 28 vs 720 for 'ten frame worksheets'), so the page leads with blank and double ten frames and keeps the worksheets. Same maker as Pre-K math (series 'ten-frames' in MathSheets.tsx and mathSheets.ts). Free: every type and range, one page at a time. Members: 5 different pages in one PDF (not for blank frames) or one page per kid. Supports ?type= and ?range= in the URL. Linked from /math-worksheets/pre-k/, /homeschool/, /homeschool/preschool/, /homeschool/kindergarten/. Preview ten-frame-worksheet-make-10.webp."
+      "notes": "Renamed around 'ten frame printables' (2,900/SD 28 vs 720 for 'ten frame worksheets'), so the page leads with blank and double ten frames and keeps the worksheets. Same maker as Pre-K math (series 'ten-frames' in MathSheets.tsx and mathSheets.ts). Free: every type and range, one page at a time. Members: 5 different pages in one PDF (not for blank frames) or one page per kid. Supports ?type= and ?range= in the URL. Linked from /math-worksheets/pre-k/, /homeschool/, /homeschool/preschool/, /homeschool/kindergarten/. Preview ten-frame-worksheet-make-10.webp.",
+      "side": "free"
     },
     {
       "id": "more-or-less-worksheets",
@@ -190,7 +193,8 @@
       "urls": [
         "/math-worksheets/more-or-less/"
       ],
-      "notes": "Kept the queue's URL and named the page around 'kindergarten more or less worksheets' (390/SD 22); greater than less than gets its own H2 and page type (390/26 for the kindergarten phrase). Series 'more-less' in MathSheets.tsx and mathSheets.ts: compare groups (moreLessPage), compare numbers with dots up to 10, greater than/less than with a symbol key and some equal pairs, one more one less. Supports ?type= and ?range=. Preview kindergarten-greater-than-less-than-worksheet.webp."
+      "notes": "Kept the queue's URL and named the page around 'kindergarten more or less worksheets' (390/SD 22); greater than less than gets its own H2 and page type (390/26 for the kindergarten phrase). Series 'more-less' in MathSheets.tsx and mathSheets.ts: compare groups (moreLessPage), compare numbers with dots up to 10, greater than/less than with a symbol key and some equal pairs, one more one less. Supports ?type= and ?range=. Preview kindergarten-greater-than-less-than-worksheet.webp.",
+      "side": "free"
     },
     {
       "id": "prek-math-in-pack",
@@ -228,7 +232,8 @@
           25
         ]
       },
-      "notes": "No new URL. New page type 'find-number' (Find the number) in src/lib/mathSheets.ts: a key with the numeral and that many dots in a ten frame, six boxes of shapes (2 or 3 hold exactly the number, the rest one or two off), past 10 the first ten sit apart like a full ten frame, then 'How many boxes have N?'. Pre-K weekly pack: free 'Extra math page' checkbox (remembered per device, off by default, Pre-K only) adds it after Thursday's page via PackOptions.extraMath, and Thursday's plan line says so; each week gets its own layout (seed = week number). Also a type on /math-worksheets/pre-k/ (number picker, ?type=find-number&number=N). /homeschool/preschool/ got an H2 'The preschool math curriculum, one number a week' (preschool math curriculum 590/SD 23) and a math FAQ. Render check: scripts/render-pack-math.mts."
+      "notes": "No new URL. New page type 'find-number' (Find the number) in src/lib/mathSheets.ts: a key with the numeral and that many dots in a ten frame, six boxes of shapes (2 or 3 hold exactly the number, the rest one or two off), past 10 the first ten sit apart like a full ten frame, then 'How many boxes have N?'. Pre-K weekly pack: free 'Extra math page' checkbox (remembered per device, off by default, Pre-K only) adds it after Thursday's page via PackOptions.extraMath, and Thursday's plan line says so; each week gets its own layout (seed = week number). Also a type on /math-worksheets/pre-k/ (number picker, ?type=find-number&number=N). /homeschool/preschool/ got an H2 'The preschool math curriculum, one number a week' (preschool math curriculum 590/SD 23) and a math FAQ. Render check: scripts/render-pack-math.mts.",
+      "side": "program"
     },
     {
       "id": "k-addition-worksheets",
@@ -281,7 +286,8 @@
       "urls": [
         "/math-worksheets/kindergarten-addition/"
       ],
-      "notes": "Main keyword changed from 'addition kindergarten math worksheets' (1,000) to 'kindergarten addition worksheets' (3,600/SD 26). Built on the math maker (series 'k-addition'), not additionPage() in homeschool.ts, so it gets New problems, A4, member sets. Subtraction with pictures is one type on this page; 'kindergarten subtraction worksheets' (2,900/23) is big enough for its own page later (see k-subtraction-worksheets). Preview kindergarten-picture-addition-worksheet.webp."
+      "notes": "Main keyword changed from 'addition kindergarten math worksheets' (1,000) to 'kindergarten addition worksheets' (3,600/SD 26). Built on the math maker (series 'k-addition'), not additionPage() in homeschool.ts, so it gets New problems, A4, member sets. Subtraction with pictures is one type on this page; 'kindergarten subtraction worksheets' (2,900/23) is big enough for its own page later (see k-subtraction-worksheets). Preview kindergarten-picture-addition-worksheet.webp.",
+      "side": "free"
     },
     {
       "id": "k-math-hub",
@@ -322,7 +328,8 @@
       "urls": [
         "/math-worksheets/kindergarten/"
       ],
-      "notes": "H1 'Free kindergarten math worksheets'; title leans on 'free ... to print' since the head term is SD 47. Free 6-page sampler (MathSampler.tsx: ten frames 11 to 20, missing numbers, compare numbers, make 10, picture addition, subtraction) for everyone, with the child's name, one PDF. Links every math maker with its preview. Breadcrumb parent for the more-or-less and addition pages."
+      "notes": "H1 'Free kindergarten math worksheets'; title leans on 'free ... to print' since the head term is SD 47. Free 6-page sampler (MathSampler.tsx: ten frames 11 to 20, missing numbers, compare numbers, make 10, picture addition, subtraction) for everyone, with the child's name, one PDF. Links every math maker with its preview. Breadcrumb parent for the more-or-less and addition pages.",
+      "side": "free"
     },
     {
       "id": "k-subtraction-worksheets",
@@ -367,7 +374,8 @@
       "urls": [
         "/math-worksheets/kindergarten-subtraction/"
       ],
-      "notes": "Ubersuggest US, 2026-10-19. New series 'k-subtraction' on the math maker with four types: subtraction with pictures (shared with the addition page), cross out and subtract (child draws the X marks), number line subtraction (hop back) and subtraction facts. New subPairs(): within 20 never takes away more than 10, within 5 allows answers of 0 so 12 facts don't repeat. Answer boxes now line up in one column per page (also on addition facts and number line addition). Preview kindergarten-subtraction-worksheet-with-pictures.webp."
+      "notes": "Ubersuggest US, 2026-10-19. New series 'k-subtraction' on the math maker with four types: subtraction with pictures (shared with the addition page), cross out and subtract (child draws the X marks), number line subtraction (hop back) and subtraction facts. New subPairs(): within 20 never takes away more than 10, within 5 allows answers of 0 so 12 facts don't repeat. Answer boxes now line up in one column per page (also on addition facts and number line addition). Preview kindergarten-subtraction-worksheet-with-pictures.webp.",
+      "side": "free"
     },
     {
       "id": "k-mixed-add-subtract",
@@ -408,7 +416,8 @@
       "urls": [
         "/math-worksheets/kindergarten-addition-and-subtraction/"
       ],
-      "notes": "Ubersuggest US, 2026-10-21. Volume held (1,000 / SD 24 plus 590 / 26 for the mixed phrasing), so it got its own page instead of a type on the addition and subtraction pages. New series 'k-mixed' on the math maker with four types: mixed picture problems (adding rows show two groups, take away rows show crossed-out pictures), mixed number line, mixed facts (six of each) and plus or minus (write the sign). mixedProblems(): half and half, starts with adding, never three of the same sign in a row. Preview addition-and-subtraction-worksheet-kindergarten.webp."
+      "notes": "Ubersuggest US, 2026-10-21. Volume held (1,000 / SD 24 plus 590 / 26 for the mixed phrasing), so it got its own page instead of a type on the addition and subtraction pages. New series 'k-mixed' on the math maker with four types: mixed picture problems (adding rows show two groups, take away rows show crossed-out pictures), mixed number line, mixed facts (six of each) and plus or minus (write the sign). mixedProblems(): half and half, starts with adding, never three of the same sign in a row. Preview addition-and-subtraction-worksheet-kindergarten.webp.",
+      "side": "free"
     },
     {
       "id": "subtraction-word-problems-k",
@@ -456,7 +465,88 @@
       "urls": [
         "/math-worksheets/kindergarten-word-problems/"
       ],
-      "notes": "Ubersuggest US, 2026-10-23. Volume held (720 / SD 30), so its own page instead of a type on the math maker. New maker src/lib/wordProblems.ts + src/components/WordProblemSheets.tsx: four types (addition, subtraction, add or subtract with an empty sign circle, draw and solve), within 5 and 10, eight themes using the program's line icons (farm, dinosaurs, ocean, bugs, pets, jungle, trucks, space). The child's name can be the story's main character (browser only). Story frames follow the program's rules: places are never taken away, objects are held and given, animals and vehicles come and go. Preview kindergarten-word-problems-worksheet.webp. Render check: scripts/render-word-problems.mts."
+      "notes": "Ubersuggest US, 2026-10-23. Volume held (720 / SD 30), so its own page instead of a type on the math maker. New maker src/lib/wordProblems.ts + src/components/WordProblemSheets.tsx: four types (addition, subtraction, add or subtract with an empty sign circle, draw and solve), within 5 and 10, eight themes using the program's line icons (farm, dinosaurs, ocean, bugs, pets, jungle, trucks, space). The child's name can be the story's main character (browser only). Story frames follow the program's rules: places are never taken away, objects are held and given, animals and vehicles come and go. Preview kindergarten-word-problems-worksheet.webp. Render check: scripts/render-word-problems.mts.",
+      "side": "free"
+    },
+    {
+      "id": "guide-how-to-homeschool-preschool",
+      "status": "todo",
+      "side": "free",
+      "title": "Learn article: how to start homeschooling preschool (what to cover at 3 to 5, a 15-minute day, what you need, how to check your state rules), linking letter tracing, pre-K math worksheets, name tracing and the free week",
+      "keywords": {
+        "how to homeschool preschool": [
+          140,
+          11
+        ],
+        "how to start homeschooling preschool": [
+          30,
+          15
+        ],
+        "homeschool preschool": [
+          1300,
+          32
+        ],
+        "how to start homeschooling": [
+          1600,
+          31
+        ]
+      },
+      "note": "Ubersuggest US, Oct 24, 2026. \"how to start homeschooling preschool\" is only 30/month, so the primary keyword is \"how to homeschool preschool\"; work \"how to start homeschooling\" in as a variant. Links the free week at /program/?level=pre-k#placement.",
+      "linkTo": [
+        "/homeschool/preschool/",
+        "/letter-tracing/",
+        "/math-worksheets/pre-k/",
+        "/name-tracing/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "guide-homeschool-kindergarten-schedule",
+      "status": "todo",
+      "side": "free",
+      "title": "Learn article: homeschool kindergarten schedule (a sample daily and weekly schedule, 15 to 30 minutes of table work, a printable-free routine), linking sight words, word families, kindergarten math worksheets and the free week",
+      "keywords": {
+        "homeschool kindergarten schedule": [
+          720,
+          18
+        ]
+      },
+      "note": "Ubersuggest US, Oct 24, 2026: 720/month, SD 18, peaks in July to September. Links the free week at /program/?level=kindergarten#placement.",
+      "linkTo": [
+        "/homeschool/kindergarten/",
+        "/sight-words/kindergarten/",
+        "/word-families/",
+        "/math-worksheets/kindergarten/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "guide-what-you-need-to-homeschool-kindergarten",
+      "status": "todo",
+      "side": "free",
+      "title": "Learn article: what you need to homeschool kindergarten (supplies list, a simple curriculum, records, state rules vary), linking letter tracing, the alphabet chart, kindergarten math worksheets and the free week",
+      "keywords": {
+        "what do you need to homeschool kindergarten": [
+          0,
+          4
+        ],
+        "how to homeschool kindergarten": [
+          210,
+          16
+        ],
+        "homeschool kindergarten supplies": [
+          140,
+          15
+        ]
+      },
+      "note": "Ubersuggest US, Oct 24, 2026: the exact phrase shows 0, so the primary keyword is \"how to homeschool kindergarten\" (210, SD 16), with \"homeschool kindergarten supplies\" (140, SD 15) as an H2. Same build.",
+      "linkTo": [
+        "/homeschool/kindergarten/",
+        "/letter-tracing/",
+        "/alphabet-chart/",
+        "/math-worksheets/kindergarten/",
+        "/program/"
+      ]
     },
     {
       "id": "word-problems-in-k-pack",
@@ -464,8 +554,10 @@
       "needs": [
         "subtraction-word-problems-k"
       ],
-      "title": "Kindergarten weekly pack: optional free word problem page from week 22 (addition stories within 5 in weeks 22 to 28, within 10 from week 29, add or subtract in weeks 33 to 36), a checkbox in the pack maker like the Pre-K extra math page",
-      "buildOn": "buildWordProblemPage() in src/lib/wordProblems.ts (needs loadThemeIcons before building the pack) and buildWeekPack() in src/lib/homeschool.ts. Keep it free; members already get themed word problems in the personalized program."
+      "title": "Program (members): Kindergarten weekly pack: optional word problem page from week 22 (addition stories within 5 in weeks 22 to 28, within 10 from week 29, add or subtract in weeks 33 to 36), a checkbox in the pack maker",
+      "buildOn": "buildWordProblemPage() in src/lib/wordProblems.ts (needs loadThemeIcons before building the pack) and buildWeekPack() in src/lib/homeschool.ts. Keep it free; members already get themed word problems in the personalized program.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "compare-word-problems",
@@ -474,7 +566,8 @@
         "subtraction-word-problems-k"
       ],
       "title": "How many more? Compare word problems: a fifth type on /math-worksheets/kindergarten-word-problems/ (two groups side by side, match them up, how many more or fewer), within 10; check 'how many more word problems' and 'compare word problems' volume first, its own page only if volume holds",
-      "buildOn": "makeProblems() and fit() in src/lib/wordProblems.ts; the program's compare problem in src/lib/program/templates.ts."
+      "buildOn": "makeProblems() and fit() in src/lib/wordProblems.ts; the program's compare problem in src/lib/program/templates.ts.",
+      "side": "free"
     },
     {
       "id": "word-problems-first-grade",
@@ -484,7 +577,8 @@
         "subtraction-word-problems-k"
       ],
       "title": "First grade word problems within 20: add to, take from, put together and missing part stories, with a number line instead of pictures past 10; part of the first grade plan",
-      "buildOn": "src/lib/wordProblems.ts (add a range of 20 and new frames); keyword data for 'first grade word problems' came back empty in Ubersuggest on 2026-10-23, recheck with other phrasings ('word problems for 1st graders', '1st grade math word problems')."
+      "buildOn": "src/lib/wordProblems.ts (add a range of 20 and new frames); keyword data for 'first grade word problems' came back empty in Ubersuggest on 2026-10-23, recheck with other phrasings ('word problems for 1st graders', '1st grade math word problems').",
+      "side": "free"
     },
     {
       "id": "k-math-in-pack",
@@ -493,8 +587,10 @@
         "k-addition-worksheets",
         "k-subtraction-worksheets"
       ],
-      "title": "Kindergarten weekly pack: optional extra math page that matches the week (compare numbers in weeks 1 to 21; in weeks 22 to 36 alternate picture addition and subtraction with pictures at the week's range), a free checkbox in the pack maker",
-      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'more-less' | 'k-addition' }). Pairs with ten-frames-in-k-pack; keep it free."
+      "title": "Program (members): Kindergarten weekly pack: optional extra math page that matches the week (compare numbers in weeks 1 to 21; in weeks 22 to 36 alternate picture addition and subtraction with pictures at the week's range), a checkbox in the pack maker",
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'more-less' | 'k-addition' }). Pairs with ten-frames-in-k-pack; keep it free.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "number-bonds-worksheets",
@@ -509,7 +605,8 @@
           14
         ]
       },
-      "buildOn": "mathSheets.ts circlePath(). Check 'number bonds worksheets' volume in Ubersuggest before choosing a new URL vs. a type on /math-worksheets/kindergarten-addition/."
+      "buildOn": "mathSheets.ts circlePath(). Check 'number bonds worksheets' volume in Ubersuggest before choosing a new URL vs. a type on /math-worksheets/kindergarten-addition/.",
+      "side": "free"
     },
     {
       "id": "ten-frame-subtraction",
@@ -524,7 +621,8 @@
           13
         ]
       },
-      "buildOn": "tfAddPage() and tenFrame() in src/lib/mathSheets.ts (TEN_FRAME_KINDS). No new URL needed; add a section to /math-worksheets/ten-frames/."
+      "buildOn": "tfAddPage() and tenFrame() in src/lib/mathSheets.ts (TEN_FRAME_KINDS). No new URL needed; add a section to /math-worksheets/ten-frames/.",
+      "side": "free"
     },
     {
       "id": "ten-frame-cards",
@@ -543,7 +641,8 @@
           34
         ]
       },
-      "buildOn": "src/lib/flashcards.ts layout and tenFrame() in mathSheets.ts. Check volume again before building; may fit as a section of /math-worksheets/ten-frames/ rather than a new URL."
+      "buildOn": "src/lib/flashcards.ts layout and tenFrame() in mathSheets.ts. Check volume again before building; may fit as a section of /math-worksheets/ten-frames/ rather than a new URL.",
+      "side": "free"
     },
     {
       "id": "ten-frames-in-k-pack",
@@ -551,8 +650,10 @@
       "needs": [
         "ten-frame-worksheets"
       ],
-      "title": "Kindergarten weekly pack: optional make 10 or ten frame addition page for the week's number or sum (checkbox in the pack maker, free for everyone)",
-      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'ten-frames' }). Pairs with prek-math-in-pack; keep it free."
+      "title": "Program (members): Kindergarten weekly pack: optional make 10 or ten frame addition page for the week's number or sum (checkbox in the pack maker)",
+      "buildOn": "buildWeekPack() in src/lib/homeschool.ts and buildMathPage({ series: 'ten-frames' }). Pairs with prek-math-in-pack; keep it free.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "mixed-in-k-pack",
@@ -561,8 +662,10 @@
         "k-mixed-add-subtract",
         "k-math-in-pack"
       ],
-      "title": "Kindergarten weekly pack: in weeks 26 to 36, let the optional extra math page be a mixed picture problems page at the week's range (alternating with the single-sign page), free checkbox",
-      "buildOn": "buildMathPage({ series: 'k-mixed', kind: 'mixed-pictures' }) inside the k-math-in-pack checkbox; keep it free."
+      "title": "Program (members): Kindergarten weekly pack: in weeks 26 to 36, let the optional extra math page be a mixed picture problems page at the week's range (alternating with the single-sign page), checkbox in the pack maker",
+      "buildOn": "buildMathPage({ series: 'k-mixed', kind: 'mixed-pictures' }) inside the k-math-in-pack checkbox; keep it free.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "fact-families-worksheets",
@@ -572,7 +675,8 @@
       ],
       "title": "Fact family worksheets (a fact family house or triangle: 3, 4, 7 gives 3 + 4, 4 + 3, 7 - 3, 7 - 4) within 10 and 20, as a type on the mixed page or its own page if volume holds; check volume first",
       "keywords": {},
-      "buildOn": "mixedProblems() and the plus-minus layout in src/lib/mathSheets.ts; the word family house drawing in src/lib/wordFamilies.ts for the house shape."
+      "buildOn": "mixedProblems() and the plus-minus layout in src/lib/mathSheets.ts; the word family house drawing in src/lib/wordFamilies.ts for the house shape.",
+      "side": "free"
     },
     {
       "id": "missing-addend-worksheets",
@@ -582,7 +686,8 @@
       ],
       "title": "Missing number addition and subtraction (3 + __ = 7, __ - 2 = 4) within 10 and 20 for late kindergarten and first grade, a type on the mixed page; check volume first",
       "keywords": {},
-      "buildOn": "factsPage() layout with the answer box moved; feeds the first-grade-plan item."
+      "buildOn": "factsPage() layout with the answer box moved; feeds the first-grade-plan item.",
+      "side": "free"
     },
     {
       "id": "word-family-pages",
@@ -660,7 +765,8 @@
         "/word-families/",
         "/word-families/at/ (and /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/)"
       ],
-      "notes": "Hub named around 'word families' (12,100/SD 28) plus 'word family worksheets' (1,000/22); family pages around '-xx word family worksheets' since 'at word family' is 1,300/25 and most single families get 170 to 720 a month. 17 families (every family in the K plan), 6 page types each in src/lib/wordFamilies.ts + src/components/WordFamilySheets.tsx: read the words (list + sentences), trace, word hunt (same-vowel distractors), word sort (paired with the next same-vowel family), word family house, word slider (cut-out). Free: every page one at a time. Members: all 6 pages for a family in one PDF or one page per kid. Linked from the K plan table (every family and review week), the K weekly pack maker (family and review weeks), /homeschool/kindergarten/, /homeschool/ and /sight-words/. Previews word-family-worksheet-at-hunt.webp and <family>-word-family-house.webp."
+      "notes": "Hub named around 'word families' (12,100/SD 28) plus 'word family worksheets' (1,000/22); family pages around '-xx word family worksheets' since 'at word family' is 1,300/25 and most single families get 170 to 720 a month. 17 families (every family in the K plan), 6 page types each in src/lib/wordFamilies.ts + src/components/WordFamilySheets.tsx: read the words (list + sentences), trace, word hunt (same-vowel distractors), word sort (paired with the next same-vowel family), word family house, word slider (cut-out). Free: every page one at a time. Members: all 6 pages for a family in one PDF or one page per kid. Linked from the K plan table (every family and review week), the K weekly pack maker (family and review weeks), /homeschool/kindergarten/, /homeschool/ and /sight-words/. Previews word-family-worksheet-at-hunt.webp and <family>-word-family-house.webp.",
+      "side": "free"
     },
     {
       "id": "word-families-in-k-pack",
@@ -668,8 +774,10 @@
       "needs": [
         "word-family-pages"
       ],
-      "title": "Put the word family house and the word sort into the Kindergarten weekly packs (family weeks: the house page; vowel review weeks: a sort page)",
-      "buildOn": "buildFamilyPage() in src/lib/wordFamilies.ts. Keep the pack at about one page per day plus the plan page; update the day text in planFor() in homeschool.ts."
+      "title": "Program (members): Put the word family house and the word sort into the Kindergarten weekly packs (family weeks: the house page; vowel review weeks: a sort page)",
+      "buildOn": "buildFamilyPage() in src/lib/wordFamilies.ts. Keep the pack at about one page per day plus the plan page; update the day text in planFor() in homeschool.ts.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "cvc-words-worksheets",
@@ -679,7 +787,8 @@
       ],
       "title": "CVC words worksheets: a mixed short vowel CVC word maker (read and trace, missing vowel, build the word from letter tiles) at /cvc-words/",
       "suggestedUrl": "/cvc-words/",
-      "buildOn": "FAMILY_INFO words grouped by vowel; the house and sort layouts in wordFamilies.ts. Check volume for cvc words, cvc worksheets, cvc words kindergarten before building."
+      "buildOn": "FAMILY_INFO words grouped by vowel; the house and sort layouts in wordFamilies.ts. Check volume for cvc words, cvc worksheets, cvc words kindergarten before building.",
+      "side": "free"
     },
     {
       "id": "more-word-families",
@@ -688,7 +797,8 @@
         "word-family-pages"
       ],
       "title": "Add the next word families to /word-families/: -am, -ad, -ill, -ell, -ack, -ock (long vowel -ake and -ight later)",
-      "buildOn": "Add entries to FAMILY_INFO in src/lib/wordFamilies.ts (words, sentences, tricky, stretch, tip). They are not in the K plan, so the page needs its own \"where it fits\" text. Keywords (Ubersuggest US, 2026-10-16): am word families 480/20, ad word families 320/16, ack 110/21, ock 110/20, ell 90/17."
+      "buildOn": "Add entries to FAMILY_INFO in src/lib/wordFamilies.ts (words, sentences, tricky, stretch, tip). They are not in the K plan, so the page needs its own \"where it fits\" text. Keywords (Ubersuggest US, 2026-10-16): am word families 480/20, ad word families 320/16, ack 110/21, ock 110/20, ell 90/17.",
+      "side": "free"
     },
     {
       "id": "phonics-hub",
@@ -715,11 +825,12 @@
           480,
           22
         ]
-      }
+      },
+      "side": "free"
     },
     {
       "id": "guide-homeschool-preschool",
-      "status": "todo",
+      "status": "replaced",
       "needs": [
         "month1-homeschool-foundation"
       ],
@@ -734,7 +845,9 @@
           19
         ]
       },
-      "buildOn": "Follow docs/content-guide.md. Link /homeschool/preschool/, /letter-of-the-week/, /name-tracing/."
+      "buildOn": "Follow docs/content-guide.md. Link /homeschool/preschool/, /letter-of-the-week/, /name-tracing/.",
+      "side": "free",
+      "note": "Replaced on Oct 24, 2026 by guide-how-to-homeschool-preschool (same build, better keyword)."
     },
     {
       "id": "thanksgiving-homeschool-week",
@@ -742,7 +855,7 @@
       "needs": [
         "month1-homeschool-foundation"
       ],
-      "title": "Seasonal bonus week: a Thanksgiving homeschool pack (Pre-K and K) using the existing coloring pages and seasonal counting",
+      "title": "Program (members): a Thanksgiving bonus week (Pre-K and K) in the program, using the existing coloring pages and seasonal counting. Free side: link the free Thanksgiving coloring pages instead of a free multi-page pack.",
       "keywords": {
         "thanksgiving kindergarten math worksheets": [
           110,
@@ -753,7 +866,9 @@
           19
         ]
       },
-      "buildOn": "Ship before mid-November. Add as an extra week, not one of the 36."
+      "buildOn": "Ship before mid-November. Add as an extra week, not one of the 36.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "prek-math-guide",
@@ -776,7 +891,8 @@
           25
         ]
       },
-      "buildOn": "Follow docs/content-guide.md. The plan page section on /homeschool/preschool/ covers the 'what'; the article covers the 'how' with ranges and the referral line."
+      "buildOn": "Follow docs/content-guide.md. The plan page section on /homeschool/preschool/ covers the 'what'; the article covers the 'how' with ranges and the referral line.",
+      "side": "free"
     },
     {
       "id": "program-find-number",
@@ -784,8 +900,10 @@
       "needs": [
         "prek-math-in-pack"
       ],
-      "title": "Personalized program: offer the find the number page in Pre-K weeks (theme pictures instead of plain shapes)",
-      "buildOn": "packFindNumberPage() in src/lib/mathSheets.ts and weekDays() in homeschool.ts. Program code only; do not touch pricing, sign-in or src/lib/server/. Check with Jesse's program notes first."
+      "title": "Program (members): Personalized program: offer the find the number page in Pre-K weeks (theme pictures instead of plain shapes)",
+      "buildOn": "packFindNumberPage() in src/lib/mathSheets.ts and weekDays() in homeschool.ts. Program code only; do not touch pricing, sign-in or src/lib/server/. Check with Jesse's program notes first.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "prek-shapes-worksheets",
@@ -794,7 +912,8 @@
         "prek-math-worksheets"
       ],
       "title": "Shapes worksheets for preschool (trace, find and color circles, squares, triangles, rectangles) as a Pre-K math type or its own page; check volume first",
-      "buildOn": "shape() and SHAPES in src/lib/mathSheets.ts. Check 'shapes worksheets for preschool' and 'preschool shapes worksheets' volume before choosing a type vs. a URL."
+      "buildOn": "shape() and SHAPES in src/lib/mathSheets.ts. Check 'shapes worksheets for preschool' and 'preschool shapes worksheets' volume before choosing a type vs. a URL.",
+      "side": "free"
     },
     {
       "id": "first-grade-plan",
@@ -803,7 +922,7 @@
         "word-family-pages",
         "k-addition-worksheets"
       ],
-      "title": "First grade at home: a 36-week plan (blends, digraphs, first grade sight words, addition and subtraction within 20, sentence writing)",
+      "title": "Program (members): First grade at home: a 36-week plan (blends, digraphs, first grade sight words, addition and subtraction within 20, sentence writing)",
       "suggestedUrl": "/homeschool/first-grade/",
       "keywords": {
         "phonics worksheets for first graders": [
@@ -811,14 +930,17 @@
           24
         ]
       },
-      "buildOn": "Add a 'first-grade' level to PLANS in src/lib/homeschool.ts and the WeekPack level picker."
+      "buildOn": "Add a 'first-grade' level to PLANS in src/lib/homeschool.ts and the WeekPack level picker.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "reading-stories",
       "status": "on-hold",
       "title": "Personalized decodable reading stories starring the child (member feature). Name swapped in on the device; AI writes stories with a {NAME} placeholder.",
       "buildOn": "On hold: Jesse said to hold off on AI reading stories for now (2026-10-13). Do not build.",
-      "hold": "On hold per Jesse (2026-10-13): no AI features for now. Concern: bots hitting an AI endpoint and running up cost. Before this comes back it needs a plan for bot protection, per-member rate limits and a hard monthly spend cap, and Jesse's go-ahead."
+      "hold": "On hold per Jesse (2026-10-13): no AI features for now. Concern: bots hitting an AI endpoint and running up cost. Before this comes back it needs a plan for bot protection, per-member rate limits and a hard monthly spend cap, and Jesse's go-ahead.",
+      "side": "program"
     },
     {
       "id": "faith-track",
@@ -849,7 +971,8 @@
       "done": "2026-10-13",
       "urls": [
         "/homeschool/christian/"
-      ]
+      ],
+      "side": "program"
     },
     {
       "id": "faith-first-grade-verses",
@@ -857,8 +980,10 @@
       "needs": [
         "first-grade-plan"
       ],
-      "title": "Extend the faith track to the first grade plan: 36 longer BSB verses for copywork",
-      "buildOn": "Add verses to src/data/verses.json keyed by level, or a second list. Berean Standard Bible only (public domain, easy modern English). Do not use NIV, ESV or other copyrighted translations."
+      "title": "Program (members): Extend the faith track to the first grade plan: 36 longer BSB verses for copywork",
+      "buildOn": "Add verses to src/data/verses.json keyed by level, or a second list. Berean Standard Bible only (public domain, easy modern English). Do not use NIV, ESV or other copyrighted translations.",
+      "side": "program",
+      "note": "Member work since Oct 24, 2026: weeks 2 to 36 of the packs are for members; week 1 stays free. If the page type works on its own, a one-page free version can be a separate free item."
     },
     {
       "id": "bible-verse-copywork-page",
@@ -880,7 +1005,8 @@
           18
         ]
       },
-      "buildOn": "Small volume but buyer-friendly audience; reuse versePage() and the cursive tool. Check volume again before building."
+      "buildOn": "Small volume but buyer-friendly audience; reuse versePage() and the cursive tool. Check volume again before building.",
+      "side": "free"
     }
   ]
 }

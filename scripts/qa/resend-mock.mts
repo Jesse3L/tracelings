@@ -236,6 +236,20 @@ http.createServer(async (req, res) => {
   }
   if (p === '/broadcasts' && m === 'GET') return send(res, 200, page(u, S.broadcasts.map(({ html, text, ...x }) => x)));
   if (seg[0] === 'broadcasts' && seg.length === 2 && m === 'GET') { const x = S.broadcasts.find((y) => y.id === seg[1]); return x ? send(res, 200, { object: 'broadcast', ...x }) : err(res, 404, 'not_found', 'Broadcast not found'); }
+  if (seg[0] === 'broadcasts' && seg.length === 2 && m === 'PATCH') {
+    const x = S.broadcasts.find((y) => y.id === seg[1]); if (!x) return err(res, 404, 'not_found', 'Broadcast not found');
+    if (x.status !== 'draft') return err(res, 422, 'validation_error', 'only drafts can be updated');
+    if (b.reply_to !== undefined && !Array.isArray(b.reply_to)) return err(res, 422, 'validation_error', 'reply_to must be an array');
+    if ('send' in b || 'scheduled_at' in b) return err(res, 422, 'validation_error', 'send is not an update field');
+    Object.assign(x, b, { updated_at: now() }); return send(res, 200, { object: 'broadcast', id: x.id });
+  }
+  if (seg[0] === 'broadcasts' && seg[2] === 'cancel' && m === 'POST') {
+    const x = S.broadcasts.find((y) => y.id === seg[1]); if (!x) return err(res, 404, 'not_found', 'Broadcast not found');
+    if (x.status === 'scheduled') { x.status = 'draft'; x.scheduled_at = null; }
+    else if (x.status === 'queued') x.status = 'canceled';
+    else return err(res, 422, 'validation_error', `cannot cancel a ${x.status} broadcast`);
+    return send(res, 200, { object: 'broadcast', id: x.id });
+  }
   if (seg[0] === 'broadcasts' && seg[2] === 'send' && m === 'POST') {
     const x = S.broadcasts.find((y) => y.id === seg[1]); if (!x) return err(res, 404, 'not_found', 'Broadcast not found');
     if (x.status !== 'draft') return err(res, 422, 'validation_error', 'not a draft');

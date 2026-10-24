@@ -1,24 +1,30 @@
 ---
-// The full 36-week plan as a table. Each row opens that week in the pack maker above (#pack).
+// The full 36-week plan as a readable outline: what each week teaches. Week 1 opens the free pack (#pack);
+// the other weeks are part of the membership, so they are text here, not print links.
 import { PLANS, weekSummary, type Level } from '../../lib/homeschool';
+import { FREE_WEEKS } from '../../lib/homeschoolAccess';
 interface Props { level: Level }
 const plan = PLANS[Astro.props.level];
 ---
 <div class="mt-5 overflow-x-auto rounded-xl border border-hairline bg-white">
   <table class="w-full min-w-[560px] text-left text-[15px]">
+    <caption class="sr-only">{plan.label} plan, all {plan.weeks.length} weeks</caption>
     <thead>
       <tr class="border-b border-hairline">
-        <th scope="col" class="p-3 font-bold w-20">Week</th>
+        <th scope="col" class="w-20 p-3 font-bold">Week</th>
         <th scope="col" class="p-3 font-bold">Focus</th>
-        <th scope="col" class="p-3 font-bold">What's in the pack</th>
+        <th scope="col" class="p-3 font-bold">What your child works on</th>
       </tr>
     </thead>
     <tbody>
       {plan.weeks.map((w) => (
-        <tr class="border-b border-hairline last:border-0 align-top">
+        <tr class="border-b border-hairline align-top last:border-0">
           <td class="p-3 text-muted">{w.n}</td>
-          <td class="p-3"><a href={`?week=${w.n}#pack`} class="font-bold text-[#2f5fc4] underline underline-offset-2">{w.title}</a></td>
-          <td class="p-3 text-muted">{weekSummary(w)}{w.family && <> <a href={`/word-families/${w.family}/`} class="text-[#2f5fc4] underline underline-offset-2 whitespace-nowrap">-{w.family} worksheets</a></>}{w.families && <> <span class="whitespace-nowrap">Worksheets:</span> {w.families.map((f, i) => <>{i > 0 && ', '}<a href={`/word-families/${f}/`} class="text-[#2f5fc4] underline underline-offset-2 whitespace-nowrap">-{f}</a></>)}</>}</td>
+          <td class="p-3">
+            <span class="font-bold text-ink">{w.title}</span>
+            {w.n <= FREE_WEEKS && <a href="#pack" class="mt-1 block text-[13px] font-bold text-[#1f7a50] underline underline-offset-2">Free: print this week</a>}
+          </td>
+          <td class="p-3 text-muted">{weekSummary(w)}{w.family && <> <a href={`/word-families/${w.family}/`} class="whitespace-nowrap text-[#2f5fc4] underline underline-offset-2">free -{w.family} worksheets</a></>}{w.families && <> <span class="whitespace-nowrap">Free worksheets:</span> {w.families.map((f, i) => <>{i > 0 && ', '}<a href={`/word-families/${f}/`} class="whitespace-nowrap text-[#2f5fc4] underline underline-offset-2">-{f}</a></>)}</>}</td>
         </tr>
       ))}
     </tbody>

@@ -449,7 +449,7 @@ function OfflineWeek({ local, paper, setPaper, font }: { local: { children: Chil
   if (!kid || !plan) {
     return (
       <div class="rounded-xl border border-hairline bg-white p-5 sm:p-6 text-[15px]">
-        <p class="text-muted">No kids are saved on this device yet. Meanwhile, the free <a href="/homeschool/" class={link}>36-week homeschool plans</a> have every week ready to print.</p>
+        <p class="text-muted">No kids are saved on this device yet. Meanwhile, every week of the <a href="/homeschool/" class={link}>36-week homeschool plans</a> is ready to print with your membership.</p>
       </div>
     );
   }

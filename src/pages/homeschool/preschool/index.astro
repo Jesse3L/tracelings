@@ -1,39 +1,41 @@
 ---
 import { faqText } from '../../../lib/seo';
-import Preview from '../../../components/site/Preview.astro';
 import Base from '../../../layouts/Base.astro';
-import ProgramBanner from '../../../components/site/ProgramBanner.astro';
 import WeekPack, { WeeklyEmail } from '../../../components/WeekPack.tsx';
+import StartCta from '../../../components/homeschool/StartCta.tsx';
 import PlanWeeks from '../../../components/homeschool/PlanWeeks.astro';
+import SamplePages from '../../../components/homeschool/SamplePages.astro';
+import FreeTools from '../../../components/homeschool/FreeTools.astro';
 import Faqs from '../../../components/homeschool/Faqs.astro';
 import { SITE } from '../../../config';
 import { LETTER_ORDER } from '../../../lib/homeschool';
 
 const url = new URL('/homeschool/preschool/', SITE.url).href;
-const title = `Free Homeschool Preschool Curriculum (36 Weeks) | ${SITE.name}`;
-const description = 'A free homeschool preschool curriculum: 36 weeks of letters, numbers and name practice, with a printable weekly pack made with your child’s name.';
+const title = `Homeschool Preschool Curriculum: Week 1 Free | ${SITE.name}`;
+const description = 'A 36-week homeschool preschool curriculum for ages 3 to 5: letters, numbers and name practice, about 15 minutes a day. Week 1 is free to print.';
 
 const faqs = [
   { q: 'What age is this preschool curriculum for?', a: 'It suits many kids ages 3 to 5, including the pre-kindergarten year. Three year olds often do best with the coloring and hunt pages and lots of help with tracing. Four and five year olds usually trace more on their own.' },
   { q: 'How long does each day take?', a: 'About 10 to 15 minutes for the page, plus whatever you do away from the paper. Short and regular beats long and rare at this age. Stop while it is still fun.' },
-  { q: 'Do I need to buy anything?', a: 'No. The weekly packs are free to print. You only need paper, crayons, a pencil and a few small things to count.' },
-  { q: 'What if my child already knows some letters?', a: 'Start at any week. Many families skip ahead to the first letter their child doesn’t know yet, or use the review weeks to check what has stuck.' },
+  { q: 'Is the preschool curriculum free?', a: 'Week 1 is free to print, and every one-page tool on Tracelings stays free, like letter tracing, bubble letters and the pre-K math worksheets. The full 36-week plan is part of Tracelings at Home, $14.99 a month or $99 a year, which also builds a plan around your child.', html: 'Week 1 is free to print, and every one-page tool on Tracelings stays free, like <a href="/letter-tracing/">letter tracing</a>, <a href="/bubble-letters/">bubble letters</a> and the <a href="/math-worksheets/pre-k/">pre-K math worksheets</a>. The full 36-week plan is part of <a href="/membership/">Tracelings at Home</a>, $14.99 a month or $99 a year, which also builds a plan around your child.' },
+  { q: 'Do I need to buy anything else?', a: 'No. You only need a printer, paper, crayons, a pencil and a few small things to count, like blocks or buttons.' },
+  { q: 'What if my child already knows some letters?', a: 'The free placement check skips what your child already knows and starts them at the right week. Many families also use the review weeks to check what has stuck.' },
   { q: 'What if my child can’t trace yet?', a: 'That’s common at 3. Let them trace with a finger, color the bubble letters, and do the hunt by pointing. Pencil control often comes somewhere between 3 and 5. If you have concerns, ask your child’s pediatrician.' },
-  { q: 'Is there a math curriculum in the preschool plan?', a: 'Yes. Every week has a number of the week, from 1 to 10 in the first 20 weeks and 11 to 20 after that. Thursday has a counting page, and you can tick the extra math page box for a second page on the same number. Both are free.' },
-  { q: 'Is there a plan for kindergarten too?', a: 'Yes. The free kindergarten plan picks up with two letters a week, then word families, sight words and early addition.', html: 'Yes. The free <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> picks up with two letters a week, then word families, sight words and early addition.' },
+  { q: 'Is there a math curriculum in the preschool plan?', a: 'Yes. Every week has a number of the week, from 1 to 10 in the first 20 weeks and 11 to 20 after that. Thursday has a counting page, and you can add an extra find the number page for the same number.' },
+  { q: 'Is there a plan for kindergarten too?', a: 'Yes. The kindergarten plan picks up with two letters a week, then word families, sight words and early addition. Both plans come with the membership.', html: 'Yes. The <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> picks up with two letters a week, then word families, sight words and early addition. Both plans come with the membership.' },
 ];
 
 const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'LearningResource',
-    name: 'Free homeschool preschool curriculum (36 weeks)',
+    name: 'Homeschool preschool curriculum (36 weeks)',
     url,
     learningResourceType: 'Curriculum',
     educationalLevel: 'Preschool, Pre-kindergarten',
     teaches: 'Letter recognition, letter sounds, handwriting, counting to 20',
     timeRequired: 'P36W',
-    isAccessibleForFree: true,
+    isAccessibleForFree: false,
     inLanguage: 'en-US',
     description,
   },
@@ -52,6 +54,12 @@ const schema = [
     mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
   },
 ];
+const facts = [
+  { k: 'Ages', v: '3 to 5' },
+  { k: 'Time', v: '10 to 15 min a day' },
+  { k: 'Length', v: '36 weeks' },
+  { k: 'Try it', v: 'Week 1 free' },
+];
 ---
 <Base title={title} description={description} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -59,19 +67,24 @@ const schema = [
       <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Preschool</span>
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
-      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free homeschool preschool curriculum: a 36-week plan</span></h1>
-      <p class="mt-4 text-lg text-muted">One letter a week, one number a week, and their own name all year. Type your child's name and print the week.</p>
+      <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Tracelings at Home</p>
+      <h1 class="mt-2 text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Homeschool preschool curriculum: a 36-week plan</span></h1>
+      <p class="mt-4 text-lg text-muted">One letter a week, one number a week, and their own name all year, in short daily pages made with your child's name. Week 1 is free. The full plan is part of the membership.</p>
+      <div class="mt-6"><StartCta client:load level="pre-k" /></div>
     </header>
 
-    <div id="pack" class="scroll-mt-24">
-      <WeekPack client:load level="pre-k" fixedLevel source="homeschool-prek" />
-    </div>
-    <Preview k={'homeschool-prek'} caption={'Example: the plan page from week 2, letter S.'} />
-    <ProgramBanner />
+    <dl class="grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+      {facts.map((f) => (
+        <div class="rounded-xl border border-hairline bg-white p-4">
+          <dt class="text-[13px] font-bold uppercase tracking-wider text-muted">{f.k}</dt>
+          <dd class="mt-1 font-bold text-ink">{f.v}</dd>
+        </div>
+      ))}
+    </dl>
 
-    <article class="prose-tl max-w-[68ch] mt-14">
+    <article class="prose-tl max-w-[68ch] mt-12">
       <p class="text-[1.15rem]!">
-        This free homeschool preschool curriculum gives you 36 weeks of short, playful lessons for ages 3 to 5. Each week has a printable
+        This homeschool preschool curriculum gives you 36 weeks of short, playful lessons for ages 3 to 5. Each week has a printable
         pack with your child's name on it: a plan page for you, then a letter page, a letter hunt, a bubble letter to color, a counting page
         and a name tracing page. It works well as a pre-kindergarten homeschool curriculum, or as a gentle start for younger preschoolers.
       </p>
@@ -80,20 +93,36 @@ const schema = [
       <ul>
         <li><strong>Week 1, their name:</strong> name tracing, a coloring page of their name, and a hunt for the letters in it.</li>
         <li><strong>Weeks 2 to 36, letters:</strong> one letter a week in this order: {LETTER_ORDER.map((l) => l.toUpperCase()).join(', ')}. A review week follows every three letters.</li>
-        <li><strong>Numbers:</strong> numbers 1 to 10 in the first 20 weeks, then 11 to 20, with a counting page every Thursday (more on that below). For extra practice, make more <a href="/math-worksheets/pre-k/">pre-K math worksheets</a> for the same numbers.</li>
+        <li><strong>Numbers:</strong> numbers 1 to 10 in the first 20 weeks, then 11 to 20, with a counting page every Thursday. For extra practice, make free <a href="/math-worksheets/pre-k/">pre-K math worksheets</a> for the same numbers.</li>
         <li><strong>Fine motor work:</strong> coloring, circling and tracing every day, which builds the hand strength writing needs.</li>
       </ul>
 
+      <h2>How much time it takes each day</h2>
+      <p>Most days take 10 to 15 minutes at the table. A typical day looks like this:</p>
+      <ol>
+        <li><strong>2 minutes:</strong> say the letter's sound and name three things that start with it.</li>
+        <li><strong>10 minutes:</strong> do the day's page together. Sit beside them and trace the first row with your finger before they use a pencil.</li>
+        <li><strong>3 minutes:</strong> one idea from the "away from the paper" list on the plan page, like a sound hunt or a letter drawn in salt.</li>
+      </ol>
+      <p>Pair it with a picture book at bedtime and you've covered the core of a preschool day.</p>
+    </article>
+
+    <section class="mt-10" aria-labelledby="samples-h">
+      <h2 id="samples-h" class="text-[1.6rem] font-bold">Sample pages</h2>
+      <p class="mt-2 max-w-2xl text-muted">Real pages from the plan. Each one prints in black and white with your child's name.</p>
+      <SamplePages items={[
+        { k: 'homeschool-prek', caption: 'The plan page for week 2, letter S: what to do each day.' },
+        { k: 'lotw-s', caption: 'A letter hunt: find and circle every S and s.' },
+        { k: 'prek-math', caption: 'A counting page like the Thursday math page.' },
+      ]} />
+    </section>
+
+    <article class="prose-tl max-w-[68ch] mt-12">
       <h2>The preschool math curriculum, one number a week</h2>
       <p>
         Thursday is math day. Each week has a number of the week, and the plan moves slowly on purpose: every number from 1 to 10 gets two
         weeks, then weeks 21 to 36 work through 11 to 20. Thursday's page has kids trace the number, count dots in a ten frame and color
-        that many stars.
-      </p>
-      <p>
-        Want a second math page? Tick <strong>Extra math page</strong> in the pack maker above. It adds a free find the number page:
-        six boxes of shapes, and your child circles every box with the number of the week. The other boxes are one or two off, so each one
-        has to be counted, not guessed. It works on Thursday after the main page, or on any other day.
+        that many stars. An optional find the number page adds six boxes of shapes, and your child circles every box with the number of the week.
       </p>
       <ul>
         <li><strong>Weeks 1 to 20, numbers 1 to 10:</strong> count small groups, touch each thing once, and say the last number as "how many."</li>
@@ -102,17 +131,9 @@ const schema = [
       </ul>
       <p>
         Many kids count 10 objects somewhere between 3 and 5, and the teen numbers often come later. If you have concerns, ask your child's
-        teacher or pediatrician. For more practice on the same number, make extra <a href="/math-worksheets/pre-k/?type=find-number">find the number worksheets</a> or
+        teacher or pediatrician. For more practice on the same number, make free <a href="/math-worksheets/pre-k/?type=find-number">find the number worksheets</a> or
         a <a href="/math-worksheets/ten-frames/">ten frame printable</a> to use with counters.
       </p>
-
-      <h2>A sample day</h2>
-      <ol>
-        <li><strong>2 minutes:</strong> say the letter's sound and name three things that start with it.</li>
-        <li><strong>10 minutes:</strong> do the day's page together. Sit beside them and trace the first row with your finger before they use a pencil.</li>
-        <li><strong>3 minutes:</strong> one idea from the "away from the paper" list on the plan page, like a sound hunt or a letter drawn in salt.</li>
-      </ol>
-      <p>Pair it with a picture book at bedtime and you've covered the core of a preschool day.</p>
 
       <h2>Homeschool preschool for 3 year olds and 4 year olds</h2>
       <p>
@@ -120,27 +141,22 @@ const schema = [
         starting dots make tracing easier. Four year olds usually move to tracing whole rows and start writing a few letters on their own.
         Kids develop at different speeds, so use the plan as a menu, not a checklist.
       </p>
-      <p>
-        Want extra practice on one letter? Every letter has its own <a href="/letter-tracing/">letter tracing worksheet</a> and
-        a <a href="/bubble-letters/">bubble letter</a> to color. For name practice beyond Fridays,
-        the <a href="/name-tracing/">name tracing worksheet maker</a> lets you change the letter style and line size.
-      </p>
 
       <h2>Want a Bible verse each week?</h2>
-      <p>Tick the faith track box above to add a Bible verse to every week, in easy modern English, with a short phrase to trace. All 36 verses are on the <a href="/homeschool/christian/">Christian homeschool preschool curriculum</a> page.</p>
+      <p>The faith track adds a Bible verse to every week, in easy modern English, with a short phrase to trace. All 36 verses are on the <a href="/homeschool/christian/">Christian homeschool preschool curriculum</a> page.</p>
 
-      <h2>All 36 weeks</h2>
-      <p>Tap any week to open its pack above.</p>
+      <h2>All 36 weeks of the preschool plan</h2>
+      <p>Here is the whole year. Week 1 is free to print below. Weeks 2 to 36 come with the membership.</p>
     </article>
     <div class="max-w-4xl"><PlanWeeks level="pre-k" /></div>
 
-    <aside class="mt-12 rounded-xl border border-hairline bg-white p-5 sm:p-6 max-w-3xl" aria-label="Personalized program">
+    <section id="pack" class="mt-14 scroll-mt-24" aria-labelledby="pack-h">
+      <h2 id="pack-h" class="text-[1.6rem] font-bold">Print week 1 free</h2>
+      <p class="mt-2 mb-6 max-w-2xl text-muted">Want to start today? Type your child's name and print week 1 of the standard plan. For a week themed on what your child loves, use the <a href="/program/?level=pre-k#placement" class="text-[#2f5fc4] underline underline-offset-2">free placement check</a> instead.</p>
+      <WeekPack client:load level="pre-k" fixedLevel source="homeschool-prek" />
+    </section>
 
-      <p class="font-bold text-lg text-ink">Not sure where to start?</p>
-
-      <p class="mt-1 text-muted leading-relaxed">Take the free 5-minute placement check. It finds the right starting week, skips what your child already knows, and themes the pages around what they love, like dinosaurs or unicorns. See the <a href="/program/" class="text-[#2f5fc4] underline underline-offset-2">personalized homeschool program</a>.</p>
-
-    </aside>
+    <FreeTools />
 
     <section class="mt-12 max-w-xl">
       <WeeklyEmail client:visible level="pre-k" />
@@ -149,6 +165,12 @@ const schema = [
     <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
       <h2 id="faq-h">Questions about the preschool plan</h2>
       <Faqs faqs={faqs} />
+    </section>
+
+    <section class="mt-12 max-w-3xl rounded-2xl border border-hairline bg-white p-6 sm:p-8" aria-labelledby="start-h">
+      <h2 id="start-h" class="text-[1.5rem] font-bold">Start with a free week</h2>
+      <p class="mt-2 mb-5 text-muted">Take the 5-minute placement check, see your child's whole year, and print week 1 themed on what they love.</p>
+      <StartCta client:visible level="pre-k" />
     </section>
   </div>
 </Base>
