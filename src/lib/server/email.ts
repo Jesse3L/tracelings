@@ -163,3 +163,34 @@ export async function markMember(email: string, timeoutMs = 2500): Promise<'tagg
     return 'failed';
   }
 }
+
+export interface BackfillResult { checked: number; eligible: number; started: number; failed: number; dry_run: boolean }
+
+/**
+ * Starts the welcome series for sign-ups that arrived while the automations were switched off. Picks contacts that
+ * signed up on the site (not the import) on or after `since`, are subscribed, not members, and have never started or
+ * finished the series (welcome_status 'none'). Marks each with welcome_status 'started' so a second run skips them.
+ */
+export async function welcomeBackfill(since: string, dryRun: boolean): Promise<BackfillResult> {
+  const all = await listAll<Contact & { id: string; email: string; unsubscribed?: boolean }>('/contacts', 5000);
+  const out: BackfillResult = { checked: all.length, eligible: 0, started: 0, failed: 0, dry_run: dryRun };
+  for (const listed of all) {
+    // The list endpoint may leave out properties; fetch the full contact when it does.
+    const c = listed.properties ? listed : ((await rs<any>(`/contacts/${enc(listed.id)}`).catch(() => null)) ?? listed);
+    const source = prop(c, 'source') ?? '';
+    const status = prop(c, 'welcome_status') ?? 'none';
+    const date = prop(c, 'signup_date') ?? '';
+    if (c.unsubscribed || !source || source.startsWith('import') || prop(c, 'member') === 'true') continue;
+    if (status !== 'none' || !date || date < since) continue;
+    out.eligible++;
+    if (dryRun) continue;
+    const variant = prop(c, 'audience') === 'teacher' ? 'teacher' : (prop(c, 'interest') as any) ?? interestFor(source);
+    try {
+      await rs(`/contacts/${enc(c.id)}`, { method: 'PATCH', body: { properties: { welcome_status: 'started' } } });
+      await rs('/events/send', { body: { event: welcomeEvent(variant), contact_id: c.id, payload: { source } } });
+      out.started++;
+    } catch { out.failed++; }
+    await new Promise((r) => setTimeout(r, 150));
+  }
+  return out;
+}

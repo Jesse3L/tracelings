@@ -3,7 +3,7 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { json, cleanEmail } from '../../../lib/server/session';
 import { rateLimited } from '../../../lib/server/programApi';
 import { resendConfigured, ResendError } from '../../../lib/server/resend';
-import { importContacts } from '../../../lib/server/email';
+import { importContacts, welcomeBackfill } from '../../../lib/server/email';
 import { domainCreate, domainStatus, domainVerify, setup, setAutomations, broadcastCreate, broadcastSend, testSend, stats, isLaunchKey } from '../../../lib/server/emailAdmin';
 import { SEGMENTS, type SegmentKey } from '../../../lib/email/audience';
 import { allTemplates } from '../../../lib/email/templates';
@@ -101,10 +101,15 @@ export const POST: APIRoute = async ({ request }) => {
         return json(200, { templates: Object.entries(allTemplates()).map(([k, t]) => ({ key: k, subject: t.subject, preview: t.preview })) });
       case 'stats':
         return json(200, await stats());
+      case 'welcome-backfill': {
+        const since = typeof body.since === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.since) ? body.since : '';
+        if (!since) return json(400, { error: 'since_required', hint: '"since": "YYYY-MM-DD"' });
+        return json(200, await welcomeBackfill(since, body.confirm !== 'START'));
+      }
       case 'inbound-webhook':
         return json(200, await ensureInboundWebhook('https://tracelings.com/api/email/inbound/'));
       default:
-        return json(400, { error: 'unknown_action', actions: ['domain-create', 'domain-status', 'domain-verify', 'setup', 'automations-enable', 'automations-disable', 'import', 'broadcast-create', 'broadcast-send', 'test-send', 'templates', 'stats', 'inbound-webhook'] });
+        return json(400, { error: 'unknown_action', actions: ['domain-create', 'domain-status', 'domain-verify', 'setup', 'automations-enable', 'automations-disable', 'import', 'broadcast-create', 'broadcast-send', 'test-send', 'templates', 'stats', 'inbound-webhook', 'welcome-backfill'] });
     }
   } catch (e) {
     if (e instanceof ResendError) return json(e.status >= 400 && e.status < 500 ? e.status : 502, { error: 'resend', code: e.code, status: e.status, message: e.message });
