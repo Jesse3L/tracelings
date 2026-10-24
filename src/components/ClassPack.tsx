@@ -5,6 +5,7 @@ import { loadFont, type LoadedFont } from '../lib/fontshape';
 import { buildCursiveSheet } from '../lib/cursive';
 import { buildColoringPage, type Theme } from '../lib/coloring';
 import { savePdf } from '../lib/download';
+import { whatLabel, kids } from '../lib/what';
 import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
 import RosterPanel from './RosterPanel';
@@ -68,7 +69,7 @@ export default function ClassPack() {
       const pages: Page[] = [];
       if (order === 'child') for (const n of names) for (const k of kinds) pages.push(pageFor(k, n)!);
       else for (const k of kinds) for (const n of names) pages.push(pageFor(k, n)!);
-      await savePdf(pages, 'class-pack.pdf', 'Class pack: name tracing, cursive and coloring');
+      await savePdf(pages, 'class-pack.pdf', 'Class pack: name tracing, cursive and coloring', whatLabel('Class pack', kinds.join(' + '), kids(names.length)));
       setDone(true);
     } catch {
       setError(true);

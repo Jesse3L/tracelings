@@ -4,6 +4,7 @@ import { toLatin, type LineSize, type Paper, type Practice } from '../../lib/she
 import { buildWordPages, cleanTraceText } from '../../lib/rowSheet';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
+import { wordTracingWhat } from '../../lib/what';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import { Segmented } from '../Tracer';
@@ -44,7 +45,7 @@ export default function Seo2WordTracing(props: { source?: string; preset?: strin
   async function save() {
     setBusy(true);
     try {
-      await savePdf(pages, `${slug}-tracing-worksheet.pdf`, 'Word tracing worksheet');
+      await savePdf(pages, `${slug}-tracing-worksheet.pdf`, 'Word tracing worksheet', wordTracingWhat({ text, lines: lines.length, examples: EXAMPLES, preset: props.preset, size }));
       setDone(true);
     } finally {
       setBusy(false);

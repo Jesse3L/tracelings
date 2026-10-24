@@ -4,6 +4,7 @@ import type { Paper } from '../../lib/sheet';
 import { buildCursiveChart } from '../../lib/alphabetChart';
 import { loadFont } from '../../lib/fontshape';
 import { savePdf } from '../../lib/download';
+import { whatLabel } from '../../lib/what';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import EmailGate from '../EmailGate';
@@ -23,7 +24,7 @@ export default function Seo2ChartButton(props: { source?: string }) {
     setFailed(false);
     try {
       const font = await loadFont('cursive');
-      await savePdf([buildCursiveChart(font, { paper, letters: 'pairs', credit: !member.member })], 'cursive-alphabet-chart.pdf', 'Cursive alphabet chart');
+      await savePdf([buildCursiveChart(font, { paper, letters: 'pairs', credit: !member.member })], 'cursive-alphabet-chart.pdf', 'Cursive alphabet chart', whatLabel('Cursive alphabet chart', 'capitals and lowercase'));
       setDone(true);
     } catch {
       setFailed(true);

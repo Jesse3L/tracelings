@@ -5,6 +5,7 @@ import { loadFont, type LoadedFont } from '../../lib/fontshape';
 import { buildCursiveSheet } from '../../lib/cursive';
 import { needsEmail } from '../../lib/gate';
 import { savePdf } from '../../lib/download';
+import { whatLabel, sizeWord } from '../../lib/what';
 import { useMember } from '../../lib/member';
 import { Segmented } from '../Tracer';
 import EmailGate from '../EmailGate';
@@ -41,8 +42,8 @@ export default function Seo2CursiveAlphabet(props: { source?: string }) {
     if (!font) return;
     setBusy(which);
     try {
-      if (which === 'all') await savePdf(CURSIVE_SETS.map((s) => build(s.text)), 'cursive-alphabet-a-to-z-worksheets.pdf', 'Cursive alphabet worksheets A to Z');
-      else await savePdf([build(CURSIVE_SETS[set].text)], `cursive-alphabet-${CURSIVE_SETS[set].label.toLowerCase().replace(/\s+/g, '-')}.pdf`, `Cursive alphabet ${CURSIVE_SETS[set].label}`);
+      if (which === 'all') await savePdf(CURSIVE_SETS.map((s) => build(s.text)), 'cursive-alphabet-a-to-z-worksheets.pdf', 'Cursive alphabet worksheets A to Z', whatLabel('Cursive alphabet', 'A to Z', sizeWord(size)));
+      else await savePdf([build(CURSIVE_SETS[set].text)], `cursive-alphabet-${CURSIVE_SETS[set].label.toLowerCase().replace(/\s+/g, '-')}.pdf`, `Cursive alphabet ${CURSIVE_SETS[set].label}`, whatLabel('Cursive alphabet', CURSIVE_SETS[set].label, sizeWord(size)));
       setDone(true);
     } finally {
       setBusy('');

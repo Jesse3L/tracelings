@@ -4,6 +4,7 @@ import { buildPrintChart, buildCursiveChart, type ChartLetters } from '../../lib
 import { loadFont, type LoadedFont } from '../../lib/fontshape';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
+import { whatLabel, caseWord } from '../../lib/what';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import { Segmented } from '../Tracer';
@@ -40,7 +41,7 @@ export default function Seo2AlphabetChart(props: { source?: string; defaultStyle
     setBusy(true);
     try {
       const which = letters === 'upper' ? '-uppercase' : letters === 'lower' ? '-lowercase' : '';
-      await savePdf([page], `${style === 'cursive' ? 'cursive-' : ''}alphabet-chart${which}.pdf`, style === 'cursive' ? 'Cursive alphabet chart' : 'Alphabet chart');
+      await savePdf([page], `${style === 'cursive' ? 'cursive-' : ''}alphabet-chart${which}.pdf`, style === 'cursive' ? 'Cursive alphabet chart' : 'Alphabet chart', whatLabel(style === 'cursive' ? 'Cursive alphabet chart' : 'Alphabet chart', caseWord(letters), style === 'print' && startDots && 'start dots'));
       setDone(true);
     } finally {
       setBusy(false);

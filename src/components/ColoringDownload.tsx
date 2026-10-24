@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks';
 import { useHydrated } from '../lib/hydrated';
 import { needsEmail, countDownload } from '../lib/gate';
+import { coloringWhat } from '../lib/what';
 import { PAPER, type Paper } from '../lib/sheet';
 import { SITE } from '../config';
 import EmailGate from './EmailGate';
@@ -46,7 +47,7 @@ export default function ColoringDownload(props: { src: string; slug: string; tit
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      countDownload(1);
+      countDownload(1, coloringWhat(props.title));
       setDone(true);
     } catch {
       setError(true);

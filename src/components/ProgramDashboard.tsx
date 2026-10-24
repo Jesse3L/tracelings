@@ -10,6 +10,7 @@ import { loadFont, type LoadedFont } from '../lib/fontshape';
 import { buildProgressReport, SKILL_LABELS } from '../lib/program/report';
 import { PLANS } from '../lib/homeschool';
 import { savePdf } from '../lib/download';
+import { whatLabel } from '../lib/what';
 import { pageToSvg, imagesIn, loadImages } from '../lib/render';
 import type { Page } from '../lib/sheet';
 
@@ -180,7 +181,7 @@ export default function ProgramDashboard() {
       // Show the picture book sheets on screen too.
       setBook(pages.filter((pg) => pg.items.some((it) => it.kind === 'image')));
       const title = `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`;
-      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, title);
+      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, title, whatLabel('Personalized plan', `${PLANS[wk.level].label} week ${wk.index}`, weekTitle(wk), redo && 'new story'));
       const notes: Record<string, string> = {
         'redo-limit': 'You’ve used both new stories for this week, so this is the last one made.',
         'not-yet': 'This week prints with our ready-made story for now. Its personal story is made when the plan reaches it.',
@@ -232,7 +233,7 @@ export default function ProgramDashboard() {
     if (!kid || !plan || !fam) return;
     setBusy('report');
     try {
-      await savePdf(buildProgressReport({ name, profile: kid.profile, plan, checkIns: fam.checkIns, paper, credit: false }), `${name ? `${slug(name)}-` : ''}progress-report.pdf`, 'Progress report');
+      await savePdf(buildProgressReport({ name, profile: kid.profile, plan, checkIns: fam.checkIns, paper, credit: false }), `${name ? `${slug(name)}-` : ''}progress-report.pdf`, 'Progress report', whatLabel('Personalized plan', 'progress report'));
     } finally { setBusy(''); }
   }
 
@@ -462,7 +463,7 @@ function OfflineWeek({ local, paper, setPaper, font }: { local: { children: Chil
       await loadThemeIcons([wk.theme]);
       const pages = buildProgramWeek({ name, profile: kid, week: wk, content: templateContentFor(kid, wk), paper, credit: false, bubble: font, planLength: plan!.weeks.length });
       await loadImages(imagesIn(pages));
-      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`);
+      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`, whatLabel('Personalized plan', `${PLANS[wk.level].label} week ${wk.index}`, weekTitle(wk), 'ready-made story'));
       setMsg({ kind: 'ok', text: 'Your PDF is downloading. It uses our ready-made themed story; personal stories come back when your saved plans do.' });
     } catch {
       setMsg({ kind: 'error', text: 'The PDF didn’t build. Please try again.' });

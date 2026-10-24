@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { notify, placeFrom } from '../../lib/server/notify';
 import { addSignup } from '../../lib/server/email';
+import { recordEvent } from '../../lib/server/events';
 
 export const prerender = false;
 
@@ -25,6 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
   const role = typeof data.role === 'string' && ROLES.has(data.role) ? data.role : '';
   const place = placeFrom(request);
 
+  // The digest record (lib/server/events.ts) always resolves within a short timeout, so it never holds up the sign-up.
   const [sheet, resend] = await Promise.all([
     notify(
       source === 'waitlist' ? 'New waitlist sign-up' : 'New email sign-up',
@@ -33,6 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
       { event: source === 'waitlist' ? 'waitlist_signup' : 'email_signup', email, source, role: role || null, place: place || null },
     ),
     addSignup(email, source, role || undefined).catch(() => ({ saved: false })),
+    recordEvent('signups', { email, source }),
   ]);
   return sheet || resend.saved ? json(200, { ok: true }) : json(503, { error: 'not_configured' });
 };

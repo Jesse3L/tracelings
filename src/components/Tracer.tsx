@@ -3,6 +3,7 @@ import { useHydrated } from '../lib/hydrated';
 import { buildSheet, rowKinds, styleName, nameNote, type LetterStyle, type LineSize, type Page, type Paper, type Practice } from '../lib/sheet';
 import { pageToSvg, pagesToPdf } from '../lib/render';
 import { needsEmail, countDownload } from '../lib/gate';
+import { tracerWhat } from '../lib/what';
 import EmailGate from './EmailGate';
 import { useMember } from '../lib/member';
 import WordChips from './WordChips';
@@ -146,7 +147,8 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
-      countDownload(mode === 'words' ? pages.length : listPages.length || 1);
+      countDownload(mode === 'words' ? pages.length : listPages.length || 1,
+        tracerWhat({ mode, value, style, letterCase, size, practice, list: listPages.length, group: props.value, chosen: chosen.length, total: allWords.length }));
       setDone(true);
     } finally {
       setBusy(false);
