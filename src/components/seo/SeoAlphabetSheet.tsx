@@ -3,6 +3,7 @@ import { useHydrated } from '../../lib/hydrated';
 import { buildSheet, rowKinds, type LineSize, type Page, type Paper } from '../../lib/sheet';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
+import { whatLabel, caseWord, sizeWord } from '../../lib/what';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import { Segmented } from '../Tracer';
@@ -57,7 +58,7 @@ export default function SeoAlphabetSheet(props: { source?: string }) {
     setBusy(true);
     try {
       const name = letterCase === 'upper' ? 'uppercase' : letterCase === 'lower' ? 'lowercase' : 'alphabet';
-      await savePdf(pages, `${name}-a-to-z-tracing-worksheets.pdf`, 'Alphabet tracing worksheets A to Z');
+      await savePdf(pages, `${name}-a-to-z-tracing-worksheets.pdf`, 'Alphabet tracing worksheets A to Z', whatLabel('Alphabet tracing', 'A to Z', caseWord(letterCase), sizeWord(size)));
       setDone(true);
     } finally {
       setBusy(false);

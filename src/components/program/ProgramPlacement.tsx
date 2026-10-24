@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { Paper, Page } from '../../lib/sheet';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
+import { whatLabel } from '../../lib/what';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import { loadFont, type LoadedFont } from '../../lib/fontshape';
@@ -188,11 +189,11 @@ export default function ProgramPlacement() {
     try {
       if (kind === 'showme') {
         await loadThemeIcons([interests[0] ?? 'dinosaurs']);
-        await savePdf([showMePage(paper, interests[0] ?? 'dinosaurs')], 'tracelings-placement-check.pdf', 'Tracelings placement check');
+        await savePdf([showMePage(paper, interests[0] ?? 'dinosaurs')], 'tracelings-placement-check.pdf', 'Tracelings placement check', whatLabel('Personalized plan', 'placement check'));
         setDone('Downloaded the placement check. Tick what your child gets right, then come back to answer the questions.');
       } else if (week1 && plan) {
         const who = slug(name);
-        await savePdf(pages, `${who ? `${who}-` : ''}tracelings-week-1-${slug(THEMES[week1.theme].label)}.pdf`, `Tracelings at Home, personalized: week 1`);
+        await savePdf(pages, `${who ? `${who}-` : ''}tracelings-week-1-${slug(THEMES[week1.theme].label)}.pdf`, `Tracelings at Home, personalized: week 1`, whatLabel('Personalized plan', 'free week 1', `${THEMES[week1.theme].label.toLowerCase()} theme`));
         setDone(`Downloaded week 1. Print at 100% size, start with the plan page, and ${bigBook ? 'make the picture book together (cut, stack and staple)' : 'cut out the little book together'}.`);
       }
     } finally {

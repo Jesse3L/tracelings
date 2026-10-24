@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { squareConfigured, createCheckout, isSellable, PLANS } from '../../../lib/server/square';
 import { json, cleanEmail, setPending, sameOrigin } from '../../../lib/server/session';
 import { notify, placeFrom } from '../../../lib/server/notify';
+import { recordEvent } from '../../../lib/server/events';
 
 export const prerender = false;
 
@@ -18,7 +19,10 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
     const link = await createCheckout(plan, email, `${url.origin}/account/?welcome=1`);
     // Remember this checkout's order in this browser. Sign-in only trusts it once Square says that order is paid.
     if (link.orderId) setPending(cookies, email, link.orderId);
+    // Saved for the daily digest alongside the alert; recordEvent always resolves within a short timeout.
+    const saved = recordEvent('checkouts', { plan: PLANS[plan].label });
     await notify('Checkout started', `Someone opened Square checkout for ${PLANS[plan].label}.${placeFrom(request) ? `\nFrom: ${placeFrom(request)}` : ''}\nSquare emails you when a payment goes through.`, 'credit_card', { event: 'checkout_started', plan: PLANS[plan].label, place: placeFrom(request) || null });
+    await saved;
     return json(200, { url: link.url });
   } catch (e) {
     console.error('checkout failed', (e as Error).message);

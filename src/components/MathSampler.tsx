@@ -3,6 +3,7 @@ import { useHydrated } from '../lib/hydrated';
 import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
+import { whatLabel } from '../lib/what';
 import { needsEmail } from '../lib/gate';
 import { useMember } from '../lib/member';
 import { buildMathPage, type MathOptions } from '../lib/mathSheets';
@@ -42,7 +43,7 @@ export default function MathSampler(props: { source?: string }) {
     setBusy(true);
     try {
       const who = toLatin(name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      await savePdf(build(), `${who ? `${who}-` : ''}kindergarten-math-sampler.pdf`, 'Kindergarten math sampler');
+      await savePdf(build(), `${who ? `${who}-` : ''}kindergarten-math-sampler.pdf`, 'Kindergarten math sampler', whatLabel('Kindergarten math sampler', `${SAMPLER.length} pages`));
       setDone(`Downloaded ${SAMPLER.length} pages. Print at 100% size.`);
     } finally {
       setBusy(false);

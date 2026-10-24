@@ -3,6 +3,7 @@ import { useHydrated } from '../lib/hydrated';
 import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
+import { whatLabel, kids } from '../lib/what';
 import { needsEmail } from '../lib/gate';
 import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
@@ -71,7 +72,7 @@ export default function WordFamilySheets(props: { family?: string; source?: stri
         const who = slug(name);
         file = `${who ? `${who}-` : ''}${family}-word-family-${slug(kindLabel)}.pdf`;
       }
-      await savePdf(pages, file, `Word family -${family}: ${k === 'set' ? 'worksheets' : kindLabel.toLowerCase()}`);
+      await savePdf(pages, file, `Word family -${family}: ${k === 'set' ? 'worksheets' : kindLabel.toLowerCase()}`, whatLabel('Word families', `-${family}`, k === 'set' ? `set of ${pages.length}` : kindLabel.toLowerCase(), k === 'list' && kids(pages.length)));
       setDone(k === 'one' ? (random ? 'Downloaded. Print at 100% size. Tap "New words" for a fresh mix.' : 'Downloaded. Print at 100% size.') : `Downloaded ${pages.length} pages.`);
     } finally {
       setBusy(false);

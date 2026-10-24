@@ -1,6 +1,6 @@
 // Sends a short alert to the owner's webhook (NOTIFY_WEBHOOK_URL in Vercel). Works with ntfy.sh, Discord, Slack,
 // or any URL that accepts JSON. Never include anything a visitor typed (child names stay in the browser).
-const env = (k: string): string | undefined => (import.meta.env as Record<string, string | undefined>)[k] ?? process.env[k];
+const env = (k: string): string | undefined => ((import.meta.env ?? {}) as Record<string, string | undefined>)[k] ?? process.env[k];
 
 export async function notify(title: string, body: string, tags = '', fields: Record<string, string | number | boolean | null> = {}): Promise<boolean> {
   const url = env('NOTIFY_WEBHOOK_URL');

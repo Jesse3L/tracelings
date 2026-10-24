@@ -8,6 +8,7 @@ import { buildColoringPage, NAME_MAX, type Theme } from '../lib/coloring';
 import { nameNote } from '../lib/sheet';
 import { needsEmail } from '../lib/gate';
 import { savePdf } from '../lib/download';
+import { fontToolWhat } from '../lib/what';
 import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
 import { useMember } from '../lib/member';
@@ -80,9 +81,9 @@ export default function FontTool(props: {
         const pages = listNames.map((n) => kind === 'cursive'
           ? buildCursiveSheet(font, { text: n, size, paper, practice, modelRow, credit })
           : buildColoringPage(font, { name: n, theme, paper, caps, credit }));
-        await savePdf(pages, kind === 'cursive' ? 'class-cursive-worksheets.pdf' : 'class-name-coloring-pages.pdf', kind === 'cursive' ? 'Class cursive worksheets' : 'Class name coloring pages');
+        await savePdf(pages, kind === 'cursive' ? 'class-cursive-worksheets.pdf' : 'class-name-coloring-pages.pdf', kind === 'cursive' ? 'Class cursive worksheets' : 'Class name coloring pages', fontToolWhat({ kind, text: '', size, theme, caps, list: pages.length }));
       } else {
-        await savePdf([page], filename, kind === 'cursive' ? 'Cursive practice worksheet' : 'Name coloring page');
+        await savePdf([page], filename, kind === 'cursive' ? 'Cursive practice worksheet' : 'Name coloring page', fontToolWhat({ kind, text, preset: props.preset, size, theme, caps }));
       }
       setDone(true);
     }

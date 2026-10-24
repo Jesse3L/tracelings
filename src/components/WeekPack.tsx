@@ -3,6 +3,7 @@ import { useHydrated } from '../lib/hydrated';
 import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
+import { weekPackWhat } from '../lib/what';
 import { needsEmail, subscribe, markEmailOk } from '../lib/gate';
 import { useMember } from '../lib/member';
 import { canPrintWeek, graceActive, markPackUsed, FREE_WEEKS, GRACE_LABEL } from '../lib/homeschoolAccess';
@@ -80,16 +81,16 @@ export default function WeekPack(props: { level?: Level; week?: number; fixedLev
     try {
       if (kind === 'list') {
         const all: Page[] = listNames.flatMap((n) => buildWeekPack({ level, week, name: n, paper, credit, bubble: font, faith, extraMath }));
-        await savePdf(all, `${slug(plan.label)}-week-${week.n}-${listNames.length}-kids.pdf`, `${plan.label} at home, week ${week.n}`);
+        await savePdf(all, `${slug(plan.label)}-week-${week.n}-${listNames.length}-kids.pdf`, `${plan.label} at home, week ${week.n}`, weekPackWhat({ level, week: week.n, faith, math: Boolean(extraMath), list: listNames.length }));
         setDone(`Downloaded week ${week.n} for ${listNames.length} kids.`);
       } else if (kind === 'month') {
         const weeks = plan.weeks.slice(week.n - 1, week.n + 3);
         const all: Page[] = weeks.flatMap((w) => buildWeekPack({ level, week: w, name, paper, credit, bubble: font, faith, extraMath }));
-        await savePdf(all, `${slug(plan.label)}-weeks-${weeks[0].n}-to-${weeks[weeks.length - 1].n}.pdf`, `${plan.label} at home, weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}`);
+        await savePdf(all, `${slug(plan.label)}-weeks-${weeks[0].n}-to-${weeks[weeks.length - 1].n}.pdf`, `${plan.label} at home, weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}`, weekPackWhat({ level, week: weeks[0].n, toWeek: weeks[weeks.length - 1].n, faith, math: Boolean(extraMath) }));
         setDone(`Downloaded weeks ${weeks[0].n} to ${weeks[weeks.length - 1].n}.`);
       } else {
         const who = slug(name);
-        await savePdf(pages, `${who ? `${who}-` : ''}${slug(plan.label)}-week-${week.n}-${slug(week.title)}.pdf`, `${plan.label} at home, week ${week.n}: ${week.title}`);
+        await savePdf(pages, `${who ? `${who}-` : ''}${slug(plan.label)}-week-${week.n}-${slug(week.title)}.pdf`, `${plan.label} at home, week ${week.n}: ${week.title}`, weekPackWhat({ level, week: week.n, title: week.title, faith, math: Boolean(extraMath) }));
         setDone(`Downloaded week ${week.n}. Print at 100% size, then start with the plan page.`);
       }
       markPackUsed();

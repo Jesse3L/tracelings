@@ -3,6 +3,7 @@ import { useHydrated } from '../lib/hydrated';
 import { buildFlashCards, CARDS_PER_PAGE } from '../lib/flashcards';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
+import { whatLabel } from '../lib/what';
 import { needsEmail } from '../lib/gate';
 import type { Paper } from '../lib/sheet';
 import EmailGate from './EmailGate';
@@ -34,7 +35,7 @@ export default function FlashCards(props: { words: string[]; slug: string; label
     setBusy(true);
     setError(false);
     try {
-      await savePdf(buildFlashCards({ words: list, paper, label: props.label, credit }), `${props.slug}-sight-word-flash-cards.pdf`, `${props.label} sight word flash cards`);
+      await savePdf(buildFlashCards({ words: list, paper, label: props.label, credit }), `${props.slug}-sight-word-flash-cards.pdf`, `${props.label} sight word flash cards`, whatLabel('Sight word flash cards', props.label, which === 'all' ? `all ${list.length} words` : `${list.length} of ${props.words.length} words`));
       setDone(true);
     } catch {
       setError(true);

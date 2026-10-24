@@ -8,13 +8,15 @@ import { domainCreate, domainStatus, domainVerify, setup, setAutomations, broadc
 import { SEGMENTS, type SegmentKey } from '../../../lib/email/audience';
 import { allTemplates } from '../../../lib/email/templates';
 import { ensureInboundWebhook } from '../../../lib/server/inbound';
+import { runDigest } from '../../../lib/server/digest';
+import { isDate } from '../../../lib/server/events';
 
 export const prerender = false;
 
 // Owner-only email admin. POST JSON { action, ... } with `Authorization: Bearer <EMAIL_ADMIN_TOKEN>`.
 // 404 when EMAIL_ADMIN_TOKEN isn't set, so the endpoint doesn't exist until the owner turns it on.
 // Nothing here sends to the list without { confirm: "SEND" }, and test sends only go to OWNER_EMAIL.
-const env = (k: string): string | undefined => (import.meta.env as Record<string, string | undefined>)[k] ?? process.env[k];
+const env = (k: string): string | undefined => ((import.meta.env ?? {}) as Record<string, string | undefined>)[k] ?? process.env[k];
 const MAX_BODY = 512 * 1024;
 
 const digest = (s: string) => createHash('sha256').update(s).digest();
@@ -111,10 +113,17 @@ export const POST: APIRoute = async ({ request }) => {
         if (!since) return json(400, { error: 'since_required', hint: '"since": "YYYY-MM-DD"' });
         return json(200, await welcomeBackfill(since, body.confirm !== 'START'));
       }
+      case 'digest': {
+        // The daily digest for one Chicago day (default yesterday). Returns the summary; emails OWNER_EMAIL only with send: true.
+        if (body.date !== undefined && !isDate(body.date)) return json(400, { error: 'bad_date', hint: '"date": "YYYY-MM-DD"' });
+        const send = body.send === true;
+        const r = await runDigest({ date: body.date, send, force: send });
+        return json(200, r);
+      }
       case 'inbound-webhook':
         return json(200, await ensureInboundWebhook('https://tracelings.com/api/email/inbound/'));
       default:
-        return json(400, { error: 'unknown_action', actions: ['domain-create', 'domain-status', 'domain-verify', 'setup', 'automations-enable', 'automations-disable', 'import', 'broadcast-create', 'broadcast-cancel', 'broadcast-send', 'test-send', 'templates', 'stats', 'inbound-webhook', 'welcome-backfill'] });
+        return json(400, { error: 'unknown_action', actions: ['domain-create', 'domain-status', 'domain-verify', 'setup', 'automations-enable', 'automations-disable', 'import', 'broadcast-create', 'broadcast-cancel', 'broadcast-send', 'test-send', 'templates', 'stats', 'inbound-webhook', 'welcome-backfill', 'digest'] });
     }
   } catch (e) {
     if (e instanceof ResendError) return json(e.status >= 400 && e.status < 500 ? e.status : 502, { error: 'resend', code: e.code, status: e.status, message: e.message });

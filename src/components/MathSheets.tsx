@@ -3,6 +3,7 @@ import { useHydrated } from '../lib/hydrated';
 import { nameNote, toLatin, type Page, type Paper } from '../lib/sheet';
 import { pageToSvg } from '../lib/render';
 import { savePdf } from '../lib/download';
+import { whatLabel, kids, WHAT_TOOLS } from '../lib/what';
 import { needsEmail } from '../lib/gate';
 import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
@@ -90,7 +91,9 @@ export default function MathSheets(props: { kind?: MathKind; source?: string; se
         const who = slug(name);
         file = `${who ? `${who}-` : ''}${filePrefix}-${fileKind}-${what}.pdf`;
       }
-      await savePdf(pages, file, `${prefix}: ${kindLabel}`);
+      await savePdf(pages, file, `${prefix}: ${kindLabel}`, whatLabel(prefix as (typeof WHAT_TOOLS)[number], kindLabel.toLowerCase(),
+        byNumber ? `number ${number}` : kind === 'blank-frame' ? blankLabel.toLowerCase() : kind === 'make-ten' ? '' : within ? `within ${range}` : `1 to ${range}`,
+        k === 'set' && `set of ${pages.length}`, k === 'list' && kids(pages.length)));
       setDone(k === 'one' ? (fixed ? 'Downloaded. Print at 100% size.' : 'Downloaded. Print at 100% size. Tap "New problems" any time for a fresh page.') : `Downloaded ${pages.length} pages.`);
     } finally {
       setBusy(false);

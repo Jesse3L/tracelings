@@ -1,10 +1,14 @@
 import type { APIRoute } from 'astro';
 import { notify, placeFrom } from '../../lib/server/notify';
+import { recordEvent } from '../../lib/server/events';
+import { cleanWhatStrict } from '../../lib/server/whatVocab';
 
 export const prerender = false;
 
-// Download pings from the browser. Only the page path, page count and member flag are accepted;
-// filenames are never sent because they can contain a child's name.
+// Download pings from the browser. Only the page path, page count, member flag, a short label of the options picked
+// (`what`, checked against lib/what.ts, never anything typed) and a random device code (`vid`) are accepted;
+// filenames are never sent because they can contain a child's name. Pings that pass the bot filter are also saved
+// as one small private record each, for the owner's daily digest (lib/server/events.ts, api/cron/daily-digest.ts).
 const hits = new Map<string, { n: number; at: number }>();
 
 const BOT_UA = /bot|crawl|spider|slurp|headless|phantom|puppeteer|playwright|selenium|lighthouse|python|curl|wget|httpclient|go-http|java\/|node-fetch|axios|scrapy|okhttp|preview|scan/i;
@@ -43,12 +47,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const pages = Number.isInteger(data.pages) && data.pages > 0 && data.pages < 1000 ? data.pages : null;
   const who = data.member === true ? 'Member' : 'Free visitor';
   const place = placeFrom(request);
+  const what = cleanWhatStrict(data.what);
+  const vid = typeof data.vid === 'string' && /^[a-z2-7]{16}$/.test(data.vid) ? data.vid : null;
 
+  // Started first and capped at a short timeout, so saving the record never slows or breaks the alert.
+  const saved = recordEvent('events', { path, what, pages, member: data.member === true, vid, place: place || null });
   await notify(
     'New Tracelings download',
     `${who} downloaded a PDF${pages ? ` (${pages} page${pages === 1 ? '' : 's'})` : ''}\nPage: tracelings.com${path}${place ? `\nFrom: ${place}` : ''}`,
     'page_facing_up',
     { event: 'download', page: `https://tracelings.com${path}`, pages, member: data.member === true, place: place || null },
   );
+  await saved;
   return new Response(null, { status: 204 });
 };

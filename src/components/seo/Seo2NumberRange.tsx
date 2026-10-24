@@ -4,6 +4,7 @@ import type { LineSize, Paper, Practice } from '../../lib/sheet';
 import { buildRangePages, type RangeLayout } from '../../lib/rowSheet';
 import { pageToSvg } from '../../lib/render';
 import { savePdf } from '../../lib/download';
+import { whatLabel, sizeWord } from '../../lib/what';
 import { needsEmail } from '../../lib/gate';
 import { useMember } from '../../lib/member';
 import { Segmented } from '../Tracer';
@@ -34,7 +35,7 @@ export default function Seo2NumberRange(props: { from?: number; to: number; sour
   async function save() {
     setBusy(true);
     try {
-      await savePdf(pages, `number-tracing-${from}-${to}${layout === 'rows' ? `-${size}` : ''}.pdf`, `Number tracing ${from} to ${to}`);
+      await savePdf(pages, `number-tracing-${from}-${to}${layout === 'rows' ? `-${size}` : ''}.pdf`, `Number tracing ${from} to ${to}`, whatLabel('Number tracing', `${from} to ${to}`, layout === 'rows' ? `rows, ${sizeWord(size)}` : 'one page'));
       setDone(true);
     } finally {
       setBusy(false);

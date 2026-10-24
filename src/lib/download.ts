@@ -2,7 +2,8 @@ import type { Page } from './sheet';
 import { pagesToPdf, loadImages, imagesIn } from './render';
 import { countDownload } from './gate';
 
-export async function savePdf(pages: Page[], filename: string, title?: string) {
+/** `what`: the anonymous label for the download ping (lib/what.ts). Never put anything typed in it. */
+export async function savePdf(pages: Page[], filename: string, title?: string, what?: string) {
   // Story scene pictures are fetched here so the PDF can embed them (cached after the first time).
   await loadImages(imagesIn(pages));
   const bytes = await pagesToPdf(pages, title);
@@ -14,5 +15,5 @@ export async function savePdf(pages: Page[], filename: string, title?: string) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 4000);
-  countDownload(pages.length);
+  countDownload(pages.length, what);
 }
