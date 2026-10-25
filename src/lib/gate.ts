@@ -78,6 +78,7 @@ export async function subscribe(email: string, source: string, role?: string): P
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: clean, source, role }),
+      signal: AbortSignal.timeout(8000),
     });
     if (res.status === 400) return 'invalid';
     return res.ok ? 'ok' : 'unavailable';

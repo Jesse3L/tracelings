@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { notify, placeFrom } from '../../lib/server/notify';
 import { addSignup } from '../../lib/server/email';
 import { recordEvent } from '../../lib/server/events';
+import { sameOrigin } from '../../lib/server/session';
+import { rateLimited, clientIp } from '../../lib/server/programApi';
 
 export const prerender = false;
 
@@ -16,7 +18,10 @@ const ROLES = new Set(['own-kids', 'classroom', 'homeschool', 'other']);
 const json = (status: number, body: Record<string, unknown>) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, url }) => {
+  // Only our own pages, and a few per visitor: each sign-up starts real welcome emails to that address.
+  if (!sameOrigin(request, url)) return json(403, { error: 'bad_origin' });
+  if (rateLimited('subscribe-ip', clientIp(request), 6, 10 * 60_000)) return json(429, { error: 'slow_down' });
   let data: { email?: unknown; source?: unknown; role?: unknown };
   try { data = await request.json(); } catch { return json(400, { error: 'bad_request' }); }
 

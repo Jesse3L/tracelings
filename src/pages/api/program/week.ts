@@ -28,6 +28,16 @@ const failedToday = (d: FamilyDoc): number => {
 const addFailed = (d: FamilyDoc) => {
   (d.usage as unknown as { failed?: Failed }).failed = { day: today(), n: failedToday(d) + 1 };
 };
+/** Child-weeks with a model call running right now (any server instance), with the time it started. Stored next to
+ *  the monthly usage, so parallel requests across instances can't all pass the cap check before any of them counts. */
+const PENDING_MS = 3 * 60_000;
+const pendingOf = (d: FamilyDoc): Record<string, number> => {
+  const u = d.usage as unknown as { pending?: Record<string, number> };
+  u.pending ??= {};
+  const now = Date.now();
+  for (const [k, t] of Object.entries(u.pending)) if (!(now - t < PENDING_MS)) delete u.pending[k];
+  return u.pending;
+};
 /** Story paths this child had in the 3 weeks before this one, from saved content, so a week doesn't repeat them. */
 const recentPaths = (d: FamilyDoc, childId: string, weekIndex: number): string[] =>
   [1, 2, 3].map((k) => d.content[weekKey(childId, weekIndex - k)]?.story?.pathId).filter((x): x is string => Boolean(x));
@@ -79,13 +89,31 @@ export async function weekFor(key: string, childId: string, weekIndex: number, r
     if (inFlight.has(`${key}:${wk}`)) return json(409, { error: 'busy' });
     inFlight.add(`${key}:${wk}`);
     let capped = false;
+    let held = false; // this request holds a counted slot that must be settled (kept on success, refunded otherwise)
     try {
-      // Before each model call the caps are checked (not counted): the family's monthly count, its failed attempts
-      // today, and the global guard. A generation is counted once, only when it passed every check and is saved, so
-      // a run of bad model output never uses up a family's month.
+      // Take one of the family's monthly generations BEFORE any model call, in the same etag-checked write that marks
+      // this child-week as running. Parallel requests (even on other instances) then can't all slip under the cap.
+      // A request that doesn't end with saved AI content gives the slot back, so bad model output never uses up the month.
+      const { result: slot } = await updateFamily(key, (d) => {
+        const pending = pendingOf(d);
+        if (pending[wk]) return 'busy' as const;
+        if (d.usage.generations >= FAMILY_MONTHLY_CAP || failedToday(d) >= FAILED_PER_DAY) return 'capped' as const;
+        d.usage.generations += 1;
+        pending[wk] = Date.now();
+        return 'ok' as const;
+      });
+      if (slot === 'busy') return json(409, { error: 'busy' });
+      if (slot === 'capped') return reply(cached ?? template(), Boolean(cached), used, 'limit');
+      held = true;
+      const release = (failed: boolean) => updateFamily(key, (d) => {
+        delete pendingOf(d)[wk];
+        d.usage.generations = Math.max(0, d.usage.generations - 1);
+        if (failed) addFailed(d);
+      });
+      // Before each model call: the failed-today cap and the global guard (the family slot is already taken).
       const reserve = async () => {
         const { doc: d } = await loadFamily(key);
-        if (d.usage.generations >= FAMILY_MONTHLY_CAP || failedToday(d) >= FAILED_PER_DAY) { capped = true; return false; }
+        if (d.usage.generations > FAMILY_MONTHLY_CAP || failedToday(d) >= FAILED_PER_DAY) { capped = true; return false; }
         if ((await globalAiCount()) >= GLOBAL_MONTHLY_CAP) { capped = true; return false; }
         return true;
       };
@@ -95,25 +123,29 @@ export async function weekFor(key: string, childId: string, weekIndex: number, r
       if (gen.content.source !== 'ai') {
         // One failed request counts once, however many tries it made inside. Not saved, so the next try can still
         // get an AI story (when the key is back or the month resets).
-        if (gen.reason === 'invalid' || gen.reason === 'call-failed') await updateFamily(key, (d) => { addFailed(d); });
+        await release(gen.reason === 'invalid' || gen.reason === 'call-failed');
+        held = false;
         return reply(cached ?? gen.content, Boolean(cached), used, capped || gen.reason === 'capped' ? 'limit' : 'fallback');
       }
       const { result } = await updateFamily(key, (d) => {
+        delete pendingOf(d)[wk]; // the generation was already counted when the slot was taken
         const r = d.usage.redos[wk] ?? 0;
         // Someone else saved this week while we were generating: keep theirs unless this was a redo.
         if (!redo && d.content[wk] && (d.contentFor?.[wk] ?? sig) === sig) return { content: d.content[wk], used: r, saved: false };
         d.content[wk] = gen.content;
         d.contentFor = { ...(d.contentFor ?? {}), [wk]: sig };
-        d.usage.generations += 1;
         if (redo) d.usage.redos[wk] = r + 1;
         return { content: gen.content, used: redo ? r + 1 : r, saved: true };
       });
       // The global spend guard counts saved generations too (it can overshoot by a few under races; the Anthropic
       // console spend limit is the hard stop).
+      held = false;
       if (result.saved) await reserveGlobalAi().catch((e) => console.error('program week: global count failed', (e as Error).message));
       return reply(result.content, false, result.used);
     } finally {
       inFlight.delete(`${key}:${wk}`);
+      // Something threw mid-generation: free the child-week (the slot stays counted, since the model may have run).
+      if (held) await updateFamily(key, (d) => { delete pendingOf(d)[wk]; }).catch(() => {});
     }
   } catch (e) {
     if (e instanceof InvalidInput) return json(400, { error: e.code });

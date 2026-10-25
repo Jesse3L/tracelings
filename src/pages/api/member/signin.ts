@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { squareConfigured, customersByEmail, activeMembership, cardLast4s, paidCheckoutCustomer, subscriptionsFor } from '../../../lib/server/square';
 import { json, cleanEmail, setSession, readPending, clearPending, sameOrigin } from '../../../lib/server/session';
 import { markMember } from '../../../lib/server/email';
+import { rateLimited, clientIp } from '../../../lib/server/programApi';
 
 export const prerender = false;
 
@@ -22,8 +23,15 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
   const last4 = typeof body?.last4 === 'string' ? body.last4.replace(/\D/g, '').slice(-4) : '';
   if (!email) return json(400, { error: 'invalid_email' });
 
+  // Per IP: lookups (which also reveal whether an email has a membership) and card-digit guesses.
+  const ip = clientIp(request);
+  if (rateLimited('signin-ip', ip, 20, 10 * 60_000)) return json(429, { error: 'too_many_attempts' });
+  if (last4 && rateLimited('signin-digits-ip', ip, 8, 15 * 60_000)) return json(429, { error: 'too_many_attempts' });
+  // Per email: count a digits attempt BEFORE the Square calls, so parallel guesses can't all slip past the check.
   const a = attempts.get(email);
-  if (a && Date.now() - a.at < 15 * 60_000 && a.n >= 5) return json(429, { error: 'too_many_attempts' });
+  const recent = a && Date.now() - a.at < 15 * 60_000 ? a : undefined;
+  if (recent && recent.n >= 5) return json(429, { error: 'too_many_attempts' });
+  if (last4) attempts.set(email, { n: (recent?.n ?? 0) + 1, at: recent?.at ?? Date.now() });
 
   try {
     const customers = await customersByEmail(email);
@@ -51,10 +59,7 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
       // (Square can take a few seconds), so it retries before asking for the card digits.
       if (last4.length !== 4) return json(401, { error: 'need_last4', ...(pending ? { checkout: 'not_ready' } : {}) });
       const cards = (await Promise.all(cids.map(cardLast4s))).flat();
-      if (!cards.includes(last4)) {
-        attempts.set(email, { n: (a && Date.now() - a.at < 15 * 60_000 ? a.n : 0) + 1, at: Date.now() });
-        return json(401, { error: 'no_match' });
-      }
+      if (!cards.includes(last4)) return json(401, { error: 'no_match' }); // already counted above
     }
     setSession(cookies, email, cids);
     clearPending(cookies);

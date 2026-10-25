@@ -7,7 +7,8 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ cookies }) => {
   if (!squareConfigured()) return json(200, { member: false, available: false });
-  const s = readSession(cookies);
+  let s: ReturnType<typeof readSession> = null;
+  try { s = readSession(cookies); } catch { return json(200, { member: false, available: false }); }
   if (!s) return json(200, { member: false, available: true });
   try {
     const sub = await activeMembership(s.cids);

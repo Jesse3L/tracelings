@@ -27,7 +27,7 @@ const firstThree = f.words.slice(0, 3).join(', ');
 const onsetList = onsets(f).join(', ');
 const listOr = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 
-const faqs = [
+const faqs: { q: string; a: string; html?: string }[] = [
   { q: `What words are in the ${fam} word family?`, a: `The ${fam} words on these worksheets are ${listOr(f.words)}. They all end in ${fam} and have the short ${f.vowel} sound. Later, ${listOr(f.stretch)} ${f.stretch.length > 1 ? 'add' : 'adds'} a blend or a digraph to the front.` },
   f.tricky,
   { q: `When do kids learn ${fam} words?`, a: `Many kids start reading short vowel word families like ${fam} in kindergarten, somewhere between ages 5 and 6, once they know most letter sounds. Some start earlier and some later, and both are normal. If you have concerns, ask your child's teacher or pediatrician.` },

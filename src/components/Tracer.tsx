@@ -139,7 +139,7 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
       const bytes = mode === 'words' ? await pagesToPdf(pages, 'Sight word tracing worksheet')
         : listPages.length ? await pagesToPdf(listPages, 'Class name tracing worksheets')
         : await pagesToPdf([page]);
-      const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+      const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/pdf' }));
       const a = document.createElement('a');
       a.href = url;
       a.download = listNames.length ? 'class-name-tracing-worksheets.pdf' : `${fileBase}.pdf`;
