@@ -12,6 +12,8 @@ const articles = defineCollection({
     published: z.coerce.date(),
     updated: z.coerce.date().optional(),
     readingMinutes: z.number(),
+    // Optional FAQ shown under the article, with matching FAQPage schema.
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
   }),
 });
 

@@ -143,6 +143,7 @@ readingMinutes: 6
 - `published`: the actual publish date (`YYYY-MM-DD`), on or after `publishAfter`.
 - `readingMinutes`: the word count divided by about 220, rounded (usually 5 to 7).
 - `updated` (optional): add it only when you revise a published article.
+- `faq` (optional, last): a list of 3 to 5 `q` / `a` pairs. The page shows them under the article as "Questions parents ask" and adds FAQPage schema. Answers follow the same rules as the body (ranges, no invented facts). Guide articles that answer a homeschool or planning question should have one.
 
 The filename is the slug: lowercase, hyphenated, and usually the primary keyword (`tripod-grasp.md`).
 
@@ -165,6 +166,6 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 - [ ] The backlog item's `status` is set to `done`.
 
 
-## Live pages you can link to (updated Oct 23, 2026)
+## Live pages you can link to (updated Oct 25, 2026)
 
-/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /homeschool/christian/, /program/, /letter-of-the-week/ and /a/ to /z/, /math-worksheets/pre-k/, /math-worksheets/ten-frames/, /math-worksheets/kindergarten/, /math-worksheets/more-or-less/, /math-worksheets/kindergarten-addition/, /math-worksheets/kindergarten-subtraction/, /math-worksheets/kindergarten-addition-and-subtraction/, /math-worksheets/kindergarten-word-problems/, /word-families/ and /at/, /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/.
+/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /homeschool/christian/, /program/, /letter-of-the-week/ and /a/ to /z/, /math-worksheets/pre-k/, /math-worksheets/ten-frames/, /math-worksheets/kindergarten/, /math-worksheets/more-or-less/, /math-worksheets/kindergarten-addition/, /math-worksheets/kindergarten-subtraction/, /math-worksheets/kindergarten-addition-and-subtraction/, /math-worksheets/kindergarten-word-problems/, /word-families/ and /at/, /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/ (including /learn/how-to-homeschool-preschool/).
