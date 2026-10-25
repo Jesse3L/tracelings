@@ -7,7 +7,8 @@ export const prerender = false;
 export const POST: APIRoute = async ({ request, url, cookies }) => {
   if (!sameOrigin(request, url)) return json(403, { error: 'bad_origin' });
   if (!squareConfigured()) return json(503, { error: 'not_configured' });
-  const s = readSession(cookies);
+  let s: ReturnType<typeof readSession> = null;
+  try { s = readSession(cookies); } catch { return json(503, { error: 'not_configured' }); }
   if (!s) return json(401, { error: 'signed_out' });
   try {
     const sub = await activeMembership(s.cids);

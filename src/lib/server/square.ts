@@ -111,10 +111,12 @@ export async function subscriptionsFor(customerIds: string[]): Promise<Sub[]> {
 /** The best current membership for these customers, if any. */
 export async function activeMembership(customerIds: string[]): Promise<(Sub & { plan?: PlanKey }) | undefined> {
   const subs = (await subscriptionsFor(customerIds)).filter((s) => s.status === 'ACTIVE' || s.status === 'PENDING');
-  if (!subs.length) return undefined;
-  subs.sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
-  const s = subs[0];
-  return { ...s, plan: await planForVariation(s.plan_variation_id) };
+  // Only Tracelings plans (the 2 program plans and the 4 old ones) count. Any other subscription sold at this
+  // Square location must not unlock the program.
+  const known = (await Promise.all(subs.map(async (s) => ({ ...s, plan: await planForVariation(s.plan_variation_id) }))))
+    .filter((s): s is Sub & { plan: PlanKey } => s.plan !== undefined);
+  known.sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
+  return known[0];
 }
 
 export async function cardLast4s(customerId: string): Promise<string[]> {

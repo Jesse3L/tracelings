@@ -7,7 +7,7 @@ export async function savePdf(pages: Page[], filename: string, title?: string, w
   // Story scene pictures are fetched here so the PDF can embed them (cached after the first time).
   await loadImages(imagesIn(pages));
   const bytes = await pagesToPdf(pages, title);
-  const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+  const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/pdf' }));
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;

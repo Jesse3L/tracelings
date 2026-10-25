@@ -138,7 +138,8 @@ function normalize(d: Partial<FamilyDoc> | null): FamilyDoc {
   const usage = { ...base.usage, ...(d.usage ?? {}) };
   if (usage.month !== monthNow()) { usage.month = monthNow(); usage.generations = 0; }
   usage.redos ??= {};
-  return { children: d.children ?? [], plans: d.plans ?? {}, checkIns: d.checkIns ?? [], content: d.content ?? {}, usage };
+  // contentFor must survive the load, or week.ts can't tell that a saved week was made for a plan that has since moved.
+  return { children: d.children ?? [], plans: d.plans ?? {}, checkIns: d.checkIns ?? [], content: d.content ?? {}, ...(d.contentFor ? { contentFor: d.contentFor } : {}), usage };
 }
 
 // ---------- Backend (Vercel Blob in production; memory when no token outside production, and in tests) ----------
