@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/add-crons.mjs",
     "preview": "astro preview",
     "previews": "npx -y tsx scripts/make-previews.mts"
   },
