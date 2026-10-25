@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24",
+  "updated": "2026-10-25",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -470,7 +470,7 @@
     },
     {
       "id": "guide-how-to-homeschool-preschool",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "title": "Learn article: how to start homeschooling preschool (what to cover at 3 to 5, a 15-minute day, what you need, how to check your state rules), linking letter tracing, pre-K math worksheets, name tracing and the free week",
       "keywords": {
@@ -478,27 +478,87 @@
           140,
           11
         ],
-        "how to start homeschooling preschool": [
-          30,
-          15
+        "homeschooling preschool": [
+          1000,
+          21
         ],
         "homeschool preschool": [
           1300,
           32
+        ],
+        "homeschooling preschool schedule": [
+          480,
+          20
+        ],
+        "when to start homeschooling preschool": [
+          70,
+          15
+        ],
+        "how to start homeschooling preschool": [
+          30,
+          15
         ],
         "how to start homeschooling": [
           1600,
           31
         ]
       },
-      "note": "Ubersuggest US, Oct 24, 2026. \"how to start homeschooling preschool\" is only 30/month, so the primary keyword is \"how to homeschool preschool\"; work \"how to start homeschooling\" in as a variant. Links the free week at /program/?level=pre-k#placement.",
+      "note": "Ubersuggest US, Oct 24, 2026. \"how to start homeschooling preschool\" is only 30/month, so the primary keyword is \"how to homeschool preschool\"; work \"how to start homeschooling\" in as a variant. Links the free week at /program/?level=pre-k#placement. Built Oct 25, 2026: primary keyword kept as \"how to homeschool preschool\" (140, SD 11, rechecked); H2s also work in \"homeschooling preschool\" (1,000, SD 21), \"when to start homeschooling preschool\" and \"homeschooling preschool schedule\". Added an optional faq field to articles (FAQPage schema).",
       "linkTo": [
         "/homeschool/preschool/",
         "/letter-tracing/",
         "/math-worksheets/pre-k/",
         "/name-tracing/",
         "/program/"
+      ],
+      "date": "2026-10-25",
+      "urls": [
+        "/learn/how-to-homeschool-preschool/"
       ]
+    },
+    {
+      "id": "guide-preschool-homeschool-schedule",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "guide-how-to-homeschool-preschool"
+      ],
+      "title": "Learn article plus a one-page printable: preschool homeschool schedule (a sample daily rhythm and a weekly chart parents fill in, made in the browser with the child's name, one page, free), linking the Pre-K plan, letter tracing, pre-K math worksheets and the free week",
+      "keywords": {
+        "preschool homeschool schedule": [
+          480,
+          21
+        ],
+        "homeschooling preschool schedule": [
+          480,
+          20
+        ],
+        "daily preschool homeschool schedule": [
+          40,
+          30
+        ],
+        "preschool homeschool schedule printable": [
+          20,
+          22
+        ]
+      },
+      "note": "Ubersuggest US, Oct 25, 2026. Its own intent (a schedule, not how to start), so it gets its own page and links back to /learn/how-to-homeschool-preschool/. The printable is one page and stays free.",
+      "linkTo": [
+        "/homeschool/preschool/",
+        "/letter-tracing/",
+        "/math-worksheets/pre-k/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "faq-on-homeschool-articles",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "guide-how-to-homeschool-preschool"
+      ],
+      "title": "Add the new optional faq field (3 to 5 questions, FAQPage schema) to the existing homeschool and readiness articles: best-kindergarten-homeschool-curriculum and kindergarten-readiness-checklist, answers written to the content guide; set updated in their frontmatter",
+      "note": "No new URLs. Uses the faq frontmatter field added on Oct 25, 2026."
     },
     {
       "id": "guide-homeschool-kindergarten-schedule",
