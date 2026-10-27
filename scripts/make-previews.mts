@@ -18,6 +18,7 @@ import { buildMathPage } from '../src/lib/mathSheets';
 import { FAMILY_INFO, buildFamilyPage } from '../src/lib/wordFamilies';
 import { loadThemeIcons } from '../src/lib/program/themes';
 import { buildWordProblemPage } from '../src/lib/wordProblems';
+import { PRESETS, DEFAULT_SUBJECTS, buildSchedulePage, loadScheduleIcons } from '../src/lib/schedule';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'public/previews');
@@ -149,6 +150,12 @@ jobs.push(render('k-mixed', 'addition-and-subtraction-worksheet-kindergarten', b
 await loadThemeIcons(['farm'], (u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
 jobs.push(render('k-word-problems', 'kindergarten-word-problems-worksheet', buildWordProblemPage({ kind: 'wp-add', range: 5, theme: 'farm', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Kindergarten word problems worksheet within 5: short farm animal stories to read aloud, with pictures to count and a number sentence to fill in'));
+// Preschool schedule: the picture schedule for a homeschool morning (the maker's default page) and the weekly chart.
+await loadScheduleIcons((u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
+jobs.push(render('preschool-schedule', 'preschool-daily-visual-schedule', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: PRESETS[0].steps, subjects: DEFAULT_SUBJECTS }),
+  'Printable preschool daily schedule with pictures: wake up, get dressed, breakfast, brush teeth, letters, numbers, snack, play outside, story time and lunch, each with a box to check off'));
+jobs.push(render('preschool-schedule-week', 'preschool-homeschool-weekly-schedule', buildSchedulePage({ kind: 'week', name: '', paper: 'letter', credit: true, steps: PRESETS[0].steps, subjects: DEFAULT_SUBJECTS }),
+  'Preschool homeschool weekly schedule chart: Monday to Friday rows for letters, numbers, read aloud, art and fine motor, outside time, and music and movement'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

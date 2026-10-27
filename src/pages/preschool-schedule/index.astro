@@ -1,0 +1,142 @@
+---
+import { faqText } from '../../lib/seo';
+import Preview from '../../components/site/Preview.astro';
+import Base from '../../layouts/Base.astro';
+import ScheduleMaker from '../../components/ScheduleMaker.tsx';
+import Faqs from '../../components/homeschool/Faqs.astro';
+import { SITE } from '../../config';
+
+const url = new URL('/preschool-schedule/', SITE.url).href;
+const title = `Preschool Daily Schedule: Free Visual Schedule | ${SITE.name}`;
+const description = 'Make a free printable preschool daily schedule with pictures: a visual schedule for the day, cut-apart picture cards, or a weekly homeschool chart.';
+
+const faqs = [
+  { q: 'What is a visual schedule for preschool?', a: 'It is the day shown in pictures, in order: breakfast, letters, snack, outside, and so on. A preschooler who can’t read yet can look at it and see what comes next. Many kids find changes between activities easier when they can see them coming.' },
+  { q: 'What should a preschool daily schedule include?', a: 'Meals and snacks, a short learning time (often 10 to 15 minutes of table work at this age), reading aloud, outside play, free play, and rest or quiet time. Put them in the order your day already runs, and keep the learning parts short.' },
+  { q: 'Should I put times on the schedule?', a: 'Only if they help you. Most preschoolers can’t read a clock, so for them the order matters more than the time. Many families leave times off the picture cards and keep them on the grown-up’s copy.' },
+  { q: 'How do I use the picture cards?', a: 'Cut them out, put them in order on a strip of card or the fridge with tape or sticky tack, and have your child turn over or take down each card when it’s done. Laminating them or covering them with clear tape helps them last.' },
+  { q: 'Is this preschool schedule printable free?', a: 'Yes. All three pages, every picture and your own words are free, one page at a time. Members can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.', html: 'Yes. All three pages, every picture and your own words are free, one page at a time. <a href="/membership/">Members</a> can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. The page is drawn in your browser, with the name and any words you type. They stay on your device and are never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Preschool daily schedule maker (free printable visual schedule)',
+    url,
+    learningResourceType: 'Printable schedule',
+    educationalLevel: 'Preschool, Pre-kindergarten',
+    teaches: 'Daily routines and what comes next, with a picture for each part of the day',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Homeschool', item: SITE.url + '/homeschool/' },
+      { '@type': 'ListItem', position: 3, name: 'Preschool daily schedule', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/homeschool/" class="hover:text-ink">Homeschool</a> <span aria-hidden="true">/</span> <span aria-current="page">Preschool schedule</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Printable preschool daily schedule</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes a free preschool daily schedule with pictures: a visual schedule of the day with boxes to check off, cut-apart picture cards, or a weekly homeschool chart. Start from a sample day, change the steps and words to match yours, add your child's name, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <ScheduleMaker client:load source="preschool-schedule" />
+    </div>
+    <div class="flex flex-wrap gap-x-8">
+      <Preview k="preschool-schedule" caption="Example: picture schedule for a homeschool morning." />
+      <Preview k="preschool-schedule-week" caption="Example: weekly homeschool chart." />
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        Preschoolers do better when they know what comes next. A picture schedule shows the day in order, so your child can check it
+        themselves instead of asking "What are we doing now?" all morning. It also gives you something calm to point to when it's time
+        to stop playing and come to the table.
+      </p>
+
+      <h2>Three preschool schedule printables</h2>
+      <ul>
+        <li><strong>Picture schedule for the day:</strong> up to 12 steps in order, each with a picture, your words, an optional time and a box to check off. Hang it at your child's eye level.</li>
+        <li><strong>Cut-apart picture cards:</strong> 12 cards with dashed cut lines. Stick them on a strip in order and take each one down when it's done. Empty cards print blank, so your child can draw their own.</li>
+        <li><strong>Weekly homeschool chart:</strong> Monday to Friday, with a row for each kind of learning (letters, numbers, read aloud, art, outside time and more). Write what you did in each box, or just check the circle.</li>
+      </ul>
+      <p>
+        There are 18 pictures to choose from, from wake up and breakfast to letters, numbers, story time, quiet time, bath and bedtime.
+        Change any label to the words your family uses: "Circle time", "Grandma's house" or "Swim lesson" all work.
+      </p>
+
+      <h2>A sample preschool daily schedule at home</h2>
+      <p>
+        The "Homeschool morning" sample in the maker is a good place to start. It keeps the learning part short and puts it early, when
+        many kids are at their freshest:
+      </p>
+      <ul>
+        <li><strong>7:00 to 8:30:</strong> wake up, get dressed, breakfast, brush teeth.</li>
+        <li><strong>8:30 to 9:00:</strong> letters and numbers, about 10 to 15 minutes at the table with a break if needed.</li>
+        <li><strong>9:15:</strong> snack, then outside play for as long as you can.</li>
+        <li><strong>10:30:</strong> story time, then free play until lunch.</li>
+      </ul>
+      <p>
+        Times are only a guide. Shift the whole thing to fit your family, and leave the times off the page if your child can't read a
+        clock yet. The order is what matters to them. For a fuller walk through the day and the week, with what to do on hard days,
+        read our <a href="/learn/preschool-homeschool-schedule/">preschool homeschool schedule guide</a>.
+      </p>
+
+      <h2>How to use a visual schedule with a preschooler</h2>
+      <ol>
+        <li><strong>Make it together.</strong> Let your child help put the cards in order or color the pictures. Kids tend to follow a plan they helped make.</li>
+        <li><strong>Hang it low.</strong> Put it where your child can see and touch it, like the fridge or the back of a door.</li>
+        <li><strong>Check it often.</strong> At each change, walk over and look together: "Snack is done. What's next?" Let your child tick the box or take down the card.</li>
+        <li><strong>Keep it steady.</strong> Use the same order most days for a week or two before changing it. If something new is coming, add a card for it the night before.</li>
+      </ol>
+      <p>
+        Some kids lean on a picture schedule more than others, and that's normal. If transitions are very hard for your child, or you
+        have other concerns, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>Filling the learning time</h2>
+      <p>
+        Short and regular works well at this age. For the letters slot, print one of our <a href="/letter-tracing/">letter tracing worksheets</a> or
+        a <a href="/name-tracing/">name tracing worksheet</a> with your child's name. For numbers, the <a href="/math-worksheets/pre-k/">pre-K math worksheets</a> make
+        counting, ten frame and find the number pages for 1 to 20.
+      </p>
+      <p>
+        If you'd rather not plan each week yourself, our <a href="/homeschool/preschool/">homeschool preschool curriculum</a> lays out
+        36 weeks with a letter and a number each week, about 15 minutes a day. The weekly chart above has a Letter and a Number line for
+        exactly that. Week 1 is free: <a href="/program/?level=pre-k#placement">take the free placement check</a> to start at the right week.
+      </p>
+
+      <h2>Try this tomorrow morning</h2>
+      <ol>
+        <li><strong>Tonight, 5 minutes:</strong> print the picture schedule with the "Homeschool morning" sample and your child's name, and tape it to the fridge.</li>
+        <li><strong>At breakfast:</strong> read it together from the top, pointing at each picture.</li>
+        <li><strong>At each change:</strong> go back to the schedule and let your child check the box.</li>
+        <li><strong>At bedtime:</strong> ask what their favorite part was, and change one step for the next day if something didn't work.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about preschool schedules</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

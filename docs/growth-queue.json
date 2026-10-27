@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-25",
+  "updated": "2026-10-27",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -518,7 +518,7 @@
     },
     {
       "id": "guide-preschool-homeschool-schedule",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "guide-how-to-homeschool-preschool"
@@ -533,6 +533,30 @@
           480,
           20
         ],
+        "visual schedule for preschool": [
+          1000,
+          25
+        ],
+        "preschool daily schedule": [
+          720,
+          19
+        ],
+        "preschool daily schedule template": [
+          110,
+          23
+        ],
+        "example of a preschool daily schedule": [
+          90,
+          19
+        ],
+        "free printable preschool daily schedule": [
+          70,
+          29
+        ],
+        "preschool schedule printable": [
+          70,
+          32
+        ],
         "daily preschool homeschool schedule": [
           40,
           30
@@ -542,13 +566,84 @@
           22
         ]
       },
-      "note": "Ubersuggest US, Oct 25, 2026. Its own intent (a schedule, not how to start), so it gets its own page and links back to /learn/how-to-homeschool-preschool/. The printable is one page and stays free.",
+      "note": "Ubersuggest US, Oct 25, 2026. Its own intent (a schedule, not how to start), so it gets its own page and links back to /learn/how-to-homeschool-preschool/. The printable is one page and stays free. Built Oct 27, 2026: the guide article plus a free maker at /preschool-schedule/ (picture schedule for the day, cut-apart picture cards, weekly homeschool chart) with 18 new routine pictures (public/schedule/). The maker page targets visual schedule for preschool and preschool daily schedule.",
       "linkTo": [
         "/homeschool/preschool/",
         "/letter-tracing/",
         "/math-worksheets/pre-k/",
         "/program/"
+      ],
+      "done": "2026-10-27",
+      "urls": [
+        "/learn/preschool-homeschool-schedule/",
+        "/preschool-schedule/"
       ]
+    },
+    {
+      "id": "bedtime-routine-chart",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "guide-preschool-homeschool-schedule"
+      ],
+      "title": "Bedtime routine chart: a Bedtime preset on the schedule maker (bath, pajamas, brush teeth, potty, story, lights out) plus its own page /preschool-schedule/bedtime-routine-chart/ with real help (a calm 20 to 30 minute routine, picture cards for toddlers). Needs 4 to 6 more routine pictures (pajamas, potty, wash hands, hug, lights out) made the same way as public/schedule/routine.json",
+      "keywords": {
+        "bedtime routine chart": [
+          720,
+          32
+        ],
+        "printable bedtime routine chart": [
+          170,
+          26
+        ],
+        "bedtime routine chart printable": [
+          110,
+          24
+        ],
+        "bedtime routine chart free printable pdf": [
+          110,
+          28
+        ]
+      },
+      "note": "Ubersuggest US, Oct 27, 2026. One page at a time, free. Morning routine variants were near zero.",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/learn/preschool-homeschool-schedule/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "first-then-board",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "guide-preschool-homeschool-schedule"
+      ],
+      "title": "First then board: a fourth page type on /preschool-schedule/ (two big boxes, First and Then, with any two routine pictures, plus a cut-apart strip), with a section and FAQ on the page",
+      "keywords": {
+        "first then visual schedule printable": [
+          210,
+          31
+        ],
+        "first then next visual schedule printable": [
+          30,
+          25
+        ]
+      },
+      "note": "Ubersuggest US, Oct 27, 2026. No new URL unless volume for first then board printable holds up when checked.",
+      "linkTo": [
+        "/preschool-schedule/"
+      ]
+    },
+    {
+      "id": "week-chart-in-pack",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "guide-preschool-homeschool-schedule"
+      ],
+      "title": "Program (members): Pre-K and Kindergarten weekly packs: an optional first page, the weekly homeschool chart already filled in with that week's letter, number and day by day activities from the plan (weeks 2 to 36 for members, week 1 free like the rest of the pack)",
+      "note": "Builds on the weekly chart in src/lib/schedule.ts. Program depth, not a new free multi-week set."
     },
     {
       "id": "faq-on-homeschool-articles",
