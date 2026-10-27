@@ -113,7 +113,7 @@
     },
     {
       "id": 53,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-10-27",
       "primaryKeyword": "what are sight words",
       "volume": 8100,
@@ -126,7 +126,9 @@
         "/sight-words/kindergarten/",
         "/sight-words/first-grade/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "what-are-sight-words",
+      "publishedOn": "2026-10-27"
     },
     {
       "id": 8,
