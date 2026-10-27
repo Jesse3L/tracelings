@@ -11,7 +11,7 @@ export const WHAT_TOOLS = [
   'Name tracing', 'Letter tracing', 'Number tracing', 'Sight word tracing', 'Word tracing', 'Alphabet tracing',
   'Alphabet chart', 'Cursive alphabet chart', 'Cursive alphabet', 'Cursive', 'Name coloring', 'Coloring',
   'Sight word flash cards', 'Word families', 'Pre-K math', 'Ten frames', 'More or less', 'Kindergarten math',
-  'Kindergarten word problems', 'Kindergarten math sampler', 'Pre-K plan', 'Kindergarten plan', 'Personalized plan', 'Class pack',
+  'Kindergarten word problems', 'Kindergarten math sampler', 'Preschool schedule', 'Pre-K plan', 'Kindergarten plan', 'Personalized plan', 'Class pack',
 ] as const;
 const TOOL_SET = new Set<string>(WHAT_TOOLS);
 

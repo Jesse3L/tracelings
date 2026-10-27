@@ -144,7 +144,7 @@ export function rng(seed: string) {
 }
 
 /** Rough Helvetica width, good enough to wrap short lines of text on a page. */
-const textW = (t: string, size: number) => {
+export const textW = (t: string, size: number) => {
   let u = 0;
   for (const ch of t) u += /[il.,'!|:;]/.test(ch) ? 0.26 : /[mwMW]/.test(ch) ? 0.84 : /[A-Z]/.test(ch) ? 0.66 : ch === ' ' ? 0.28 : 0.53;
   return u * size;

@@ -767,6 +767,18 @@
     "height": 1035,
     "alt": "Pre-K math worksheet with six ten frames: count the dots in each frame and write how many in the box"
   },
+  "preschool-schedule": {
+    "src": "/previews/preschool-daily-visual-schedule.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Printable preschool daily schedule with pictures: wake up, get dressed, breakfast, brush teeth, letters, numbers, snack, play outside, story time and lunch, each with a box to check off"
+  },
+  "preschool-schedule-week": {
+    "src": "/previews/preschool-homeschool-weekly-schedule.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Preschool homeschool weekly schedule chart: Monday to Friday rows for letters, numbers, read aloud, art and fine motor, outside time, and music and movement"
+  },
   "sight-first-grade": {
     "src": "/previews/sight-words-first-grade.webp",
     "width": 800,
