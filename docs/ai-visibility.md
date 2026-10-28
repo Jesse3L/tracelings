@@ -19,11 +19,18 @@ Assistants quote and link pages that answer the question in the first lines, in 
 3. **Ubersuggest AI Search Visibility** (if a `tracelings.com` project exists in `list_projects`): `brand_visibility_overview`, `brand_prompts`, `brand_citations` and `brand_citation_gaps` show which tracked questions mention Tracelings in ChatGPT, Gemini and Google AI Overviews, who gets named instead, and which sites the answers cite. If the project does not exist yet, say so in the report and skip this part; don't create or delete Ubersuggest projects.
 4. **Google Analytics** is not connected to sessions. Jesse can look at Reports > Acquisition > Traffic acquisition, filtered to the AI Assistant channel, with Session source and Landing page added.
 
-## Tracked questions (for Ubersuggest, up to 15)
+## Tracked questions (Ubersuggest AI Search Visibility)
 
-free name tracing worksheets · name tracing worksheet generator · free printable letter tracing worksheets · free homeschool preschool curriculum · kindergarten homeschool curriculum free · christian homeschool curriculum for preschool · how to start homeschooling preschool · free kindergarten math worksheets printable · kindergarten word problems printable · ten frame printable · cursive name tracing worksheet · free sight word worksheets kindergarten · word family worksheets free · name coloring pages printable · letter of the week preschool curriculum
+Project `tracelings.com` (id `23b66d76e9beadf9fc2fea3dede9501f5f8acee847a16950c7948fffb9a94b99`), brand "Tracelings", set up Oct 28, 2026. Answers in ChatGPT, Gemini and Google AI Overviews are checked about every two weeks (BI_WEEKLY on this plan), so some Mondays show no new data. Competitors compared: Education.com, Twinkl, K5 Learning, Superstar Worksheets, Homeschool Preschool, The Measured Mom. The plan allows 15 prompts per brand; all 15 are used.
 
-Change the list only when a question has had no movement for 8 weeks and a better one is clear; note the swap in the log.
+- Name and handwriting worksheets: What's the best free name tracing worksheet generator? · Where can I make free name tracing worksheets with my child's name? · Where can I print free letter tracing worksheets for preschool? · Is there a free cursive name tracing worksheet maker? · Where can I make a free name coloring page with my kid's name?
+- Homeschool preschool and kindergarten: What is a good free homeschool preschool curriculum? · What is the best kindergarten homeschool curriculum with a free trial week? · Is there a Christian homeschool curriculum for preschool with a weekly Bible verse? · How do I start homeschooling my preschooler? · Is there a letter of the week preschool curriculum I can print?
+- Kindergarten math printables: Where can I get free printable kindergarten math worksheets? · Where can I find printable kindergarten word problems with pictures? · Where can I print free ten frame worksheets?
+- Early reading printables: Where can I find free sight word worksheets for kindergarten? · Where can I find free word family worksheets for kindergarten?
+
+The project also tracks 18 Google keywords (name tracing worksheets, homeschool preschool curriculum, kindergarten math worksheets and others) against the same competitors.
+
+Change the list only when a question has had no movement for 8 weeks and a better one is clear, and only with Jesse's OK (each change spends a monthly brand credit and `configure_brand` replaces the whole list); note the swap in the log.
 
 ## Each Monday run
 
