@@ -163,7 +163,7 @@ eq(dg.digestSubject({ ...sum, date: '2026-10-20' }, '2026-10-23'), 'Tracelings o
 ok(r.text.includes('Visitor 1 (Austin, Texas, US), member, 3 downloads: Letter tracing: A, capitals and lowercase, medium lines (1 page) on /letter-tracing/a/; Name tracing: first letter capital, large lines (2 pages) on /name-tracing/; Pre-K plan: week 1 (Letter S) (7 pages) on /homeschool/preschool/'), 'visitor line in text');
 ok(r.text.includes('Visitor 3, 1 download: A PDF (1 page) on /name-tracing/'), 'download without a label');
 ok(r.html.includes('href="https://tracelings.com/letter-tracing/a/"'), 'page links');
-ok(r.html.includes('parent@example.com') && r.html.includes('from letter-tracing'), 'sign-ups listed');
+ok(r.html.includes('parent@example.com') && r.html.includes('letter-tracing page'), 'sign-ups listed');
 ok(r.html.includes('Personalized, yearly'), 'checkouts listed');
 ok(r.html.includes('>member<'), 'member badge');
 ok(r.html.includes('Friday, October 23, 2026'), 'long date');
@@ -251,12 +251,77 @@ eq(recs.length, 3, 'bot pings are not saved');
 eq(recs.map((x) => x.what), ['Name tracing: first letter capital, large lines', null, null], 'labels with typed text are dropped server-side');
 eq(recs.map((x) => x.vid), ['abcdefghijklmnop', 'abcdefghijklmnop', null], 'bad device code dropped');
 eq(recs[0].place, 'Austin, Texas, US', 'place saved');
-eq(Object.keys(recs[0]).sort(), ['at', 'member', 'pages', 'path', 'place', 'vid', 'what'], 'only the allowed fields');
+eq(Object.keys(recs[0]).sort(), ['at', 'member', 'pages', 'path', 'place', 'src', 'vid', 'what'], 'only the allowed fields');
+eq(recs[0].src, null, 'no source sent: null');
+await ping({ ...base, src: 'ChatGPT' }, undefined, '10.0.0.9');
+await ping({ ...base, src: 'https://chatgpt.com/?q=emma' }, undefined, '10.0.0.9');
+const recs2 = [...store.data.entries()].filter(([k]) => k.startsWith('events/')).map(([, v]) => JSON.parse(v)).sort((a, b) => a.at.localeCompare(b.at));
+eq(recs2.slice(-2).map((x) => x.src), ['ChatGPT', null], 'source label kept, anything else dropped');
 
 const { POST: subscribe } = await import('../src/pages/api/subscribe.ts');
-await subscribe({ request: new Request('https://tracelings.com/api/subscribe/', { method: 'POST', body: JSON.stringify({ email: 'New@Example.com', source: 'name-tracing', name: 'Emma' }), headers: { 'content-type': 'application/json' } }) } as any);
+await subscribe({ request: new Request('https://tracelings.com/api/subscribe/', { method: 'POST', body: JSON.stringify({ email: 'New@Example.com', source: 'name-tracing', name: 'Emma', via: 'Perplexity' }), headers: { 'content-type': 'application/json' } }) } as any);
 const sg = [...store.data.entries()].filter(([k]) => k.startsWith('signups/')).map(([, v]) => JSON.parse(v));
-eq(sg.map((s) => [s.email, s.source]), [['new@example.com', 'name-tracing']], 'sign-up saved (email + source only)');
+eq(sg.map((s) => [s.email, s.source, s.via]), [['new@example.com', 'name-tracing', 'Perplexity']], 'sign-up saved (email, source, visit source)');
+eq(Object.keys(sg[0]).sort(), ['at', 'email', 'source', 'via'], 'sign-up: only the allowed fields');
+
+// ---------- visit source labels ----------
+const { classifySource, cleanSource } = await import('../src/lib/source.ts');
+const cs = (u: string | null, r: string) => classifySource(u, r);
+eq(cs(null, 'https://chatgpt.com/'), 'ChatGPT', 'chatgpt referrer');
+eq(cs('chatgpt.com', ''), 'ChatGPT', 'chatgpt utm (no referrer)');
+eq(cs(null, 'https://www.perplexity.ai/search?q=x'), 'Perplexity', 'perplexity');
+eq(cs(null, 'https://gemini.google.com/app'), 'Gemini', 'gemini before google');
+eq(cs(null, 'https://copilot.microsoft.com/'), 'Copilot', 'copilot');
+eq(cs(null, 'https://claude.ai/chat/1'), 'Claude', 'claude');
+eq(cs(null, 'https://www.google.com/'), 'Google', 'google');
+eq(cs(null, 'https://www.google.co.uk/'), 'Google', 'google uk');
+eq(cs(null, 'https://mail.google.com/'), 'Email', 'gmail is email, not google');
+eq(cs('email', ''), 'Email', 'our email links');
+eq(cs(null, 'https://www.bing.com/search'), 'Bing', 'bing');
+eq(cs(null, 'https://www.pinterest.com/pin/1'), 'Pinterest', 'pinterest');
+eq(cs(null, 'https://l.facebook.com/'), 'Facebook', 'facebook');
+eq(cs(null, 'https://someblog.example/'), 'Other site', 'other site');
+eq(cs(null, ''), 'Direct', 'no referrer: direct');
+eq(cs(null, 'https://tracelings.com/name-tracing/'), null, 'own site: no label');
+eq(cs(null, 'not a url'), 'Direct', 'bad referrer');
+eq(cleanSource('ChatGPT'), 'ChatGPT', 'clean ok');
+eq(cleanSource('chatgpt'), null, 'clean is exact');
+
+// ---------- digest: sources ----------
+const srcDay = { date: '2026-10-27', events: [
+  { at: '2026-10-27T15:00:00Z', path: '/name-tracing/', what: null, pages: 1, member: false, vid: 'aaaaaaaaaaaaaaaa', place: null, src: 'ChatGPT' },
+  { at: '2026-10-27T15:01:00Z', path: '/letter-tracing/', what: null, pages: 1, member: false, vid: 'aaaaaaaaaaaaaaaa', place: null, src: 'ChatGPT' },
+  { at: '2026-10-27T16:00:00Z', path: '/name-tracing/', what: null, pages: 1, member: false, vid: 'bbbbbbbbbbbbbbbb', place: null, src: 'Google' },
+  { at: '2026-10-27T17:00:00Z', path: '/name-tracing/', what: null, pages: 1, member: false, vid: 'cccccccccccccccc', place: null },
+], signups: [{ at: '2026-10-27T15:02:00Z', email: 'a@example.com', source: 'name-tracing', via: 'ChatGPT' }, { at: '2026-10-27T18:00:00Z', email: 'b@example.com', source: 'name-tracing', via: 'Perplexity' }], checkouts: [] };
+const ss = dg.summarize(srcDay as any);
+eq(ss.sources, [
+  { source: 'ChatGPT', visitors: 1, downloads: 2, signups: 1 },
+  { source: 'Google', visitors: 1, downloads: 1, signups: 0 },
+  { source: 'Not recorded', visitors: 1, downloads: 1, signups: 0 },
+  { source: 'Perplexity', visitors: 0, downloads: 0, signups: 1 },
+], 'source rows');
+eq(ss.ai, { visitors: 1, downloads: 2, signups: 2 }, 'AI assistants added together');
+eq(ss.visitors[0].src, 'ChatGPT', 'visitor source');
+const sr = dg.renderDigest(ss, '2026-10-27');
+ok(sr.text.includes('AI assistants: 1 visitor, 2 downloads, 2 new emails'), 'AI line in text');
+ok(sr.text.includes('ChatGPT: 1 / 2 / 1'), 'source row in text');
+ok(sr.text.includes('Visitor 1, from ChatGPT, 2 downloads'), 'visitor source in text');
+ok(sr.html.includes('Where they came from') && sr.html.includes('came from Perplexity'), 'sources in html');
+// ---------- week section (Monday email) ----------
+eq(dg.isWeekDigest('2026-10-25'), true, 'Oct 25 2026 is a Sunday');
+eq(dg.isWeekDigest('2026-10-26'), false, 'Monday is not');
+const day2 = { date: '2026-10-25', events: [{ at: '2026-10-25T15:00:00Z', path: '/homeschool/preschool/', what: null, pages: 7, member: false, vid: 'aaaaaaaaaaaaaaaa', place: null, src: 'ChatGPT' }], signups: [], checkouts: [] };
+const wk = dg.summarizeWeek([srcDay as any, day2 as any]);
+eq([wk.from, wk.to], ['2026-10-25', '2026-10-27'], 'week range');
+eq(wk.totals, { downloads: 5, visitors: 3, signups: 2, checkouts: 0 }, 'same device on two days is one visitor');
+eq(wk.aiPages, [{ path: '/homeschool/preschool/', count: 1 }, { path: '/letter-tracing/', count: 1 }, { path: '/name-tracing/', count: 1 }], 'AI pages');
+const wr = dg.renderDigest({ ...ss, week: wk }, '2026-10-27');
+ok(wr.text.includes('LAST 7 DAYS (Oct 25 to Oct 27)') && wr.text.includes('Pages AI assistant visitors downloaded from:'), 'week in text');
+ok(wr.html.includes('Last 7 days') && !sr.html.includes('Last 7 days'), 'week only when set');
+ok(!dg.isEmpty({ ...dg.summarize({ date: '2026-10-25', events: [], signups: [], checkouts: [] }), week: wk }), 'a quiet Sunday still sends the week');
+if (process.env.DIGEST_SOURCE_SAMPLE) fs.writeFileSync(process.env.DIGEST_SOURCE_SAMPLE.replace('.html', '-week.html'), wr.html);
+if (process.env.DIGEST_SOURCE_SAMPLE) fs.writeFileSync(process.env.DIGEST_SOURCE_SAMPLE, sr.html);
 ok(!JSON.stringify(sg).includes('Emma'), 'no name in sign-up record');
 
 srv.close();
