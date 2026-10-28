@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { notify, placeFrom } from '../../lib/server/notify';
 import { addSignup } from '../../lib/server/email';
 import { recordEvent } from '../../lib/server/events';
+import { cleanSource } from '../../lib/source';
 
 export const prerender = false;
 
@@ -17,7 +18,7 @@ const json = (status: number, body: Record<string, unknown>) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
 
 export const POST: APIRoute = async ({ request }) => {
-  let data: { email?: unknown; source?: unknown; role?: unknown };
+  let data: { email?: unknown; source?: unknown; role?: unknown; via?: unknown };
   try { data = await request.json(); } catch { return json(400, { error: 'bad_request' }); }
 
   const email = typeof data.email === 'string' ? data.email.trim().toLowerCase() : '';
@@ -25,6 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
   const source = typeof data.source === 'string' && SOURCES.has(data.source) ? data.source : 'other';
   const role = typeof data.role === 'string' && ROLES.has(data.role) ? data.role : '';
   const place = placeFrom(request);
+  const via = cleanSource(data.via); // where the visit came from (ChatGPT, Google...), for the daily digest only
 
   // The digest record (lib/server/events.ts) always resolves within a short timeout, so it never holds up the sign-up.
   const [sheet, resend] = await Promise.all([
@@ -35,7 +37,7 @@ export const POST: APIRoute = async ({ request }) => {
       { event: source === 'waitlist' ? 'waitlist_signup' : 'email_signup', email, source, role: role || null, place: place || null },
     ),
     addSignup(email, source, role || undefined).catch(() => ({ saved: false })),
-    recordEvent('signups', { email, source }),
+    recordEvent('signups', { email, source, via }),
   ]);
   return sheet || resend.saved ? json(200, { ok: true }) : json(503, { error: 'not_configured' });
 };

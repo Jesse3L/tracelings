@@ -13,6 +13,8 @@ Grow **Tracelings at Home, Personalized**, the paid homeschool program (Pre-K an
 - **No new free multi-week packs or multi-page sets.** A new page type for the weekly packs is program (members) work. A one-page version of it can also be a free tool.
 - The plan pages (`/homeschool/...`, `/letter-of-the-week/...`) stay indexable guides: the outline and explanations are readable by anyone; only the downloads are locked.
 
+AI assistants are the biggest traffic source (Oct 2026). A separate Monday routine (`docs/ai-visibility.md`) improves the pages they send people to and adds queue items for questions where Tracelings isn't named yet; treat those items like any other.
+
 This is **build on what we have**, not "find random new keywords." Keyword data is only used to decide *which* piece of the programs to build next and what to call it.
 
 ## Rules that never change

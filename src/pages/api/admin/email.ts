@@ -117,7 +117,8 @@ export const POST: APIRoute = async ({ request }) => {
         // The daily digest for one Chicago day (default yesterday). Returns the summary; emails OWNER_EMAIL only with send: true.
         if (body.date !== undefined && !isDate(body.date)) return json(400, { error: 'bad_date', hint: '"date": "YYYY-MM-DD"' });
         const send = body.send === true;
-        const r = await runDigest({ date: body.date, send, force: send });
+        const week = typeof body.week === 'boolean' ? body.week : undefined; // true adds the 7-day section to any day
+        const r = await runDigest({ date: body.date, send, force: send, week });
         return json(200, r);
       }
       case 'inbound-webhook':

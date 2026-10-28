@@ -1,5 +1,6 @@
 import { track } from '@vercel/analytics';
 import { cleanWhat } from './what';
+import { visitSource } from './source';
 
 // Free downloads need an email once per device, before the first download. Members never see the prompt.
 const COUNT_KEY = 'tl-downloads';
@@ -44,7 +45,7 @@ export function deviceId(): string {
 
 /** Counts a download for the email prompt, and sends an anonymous "someone downloaded" ping.
  *  Only the page path, page count, a short label of the options picked (`what`, built from our own menus, see
- *  lib/what.ts) and the random device code go out. Never the filename or anything typed (names stay on this device). */
+ *  lib/what.ts), the random device code and where the visit came from (a fixed label, lib/source.ts) go out. Never the filename or anything typed (names stay on this device). */
 export function countDownload(pages?: number, what?: string) {
   write(COUNT_KEY, String(Number(read(COUNT_KEY) || '0') + 1));
   try {
@@ -53,7 +54,8 @@ export function countDownload(pages?: number, what?: string) {
     const secs = Math.round((performance.now() - loadedAt) / 1000);
     const label = cleanWhat(what) ?? undefined;
     const vid = deviceId() || undefined;
-    const payload = JSON.stringify({ type: 'download', path: location.pathname, pages, member, human, secs, what: label, vid });
+    const src = visitSource() ?? undefined;
+    const payload = JSON.stringify({ type: 'download', path: location.pathname, pages, member, human, secs, what: label, vid, src });
     if (!navigator.sendBeacon?.('/api/event/', new Blob([payload], { type: 'application/json' }))) {
       fetch('/api/event/', { method: 'POST', body: payload, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
     }
@@ -77,7 +79,7 @@ export async function subscribe(email: string, source: string, role?: string): P
     const res = await fetch('/api/subscribe/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: clean, source, role }),
+      body: JSON.stringify({ email: clean, source, role, via: visitSource() ?? undefined }),
     });
     if (res.status === 400) return 'invalid';
     return res.ok ? 'ok' : 'unavailable';
