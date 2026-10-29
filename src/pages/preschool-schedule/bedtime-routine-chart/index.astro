@@ -1,0 +1,153 @@
+---
+import { faqText } from '../../../lib/seo';
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import ScheduleMaker from '../../../components/ScheduleMaker.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/preschool-schedule/bedtime-routine-chart/', SITE.url).href;
+const title = `Bedtime Routine Chart: Free Printable with Pictures | ${SITE.name}`;
+const description = 'Make a free printable bedtime routine chart with pictures and your child’s name: bath, pajamas, potty, teeth, story, hugs and lights out, or cut-apart cards.';
+
+const faqs = [
+  { q: 'What should be on a bedtime routine chart?', a: 'The few steps your child does every night, in the order you do them. For many preschoolers that is bath (on bath nights), pajamas, potty, brush teeth, a story, a hug and lights out. Five to eight steps is plenty. If a step only happens some nights, leave it off or make a card for it.' },
+  { q: 'How long should a bedtime routine take?', a: 'Many families aim for about 20 to 30 minutes from pajamas to lights out, a little longer on bath nights. What helps most is doing the same steps in the same order at about the same time each night, more than the exact length.' },
+  { q: 'At what age can a child use a bedtime routine chart?', a: 'Many kids start following a picture chart somewhere between 2 and 3, with a grown-up pointing at each step. By 4 or 5, some kids can walk through it with only a reminder. Kids vary a lot here, and that’s normal.' },
+  { q: 'How much sleep does a preschooler need?', a: 'The American Academy of Sleep Medicine recommends 10 to 13 hours in 24 hours, naps included, for children 3 to 5, and 9 to 12 hours for children 6 to 12. If you have concerns about your child’s sleep, ask your child’s pediatrician.' },
+  { q: 'Is this bedtime routine chart printable free?', a: 'Yes. The chart, the cut-apart cards, every picture and your own words are free, one page at a time. Members can also print the page for every child on their list at once, or both pages in one PDF, with no footer line.', html: 'Yes. The chart, the cut-apart cards, every picture and your own words are free, one page at a time. <a href="/membership/">Members</a> can also print the page for every child on their list at once, or both pages in one PDF, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. The chart is drawn in your browser, with the name and any words you type. They stay on your device and are never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Bedtime routine chart maker (free printable with pictures)',
+    url,
+    learningResourceType: 'Printable chart',
+    educationalLevel: 'Toddler, Preschool, Kindergarten',
+    teaches: 'The bedtime routine in order, with a picture for each step',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Preschool schedule', item: SITE.url + '/preschool-schedule/' },
+      { '@type': 'ListItem', position: 3, name: 'Bedtime routine chart', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/preschool-schedule/" class="hover:text-ink">Preschool schedule</a> <span aria-hidden="true">/</span> <span aria-current="page">Bedtime routine chart</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Printable bedtime routine chart</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes a free printable bedtime routine chart with pictures: each step from bath to lights out, with a box to check off, or a page of cut-apart picture cards. Change the steps and words to match your night, add your child's name, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <ScheduleMaker client:load source="bedtime-routine-chart" preset="bedtime" kinds={['day', 'cards']} />
+    </div>
+    <div class="flex flex-wrap gap-x-8">
+      <Preview k="bedtime-routine-chart" caption="Example: bedtime routine chart with seven steps." />
+      <Preview k="bedtime-routine-cards" caption="Example: bedtime picture cards to cut apart." />
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        Bedtime goes smoother when a child knows exactly what comes next. A bedtime routine chart puts the steps in pictures, so a
+        3 or 4 year old can see that pajamas come before teeth and that one story comes before lights out. The chart becomes the one
+        giving directions, and you get to be the one cheering.
+      </p>
+
+      <h2>Two bedtime printables</h2>
+      <ul>
+        <li><strong>Bedtime routine chart:</strong> up to 12 steps in order, each with a picture, your words, an optional time and a box to check off. Slip it in a sheet protector and use a dry-erase marker to check the boxes again each night.</li>
+        <li><strong>Bedtime picture cards:</strong> 12 cards with dashed cut lines. Stick them in a row on the bedroom door and let your child turn each one over or move it to a "done" pocket. Empty cards print blank to draw on.</li>
+      </ul>
+      <p>
+        There are bedtime pictures for bath, pajamas, potty, wash hands, wash face, brush teeth, a drink of water, clothes for tomorrow,
+        story time, hugs and kisses, the night light and lights out, plus all the daytime pictures from
+        our <a href="/preschool-schedule/">preschool daily schedule maker</a>. Change any label to your family's words, like "Bath (Mon, Wed, Fri)" or "Two songs".
+      </p>
+
+      <h2>A simple bedtime routine for a preschooler</h2>
+      <p>
+        The "Bedtime routine" sample in the maker is a calm 20 to 30 minute routine, a little longer on bath nights. It runs from the
+        busiest step to the quietest:
+      </p>
+      <ol>
+        <li><strong>6:45, bath:</strong> warm water and a few minutes of play. On non-bath nights, wash hands and face instead.</li>
+        <li><strong>Pajamas and potty:</strong> let your child choose between two pairs of pajamas. A small choice helps them feel in charge.</li>
+        <li><strong>Brush teeth:</strong> a grown-up usually helps at this age. Many families brush for about two minutes with a song.</li>
+        <li><strong>7:05, story time:</strong> one or two books in bed, chosen before you start, so "one more" has an easy answer.</li>
+        <li><strong>Hugs and kisses, then 7:30, lights out:</strong> the same short goodnight words every night, then leave the room.</li>
+      </ol>
+      <p>
+        Times are only a guide, so shift the whole thing to fit your evening. Most preschoolers can't read a clock yet, and the order is
+        what they follow. On nights without a bath, or when the evening runs late, try the "Short bedtime (no bath)" sample instead.
+      </p>
+
+      <h2>Bedtime routine chart for toddlers</h2>
+      <p>
+        Younger kids do best with fewer, bigger pictures. For a 2 year old, try three to five steps (pajamas, teeth, story, lights out)
+        and the picture cards rather than the list. Hold up each card as you start that step, and say its name. Toddlers often like
+        handing you the card when the step is done, which turns the routine into a small game instead of a string of instructions.
+      </p>
+      <p>
+        Older preschoolers and kindergartners can usually handle the full chart and check off the boxes themselves. Some like adding a
+        step of their own, like setting out clothes for tomorrow.
+      </p>
+
+      <h2>How to make the chart stick</h2>
+      <ol>
+        <li><strong>Make it together.</strong> Let your child help pick the steps, put the cards in order or color the pictures. Kids tend to follow a plan they helped make.</li>
+        <li><strong>Hang it where bedtime happens.</strong> The bathroom door or the bedroom wall at your child's eye level works well.</li>
+        <li><strong>Let the chart say no.</strong> When the request for a third story comes, point at the chart: "Story time is done. What's next?"</li>
+        <li><strong>Keep it the same for two weeks</strong> before changing anything, then change one step at a time.</li>
+      </ol>
+      <p>
+        Every child settles differently, and it can take a few weeks before a new routine feels normal. If bedtime stays very hard, or
+        you have concerns about your child's sleep, ask your child's pediatrician.
+      </p>
+
+      <h2>The rest of the day</h2>
+      <p>
+        The same pictures make a daytime schedule too. Print a <a href="/preschool-schedule/">picture schedule for the day</a> for the
+        fridge, and read our <a href="/learn/preschool-homeschool-schedule/">preschool homeschool schedule guide</a> for a sample day
+        and week, with a short learning time and a calm wind-down in the evening.
+      </p>
+      <p>
+        If you're teaching at home, our <a href="/homeschool/preschool/">homeschool preschool curriculum</a> lays out 36 weeks with a
+        letter and a number each week, about 15 minutes a day. Week 1 is
+        free: <a href="/program/?level=pre-k#placement">take the free placement check</a> to start at the right week.
+      </p>
+
+      <h2>Try this tonight</h2>
+      <ol>
+        <li><strong>Before dinner, 5 minutes:</strong> print the chart with the "Bedtime routine" sample and your child's name.</li>
+        <li><strong>After dinner:</strong> read it together from the top, pointing at each picture, and tape it up where bedtime starts.</li>
+        <li><strong>At each step:</strong> walk back to the chart and let your child check the box.</li>
+        <li><strong>Tomorrow morning:</strong> notice which step was hardest, and change only that one for the next night.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about bedtime routine charts</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

@@ -156,6 +156,12 @@ jobs.push(render('preschool-schedule', 'preschool-daily-visual-schedule', buildS
   'Printable preschool daily schedule with pictures: wake up, get dressed, breakfast, brush teeth, letters, numbers, snack, play outside, story time and lunch, each with a box to check off'));
 jobs.push(render('preschool-schedule-week', 'preschool-homeschool-weekly-schedule', buildSchedulePage({ kind: 'week', name: '', paper: 'letter', credit: true, steps: PRESETS[0].steps, subjects: DEFAULT_SUBJECTS }),
   'Preschool homeschool weekly schedule chart: Monday to Friday rows for letters, numbers, read aloud, art and fine motor, outside time, and music and movement'));
+// Bedtime routine chart: the bedtime sample as a checklist and as cut-apart cards.
+const bed = PRESETS.find((p) => p.v === 'bedtime')!;
+jobs.push(render('bedtime-routine-chart', 'printable-bedtime-routine-chart', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: bed.steps, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' }),
+  'Printable bedtime routine chart with pictures: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out, each with a box to check off'));
+jobs.push(render('bedtime-routine-cards', 'bedtime-routine-picture-cards', buildSchedulePage({ kind: 'cards', name: '', paper: 'letter', credit: true, steps: bed.steps, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' }),
+  'Bedtime routine picture cards to cut apart: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

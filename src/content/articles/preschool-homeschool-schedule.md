@@ -81,7 +81,7 @@ A clock schedule tells you what to do at 9:15. A rhythm tells you what comes aft
 
 Pick two or three anchors your day always has, like breakfast, lunch and bedtime, and hang everything else on them. "After breakfast we do letters. After snack we go outside. After lunch is quiet time." Your child learns the pattern within a week or two, and the arguments about what's next often get shorter.
 
-A picture schedule helps a lot here. Preschoolers can't read a list, but they can look at a row of pictures and see that story time comes after outside. Our free [printable preschool daily schedule](/preschool-schedule/) makes one in a couple of minutes, with your child's name at the top and your own words for each step. It also makes cut-apart picture cards and a weekly chart for the rhythm above.
+A picture schedule helps a lot here. Preschoolers can't read a list, but they can look at a row of pictures and see that story time comes after outside. Our free [printable preschool daily schedule](/preschool-schedule/) makes one in a couple of minutes, with your child's name at the top and your own words for each step. It also makes cut-apart picture cards and a weekly chart for the rhythm above, and the same pictures make a [printable bedtime routine chart](/preschool-schedule/bedtime-routine-chart/) for the end of the day.
 
 ## When the schedule falls apart
 

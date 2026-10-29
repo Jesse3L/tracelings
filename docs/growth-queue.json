@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-27",
+  "updated": "2026-10-29",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -581,7 +581,7 @@
     },
     {
       "id": "bedtime-routine-chart",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "guide-preschool-homeschool-schedule"
@@ -603,12 +603,66 @@
         "bedtime routine chart free printable pdf": [
           110,
           28
+        ],
+        "free printable bedtime routine chart printable": [
+          70,
+          27
+        ],
+        "editable bedtime routine chart": [
+          30,
+          22
+        ],
+        "diy bedtime routine chart": [
+          40,
+          20
         ]
       },
-      "note": "Ubersuggest US, Oct 27, 2026. One page at a time, free. Morning routine variants were near zero.",
+      "note": "Ubersuggest US, Oct 27, 2026. One page at a time, free. Morning routine variants were near zero. Rechecked Oct 29, 2026 (volume held). Built Oct 29, 2026: Bedtime routine and Short bedtime presets on the schedule maker, titles \"Maya's Bedtime\", 9 new pictures (pajamas, potty, wash hands, wash face, drink of water, clothes for tomorrow, hugs, night light, lights out), and the page with the checklist and cut-apart cards. Toddler variants show 0 in Ubersuggest, so they are a section, not a page.",
       "linkTo": [
         "/preschool-schedule/",
         "/learn/preschool-homeschool-schedule/",
+        "/program/"
+      ],
+      "done": "2026-10-29",
+      "urls": [
+        "/preschool-schedule/bedtime-routine-chart/"
+      ]
+    },
+    {
+      "id": "morning-routine-chart",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "bedtime-routine-chart"
+      ],
+      "title": "Morning routine chart: a section and a Morning routine preset on /preschool-schedule/ (wake up, potty, get dressed, breakfast, brush teeth, shoes, backpack for school days), reusing the existing pictures plus shoes and backpack. A page only if \"morning routine chart\" volume holds when checked (Oct 27 check showed morning variants near zero).",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/preschool-schedule/bedtime-routine-chart/"
+      ]
+    },
+    {
+      "id": "chore-chart-preschool",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "bedtime-routine-chart"
+      ],
+      "title": "Chore chart for preschoolers and kindergartners: a fourth page type on the schedule maker (a week grid with picture chores like make bed, feed pet, set table, put toys away, and a star to color each day), its own page if volume holds. Needs 6 to 8 chore pictures made the same way as public/schedule/routine.json. Check \"chore chart for kids\", \"preschool chore chart\" and \"printable chore chart\".",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "routine-chart-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "bedtime-routine-chart"
+      ],
+      "title": "Program (members): add the child's own bedtime or daily picture schedule as an optional page in the personalized week-1 welcome pack (built from the routine pictures, name in the title), so new members print their routine with their first week.",
+      "linkTo": [
         "/program/"
       ]
     },
