@@ -1,10 +1,13 @@
-// Preschool schedule printables (/preschool-schedule/): a picture schedule for the day, cut-apart picture cards,
-// and a weekly homeschool chart. One page each, drawn in the browser like every other maker, so the child's name
-// never leaves the device. Routine pictures live in public/schedule/routine.json (0..1000 paths, even-odd fill).
+// Preschool schedule printables (/preschool-schedule/ and /preschool-schedule/bedtime-routine-chart/): a picture
+// schedule for the day or for bedtime, cut-apart picture cards, and a weekly homeschool chart. One page each, drawn
+// in the browser like every other maker, so the child's name never leaves the device.
+// Routine pictures live in public/schedule/routine.json (0..1000 paths, even-odd fill).
 import { PAPER, COLORS, cleanName, type Item, type Page, type Paper } from './sheet';
 import { M, footer, box, circlePath, starPath, textW } from './homeschool';
 
 export type ScheduleKind = 'day' | 'cards' | 'week';
+/** What the day and card pages are for: the day ("Maya's Day") or the bedtime routine ("Maya's Bedtime"). */
+export type Routine = 'day' | 'bedtime';
 
 export interface Step { icon: string; label: string; time: string }
 
@@ -15,6 +18,7 @@ export interface ScheduleOptions {
   credit: boolean;
   steps: Step[]; // the day, in order (picture schedule and cards)
   subjects: string[]; // ids from SUBJECTS (weekly chart)
+  routine?: Routine; // default 'day'
 }
 
 export const SCHEDULE_KINDS: { v: ScheduleKind; label: string; sub: string }[] = [
@@ -42,6 +46,15 @@ export const ACTIVITIES: { icon: string; label: string }[] = [
   { icon: 'puzzles', label: 'Puzzles' },
   { icon: 'clean-up', label: 'Clean up' },
   { icon: 'bath', label: 'Bath' },
+  { icon: 'pajamas', label: 'Pajamas' },
+  { icon: 'potty', label: 'Potty' },
+  { icon: 'wash-hands', label: 'Wash hands' },
+  { icon: 'wash-face', label: 'Wash face' },
+  { icon: 'drink-water', label: 'Drink of water' },
+  { icon: 'clothes-tomorrow', label: 'Clothes for tomorrow' },
+  { icon: 'hug', label: 'Hugs and kisses' },
+  { icon: 'night-light', label: 'Night light on' },
+  { icon: 'lights-out', label: 'Lights out' },
   { icon: 'bedtime', label: 'Bedtime' },
 ];
 export const activityLabel = (icon: string) => ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon;
@@ -49,7 +62,7 @@ export const activityLabel = (icon: string) => ACTIVITIES.find((a) => a.icon ===
 const step = (icon: string, time = ''): Step => ({ icon, label: activityLabel(icon), time });
 
 /** Ready-made days to start from. Times are only a suggestion and can be cleared. */
-export const PRESETS: { v: string; label: string; steps: Step[] }[] = [
+export const PRESETS: { v: string; label: string; steps: Step[]; routine?: Routine }[] = [
   {
     v: 'morning', label: 'Homeschool morning',
     steps: [step('wake-up', '7:00'), step('get-dressed'), step('breakfast', '7:30'), step('brush-teeth'), step('writing', '8:30'), step('math'), step('snack', '9:15'), step('outside'), step('story', '10:30'), step('lunch', '11:30')],
@@ -61,6 +74,14 @@ export const PRESETS: { v: string; label: string; steps: Step[] }[] = [
   {
     v: 'short', label: 'Short learning time',
     steps: [step('writing'), step('math'), step('art'), step('snack'), step('story'), step('outside')],
+  },
+  {
+    v: 'bedtime', label: 'Bedtime routine', routine: 'bedtime',
+    steps: [step('bath', '6:45'), step('pajamas'), step('potty'), step('brush-teeth'), step('story', '7:05'), step('hug'), step('lights-out', '7:30')],
+  },
+  {
+    v: 'bedtime-short', label: 'Short bedtime (no bath)', routine: 'bedtime',
+    steps: [step('pajamas'), step('potty'), step('brush-teeth'), step('story'), step('lights-out')],
   },
 ];
 
@@ -173,6 +194,11 @@ const LABELS: Record<ScheduleKind, string> = {
   cards: 'Preschool schedule cards',
   week: 'Preschool homeschool week',
 };
+const BEDTIME_LABELS: Record<ScheduleKind, string> = {
+  day: 'Bedtime routine chart',
+  cards: 'Bedtime routine cards',
+  week: 'Preschool homeschool week',
+};
 
 // ---------- Pages ----------
 
@@ -180,7 +206,8 @@ const LABELS: Record<ScheduleKind, string> = {
 function dayPage(o: ScheduleOptions, w: number, h: number): Page {
   const items: Item[] = [];
   const steps = o.steps.slice(0, MAX_STEPS);
-  const t = titleFor(o.name, 'Day', 'My Day', 30, w - 2 * M, 18);
+  const bed = o.routine === 'bedtime';
+  const t = titleFor(o.name, bed ? 'Bedtime' : 'Day', bed ? 'My Bedtime' : 'My Day', 30, w - 2 * M, 18);
   items.push({ kind: 'text', x: w / 2, y: M + 34, size: t.size, text: t.text, color: INK, align: 'center' });
   const top = M + 58;
   const bottom = h - M - 24;
@@ -210,7 +237,7 @@ function dayPage(o: ScheduleOptions, w: number, h: number): Page {
     const label = fitText(cleanLabel(s.label) || activityLabel(s.icon), labelSize, right - lx, 12);
     items.push({ kind: 'text', x: lx, y: y + boxH / 2 + label.size * 0.36, size: label.size, text: label.text, color: INK, align: 'left' });
   });
-  footer(items, w, h, o.credit, LABELS.day);
+  footer(items, w, h, o.credit, scheduleLabel('day', o.routine));
   return { w, h, items };
 }
 
@@ -218,7 +245,8 @@ function dayPage(o: ScheduleOptions, w: number, h: number): Page {
 function cardsPage(o: ScheduleOptions, w: number, h: number): Page {
   const items: Item[] = [];
   const steps = o.steps.slice(0, CARDS);
-  const t = titleFor(o.name, 'schedule cards', 'Schedule cards', 18, w - 2 * M, 12);
+  const bed = o.routine === 'bedtime';
+  const t = titleFor(o.name, bed ? 'bedtime cards' : 'schedule cards', bed ? 'Bedtime cards' : 'Schedule cards', 18, w - 2 * M, 12);
   items.push({ kind: 'text', x: M, y: M + 16, size: t.size, text: t.text, color: INK, align: 'left' });
   items.push({ kind: 'text', x: w - M, y: M + 16, size: 10, text: 'Cut on the dashed lines.', color: COLORS.quiet, align: 'right' });
   const cols = 3, rows = 4;
@@ -252,7 +280,7 @@ function cardsPage(o: ScheduleOptions, w: number, h: number): Page {
     lines.lines.forEach((l, k) => items.push({ kind: 'text', x: x + cw / 2, y: firstY + k * lineH, size: lines.size, text: l, color: INK, align: 'center' }));
     if (time) items.push({ kind: 'text', x: x + cw / 2, y: labelY + 2, size: 11, text: time, color: COLORS.quiet, align: 'center' });
   }
-  footer(items, w, h, o.credit, LABELS.cards);
+  footer(items, w, h, o.credit, scheduleLabel('cards', o.routine));
   return { w, h, items };
 }
 
@@ -324,4 +352,4 @@ export function buildSchedulePage(o: ScheduleOptions): Page {
   if (o.kind === 'week') return weekPage(o, w, h);
   return dayPage(o, w, h);
 }
-export const scheduleLabel = (k: ScheduleKind) => LABELS[k];
+export const scheduleLabel = (k: ScheduleKind, routine: Routine = 'day') => (routine === 'bedtime' ? BEDTIME_LABELS : LABELS)[k];

@@ -9,7 +9,7 @@ import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
 import {
   ACTIVITIES, PRESETS, SCHEDULE_KINDS, SUBJECTS, DEFAULT_SUBJECTS, MAX_STEPS, MAX_LABEL, activityLabel, buildSchedulePage,
-  loadScheduleIcons, scheduleIconUrl, scheduleLabel, type ScheduleKind, type Step,
+  loadScheduleIcons, scheduleIconUrl, scheduleLabel, type Routine, type ScheduleKind, type Step,
 } from '../lib/schedule';
 import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
@@ -22,10 +22,14 @@ const small = 'rounded-md border border-hairline bg-white px-2 py-1 text-[14px] 
  * weekly homeschool chart. Free: every page, every picture, one page at a time. Members also print all three pages
  * at once, or this page for every kid on their list. The child's name and the typed labels stay in the browser.
  */
-export default function ScheduleMaker(props: { source?: string }) {
-  const [kind, setKind] = useState<ScheduleKind>('day');
-  const [preset, setPreset] = useState('morning');
-  const [steps, setSteps] = useState<Step[]>(PRESETS[0].steps);
+export default function ScheduleMaker(props: { source?: string; preset?: string; kinds?: ScheduleKind[] }) {
+  const start = PRESETS.find((p) => p.v === props.preset) ?? PRESETS[0];
+  // The bedtime page offers the day list and the cards; the weekly homeschool chart lives on /preschool-schedule/.
+  const KINDS = SCHEDULE_KINDS.filter((x) => !props.kinds || props.kinds.includes(x.v));
+  const [kind, setKind] = useState<ScheduleKind>(KINDS[0].v);
+  const [preset, setPreset] = useState(start.v);
+  const [steps, setSteps] = useState<Step[]>(start.steps);
+  const [routine, setRoutine] = useState<Routine>(start.routine ?? 'day');
   const [subjects, setSubjects] = useState<string[]>(DEFAULT_SUBJECTS);
   const [name, setName] = useState('');
   const [paper, setPaper] = useState<Paper>('letter');
@@ -43,9 +47,9 @@ export default function ScheduleMaker(props: { source?: string }) {
     try {
       const q = new URLSearchParams(location.search);
       const k = q.get('type') as ScheduleKind | null;
-      if (k && SCHEDULE_KINDS.some((x) => x.v === k)) setKind(k);
+      if (k && KINDS.some((x) => x.v === k)) setKind(k);
       const p = PRESETS.find((x) => x.v === q.get('preset'));
-      if (p) { setPreset(p.v); setSteps(p.steps); }
+      if (p) { setPreset(p.v); setSteps(p.steps); setRoutine(p.routine ?? 'day'); }
       const nm = sessionStorage.getItem('tl-name');
       if (nm) setName(nm);
     } catch { /* storage or URL unavailable */ }
@@ -55,15 +59,16 @@ export default function ScheduleMaker(props: { source?: string }) {
   useEffect(() => { try { if (name) sessionStorage.setItem('tl-name', name); } catch { /* ignore */ } }, [name]);
   useEffect(() => setDone(''), [kind]);
 
-  const opts = { kind, name, paper, credit, steps, subjects };
-  const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, icons]);
+  const opts = { kind, name, paper, credit, steps, subjects, routine };
+  const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, icons]);
   const svg = useMemo(() => pageToSvg(page), [page]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
-  const kindLabel = SCHEDULE_KINDS.find((x) => x.v === kind)!.label;
+  const kindOf = (o: (typeof SCHEDULE_KINDS)[number]) => (routine === 'bedtime' && o.v === 'day' ? { ...o, label: 'Bedtime routine chart', sub: 'Each step in order, with a picture and a box to check off' } : o);
+  const kindLabel = kindOf(KINDS.find((x) => x.v === kind) ?? KINDS[0]).label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const base = slug(scheduleLabel(kind));
+  const base = slug(scheduleLabel(kind, routine));
 
-  const pickPreset = (v: string) => { const p = PRESETS.find((x) => x.v === v); if (p) { setPreset(v); setSteps(p.steps); } };
+  const pickPreset = (v: string) => { const p = PRESETS.find((x) => x.v === v); if (p) { setPreset(v); setSteps(p.steps); setRoutine(p.routine ?? 'day'); } };
   const edit = (i: number, patch: Partial<Step>) => { setPreset(''); setSteps((s) => s.map((x, k) => (k === i ? { ...x, ...patch } : x))); };
   const move = (i: number, d: -1 | 1) => { setPreset(''); setSteps((s) => { const t = [...s]; [t[i], t[i + d]] = [t[i + d], t[i]]; return t; }); };
   const remove = (i: number) => { setPreset(''); setSteps((s) => s.filter((_, k) => k !== i)); };
@@ -80,14 +85,14 @@ export default function ScheduleMaker(props: { source?: string }) {
         pages = listNames.map((n) => buildSchedulePage({ ...opts, name: n }));
         file = `${base}-${listNames.length}-kids.pdf`;
       } else if (k === 'all') {
-        pages = SCHEDULE_KINDS.map((x) => buildSchedulePage({ ...opts, kind: x.v }));
-        file = 'preschool-schedule-3-pages.pdf';
+        pages = KINDS.map((x) => buildSchedulePage({ ...opts, kind: x.v }));
+        file = `${routine === 'bedtime' ? 'bedtime-routine' : 'preschool-schedule'}-${pages.length}-pages.pdf`;
       } else {
         pages = [buildSchedulePage(opts)];
         const who = slug(name);
         file = `${who ? `${who}-` : ''}${base}.pdf`;
       }
-      await savePdf(pages, file, 'Preschool schedule', whatLabel('Preschool schedule', k === 'all' ? 'all 3 pages' : kindLabel.toLowerCase(), k === 'list' && kids(pages.length)));
+      await savePdf(pages, file, routine === 'bedtime' ? 'Bedtime routine chart' : 'Preschool schedule', whatLabel('Preschool schedule', k === 'all' ? `all ${pages.length} pages` : kindLabel.toLowerCase(), routine === 'bedtime' && k === 'all' && 'bedtime', k === 'list' && kids(pages.length)));
       setDone(k === 'one' ? 'Downloaded. Print at 100% size.' : `Downloaded ${pages.length} pages.`);
     } finally {
       setBusy(false);
@@ -102,7 +107,7 @@ export default function ScheduleMaker(props: { source?: string }) {
         <fieldset class="mb-5">
           <legend class="text-[15px] font-bold mb-2">Page</legend>
           <div class="grid gap-2">
-            {SCHEDULE_KINDS.map((o) => {
+            {KINDS.map(kindOf).map((o) => {
               const on = o.v === kind;
               return (
                 <label class={`cursor-pointer rounded-lg border px-3 py-2 text-[15px] leading-tight transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-rule ${on ? 'border-rule bg-white text-ink shadow-[inset_0_0_0_1px_var(--color-rule)]' : 'border-hairline bg-white/60 text-muted hover:text-ink'}`}>
@@ -121,7 +126,7 @@ export default function ScheduleMaker(props: { source?: string }) {
               <span class="block text-[15px] font-bold mb-2">Start from</span>
               <select value={preset} onChange={(e) => pickPreset((e.target as HTMLSelectElement).value)}
                 class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink focus:border-rule focus:outline-none">
-                {preset === '' && <option value="">Your own day</option>}
+                {preset === '' && <option value="">{routine === 'bedtime' ? 'Your own routine' : 'Your own day'}</option>}
                 {PRESETS.map((p) => <option value={p.v}>{p.label}</option>)}
               </select>
             </label>
@@ -176,7 +181,7 @@ export default function ScheduleMaker(props: { source?: string }) {
           <input id="sch-name" type="text" value={name} maxLength={24} autoComplete="off" spellcheck={false} placeholder="Type a name"
             onInput={(e) => setName((e.target as HTMLInputElement).value)}
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none" />
-          <span class="block text-[13px] text-muted mt-2">Printed in the title, like "Maya's Day". It stays on this device.</span>
+          <span class="block text-[13px] text-muted mt-2">Printed in the title, like "Maya's {routine === 'bedtime' ? 'Bedtime' : 'Day'}". It stays on this device.</span>
         </label>
 
         <Segmented legend="Paper" name="sch-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
@@ -192,7 +197,7 @@ export default function ScheduleMaker(props: { source?: string }) {
               <p class="font-bold text-ink">Member printing</p>
               <div class="mt-3 grid gap-2">
                 <button type="button" disabled={busy} onClick={() => save('all')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
-                  All 3 pages in one PDF
+                  All {KINDS.length} pages in one PDF
                 </button>
                 <button type="button" disabled={busy || listNames.length === 0} onClick={() => save('list')} class="rounded-lg border border-rule bg-white px-4 py-2.5 text-left text-[15px] font-bold text-ink disabled:opacity-50">
                   {listNames.length ? `This page for all ${listNames.length} kids` : 'This page for every kid on your list'}
@@ -202,7 +207,7 @@ export default function ScheduleMaker(props: { source?: string }) {
             </>
           ) : (
             <>
-              <span class="font-bold text-ink">More than one child?</span> Members print this page for every kid at once, or all three pages in one PDF, with no footer line.{' '}
+              <span class="font-bold text-ink">More than one child?</span> Members print this page for every kid at once, or all {KINDS.length === 3 ? 'three' : 'both'} pages in one PDF, with no footer line.{' '}
               <a href="/membership/" class={link}>See membership</a>
             </>
           )}

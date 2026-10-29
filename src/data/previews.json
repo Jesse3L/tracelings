@@ -1,4 +1,16 @@
 {
+  "bedtime-routine-cards": {
+    "src": "/previews/bedtime-routine-picture-cards.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Bedtime routine picture cards to cut apart: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out"
+  },
+  "bedtime-routine-chart": {
+    "src": "/previews/printable-bedtime-routine-chart.webp",
+    "width": 800,
+    "height": 1035,
+    "alt": "Printable bedtime routine chart with pictures: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out, each with a box to check off"
+  },
   "bubble-a": {
     "src": "/previews/bubble-letter-a.webp",
     "width": 800,
