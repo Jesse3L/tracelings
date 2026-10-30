@@ -132,7 +132,7 @@
     },
     {
       "id": 8,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-10-30",
       "primaryKeyword": "christmas activities for preschoolers",
       "volume": 1300,
@@ -144,7 +144,9 @@
         "/number-tracing/1-20/",
         "/name-tracing/"
       ],
-      "season": "christmas"
+      "season": "christmas",
+      "slug": "christmas-activities-for-preschoolers",
+      "publishedOn": "2026-10-30"
     },
     {
       "id": 41,
