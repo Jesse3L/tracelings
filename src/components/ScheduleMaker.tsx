@@ -24,7 +24,7 @@ const small = 'rounded-md border border-hairline bg-white px-2 py-1 text-[14px] 
  */
 export default function ScheduleMaker(props: { source?: string; preset?: string; kinds?: ScheduleKind[] }) {
   const start = PRESETS.find((p) => p.v === props.preset) ?? PRESETS[0];
-  // The bedtime page offers the day list and the cards; the weekly homeschool chart lives on /preschool-schedule/.
+  // The bedtime and morning pages offer the day list and the cards; the weekly homeschool chart lives on /preschool-schedule/.
   const KINDS = SCHEDULE_KINDS.filter((x) => !props.kinds || props.kinds.includes(x.v));
   const [kind, setKind] = useState<ScheduleKind>(KINDS[0].v);
   const [preset, setPreset] = useState(start.v);
@@ -63,7 +63,10 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, icons]);
   const svg = useMemo(() => pageToSvg(page), [page]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
-  const kindOf = (o: (typeof SCHEDULE_KINDS)[number]) => (routine === 'bedtime' && o.v === 'day' ? { ...o, label: 'Bedtime routine chart', sub: 'Each step in order, with a picture and a box to check off' } : o);
+  const kindOf = (o: (typeof SCHEDULE_KINDS)[number]) => (routine !== 'day' && o.v === 'day' ? { ...o, label: scheduleLabel('day', routine), sub: 'Each step in order, with a picture and a box to check off' } : o);
+  const routineFile = routine === 'bedtime' ? 'bedtime-routine' : routine === 'morning' ? 'morning-routine' : 'preschool-schedule';
+  const routineTitle = routine === 'bedtime' ? 'Bedtime routine chart' : routine === 'morning' ? 'Morning routine chart' : 'Preschool schedule';
+  const routineWord = routine === 'bedtime' ? 'Bedtime' : routine === 'morning' ? 'Morning' : 'Day';
   const kindLabel = kindOf(KINDS.find((x) => x.v === kind) ?? KINDS[0]).label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const base = slug(scheduleLabel(kind, routine));
@@ -86,13 +89,13 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
         file = `${base}-${listNames.length}-kids.pdf`;
       } else if (k === 'all') {
         pages = KINDS.map((x) => buildSchedulePage({ ...opts, kind: x.v }));
-        file = `${routine === 'bedtime' ? 'bedtime-routine' : 'preschool-schedule'}-${pages.length}-pages.pdf`;
+        file = `${routineFile}-${pages.length}-pages.pdf`;
       } else {
         pages = [buildSchedulePage(opts)];
         const who = slug(name);
         file = `${who ? `${who}-` : ''}${base}.pdf`;
       }
-      await savePdf(pages, file, routine === 'bedtime' ? 'Bedtime routine chart' : 'Preschool schedule', whatLabel('Preschool schedule', k === 'all' ? `all ${pages.length} pages` : kindLabel.toLowerCase(), routine === 'bedtime' && k === 'all' && 'bedtime', k === 'list' && kids(pages.length)));
+      await savePdf(pages, file, routineTitle, whatLabel('Preschool schedule', k === 'all' ? `all ${pages.length} pages` : kindLabel.toLowerCase(), routine !== 'day' && k === 'all' && routine, k === 'list' && kids(pages.length)));
       setDone(k === 'one' ? 'Downloaded. Print at 100% size.' : `Downloaded ${pages.length} pages.`);
     } finally {
       setBusy(false);
@@ -126,7 +129,7 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
               <span class="block text-[15px] font-bold mb-2">Start from</span>
               <select value={preset} onChange={(e) => pickPreset((e.target as HTMLSelectElement).value)}
                 class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink focus:border-rule focus:outline-none">
-                {preset === '' && <option value="">{routine === 'bedtime' ? 'Your own routine' : 'Your own day'}</option>}
+                {preset === '' && <option value="">{routine !== 'day' ? 'Your own routine' : 'Your own day'}</option>}
                 {PRESETS.map((p) => <option value={p.v}>{p.label}</option>)}
               </select>
             </label>
@@ -181,7 +184,7 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
           <input id="sch-name" type="text" value={name} maxLength={24} autoComplete="off" spellcheck={false} placeholder="Type a name"
             onInput={(e) => setName((e.target as HTMLInputElement).value)}
             class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-xl text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none" />
-          <span class="block text-[13px] text-muted mt-2">Printed in the title, like "Maya's {routine === 'bedtime' ? 'Bedtime' : 'Day'}". It stays on this device.</span>
+          <span class="block text-[13px] text-muted mt-2">Printed in the title, like "Maya's {routineWord}". It stays on this device.</span>
         </label>
 
         <Segmented legend="Paper" name="sch-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
