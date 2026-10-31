@@ -20,9 +20,16 @@ const allSubjects = SUBJECTS.map((s) => s.id);
 // Every bedtime picture, with the longest labels a parent might type.
 const bedIcons = ['bath', 'pajamas', 'potty', 'wash-hands', 'wash-face', 'brush-teeth', 'drink-water', 'clothes-tomorrow', 'story', 'hug', 'night-light', 'lights-out'];
 const longBed: Step[] = bedIcons.map((icon, i) => ({ icon, label: i % 4 === 1 ? 'Put on cozy pajamas now' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '7:45 pm' : '' }));
+// Every morning picture (wake up to backpack), with long labels and times.
+const mornIcons = ['wake-up', 'potty', 'wash-hands', 'wash-face', 'get-dressed', 'brush-hair', 'make-bed', 'breakfast', 'brush-teeth', 'shoes', 'coat', 'backpack'];
+const longMorn: Step[] = mornIcons.map((icon, i) => ({ icon, label: i % 4 === 2 ? 'Put shoes on by the door' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '6:45 am' : '' }));
+// The chore pictures made with the morning set.
+const chores: Step[] = ['make-bed', 'feed-pet', 'set-table', 'water-plants', 'clean-up', 'lunchbox'].map((icon) => ({ icon, label: ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon, time: '' }));
 const cases: { tag: string; steps: Step[]; subjects: string[]; routine?: Routine }[] = [
   ...PRESETS.map((p) => ({ tag: p.v, steps: p.steps, subjects: DEFAULT_SUBJECTS, routine: p.routine })),
   { tag: 'bedtime-long', steps: longBed, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' },
+  { tag: 'morning-long', steps: longMorn, subjects: DEFAULT_SUBJECTS, routine: 'morning' },
+  { tag: 'chores', steps: chores, subjects: DEFAULT_SUBJECTS },
   { tag: 'long', steps: longSteps, subjects: allSubjects },
   { tag: 'four', steps: PRESETS[2].steps.slice(0, 4), subjects: allSubjects.slice(0, 4) },
 ];

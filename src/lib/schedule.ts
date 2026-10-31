@@ -1,13 +1,13 @@
-// Preschool schedule printables (/preschool-schedule/ and /preschool-schedule/bedtime-routine-chart/): a picture
-// schedule for the day or for bedtime, cut-apart picture cards, and a weekly homeschool chart. One page each, drawn
+// Preschool schedule printables (/preschool-schedule/, /preschool-schedule/bedtime-routine-chart/ and
+// /preschool-schedule/morning-routine-chart/): a picture schedule for the day, the morning or bedtime, cut-apart picture cards, and a weekly homeschool chart. One page each, drawn
 // in the browser like every other maker, so the child's name never leaves the device.
 // Routine pictures live in public/schedule/routine.json (0..1000 paths, even-odd fill).
 import { PAPER, COLORS, cleanName, type Item, type Page, type Paper } from './sheet';
 import { M, footer, box, circlePath, starPath, textW } from './homeschool';
 
 export type ScheduleKind = 'day' | 'cards' | 'week';
-/** What the day and card pages are for: the day ("Maya's Day") or the bedtime routine ("Maya's Bedtime"). */
-export type Routine = 'day' | 'bedtime';
+/** What the day and card pages are for: the day ("Maya's Day"), the morning ("Maya's Morning") or bedtime ("Maya's Bedtime"). */
+export type Routine = 'day' | 'bedtime' | 'morning';
 
 export interface Step { icon: string; label: string; time: string }
 
@@ -56,6 +56,15 @@ export const ACTIVITIES: { icon: string; label: string }[] = [
   { icon: 'night-light', label: 'Night light on' },
   { icon: 'lights-out', label: 'Lights out' },
   { icon: 'bedtime', label: 'Bedtime' },
+  { icon: 'brush-hair', label: 'Brush hair' },
+  { icon: 'make-bed', label: 'Make bed' },
+  { icon: 'shoes', label: 'Shoes on' },
+  { icon: 'coat', label: 'Coat on' },
+  { icon: 'backpack', label: 'Backpack' },
+  { icon: 'lunchbox', label: 'Lunchbox' },
+  { icon: 'feed-pet', label: 'Feed the pet' },
+  { icon: 'set-table', label: 'Set the table' },
+  { icon: 'water-plants', label: 'Water the plants' },
 ];
 export const activityLabel = (icon: string) => ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon;
 
@@ -82,6 +91,14 @@ export const PRESETS: { v: string; label: string; steps: Step[]; routine?: Routi
   {
     v: 'bedtime-short', label: 'Short bedtime (no bath)', routine: 'bedtime',
     steps: [step('pajamas'), step('potty'), step('brush-teeth'), step('story'), step('lights-out')],
+  },
+  {
+    v: 'morning-school', label: 'School morning routine', routine: 'morning',
+    steps: [step('wake-up', '6:45'), step('potty'), step('get-dressed'), step('breakfast', '7:00'), step('brush-teeth'), step('brush-hair'), step('shoes'), step('coat'), step('backpack', '7:35')],
+  },
+  {
+    v: 'morning-home', label: 'Home morning routine', routine: 'morning',
+    steps: [step('wake-up', '7:00'), step('potty'), step('wash-hands'), step('get-dressed'), step('make-bed'), step('breakfast', '7:30'), step('brush-teeth'), step('play')],
   },
 ];
 
@@ -199,6 +216,17 @@ const BEDTIME_LABELS: Record<ScheduleKind, string> = {
   cards: 'Bedtime routine cards',
   week: 'Preschool homeschool week',
 };
+const MORNING_LABELS: Record<ScheduleKind, string> = {
+  day: 'Morning routine chart',
+  cards: 'Morning routine cards',
+  week: 'Preschool homeschool week',
+};
+/** Title words for the day list and the cards: "Maya's Morning", "Maya's morning cards". */
+const TITLES: Record<Routine, { day: string; myDay: string; cards: string; myCards: string }> = {
+  day: { day: 'Day', myDay: 'My Day', cards: 'schedule cards', myCards: 'Schedule cards' },
+  bedtime: { day: 'Bedtime', myDay: 'My Bedtime', cards: 'bedtime cards', myCards: 'Bedtime cards' },
+  morning: { day: 'Morning', myDay: 'My Morning', cards: 'morning cards', myCards: 'Morning cards' },
+};
 
 // ---------- Pages ----------
 
@@ -206,8 +234,8 @@ const BEDTIME_LABELS: Record<ScheduleKind, string> = {
 function dayPage(o: ScheduleOptions, w: number, h: number): Page {
   const items: Item[] = [];
   const steps = o.steps.slice(0, MAX_STEPS);
-  const bed = o.routine === 'bedtime';
-  const t = titleFor(o.name, bed ? 'Bedtime' : 'Day', bed ? 'My Bedtime' : 'My Day', 30, w - 2 * M, 18);
+  const tt = TITLES[o.routine ?? 'day'];
+  const t = titleFor(o.name, tt.day, tt.myDay, 30, w - 2 * M, 18);
   items.push({ kind: 'text', x: w / 2, y: M + 34, size: t.size, text: t.text, color: INK, align: 'center' });
   const top = M + 58;
   const bottom = h - M - 24;
@@ -245,8 +273,8 @@ function dayPage(o: ScheduleOptions, w: number, h: number): Page {
 function cardsPage(o: ScheduleOptions, w: number, h: number): Page {
   const items: Item[] = [];
   const steps = o.steps.slice(0, CARDS);
-  const bed = o.routine === 'bedtime';
-  const t = titleFor(o.name, bed ? 'bedtime cards' : 'schedule cards', bed ? 'Bedtime cards' : 'Schedule cards', 18, w - 2 * M, 12);
+  const tt = TITLES[o.routine ?? 'day'];
+  const t = titleFor(o.name, tt.cards, tt.myCards, 18, w - 2 * M, 12);
   items.push({ kind: 'text', x: M, y: M + 16, size: t.size, text: t.text, color: INK, align: 'left' });
   items.push({ kind: 'text', x: w - M, y: M + 16, size: 10, text: 'Cut on the dashed lines.', color: COLORS.quiet, align: 'right' });
   const cols = 3, rows = 4;
@@ -352,4 +380,4 @@ export function buildSchedulePage(o: ScheduleOptions): Page {
   if (o.kind === 'week') return weekPage(o, w, h);
   return dayPage(o, w, h);
 }
-export const scheduleLabel = (k: ScheduleKind, routine: Routine = 'day') => (routine === 'bedtime' ? BEDTIME_LABELS : LABELS)[k];
+export const scheduleLabel = (k: ScheduleKind, routine: Routine = 'day') => (routine === 'bedtime' ? BEDTIME_LABELS : routine === 'morning' ? MORNING_LABELS : LABELS)[k];

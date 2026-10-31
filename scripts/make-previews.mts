@@ -162,6 +162,12 @@ jobs.push(render('bedtime-routine-chart', 'printable-bedtime-routine-chart', bui
   'Printable bedtime routine chart with pictures: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out, each with a box to check off'));
 jobs.push(render('bedtime-routine-cards', 'bedtime-routine-picture-cards', buildSchedulePage({ kind: 'cards', name: '', paper: 'letter', credit: true, steps: bed.steps, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' }),
   'Bedtime routine picture cards to cut apart: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out'));
+// Morning routine chart: the school morning sample as a checklist and as cut-apart cards.
+const morn = PRESETS.find((p) => p.v === 'morning-school')!;
+jobs.push(render('morning-routine-chart', 'printable-morning-routine-chart', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: morn.steps, subjects: DEFAULT_SUBJECTS, routine: 'morning' }),
+  'Printable morning routine chart for preschoolers with pictures: wake up, potty, get dressed, breakfast, brush teeth, brush hair, shoes, coat and backpack, each with a box to check off'));
+jobs.push(render('morning-routine-cards', 'morning-routine-picture-cards', buildSchedulePage({ kind: 'cards', name: '', paper: 'letter', credit: true, steps: morn.steps, subjects: DEFAULT_SUBJECTS, routine: 'morning' }),
+  'Morning routine picture cards to cut apart: wake up, potty, get dressed, breakfast, brush teeth, brush hair, shoes on, coat on and backpack'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

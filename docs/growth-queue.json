@@ -630,7 +630,7 @@
     },
     {
       "id": "morning-routine-chart",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "bedtime-routine-chart"
@@ -639,6 +639,72 @@
       "linkTo": [
         "/preschool-schedule/",
         "/preschool-schedule/bedtime-routine-chart/"
+      ],
+      "done": "2026-10-31",
+      "urls": [
+        "/preschool-schedule/morning-routine-chart/"
+      ],
+      "keywords": {
+        "morning routine chart for preschoolers": [
+          1000,
+          30
+        ],
+        "morning routine chart": [
+          390,
+          30
+        ],
+        "free editable morning routine chart": [
+          210,
+          24
+        ],
+        "printable morning routine chart": [
+          90,
+          30
+        ],
+        "free editable morning routine chart pdf": [
+          90,
+          24
+        ],
+        "free printable morning routine chart": [
+          40,
+          30
+        ],
+        "visual morning routine chart": [
+          40,
+          29
+        ],
+        "preschool morning routine chart": [
+          30,
+          30
+        ]
+      },
+      "note": "Ubersuggest US, Oct 31, 2026: volume held (the Oct 27 near-zero reading was for \"for kids\" variants, which still read 0), so it got its own page named for \"morning routine chart for preschoolers\". Built: School morning routine and Home morning routine presets, titles \"Maya's Morning\", 9 new pictures (shoes, backpack, coat, brush hair, make bed, lunchbox, feed pet, set table, water plants; the last four are ready for the chore chart), and the page with the checklist and cut-apart cards."
+    },
+    {
+      "id": "potty-training-chart",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "morning-routine-chart"
+      ],
+      "title": "Potty training chart: a one-page printable on the schedule maker (potty steps in pictures: pants down, potty, wipe, flush, wash hands, plus a sticker or star chart for the week) with its own page under /preschool-schedule/ if volume holds; check \"potty training chart\" and \"printable potty chart\" first. Needs 3 to 4 pictures (flush, toilet paper, sticker star).",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/preschool-schedule/morning-routine-chart/",
+        "/preschool-schedule/bedtime-routine-chart/"
+      ]
+    },
+    {
+      "id": "after-school-routine-chart",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "morning-routine-chart"
+      ],
+      "title": "After school routine chart: an After school preset (shoes off, backpack away, wash hands, snack, play outside, homework or reading, dinner) and a section on /preschool-schedule/morning-routine-chart/ or its own page if \"after school routine chart\" volume holds; check first.",
+      "linkTo": [
+        "/preschool-schedule/morning-routine-chart/",
+        "/preschool-schedule/"
       ]
     },
     {
@@ -652,7 +718,8 @@
       "linkTo": [
         "/preschool-schedule/",
         "/program/"
-      ]
+      ],
+      "note": "Oct 31, 2026: make bed, feed the pet, set the table, water the plants, lunchbox and clean up pictures already exist (public/schedule/routine.json); 2 to 4 more needed (laundry, dishes, wipe table, put toys away)."
     },
     {
       "id": "routine-chart-in-program",
@@ -661,7 +728,7 @@
       "needs": [
         "bedtime-routine-chart"
       ],
-      "title": "Program (members): add the child's own bedtime or daily picture schedule as an optional page in the personalized week-1 welcome pack (built from the routine pictures, name in the title), so new members print their routine with their first week.",
+      "title": "Program (members): add the child's own morning, bedtime or daily picture schedule as an optional page in the personalized week-1 welcome pack (built from the routine pictures, name in the title), so new members print their routine with their first week.",
       "linkTo": [
         "/program/"
       ]

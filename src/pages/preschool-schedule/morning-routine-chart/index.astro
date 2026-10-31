@@ -1,0 +1,162 @@
+---
+import { faqText } from '../../../lib/seo';
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import ScheduleMaker from '../../../components/ScheduleMaker.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/preschool-schedule/morning-routine-chart/', SITE.url).href;
+const title = `Morning Routine Chart for Preschoolers: Free Printable | ${SITE.name}`;
+const description = 'Make a free printable morning routine chart for preschoolers with pictures and your child’s name: wake up, get dressed, breakfast, teeth, shoes and backpack.';
+
+const faqs = [
+  { q: 'What should be on a morning routine chart for a preschooler?', a: 'The steps your child does every morning, in the order you do them. For many preschoolers that is wake up, potty, get dressed, breakfast, brush teeth and brush hair, then shoes, coat and backpack on school days. Six to nine steps is plenty. Leave off anything a grown-up does for them, like packing the lunch.' },
+  { q: 'How long should a preschool morning routine take?', a: 'Many families plan about 45 minutes to an hour from wake up to out the door, and less on home mornings. Preschoolers tend to move slowly in the morning, so build in 10 extra minutes rather than rushing each step.' },
+  { q: 'At what age can a child follow a morning routine chart?', a: 'Many kids start following a picture chart somewhere between 2 and 3, with a grown-up pointing at each step. By 4 or 5, some kids can get through most of it with a reminder or two. Kids vary a lot here, and that’s normal.' },
+  { q: 'Can I make one chart for school days and one for home days?', a: 'Yes. Pick the School morning routine sample for school days and the Home morning routine sample for weekends or homeschool mornings, change any step, and print each one. Hang the one for today, or put both side by side.' },
+  { q: 'Is this morning routine chart free?', a: 'Yes. The chart, the cut-apart cards, every picture and your own words are free, one page at a time. Members can also print the page for every child on their list at once, or both pages in one PDF, with no footer line.', html: 'Yes. The chart, the cut-apart cards, every picture and your own words are free, one page at a time. <a href="/membership/">Members</a> can also print the page for every child on their list at once, or both pages in one PDF, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. The chart is drawn in your browser, with the name and any words you type. They stay on your device and are never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Morning routine chart maker for preschoolers (free printable with pictures)',
+    url,
+    learningResourceType: 'Printable chart',
+    educationalLevel: 'Toddler, Preschool, Kindergarten',
+    teaches: 'The morning routine in order, with a picture for each step',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Preschool schedule', item: SITE.url + '/preschool-schedule/' },
+      { '@type': 'ListItem', position: 3, name: 'Morning routine chart', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/preschool-schedule/" class="hover:text-ink">Preschool schedule</a> <span aria-hidden="true">/</span> <span aria-current="page">Morning routine chart</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Morning routine chart for preschoolers</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes a free printable morning routine chart with pictures: each step from wake up to backpack, with a box to check off, or a page of cut-apart picture cards. Start from the school morning or the home morning, change the steps and words to fit your family, add your child's name, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <ScheduleMaker client:load source="morning-routine-chart" preset="morning-school" kinds={['day', 'cards']} />
+    </div>
+    <div class="flex flex-wrap gap-x-8">
+      <Preview k="morning-routine-chart" caption="Example: school morning routine chart with nine steps." />
+      <Preview k="morning-routine-cards" caption="Example: morning picture cards to cut apart." />
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        Mornings are when "put your shoes on" gets said five times. A morning routine chart puts the steps in pictures, so a 3 or
+        4 year old can see that clothes come before breakfast and shoes come before the door. Your child checks the chart instead
+        of waiting for the next reminder, and you get to point at a picture instead of repeating yourself.
+      </p>
+
+      <h2>Two morning printables</h2>
+      <ul>
+        <li><strong>Morning routine chart:</strong> up to 12 steps in order, each with a picture, your words, an optional time and a box to check off. Slip it in a sheet protector and use a dry-erase marker so the boxes can be checked again tomorrow.</li>
+        <li><strong>Morning picture cards:</strong> 12 cards with dashed cut lines. Stick them in a row by the front door or the bathroom mirror and let your child flip each one over when it's done. Empty cards print blank to draw on.</li>
+      </ul>
+      <p>
+        There are morning pictures for wake up, potty, wash hands, wash face, get dressed, make bed, breakfast, brush teeth, brush
+        hair, shoes, coat, backpack and lunchbox, plus all the daytime and bedtime pictures from
+        our <a href="/preschool-schedule/">preschool daily schedule maker</a>. Change any label to your family's words, like "Vitamins" or
+        "Shoes by the door".
+      </p>
+
+      <h2>A sample school morning routine</h2>
+      <p>
+        The "School morning routine" sample in the maker takes about 50 minutes, from a 6:45 wake up to out the door at about 7:35.
+        It puts the slow steps first and the ones that lead to the door last:
+      </p>
+      <ol>
+        <li><strong>6:45, wake up and potty:</strong> open the curtains and give a few quiet minutes before asking for anything.</li>
+        <li><strong>Get dressed:</strong> lay the clothes out the night before so there is nothing to choose at 7 am. Many preschoolers can pull on pants and a shirt; buttons and socks often still need a hand.</li>
+        <li><strong>7:00, breakfast:</strong> the longest step for many kids. Sit down together if you can, and keep screens off so breakfast actually gets eaten.</li>
+        <li><strong>Brush teeth and brush hair:</strong> a grown-up usually helps at this age. A two-minute song keeps teeth time from dragging.</li>
+        <li><strong>Shoes, coat, then 7:35, backpack:</strong> keep all three by the door. Slip-on shoes or shoes with hook-and-loop straps make this step something your child can do alone.</li>
+      </ol>
+      <p>
+        Times are only a guide, so slide the whole morning to match your start time. Most preschoolers can't read a clock yet, and the
+        order is what they follow. If you're often late, start the routine 10 minutes earlier rather than hurrying each step.
+      </p>
+
+      <h2>A home morning or homeschool morning</h2>
+      <p>
+        On weekends and homeschool days, the "Home morning routine" sample drops the coat and backpack and adds wash hands, make bed
+        and free play. Making the bed at 3 or 4 usually means pulling the blanket up and putting the pillow on top, and that counts.
+        The free play at the end gives your child something to look forward to once the steps are done.
+      </p>
+      <p>
+        If you teach at home, the morning routine leads straight into learning time.
+        Our <a href="/learn/preschool-homeschool-schedule/">preschool homeschool schedule guide</a> has a sample day with 10 to 15 minutes
+        of table work after breakfast, and the same maker prints a picture schedule for the whole day.
+      </p>
+
+      <h2>Morning routine chart for toddlers</h2>
+      <p>
+        Younger kids do best with fewer, bigger pictures. For a 2 year old, try three to five steps (wake up, get dressed, breakfast,
+        teeth) and the picture cards rather than the list. Hold up each card as you start that step, and say its name. Many toddlers
+        like handing you the card when the step is done.
+      </p>
+      <p>
+        Older preschoolers and kindergartners can usually handle the full chart and check off the boxes themselves. Some like adding a
+        job of their own, like feeding the pet or packing their lunchbox.
+      </p>
+
+      <h2>How to make the morning chart stick</h2>
+      <ol>
+        <li><strong>Make it together.</strong> Let your child help choose the steps, put the cards in order or color the pictures.</li>
+        <li><strong>Start the night before.</strong> Clothes out, backpack by the door, shoes in one spot. Our <a href="/preschool-schedule/bedtime-routine-chart/">bedtime routine chart</a> has a "Clothes for tomorrow" picture for this.</li>
+        <li><strong>Hang it where the morning happens.</strong> The bedroom door for the first steps, or the front door if most of the hold-ups are shoes and coats.</li>
+        <li><strong>Ask "what's next?"</strong> instead of giving the next instruction. Your child looks at the chart and tells you.</li>
+        <li><strong>Keep it the same for two weeks</strong> before changing anything, then change one step at a time.</li>
+      </ol>
+      <p>
+        Every child moves at a different pace in the morning, and it can take a few weeks before a new routine feels normal. If you have
+        concerns about your child's sleep, mood or self-care skills, ask your child's teacher or pediatrician.
+      </p>
+
+      <h2>Learning after breakfast</h2>
+      <p>
+        If you're homeschooling, our <a href="/homeschool/preschool/">homeschool preschool curriculum</a> lays out 36 weeks with a
+        letter and a number each week, about 15 minutes a day, which fits after the morning routine. Week 1 is
+        free: <a href="/program/?level=pre-k#placement">take the free placement check</a> to start at the right week.
+      </p>
+
+      <h2>Try this tomorrow morning</h2>
+      <ol>
+        <li><strong>Tonight, 5 minutes:</strong> print the chart with the "School morning routine" or "Home morning routine" sample and your child's name.</li>
+        <li><strong>Before bed:</strong> read it together from the top, pointing at each picture, and tape it up where the morning starts. Lay out tomorrow's clothes.</li>
+        <li><strong>In the morning:</strong> at each step, walk back to the chart and let your child check the box.</li>
+        <li><strong>After drop-off or breakfast:</strong> notice which step took longest, and change only that one for the next day.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about morning routine charts</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>
