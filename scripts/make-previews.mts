@@ -168,6 +168,12 @@ jobs.push(render('morning-routine-chart', 'printable-morning-routine-chart', bui
   'Printable morning routine chart for preschoolers with pictures: wake up, potty, get dressed, breakfast, brush teeth, brush hair, shoes, coat and backpack, each with a box to check off'));
 jobs.push(render('morning-routine-cards', 'morning-routine-picture-cards', buildSchedulePage({ kind: 'cards', name: '', paper: 'letter', credit: true, steps: morn.steps, subjects: DEFAULT_SUBJECTS, routine: 'morning' }),
   'Morning routine picture cards to cut apart: wake up, potty, get dressed, breakfast, brush teeth, brush hair, shoes on, coat on and backpack'));
+// Potty training chart: the sticker chart (the page's default) and the potty chair steps.
+const potty = PRESETS.find((p) => p.v === 'potty-chair')!;
+jobs.push(render('potty-sticker-chart', 'printable-potty-training-sticker-chart', buildSchedulePage({ kind: 'stickers', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty', boxes: 5 }),
+  'Printable potty training sticker chart: Monday to Sunday with five sticker circles a day, a star to color in each one, and a reward line at the bottom'));
+jobs.push(render('potty-steps-chart', 'potty-training-steps-chart-with-pictures', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty' }),
+  'Potty training steps chart with pictures: pants down, sit on the potty, wipe, pants up, flush or dump, wash hands and dry hands, each with a box to check off'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

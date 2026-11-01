@@ -8,7 +8,7 @@ import { needsEmail } from '../lib/gate';
 import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
 import {
-  ACTIVITIES, PRESETS, SCHEDULE_KINDS, SUBJECTS, DEFAULT_SUBJECTS, MAX_STEPS, MAX_LABEL, activityLabel, buildSchedulePage,
+  ACTIVITIES, PRESETS, SCHEDULE_KINDS, SUBJECTS, DEFAULT_SUBJECTS, DEFAULT_KINDS, STICKER_BOXES, MAX_STEPS, MAX_LABEL, activityLabel, buildSchedulePage,
   loadScheduleIcons, scheduleIconUrl, scheduleLabel, type Routine, type ScheduleKind, type Step,
 } from '../lib/schedule';
 import { Segmented } from './Tracer';
@@ -24,14 +24,17 @@ const small = 'rounded-md border border-hairline bg-white px-2 py-1 text-[14px] 
  */
 export default function ScheduleMaker(props: { source?: string; preset?: string; kinds?: ScheduleKind[] }) {
   const start = PRESETS.find((p) => p.v === props.preset) ?? PRESETS[0];
-  // The bedtime and morning pages offer the day list and the cards; the weekly homeschool chart lives on /preschool-schedule/.
-  const KINDS = SCHEDULE_KINDS.filter((x) => !props.kinds || props.kinds.includes(x.v));
+  // The bedtime and morning pages offer the day list and the cards; the weekly homeschool chart lives on /preschool-schedule/
+  // and the potty sticker chart on /preschool-schedule/potty-training-chart/.
+  const KINDS = (props.kinds ?? DEFAULT_KINDS).map((v) => SCHEDULE_KINDS.find((x) => x.v === v)!).filter(Boolean);
   const [kind, setKind] = useState<ScheduleKind>(KINDS[0].v);
   const [preset, setPreset] = useState(start.v);
   const [steps, setSteps] = useState<Step[]>(start.steps);
   const [routine, setRoutine] = useState<Routine>(start.routine ?? 'day');
   const [subjects, setSubjects] = useState<string[]>(DEFAULT_SUBJECTS);
   const [name, setName] = useState('');
+  const [boxes, setBoxes] = useState(5);
+  const [reward, setReward] = useState('');
   const [paper, setPaper] = useState<Paper>('letter');
   const [icons, setIcons] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -59,14 +62,14 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   useEffect(() => { try { if (name) sessionStorage.setItem('tl-name', name); } catch { /* ignore */ } }, [name]);
   useEffect(() => setDone(''), [kind]);
 
-  const opts = { kind, name, paper, credit, steps, subjects, routine };
-  const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, icons]);
+  const opts = { kind, name, paper, credit, steps, subjects, routine, boxes, reward };
+  const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, boxes, reward, icons]);
   const svg = useMemo(() => pageToSvg(page), [page]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
   const kindOf = (o: (typeof SCHEDULE_KINDS)[number]) => (routine !== 'day' && o.v === 'day' ? { ...o, label: scheduleLabel('day', routine), sub: 'Each step in order, with a picture and a box to check off' } : o);
-  const routineFile = routine === 'bedtime' ? 'bedtime-routine' : routine === 'morning' ? 'morning-routine' : 'preschool-schedule';
-  const routineTitle = routine === 'bedtime' ? 'Bedtime routine chart' : routine === 'morning' ? 'Morning routine chart' : 'Preschool schedule';
-  const routineWord = routine === 'bedtime' ? 'Bedtime' : routine === 'morning' ? 'Morning' : 'Day';
+  const routineFile = routine === 'bedtime' ? 'bedtime-routine' : routine === 'morning' ? 'morning-routine' : routine === 'potty' ? 'potty-training-chart' : 'preschool-schedule';
+  const routineTitle = routine === 'bedtime' ? 'Bedtime routine chart' : routine === 'morning' ? 'Morning routine chart' : routine === 'potty' ? 'Potty training chart' : 'Preschool schedule';
+  const routineWord = kind === 'stickers' ? 'Potty Chart' : routine === 'bedtime' ? 'Bedtime' : routine === 'morning' ? 'Morning' : routine === 'potty' ? 'Potty Steps' : 'Day';
   const kindLabel = kindOf(KINDS.find((x) => x.v === kind) ?? KINDS[0]).label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const base = slug(scheduleLabel(kind, routine));
@@ -123,7 +126,24 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
           </div>
         </fieldset>
 
-        {kind !== 'week' ? (
+        {kind === 'stickers' ? (
+          <div class="mb-5">
+            <label class="block mb-3">
+              <span class="block text-[15px] font-bold mb-2">Boxes for each day</span>
+              <select value={boxes} onChange={(e) => setBoxes(Number((e.target as HTMLSelectElement).value))}
+                class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink focus:border-rule focus:outline-none">
+                {STICKER_BOXES.map((b) => <option value={b}>{b} a day{b === 5 ? ' (most kids)' : b === 8 ? ' (small stickers)' : ''}</option>)}
+              </select>
+            </label>
+            <label class="block">
+              <span class="block text-[15px] font-bold mb-2">Reward <span class="font-normal text-muted">(optional)</span></span>
+              <input type="text" value={reward} maxLength={40} autoComplete="off" placeholder="Like: a trip to the park"
+                onInput={(e) => setReward((e.target as HTMLInputElement).value)}
+                class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink placeholder:text-[#a3acbf] focus:border-rule focus:outline-none" />
+              <span class="block text-[13px] text-muted mt-2">Printed on the line under "When my chart is full, I get". Leave it blank to write it in by hand.</span>
+            </label>
+          </div>
+        ) : kind !== 'week' ? (
           <div class="mb-5">
             <label class="block mb-3">
               <span class="block text-[15px] font-bold mb-2">Start from</span>
@@ -210,7 +230,7 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
             </>
           ) : (
             <>
-              <span class="font-bold text-ink">More than one child?</span> Members print this page for every kid at once, or all {KINDS.length === 3 ? 'three' : 'both'} pages in one PDF, with no footer line.{' '}
+              <span class="font-bold text-ink">More than one child?</span> Members print this page for every kid at once, or all {KINDS.length === 3 ? 'three' : KINDS.length === 2 ? 'both' : KINDS.length} pages in one PDF, with no footer line.{' '}
               <a href="/membership/" class={link}>See membership</a>
             </>
           )}
