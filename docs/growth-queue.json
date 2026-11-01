@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-29",
+  "updated": "2026-11-01",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -682,7 +682,7 @@
     },
     {
       "id": "potty-training-chart",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "morning-routine-chart"
@@ -692,6 +692,86 @@
         "/preschool-schedule/",
         "/preschool-schedule/morning-routine-chart/",
         "/preschool-schedule/bedtime-routine-chart/"
+      ],
+      "done": "2026-11-01",
+      "urls": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "keywords": {
+        "potty training chart": [
+          12100,
+          35
+        ],
+        "potty training chart and stickers": [
+          8100,
+          35
+        ],
+        "potty training chart to print": [
+          3600,
+          28
+        ],
+        "printable potty training chart": [
+          2900,
+          38
+        ],
+        "free printable potty chart": [
+          2400,
+          19
+        ],
+        "printable potty chart": [
+          1900,
+          30
+        ],
+        "potty training chart printable": [
+          1900,
+          34
+        ],
+        "printable potty chart for stickers": [
+          1300,
+          32
+        ],
+        "free potty training chart": [
+          720,
+          28
+        ]
+      }
+    },
+    {
+      "id": "potty-sticker-chart-themes",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-training-chart"
+      ],
+      "title": "Potty sticker chart picture themes: let the sticker chart use a theme picture in each circle instead of the star (dinosaurs, trucks, unicorns, ocean, space from public/program/icons), a select on /preschool-schedule/potty-training-chart/; character charts (Paw Patrol, Bluey, Minnie) show real demand but are trademarks, so use our own theme pictures only. Check 'dinosaur potty training chart' (50 / SD 27) and 'unicorn potty chart' first.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/"
+      ]
+    },
+    {
+      "id": "potty-training-guide",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-training-chart"
+      ],
+      "title": "Learn article: how to start potty training (readiness signs as ranges, the first three days, a sticker for every try, accidents, night time later, the pediatrician line), linking the potty training chart, the morning and bedtime routine charts and the Pre-K plan's free week. Check 'how to start potty training', 'potty training tips' and 'potty training schedule' first.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/",
+        "/preschool-schedule/bedtime-routine-chart/"
+      ]
+    },
+    {
+      "id": "reward-chart-kids",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-training-chart"
+      ],
+      "title": "Reward chart for kids: the sticker chart page type with any goal instead of potty (a goal word and picture in the title, like 'Brush teeth' or 'Stay in bed'), its own page under /preschool-schedule/ if volume holds; check 'reward chart for kids', 'sticker chart' and 'behavior chart for kids' first.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/",
+        "/preschool-schedule/"
       ]
     },
     {

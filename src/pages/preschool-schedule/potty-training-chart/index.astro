@@ -1,0 +1,155 @@
+---
+import { faqText } from '../../../lib/seo';
+import Preview from '../../../components/site/Preview.astro';
+import Base from '../../../layouts/Base.astro';
+import ScheduleMaker from '../../../components/ScheduleMaker.tsx';
+import Faqs from '../../../components/homeschool/Faqs.astro';
+import { SITE } from '../../../config';
+
+const url = new URL('/preschool-schedule/potty-training-chart/', SITE.url).href;
+const title = `Potty Training Chart: Free Printable Sticker Chart | ${SITE.name}`;
+const description = 'Make a free printable potty training chart with your child’s name: a week of sticker boxes with a reward line, plus the potty steps in pictures, from pants down to wash hands.';
+
+const faqs = [
+  { q: 'How do you use a potty training chart?', a: 'Hang it in the bathroom at your child’s eye level. Each time your child sits on the potty, they add a sticker or color a star in that day’s row, right away, while you cheer. When the chart is full, they get the reward written at the bottom. Reward the trying, not only the successes, especially in the first week.' },
+  { q: 'Should the sticker be for trying or for actually going?', a: 'Start with a sticker for every try. Sitting on the potty is the skill you are building first, and a chart that only rewards success can feel impossible to a child who is just starting. Once your child is going most times, some families switch to a sticker for going, or a sticker for a dry morning.' },
+  { q: 'How many boxes should a potty chart have each day?', a: 'Five boxes a day fits most kids, since many potty-training days have four to six planned tries (after waking, after meals, before naps and before bed). Pick three for a gentle start, or six or eight if your child goes often or you use small stickers.' },
+  { q: 'What age should you start potty training?', a: 'Many kids show signs of being ready somewhere between about 18 months and 3 years, and some a little later. Signs include staying dry for a couple of hours, telling you when the diaper is wet or dirty, and showing interest in the toilet. Kids vary a lot here. If you have concerns, ask your child’s pediatrician.' },
+  { q: 'What are good rewards for a potty chart?', a: 'Small and quick works best: a trip to the park, a new book from the library, choosing dinner, a bubble bath or extra story time. For a toddler, the sticker itself and a happy dance are often reward enough. Save a bigger reward for the first full chart, and keep it the same so your child knows what they are working toward.' },
+  { q: 'Is this potty training chart free?', a: 'Yes. The sticker chart, the potty steps chart, the picture cards and every picture are free, one page at a time. Members can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.', html: 'Yes. The sticker chart, the potty steps chart, the picture cards and every picture are free, one page at a time. <a href="/membership/">Members</a> can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.' },
+  { q: 'Is my child’s name sent anywhere?', a: 'No. The chart is drawn in your browser, with the name, the reward and any words you type. They stay on your device and are never sent to our server or put in a link.' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: 'Potty training chart maker (free printable sticker chart and potty steps with pictures)',
+    url,
+    learningResourceType: 'Printable chart',
+    educationalLevel: 'Toddler, Preschool',
+    teaches: 'Using the potty: the steps in order with a picture for each, and a sticker chart for each try',
+    isAccessibleForFree: true,
+    inLanguage: 'en-US',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Preschool schedule', item: SITE.url + '/preschool-schedule/' },
+      { '@type': 'ListItem', position: 3, name: 'Potty training chart', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <a href="/preschool-schedule/" class="hover:text-ink">Preschool schedule</a> <span aria-hidden="true">/</span> <span aria-current="page">Potty training chart</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Potty training chart</span></h1>
+      <p class="mt-4 text-lg text-muted">This page makes a free printable potty training chart with your child's name: a week of sticker boxes with a reward line at the bottom, a potty steps chart with a picture for each step, or cut-apart potty picture cards. Pick the boxes per day, type the reward if you like, and print.</p>
+    </header>
+
+    <div id="maker" class="scroll-mt-24">
+      <ScheduleMaker client:load source="potty-training-chart" preset="potty-chair" kinds={['stickers', 'day', 'cards']} />
+    </div>
+    <div class="flex flex-wrap gap-x-8">
+      <Preview k="potty-sticker-chart" caption="Example: potty sticker chart with five boxes a day." />
+      <Preview k="potty-steps-chart" caption="Example: potty steps chart for the potty chair." />
+    </div>
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <p class="text-[1.15rem]!">
+        A potty training chart gives your child something to see and do each time they try: a sticker in a box, right away, with
+        you cheering. Over a few days the row fills up, and your child can see the tries adding up toward the reward at the
+        bottom. The steps chart helps with the other half, remembering what comes after "sit on the potty."
+      </p>
+
+      <h2>Three potty printables</h2>
+      <ul>
+        <li><strong>Potty sticker chart:</strong> Monday to Sunday, with 3, 4, 5, 6 or 8 circles a day. Each circle fits a sticker, or your child can color the star inside if you don't have stickers. A box at the bottom says "When my chart is full, I get:" with your reward printed on the line, or left blank to write in.</li>
+        <li><strong>Potty steps chart:</strong> each step in order, with a picture and a box to check off. There are samples for a potty chair, the big toilet with a step stool, and a short three-step version for the very first days.</li>
+        <li><strong>Potty picture cards:</strong> 12 cards with dashed cut lines, to tape in a row on the wall by the potty. Empty cards print blank to draw on.</li>
+      </ul>
+      <p>
+        The potty pictures are pants down, sit on the potty, sit on the toilet, step stool, wipe, flush, pants up, wash hands, soap
+        and dry hands. All the pictures from our <a href="/preschool-schedule/">preschool daily schedule maker</a> are there too, and
+        you can change any label to your family's words, like "Pee-pee time" or "Dump the potty."
+      </p>
+
+      <h2>The potty steps in order</h2>
+      <p>
+        The "Potty chair steps" sample in the maker has seven steps. Saying them the same way every time helps a toddler remember the
+        order:
+      </p>
+      <ol>
+        <li><strong>Pants down:</strong> pants and underwear (or the pull-up) down to the knees. Elastic waists make this much easier.</li>
+        <li><strong>Sit on the potty:</strong> feet flat on the floor, for a few minutes. A book or a song helps them stay put.</li>
+        <li><strong>Wipe:</strong> a grown-up usually helps with wiping for a long while. Girls wipe front to back.</li>
+        <li><strong>Pants up:</strong> let your child pull up as much as they can by themselves.</li>
+        <li><strong>Flush or dump:</strong> with a potty chair, a grown-up empties it into the toilet and your child gets to flush.</li>
+        <li><strong>Wash hands, then dry hands:</strong> soap, a song, rinse and towel. A step stool at the sink makes this a job they can do.</li>
+      </ol>
+      <p>
+        For the big toilet, the "Big toilet steps" sample adds the step stool at the start. A small seat that sits on top of the
+        toilet seat, and a stool under the feet, help many kids feel steady.
+      </p>
+
+      <h2>How to use the sticker chart</h2>
+      <ol>
+        <li><strong>Hang it in the bathroom</strong> at your child's eye level, with the stickers in a cup nearby.</li>
+        <li><strong>A sticker for every try.</strong> In the first days, sitting on the potty earns a sticker even if nothing happens. That is the skill you are building.</li>
+        <li><strong>Give it right away.</strong> A sticker an hour later doesn't connect to the try. Let your child put it on the chart.</li>
+        <li><strong>Name the reward before you start,</strong> and keep it small: a park trip, a library book, choosing dinner. Point to the reward box when the row is filling up.</li>
+        <li><strong>Accidents get no sticker and no scolding.</strong> Say "pee goes in the potty," clean up together, and move on. A blank circle is fine.</li>
+        <li><strong>Print a new chart each week.</strong> When your child is going most times, switch to a sticker for going, or for a dry morning.</li>
+      </ol>
+
+      <h2>Signs your child may be ready</h2>
+      <p>
+        Many kids show signs of being ready somewhere between about 18 months and 3 years, and some a little later. Common signs
+        include staying dry for a couple of hours, telling you when the diaper is wet or dirty, hiding to poop, wanting to watch
+        you use the toilet, and being able to pull pants up and down with a little help.
+      </p>
+      <p>
+        Starting when your child shows a few of these signs usually goes more smoothly than starting by a set age. Kids vary a lot
+        here, and staying dry at night often comes months after daytime. If you have concerns, ask your child's pediatrician.
+      </p>
+
+      <h2>Potty training a preschooler</h2>
+      <p>
+        If your child is 3 or older, the chart can do more of the work. Older kids often like counting the stickers, choosing the
+        reward and checking off the steps by themselves. Pick the six or eight boxes a day if they go often.
+      </p>
+      <p>
+        Many families start potty training alongside other new routines. Our <a href="/preschool-schedule/morning-routine-chart/">morning routine chart</a> and <a href="/preschool-schedule/bedtime-routine-chart/">bedtime routine chart</a> already
+        include a potty step, so the potty becomes part of waking
+        up and going to bed. If you're homeschooling a preschooler, the <a href="/homeschool/preschool/">homeschool preschool curriculum</a> keeps
+        table time to about 15 minutes, with potty breaks before and after. Week 1 is
+        free: <a href="/program/?level=pre-k#placement">take the free placement check</a>.
+      </p>
+
+      <h2>Try this on day one</h2>
+      <ol>
+        <li><strong>The night before, 5 minutes:</strong> print the sticker chart with five boxes a day and your child's name, and the potty steps chart with the "Potty chair steps" sample.</li>
+        <li><strong>In the morning:</strong> read the steps chart together, pointing at each picture, and let your child tape both charts up in the bathroom.</li>
+        <li><strong>Through the day:</strong> offer the potty right after waking, after meals, before a nap and before bed. Each try gets a sticker.</li>
+        <li><strong>At bedtime:</strong> count the stickers together and say how many more until the reward.</li>
+      </ol>
+    </article>
+
+    <section class="prose-tl max-w-[68ch] mt-14" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions about potty training charts</h2>
+      <Faqs faqs={faqs} />
+    </section>
+  </div>
+</Base>

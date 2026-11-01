@@ -25,19 +25,25 @@ const mornIcons = ['wake-up', 'potty', 'wash-hands', 'wash-face', 'get-dressed',
 const longMorn: Step[] = mornIcons.map((icon, i) => ({ icon, label: i % 4 === 2 ? 'Put shoes on by the door' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '6:45 am' : '' }));
 // The chore pictures made with the morning set.
 const chores: Step[] = ['make-bed', 'feed-pet', 'set-table', 'water-plants', 'clean-up', 'lunchbox'].map((icon) => ({ icon, label: ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon, time: '' }));
-const cases: { tag: string; steps: Step[]; subjects: string[]; routine?: Routine }[] = [
+// Every potty picture, with long labels.
+const pottyIcons = ['step-stool', 'underwear', 'toilet', 'potty', 'toilet-paper', 'pants-up', 'flush', 'wash-hands', 'soap', 'towel', 'star', 'drink-water'];
+const longPotty: Step[] = pottyIcons.map((icon, i) => ({ icon, label: i % 4 === 1 ? 'Pull pants down to knees' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '10:30 am' : '' }));
+const cases: { tag: string; steps: Step[]; subjects: string[]; routine?: Routine; boxes?: number; reward?: string }[] = [
   ...PRESETS.map((p) => ({ tag: p.v, steps: p.steps, subjects: DEFAULT_SUBJECTS, routine: p.routine })),
   { tag: 'bedtime-long', steps: longBed, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' },
   { tag: 'morning-long', steps: longMorn, subjects: DEFAULT_SUBJECTS, routine: 'morning' },
   { tag: 'chores', steps: chores, subjects: DEFAULT_SUBJECTS },
+  { tag: 'potty-long', steps: longPotty, subjects: DEFAULT_SUBJECTS, routine: 'potty' },
+  ...[3, 4, 5, 6, 8].map((b) => ({ tag: `stickers-${b}`, steps: longPotty, subjects: DEFAULT_SUBJECTS, routine: 'potty' as Routine, boxes: b, reward: b === 8 ? 'A trip to the park and ice cream with Grandma' : b === 5 ? 'New book' : '' })),
   { tag: 'long', steps: longSteps, subjects: allSubjects },
   { tag: 'four', steps: PRESETS[2].steps.slice(0, 4), subjects: allSubjects.slice(0, 4) },
 ];
 let n = 0, issues = 0;
 for (const { v: kind } of SCHEDULE_KINDS) for (const c of cases) for (const paper of ['letter', 'a4'] as const) for (const name of ['Maximiliano Alexander Montgomery', 'Maya', '']) {
   if (kind === 'week' && c.tag !== 'morning' && c.tag !== 'long' && c.tag !== 'four') continue;
+  if ((kind === 'stickers') !== c.tag.startsWith('stickers-')) continue;
   if (process.argv[3] && !c.tag.startsWith(process.argv[3])) continue;
-  const o: ScheduleOptions = { kind, name, paper, credit: true, steps: c.steps, subjects: c.subjects, routine: c.routine };
+  const o: ScheduleOptions = { kind, name, paper, credit: true, steps: c.steps, subjects: c.subjects, routine: c.routine, boxes: c.boxes, reward: c.reward };
   const page = buildSchedulePage(o);
   for (const it of page.items) {
     const xs = it.kind === 'line' ? [it.x1, it.x2] : [];
@@ -61,7 +67,7 @@ for (const { v: kind } of SCHEDULE_KINDS) for (const c of cases) for (const pape
   n++;
 }
 for (const { v: kind } of SCHEDULE_KINDS) {
-  const bytes = await pagesToPdf([buildSchedulePage({ kind, name: 'José Núñez', paper: 'letter', credit: true, steps: longSteps, subjects: allSubjects })], 'Schedule test');
+  const bytes = await pagesToPdf([buildSchedulePage({ kind, name: 'José Núñez', paper: 'letter', credit: true, steps: longSteps, subjects: allSubjects, routine: kind === 'stickers' ? 'potty' : undefined, reward: 'Helado con Abuela' })], 'Schedule test');
   await writeFile(path.join(out, `${kind}.pdf`), bytes);
 }
 console.log(`${n} renders, ${issues} issues, PDFs built, in ${out}`);

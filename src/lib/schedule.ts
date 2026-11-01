@@ -1,13 +1,15 @@
 // Preschool schedule printables (/preschool-schedule/, /preschool-schedule/bedtime-routine-chart/ and
-// /preschool-schedule/morning-routine-chart/): a picture schedule for the day, the morning or bedtime, cut-apart picture cards, and a weekly homeschool chart. One page each, drawn
+// /preschool-schedule/morning-routine-chart/ and /preschool-schedule/potty-training-chart/): a picture schedule for the day, the
+// morning, bedtime or the potty steps, cut-apart picture cards, a weekly homeschool chart and a potty sticker chart. One page each, drawn
 // in the browser like every other maker, so the child's name never leaves the device.
 // Routine pictures live in public/schedule/routine.json (0..1000 paths, even-odd fill).
 import { PAPER, COLORS, cleanName, type Item, type Page, type Paper } from './sheet';
 import { M, footer, box, circlePath, starPath, textW } from './homeschool';
 
-export type ScheduleKind = 'day' | 'cards' | 'week';
-/** What the day and card pages are for: the day ("Maya's Day"), the morning ("Maya's Morning") or bedtime ("Maya's Bedtime"). */
-export type Routine = 'day' | 'bedtime' | 'morning';
+export type ScheduleKind = 'day' | 'cards' | 'week' | 'stickers';
+/** What the day and card pages are for: the day ("Maya's Day"), the morning ("Maya's Morning"), bedtime ("Maya's Bedtime")
+ * or the potty steps ("Maya's Potty Steps"). */
+export type Routine = 'day' | 'bedtime' | 'morning' | 'potty';
 
 export interface Step { icon: string; label: string; time: string }
 
@@ -19,13 +21,19 @@ export interface ScheduleOptions {
   steps: Step[]; // the day, in order (picture schedule and cards)
   subjects: string[]; // ids from SUBJECTS (weekly chart)
   routine?: Routine; // default 'day'
+  boxes?: number; // sticker chart: boxes for each day (STICKER_BOXES), default 5
+  reward?: string; // sticker chart: what the child is working toward, printed on the reward line (may be empty)
 }
 
 export const SCHEDULE_KINDS: { v: ScheduleKind; label: string; sub: string }[] = [
   { v: 'day', label: 'Picture schedule for the day', sub: 'The day in order, with pictures and a box to check off' },
   { v: 'cards', label: 'Cut-apart picture cards', sub: '12 cards to cut out and stick on a strip or the fridge' },
   { v: 'week', label: 'Weekly homeschool chart', sub: 'Monday to Friday, a row for each kind of learning' },
+  { v: 'stickers', label: 'Potty sticker chart', sub: 'A week of boxes for a sticker or a star each time' },
 ];
+/** The page types every schedule maker shows unless a page picks its own. The sticker chart is for the potty page. */
+export const DEFAULT_KINDS: ScheduleKind[] = ['day', 'cards', 'week'];
+export const STICKER_BOXES = [3, 4, 5, 6, 8];
 
 /** Every routine picture, with the label it starts with. Parents can change the words. */
 export const ACTIVITIES: { icon: string; label: string }[] = [
@@ -65,6 +73,15 @@ export const ACTIVITIES: { icon: string; label: string }[] = [
   { icon: 'feed-pet', label: 'Feed the pet' },
   { icon: 'set-table', label: 'Set the table' },
   { icon: 'water-plants', label: 'Water the plants' },
+  { icon: 'toilet', label: 'Sit on the toilet' },
+  { icon: 'step-stool', label: 'Step up on the stool' },
+  { icon: 'underwear', label: 'Pants down' },
+  { icon: 'toilet-paper', label: 'Wipe' },
+  { icon: 'flush', label: 'Flush' },
+  { icon: 'pants-up', label: 'Pants up' },
+  { icon: 'soap', label: 'Soap' },
+  { icon: 'towel', label: 'Dry hands' },
+  { icon: 'star', label: 'Star' },
 ];
 export const activityLabel = (icon: string) => ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon;
 
@@ -99,6 +116,18 @@ export const PRESETS: { v: string; label: string; steps: Step[]; routine?: Routi
   {
     v: 'morning-home', label: 'Home morning routine', routine: 'morning',
     steps: [step('wake-up', '7:00'), step('potty'), step('wash-hands'), step('get-dressed'), step('make-bed'), step('breakfast', '7:30'), step('brush-teeth'), step('play')],
+  },
+  {
+    v: 'potty-chair', label: 'Potty chair steps', routine: 'potty',
+    steps: [step('underwear'), { icon: 'potty', label: 'Sit on the potty', time: '' }, step('toilet-paper'), step('pants-up'), { icon: 'flush', label: 'Flush or dump', time: '' }, step('wash-hands'), step('towel')],
+  },
+  {
+    v: 'potty-toilet', label: 'Big toilet steps', routine: 'potty',
+    steps: [step('step-stool'), step('underwear'), step('toilet'), step('toilet-paper'), step('pants-up'), step('flush'), step('wash-hands'), step('towel')],
+  },
+  {
+    v: 'potty-short', label: 'First potty steps (short)', routine: 'potty',
+    steps: [{ icon: 'potty', label: 'Sit on the potty', time: '' }, step('flush'), step('wash-hands')],
   },
 ];
 
@@ -210,22 +239,32 @@ const LABELS: Record<ScheduleKind, string> = {
   day: 'Preschool daily schedule',
   cards: 'Preschool schedule cards',
   week: 'Preschool homeschool week',
+  stickers: 'Potty sticker chart',
 };
 const BEDTIME_LABELS: Record<ScheduleKind, string> = {
   day: 'Bedtime routine chart',
   cards: 'Bedtime routine cards',
   week: 'Preschool homeschool week',
+  stickers: 'Potty sticker chart',
 };
 const MORNING_LABELS: Record<ScheduleKind, string> = {
   day: 'Morning routine chart',
   cards: 'Morning routine cards',
   week: 'Preschool homeschool week',
+  stickers: 'Potty sticker chart',
+};
+const POTTY_LABELS: Record<ScheduleKind, string> = {
+  day: 'Potty steps chart',
+  cards: 'Potty picture cards',
+  week: 'Preschool homeschool week',
+  stickers: 'Potty sticker chart',
 };
 /** Title words for the day list and the cards: "Maya's Morning", "Maya's morning cards". */
 const TITLES: Record<Routine, { day: string; myDay: string; cards: string; myCards: string }> = {
   day: { day: 'Day', myDay: 'My Day', cards: 'schedule cards', myCards: 'Schedule cards' },
   bedtime: { day: 'Bedtime', myDay: 'My Bedtime', cards: 'bedtime cards', myCards: 'Bedtime cards' },
   morning: { day: 'Morning', myDay: 'My Morning', cards: 'morning cards', myCards: 'Morning cards' },
+  potty: { day: 'Potty Steps', myDay: 'My Potty Steps', cards: 'potty cards', myCards: 'Potty cards' },
 };
 
 // ---------- Pages ----------
@@ -374,10 +413,67 @@ function weekPage(o: ScheduleOptions, w: number, h: number): Page {
   return { w, h, items };
 }
 
+const WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+/** A week of sticker boxes: one row per day, a circle per try with a light star to color in, and a reward line. */
+function stickersPage(o: ScheduleOptions, w: number, h: number): Page {
+  const items: Item[] = [];
+  const n = STICKER_BOXES.includes(o.boxes ?? 5) ? (o.boxes ?? 5) : 5;
+  // Title with a star on each side.
+  const starR = 15;
+  const t = titleFor(o.name, 'Potty Chart', 'My Potty Chart', 30, w - 2 * M - 4 * starR - 40, 18);
+  const ty = M + 34;
+  items.push({ kind: 'text', x: w / 2, y: ty, size: t.size, text: t.text, color: INK, align: 'center' });
+  const half = textW(t.text, t.size) / 2;
+  for (const sx of [w / 2 - half - 14 - starR, w / 2 + half + 14 + starR]) items.push({ kind: 'path', d: starPath(sx, ty - t.size * 0.34, starR), color: INK, width: 1.4, fill: '#ffffff' });
+  items.push({ kind: 'text', x: w / 2, y: ty + 24, size: 12, text: 'A sticker or a colored star every time I try on the potty.', color: COLORS.quiet, align: 'center' });
+
+  const top = ty + 42;
+  const rewardH = 74;
+  const bottom = h - M - 24 - rewardH - 16;
+  const firstW = 112;
+  const rowH = (bottom - top) / WEEK.length;
+  const colW = (w - 2 * M - firstW) / n;
+  const r = Math.min(rowH, colW) / 2 - 7;
+  items.push({ kind: 'path', d: box(M, top, w - 2 * M, bottom - top, 10), color: COLORS.guide, width: 1.4 });
+  WEEK.forEach((d, i) => {
+    const y = top + i * rowH;
+    if (i > 0) items.push({ kind: 'line', x1: M, y1: y, x2: w - M, y2: y, color: COLORS.guide, width: 1 });
+    if (i % 2 === 1) items.push({ kind: 'path', d: box(M + 1.5, y + 1.5, firstW - 3, rowH - 3, 0), color: SOFT, width: 0, fill: SOFT });
+    const lab = fitText(d, 14, firstW - 24, 10);
+    items.push({ kind: 'text', x: M + 10, y: y + rowH / 2 + lab.size * 0.36, size: lab.size, text: lab.text, color: INK, align: 'left' });
+    for (let k = 0; k < n; k++) {
+      const cx = M + firstW + k * colW + colW / 2, cy = y + rowH / 2;
+      items.push({ kind: 'path', d: circlePath(cx, cy, r), color: COLORS.quiet, width: 1.2 });
+      items.push({ kind: 'path', d: starPath(cx, cy + r * 0.06, r * 0.62), color: COLORS.guide, width: 1 });
+    }
+  });
+  items.push({ kind: 'line', x1: M + firstW, y1: top, x2: M + firstW, y2: bottom, color: COLORS.guide, width: 1.4 });
+
+  // The reward box: a star, the words, and the reward written in (or a line to write it).
+  const ry = bottom + 16;
+  items.push({ kind: 'path', d: box(M, ry, w - 2 * M, rewardH, 10), color: COLORS.guide, width: 1.4, fill: SOFT });
+  drawIcon(items, 'star', M + 12 + 26, ry + rewardH / 2, 52);
+  const lx = M + 80;
+  items.push({ kind: 'text', x: lx, y: ry + 27, size: 14, text: 'When my chart is full, I get:', color: INK, align: 'left' });
+  const lineY = ry + rewardH - 16;
+  items.push({ kind: 'line', x1: lx, y1: lineY, x2: w - M - 16, y2: lineY, color: COLORS.quiet, width: 0.75 });
+  // The form allows 40 characters; anything longer is cut at a whole word, never mid-word.
+  const full = cleanLabel(o.reward ?? '', 200);
+  const reward = full.length <= 40 ? full : full.slice(0, 41).replace(/\s+\S*$/, '');
+  if (reward) {
+    const f = fitText(reward, 18, w - M - 16 - lx - 4, 11);
+    items.push({ kind: 'text', x: lx + 2, y: lineY - 5, size: f.size, text: f.text, color: INK, align: 'left' });
+  }
+  footer(items, w, h, o.credit, LABELS.stickers);
+  return { w, h, items };
+}
+
 export function buildSchedulePage(o: ScheduleOptions): Page {
   const { w, h } = PAPER[o.paper];
+  if (o.kind === 'stickers') return stickersPage(o, w, h);
   if (o.kind === 'cards') return cardsPage(o, w, h);
   if (o.kind === 'week') return weekPage(o, w, h);
   return dayPage(o, w, h);
 }
-export const scheduleLabel = (k: ScheduleKind, routine: Routine = 'day') => (routine === 'bedtime' ? BEDTIME_LABELS : routine === 'morning' ? MORNING_LABELS : LABELS)[k];
+export const scheduleLabel = (k: ScheduleKind, routine: Routine = 'day') => (routine === 'bedtime' ? BEDTIME_LABELS : routine === 'morning' ? MORNING_LABELS : routine === 'potty' ? POTTY_LABELS : LABELS)[k];
