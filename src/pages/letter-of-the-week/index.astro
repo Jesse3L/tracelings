@@ -13,6 +13,7 @@ const description = 'Letter of the week for every letter A to Z: how to teach ea
 const wordsFor = (l: string) => letters.find((x) => x.letter === l)!.words.slice(0, 2).join(', ');
 
 const faqs = [
+  { q: 'Is there a letter of the week preschool curriculum I can print?', a: 'Yes. Every letter A to Z has a page here with how to write it, words to say and a plan for five short days, plus free one-page printables you can print today. The full weekly pack for each letter, a plan page and a page for every day with your child’s name, is part of Tracelings at Home. Week 1 of the Pre-K plan is free to try.', html: 'Yes. Every letter A to Z has a page here with how to write it, words to say and a plan for five short days, plus free one-page printables you can print today. The full weekly pack for each letter, a plan page and a page for every day with your child’s name, is part of Tracelings at Home. <a href="/program/">Week 1 of the Pre-K plan</a> is free to try.' },
   { q: 'What is letter of the week?', a: 'A simple way to teach the alphabet: you spend a week on one letter, with a few short activities each day for its shape, its sound and words that start with it. It suits many preschoolers ages 3 to 5.' },
   { q: 'What order should I teach the letters in?', a: 'A to Z works, but many teachers start with letters that make lots of short words, like s, a, t, i, p and n. Our plan uses that phonics order. You can open any letter in any order.' },
   { q: 'Is one letter a week too slow?', a: 'For many 3 and 4 year olds it is a comfortable pace, and it leaves time to play with each sound. Kids who already know their letters often move faster, and two letters a week is common in kindergarten.', html: 'For many 3 and 4 year olds it is a comfortable pace, and it leaves time to play with each sound. Kids who already know their letters often move faster, and two letters a week is common in our <a href="/homeschool/kindergarten/">kindergarten homeschool plan</a>.' },
@@ -36,7 +37,7 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Letter of the week printables</span></h1>
-      <p class="mt-4 text-lg text-muted">Pick a letter for a week of short activities, words to say and free one-page printables.</p>
+      <p class="mt-4 text-lg text-muted">A printable letter of the week plan for preschool: a page for every letter A to Z with how to write it, words to say and five short days of activities, plus free one-page printables (letter tracing, a bubble letter, counting and name tracing). The full weekly pack for each letter is for members, and week 1 of the Pre-K plan is free.</p>
     </header>
 
     <section aria-labelledby="letters-h">

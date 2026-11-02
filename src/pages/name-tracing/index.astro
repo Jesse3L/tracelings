@@ -10,6 +10,9 @@ const description = 'Make free name tracing worksheets with any name. Editable d
 const url = new URL('/name-tracing/', SITE.url).href;
 
 const faqs: { q: string; a: string; html?: string }[] = [
+  { q: 'Where can I make free name tracing worksheets with my child’s name?', a: 'Right on this page. Type the name in the box at the top, pick a letter style, line size and number of rows, and download a PDF for US Letter or A4. It’s free for as many names as you like, one page at a time. You add your email once before the first download, and there’s no password.' },
+  { q: 'Can I make a cursive name tracing worksheet?', a: 'Yes. The cursive name tracing maker works the same way: type the name and print it in connected cursive on handwriting lines, free. It suits kids who already print their name well.', html: 'Yes. The <a href="/cursive-name-tracing/">cursive name tracing maker</a> works the same way: type the name and print it in connected cursive on handwriting lines, free. It suits kids who already print their name well.' },
+  { q: 'Can I make a name coloring page too?', a: 'Yes. The name coloring page maker prints your child’s name in big outline letters to color, free, on the same paper sizes.', html: 'Yes. The <a href="/name-coloring-pages/">name coloring page maker</a> prints your child’s name in big outline letters to color, free, on the same paper sizes.' },
   { q: 'Are these name tracing worksheets really free?', a: 'Yes. Add your email once and every sheet on that device stays free, with no password and no limit.' },
   { q: 'What paper size do the worksheets print on?', a: 'Choose US Letter or A4 before you download. The PDF is sized for that paper, so it prints at full size without cropping or shrinking.' },
   { q: 'How do I make an editable name tracing worksheet?', a: 'Type the name in the box above and the sheet updates as you go. Change the letter style, line size, practice rows and starting dots until it looks right, then download the PDF. You can come back and edit it for a different name any time.' },
@@ -58,7 +61,7 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free name tracing worksheets: type a name, print in seconds</span></h1>
-      <p class="mt-4 text-lg text-muted">Type a name, pick a style, print. Your sheet is ready in seconds.</p>
+      <p class="mt-4 text-lg text-muted">Type your child's name and print a free page of dotted letters on handwriting lines, with green starting dots, in US Letter or A4. Choose capital first letter, ALL CAPS or lowercase and a line size for ages 3 to 6 and up. The name never leaves your browser.</p>
     </header>
 
     <Tracer client:load mode="name" source="name-tracing" />
@@ -111,7 +114,7 @@ const schema = [
       </div>
 
       <h2>More ways to practice</h2>
-      <p>Practice single letters with our <a href="/letter-tracing/">letter tracing worksheets</a>, or numbers with <a href="/number-tracing/">number tracing</a>. New to this? Read <a href="/learn/how-to-teach-a-preschooler-to-write-their-name/">how to teach a preschooler to write their name</a>.</p>
+      <p>Practice single letters with our <a href="/letter-tracing/">letter tracing worksheets</a>, or numbers with <a href="/number-tracing/">number tracing</a>. New to this? Read <a href="/learn/how-to-teach-a-preschooler-to-write-their-name/">how to teach a preschooler to write their name</a>. Planning a whole week of practice? Try <a href="/program/">week 1 of the homeschool plan free</a>, with name practice every day.</p>
     </article>
   </div>
 </Base>
