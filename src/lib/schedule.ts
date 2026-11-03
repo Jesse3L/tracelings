@@ -5,6 +5,8 @@
 // Routine pictures live in public/schedule/routine.json (0..1000 paths, even-odd fill).
 import { PAPER, COLORS, cleanName, type Item, type Page, type Paper } from './sheet';
 import { M, footer, box, circlePath, starPath, textW } from './homeschool';
+import { THEMES, THEME_IDS, iconPath, iconsReady, loadThemeIcons, smallIcons } from './program/themes';
+import type { ThemeId } from './program/types';
 
 export type ScheduleKind = 'day' | 'cards' | 'week' | 'stickers';
 /** What the day and card pages are for: the day ("Maya's Day"), the morning ("Maya's Morning"), bedtime ("Maya's Bedtime")
@@ -23,7 +25,20 @@ export interface ScheduleOptions {
   routine?: Routine; // default 'day'
   boxes?: number; // sticker chart: boxes for each day (STICKER_BOXES), default 5
   reward?: string; // sticker chart: what the child is working toward, printed on the reward line (may be empty)
+  theme?: StickerTheme; // sticker chart: a light picture in each circle instead of the star (default 'stars')
 }
+
+/** Pictures for the sticker chart circles: plain stars, or one of the program's interest themes (our own line art). */
+export type StickerTheme = 'stars' | ThemeId;
+export const STICKER_THEMES: { v: StickerTheme; label: string }[] = [
+  { v: 'stars', label: 'Stars' },
+  ...THEME_IDS.map((id) => ({ v: id as StickerTheme, label: THEMES[id].label })),
+];
+/** One word for titles and file names: "dinosaur", "unicorn". Empty for stars. */
+export const stickerThemeWord = (t: StickerTheme = 'stars') =>
+  t === 'stars' ? '' : ({ dinosaurs: 'dinosaur', trucks: 'truck', unicorns: 'unicorn', ocean: 'ocean', space: 'space', farm: 'farm', bugs: 'bug', castles: 'castle', trains: 'train', sports: 'sports', pets: 'pet', jungle: 'jungle' } as Record<string, string>)[t] ?? t;
+/** Loads a sticker theme's pictures (no-op for stars). Pages drawn before they arrive show the plain stars. */
+export const loadStickerTheme = (t: StickerTheme, fetcher?: IconFetcher) => (t === 'stars' ? Promise.resolve() : loadThemeIcons([t], fetcher));
 
 export const SCHEDULE_KINDS: { v: ScheduleKind; label: string; sub: string }[] = [
   { v: 'day', label: 'Picture schedule for the day', sub: 'The day in order, with pictures and a box to check off' },
@@ -421,12 +436,19 @@ function stickersPage(o: ScheduleOptions, w: number, h: number): Page {
   const n = STICKER_BOXES.includes(o.boxes ?? 5) ? (o.boxes ?? 5) : 5;
   // Title with a star on each side.
   const starR = 15;
+  // A theme puts a light picture in every circle and the theme's main picture beside the title and the reward.
+  const th = o.theme && o.theme !== 'stars' && iconsReady(o.theme) ? o.theme : null;
+  const pics = th ? (n >= 6 ? smallIcons(th) : THEMES[th].icons).map((i) => i.id).filter((id) => iconPath(th, id)) : [];
+  const cover = th ? iconPath(th, THEMES[th].cover) : null;
   const t = titleFor(o.name, 'Potty Chart', 'My Potty Chart', 30, w - 2 * M - 4 * starR - 40, 18);
   const ty = M + 34;
   items.push({ kind: 'text', x: w / 2, y: ty, size: t.size, text: t.text, color: INK, align: 'center' });
   const half = textW(t.text, t.size) / 2;
-  for (const sx of [w / 2 - half - 14 - starR, w / 2 + half + 14 + starR]) items.push({ kind: 'path', d: starPath(sx, ty - t.size * 0.34, starR), color: INK, width: 1.4, fill: '#ffffff' });
-  items.push({ kind: 'text', x: w / 2, y: ty + 24, size: 12, text: 'A sticker or a colored star every time I try on the potty.', color: COLORS.quiet, align: 'center' });
+  for (const sx of [w / 2 - half - 14 - starR, w / 2 + half + 14 + starR]) {
+    if (cover) items.push({ kind: 'path', d: placePath(cover, sx, ty - t.size * 0.34, starR * 2.4), color: INK, width: 0, fill: INK, evenOdd: true });
+    else items.push({ kind: 'path', d: starPath(sx, ty - t.size * 0.34, starR), color: INK, width: 1.4, fill: '#ffffff' });
+  }
+  items.push({ kind: 'text', x: w / 2, y: ty + 24, size: 12, text: `A sticker or a colored ${th ? 'picture' : 'star'} every time I try on the potty.`, color: COLORS.quiet, align: 'center' });
 
   const top = ty + 42;
   const rewardH = 74;
@@ -445,7 +467,10 @@ function stickersPage(o: ScheduleOptions, w: number, h: number): Page {
     for (let k = 0; k < n; k++) {
       const cx = M + firstW + k * colW + colW / 2, cy = y + rowH / 2;
       items.push({ kind: 'path', d: circlePath(cx, cy, r), color: COLORS.quiet, width: 1.2 });
-      items.push({ kind: 'path', d: starPath(cx, cy + r * 0.06, r * 0.62), color: COLORS.guide, width: 1 });
+      // Each circle a different picture from the theme, shifted one along each day so no column repeats.
+      const pic = pics.length ? iconPath(th!, pics[(i + k) % pics.length]) : null;
+      if (pic) items.push({ kind: 'path', d: placePath(pic, cx, cy, r * 1.42), color: COLORS.trace, width: 0, fill: COLORS.trace, evenOdd: true });
+      else items.push({ kind: 'path', d: starPath(cx, cy + r * 0.06, r * 0.62), color: COLORS.guide, width: 1 });
     }
   });
   items.push({ kind: 'line', x1: M + firstW, y1: top, x2: M + firstW, y2: bottom, color: COLORS.guide, width: 1.4 });
@@ -453,7 +478,8 @@ function stickersPage(o: ScheduleOptions, w: number, h: number): Page {
   // The reward box: a star, the words, and the reward written in (or a line to write it).
   const ry = bottom + 16;
   items.push({ kind: 'path', d: box(M, ry, w - 2 * M, rewardH, 10), color: COLORS.guide, width: 1.4, fill: SOFT });
-  drawIcon(items, 'star', M + 12 + 26, ry + rewardH / 2, 52);
+  if (cover) items.push({ kind: 'path', d: placePath(cover, M + 12 + 26, ry + rewardH / 2, 56), color: INK, width: 0, fill: INK, evenOdd: true });
+  else drawIcon(items, 'star', M + 12 + 26, ry + rewardH / 2, 52);
   const lx = M + 80;
   items.push({ kind: 'text', x: lx, y: ry + 27, size: 14, text: 'When my chart is full, I get:', color: INK, align: 'left' });
   const lineY = ry + rewardH - 16;
