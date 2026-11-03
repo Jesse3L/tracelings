@@ -150,7 +150,7 @@
     },
     {
       "id": 41,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-03",
       "primaryKeyword": "cvc words for kindergarten",
       "volume": 2400,
@@ -162,7 +162,9 @@
         "/letter-tracing/",
         "/sight-words/kindergarten/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "cvc-words-for-kindergarten",
+      "publishedOn": "2026-11-03"
     },
     {
       "id": 5,
