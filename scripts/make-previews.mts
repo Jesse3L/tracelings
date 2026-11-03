@@ -174,6 +174,10 @@ jobs.push(render('potty-sticker-chart', 'printable-potty-training-sticker-chart'
   'Printable potty training sticker chart: Monday to Sunday with five sticker circles a day, a star to color in each one, and a reward line at the bottom'));
 jobs.push(render('potty-steps-chart', 'potty-training-steps-chart-with-pictures', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty' }),
   'Potty training steps chart with pictures: pants down, sit on the potty, wipe, pants up, flush or dump, wash hands and dry hands, each with a box to check off'));
+// Potty sticker chart with a picture theme: dinosaurs, five circles a day.
+await loadThemeIcons(['dinosaurs'], (u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
+jobs.push(render('potty-sticker-chart-dinosaurs', 'dinosaur-potty-training-sticker-chart', buildSchedulePage({ kind: 'stickers', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty', boxes: 5, theme: 'dinosaurs' }),
+  'Printable dinosaur potty training sticker chart: Monday to Sunday with five circles a day, each with a light dinosaur picture to cover with a sticker or color in, and a reward line at the bottom'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

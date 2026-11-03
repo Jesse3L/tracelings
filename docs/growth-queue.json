@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-01",
+  "updated": "2026-11-03",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -738,7 +738,7 @@
     },
     {
       "id": "potty-sticker-chart-themes",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "potty-training-chart"
@@ -746,7 +746,75 @@
       "title": "Potty sticker chart picture themes: let the sticker chart use a theme picture in each circle instead of the star (dinosaurs, trucks, unicorns, ocean, space from public/program/icons), a select on /preschool-schedule/potty-training-chart/; character charts (Paw Patrol, Bluey, Minnie) show real demand but are trademarks, so use our own theme pictures only. Check 'dinosaur potty training chart' (50 / SD 27) and 'unicorn potty chart' first.",
       "linkTo": [
         "/preschool-schedule/potty-training-chart/"
+      ],
+      "done": "2026-11-03",
+      "urls": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "keywords": {
+        "potty training sticker chart": [
+          8100,
+          30
+        ],
+        "dinosaur potty training chart": [
+          50,
+          27
+        ],
+        "unicorn potty chart": [
+          40,
+          28
+        ],
+        "free printable dinosaur potty training chart": [
+          30,
+          30
+        ],
+        "unicorn potty training chart": [
+          20,
+          36
+        ],
+        "printable dinosaur potty training chart": [
+          10,
+          16
+        ],
+        "truck potty training chart": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "reward-chart-themes",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-sticker-chart-themes",
+        "reward-chart-kids"
+      ],
+      "title": "Carry the 12 sticker chart picture themes over to the reward chart for kids (when that page is built), so a 'Brush teeth' or 'Stay in bed' chart can use dinosaurs, unicorns or trucks too. No new URL; reuse STICKER_THEMES in src/lib/schedule.ts.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/"
       ]
+    },
+    {
+      "id": "potty-chart-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "potty-sticker-chart-themes"
+      ],
+      "title": "Program (members): in the Pre-K program, offer the child's potty sticker chart in their own interest theme (the theme from the placement check) as an optional page in the welcome pack, one tap, no typing. The free one-page chart on /preschool-schedule/potty-training-chart/ stays free.",
+      "linkTo": [
+        "/program/",
+        "/preschool-schedule/potty-training-chart/"
+      ]
+    },
+    {
+      "id": "faq-plus-icon-overflow",
+      "status": "todo",
+      "side": "free",
+      "needs": [],
+      "title": "Small fix: 15 pages copy the FAQ summary markup inline (membership, word tracing, letter tracing, name tracing, cursive pages, sight words, number tracing, alphabet chart, coloring collections) and their rotated + sign stretches to the full height of a two-line question, which adds about 2px of sideways scroll on phones when a long question is open. Add shrink-0 self-start to that span, as done in src/components/homeschool/Faqs.astro on Nov 3, or switch those pages to the Faqs component.",
+      "linkTo": []
     },
     {
       "id": "potty-training-guide",

@@ -8,15 +8,16 @@ import { SITE } from '../../../config';
 
 const url = new URL('/preschool-schedule/potty-training-chart/', SITE.url).href;
 const title = `Potty Training Chart: Free Printable Sticker Chart | ${SITE.name}`;
-const description = 'Make a free printable potty training chart with your child’s name: a week of sticker boxes with a reward line, plus the potty steps in pictures, from pants down to wash hands.';
+const description = 'Make a free printable potty training chart with your child’s name: a week of sticker circles with stars, dinosaurs, unicorns, trucks or another theme, a reward line, and the potty steps in pictures.';
 
 const faqs = [
   { q: 'How do you use a potty training chart?', a: 'Hang it in the bathroom at your child’s eye level. Each time your child sits on the potty, they add a sticker or color a star in that day’s row, right away, while you cheer. When the chart is full, they get the reward written at the bottom. Reward the trying, not only the successes, especially in the first week.' },
   { q: 'Should the sticker be for trying or for actually going?', a: 'Start with a sticker for every try. Sitting on the potty is the skill you are building first, and a chart that only rewards success can feel impossible to a child who is just starting. Once your child is going most times, some families switch to a sticker for going, or a sticker for a dry morning.' },
   { q: 'How many boxes should a potty chart have each day?', a: 'Five boxes a day fits most kids, since many potty-training days have four to six planned tries (after waking, after meals, before naps and before bed). Pick three for a gentle start, or six or eight if your child goes often or you use small stickers.' },
   { q: 'What age should you start potty training?', a: 'Many kids show signs of being ready somewhere between about 18 months and 3 years, and some a little later. Signs include staying dry for a couple of hours, telling you when the diaper is wet or dirty, and showing interest in the toilet. Kids vary a lot here. If you have concerns, ask your child’s pediatrician.' },
+  { q: 'Can I make a dinosaur or unicorn potty chart?', a: 'Yes. Under "Pictures in the circles," pick Dinosaurs, Unicorns, Trucks and cars, Ocean animals, Space or one of seven more themes. Every circle gets a light picture from that theme to cover with a sticker or color in, and the theme’s main picture goes beside the title and the reward. They are our own drawings, not cartoon characters, and every theme is free.' },
   { q: 'What are good rewards for a potty chart?', a: 'Small and quick works best: a trip to the park, a new book from the library, choosing dinner, a bubble bath or extra story time. For a toddler, the sticker itself and a happy dance are often reward enough. Save a bigger reward for the first full chart, and keep it the same so your child knows what they are working toward.' },
-  { q: 'Is this potty training chart free?', a: 'Yes. The sticker chart, the potty steps chart, the picture cards and every picture are free, one page at a time. Members can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.', html: 'Yes. The sticker chart, the potty steps chart, the picture cards and every picture are free, one page at a time. <a href="/membership/">Members</a> can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.' },
+  { q: 'Is this potty training chart free?', a: 'Yes. The sticker chart with every picture theme, the potty steps chart, the picture cards and every picture are free, one page at a time. Members can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.', html: 'Yes. The sticker chart with every picture theme, the potty steps chart, the picture cards and every picture are free, one page at a time. <a href="/membership/">Members</a> can also print a page for every child on their list at once, or all three pages in one PDF, with no footer line.' },
   { q: 'Is my child’s name sent anywhere?', a: 'No. The chart is drawn in your browser, with the name, the reward and any words you type. They stay on your device and are never sent to our server or put in a link.' },
 ];
 
@@ -56,7 +57,7 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Potty training chart</span></h1>
-      <p class="mt-4 text-lg text-muted">This page makes a free printable potty training chart with your child's name: a week of sticker boxes with a reward line at the bottom, a potty steps chart with a picture for each step, or cut-apart potty picture cards. Pick the boxes per day, type the reward if you like, and print.</p>
+      <p class="mt-4 text-lg text-muted">This page makes a free printable potty training chart with your child's name: a week of sticker circles with a reward line at the bottom, a potty steps chart with a picture for each step, or cut-apart potty picture cards. Pick stars or a picture theme like dinosaurs, unicorns or trucks, choose the boxes per day, type the reward if you like, and print.</p>
     </header>
 
     <div id="maker" class="scroll-mt-24">
@@ -65,6 +66,7 @@ const schema = [
     <div class="flex flex-wrap gap-x-8">
       <Preview k="potty-sticker-chart" caption="Example: potty sticker chart with five boxes a day." />
       <Preview k="potty-steps-chart" caption="Example: potty steps chart for the potty chair." />
+      <Preview k="potty-sticker-chart-dinosaurs" caption="Example: dinosaur potty sticker chart." />
     </div>
 
     <article class="prose-tl max-w-[68ch] mt-14">
@@ -76,7 +78,7 @@ const schema = [
 
       <h2>Three potty printables</h2>
       <ul>
-        <li><strong>Potty sticker chart:</strong> Monday to Sunday, with 3, 4, 5, 6 or 8 circles a day. Each circle fits a sticker, or your child can color the star inside if you don't have stickers. A box at the bottom says "When my chart is full, I get:" with your reward printed on the line, or left blank to write in.</li>
+        <li><strong>Potty sticker chart:</strong> Monday to Sunday, with 3, 4, 5, 6 or 8 circles a day. Each circle fits a sticker, or your child can color the star or picture inside if you don't have stickers. A box at the bottom says "When my chart is full, I get:" with your reward printed on the line, or left blank to write in.</li>
         <li><strong>Potty steps chart:</strong> each step in order, with a picture and a box to check off. There are samples for a potty chair, the big toilet with a step stool, and a short three-step version for the very first days.</li>
         <li><strong>Potty picture cards:</strong> 12 cards with dashed cut lines, to tape in a row on the wall by the potty. Empty cards print blank to draw on.</li>
       </ul>
@@ -84,6 +86,24 @@ const schema = [
         The potty pictures are pants down, sit on the potty, sit on the toilet, step stool, wipe, flush, pants up, wash hands, soap
         and dry hands. All the pictures from our <a href="/preschool-schedule/">preschool daily schedule maker</a> are there too, and
         you can change any label to your family's words, like "Pee-pee time" or "Dump the potty."
+      </p>
+
+      <h2>Dinosaur, unicorn and truck potty charts</h2>
+      <p>
+        A potty training sticker chart works better when your child wants to look at it. Under "Pictures in the circles" you can
+        swap the stars for one of 12 picture themes: Dinosaurs, Unicorns, Trucks and cars, Ocean animals, Space, Farm animals, Bugs,
+        Princesses and castles, Trains, Sports, Pets or Jungle animals.
+      </p>
+      <ul>
+        <li><strong>Every circle gets a light picture,</strong> like a T-rex, an egg, a bone or a volcano for dinosaurs. A sticker covers it, or your child colors it in after each try.</li>
+        <li><strong>The pictures change from circle to circle,</strong> so a full row looks like a collection. Some kids like to say the name of each picture as they cover it.</li>
+        <li><strong>The theme's main picture</strong> sits beside the title and next to the reward, so the chart looks like it belongs to your child.</li>
+      </ul>
+      <p>
+        Let your child pick the theme. Choosing is part of the fun, and a chart they picked is one they want to fill. The pictures are
+        our own drawings, not cartoon characters, and they are the same ones used in the interest themes of
+        our <a href="/program/">personalized homeschool program</a>. With six or eight circles a day, the chart uses the simpler pictures
+        from each theme so they still read clearly when small.
       </p>
 
       <h2>The potty steps in order</h2>

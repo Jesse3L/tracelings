@@ -93,7 +93,7 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Preschool daily schedule maker (visual schedule, picture cards, weekly homeschool chart) | `/preschool-schedule/` | live |
 | Morning routine chart for preschoolers (printable checklist or picture cards, school and home mornings) | `/preschool-schedule/morning-routine-chart/` | live |
 | Bedtime routine chart (printable checklist or picture cards, toddler and preschool tips) | `/preschool-schedule/bedtime-routine-chart/` | live |
-| Potty training chart (printable sticker chart with a reward line, potty steps checklist, picture cards) | `/preschool-schedule/potty-training-chart/` | live |
+| Potty training chart (printable sticker chart with stars or 12 picture themes such as dinosaurs and unicorns, a reward line, potty steps checklist, picture cards) | `/preschool-schedule/potty-training-chart/` | live |
 | Pre-K math worksheets | `/math-worksheets/pre-k/` | live |
 | Ten frame printables and worksheets | `/math-worksheets/ten-frames/` | live |
 | Kindergarten math worksheets (hub, free sampler) | `/math-worksheets/kindergarten/` | live |

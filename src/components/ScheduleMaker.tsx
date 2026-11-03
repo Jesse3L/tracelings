@@ -9,7 +9,7 @@ import { useMember } from '../lib/member';
 import { useRoster } from '../lib/roster';
 import {
   ACTIVITIES, PRESETS, SCHEDULE_KINDS, SUBJECTS, DEFAULT_SUBJECTS, DEFAULT_KINDS, STICKER_BOXES, MAX_STEPS, MAX_LABEL, activityLabel, buildSchedulePage,
-  loadScheduleIcons, scheduleIconUrl, scheduleLabel, type Routine, type ScheduleKind, type Step,
+  loadScheduleIcons, scheduleIconUrl, scheduleLabel, STICKER_THEMES, loadStickerTheme, stickerThemeWord, type Routine, type ScheduleKind, type Step, type StickerTheme,
 } from '../lib/schedule';
 import { Segmented } from './Tracer';
 import EmailGate from './EmailGate';
@@ -35,6 +35,7 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   const [name, setName] = useState('');
   const [boxes, setBoxes] = useState(5);
   const [reward, setReward] = useState('');
+  const [theme, setTheme] = useState<StickerTheme>('stars');
   const [paper, setPaper] = useState<Paper>('letter');
   const [icons, setIcons] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -53,6 +54,8 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
       if (k && KINDS.some((x) => x.v === k)) setKind(k);
       const p = PRESETS.find((x) => x.v === q.get('preset'));
       if (p) { setPreset(p.v); setSteps(p.steps); setRoutine(p.routine ?? 'day'); }
+      const th = STICKER_THEMES.find((x) => x.v === q.get('theme'));
+      if (th) setTheme(th.v);
       const nm = sessionStorage.getItem('tl-name');
       if (nm) setName(nm);
     } catch { /* storage or URL unavailable */ }
@@ -61,9 +64,11 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   // Keep the typed name for the other tools in this tab (never in the URL, never sent anywhere).
   useEffect(() => { try { if (name) sessionStorage.setItem('tl-name', name); } catch { /* ignore */ } }, [name]);
   useEffect(() => setDone(''), [kind]);
+  // A sticker theme's pictures load when it is picked; until then the page shows the plain stars.
+  useEffect(() => { loadStickerTheme(theme).then(() => setIcons((n) => n + 1)); }, [theme]);
 
-  const opts = { kind, name, paper, credit, steps, subjects, routine, boxes, reward };
-  const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, boxes, reward, icons]);
+  const opts = { kind, name, paper, credit, steps, subjects, routine, boxes, reward, theme };
+  const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, boxes, reward, theme, icons]);
   const svg = useMemo(() => pageToSvg(page), [page]);
   const listNames = member.member ? roster.slice(0, member.maxNames ?? 8) : [];
   const kindOf = (o: (typeof SCHEDULE_KINDS)[number]) => (routine !== 'day' && o.v === 'day' ? { ...o, label: scheduleLabel('day', routine), sub: 'Each step in order, with a picture and a box to check off' } : o);
@@ -72,7 +77,8 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   const routineWord = kind === 'stickers' ? 'Potty Chart' : routine === 'bedtime' ? 'Bedtime' : routine === 'morning' ? 'Morning' : routine === 'potty' ? 'Potty Steps' : 'Day';
   const kindLabel = kindOf(KINDS.find((x) => x.v === kind) ?? KINDS[0]).label;
   const slug = (s: string) => toLatin(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const base = slug(scheduleLabel(kind, routine));
+  const themeWord = kind === 'stickers' ? stickerThemeWord(theme) : '';
+  const base = slug(`${themeWord} ${scheduleLabel(kind, routine)}`);
 
   const pickPreset = (v: string) => { const p = PRESETS.find((x) => x.v === v); if (p) { setPreset(v); setSteps(p.steps); setRoutine(p.routine ?? 'day'); } };
   const edit = (i: number, patch: Partial<Step>) => { setPreset(''); setSteps((s) => s.map((x, k) => (k === i ? { ...x, ...patch } : x))); };
@@ -84,7 +90,7 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   async function save(k: 'one' | 'all' | 'list') {
     setBusy(true);
     try {
-      await loadScheduleIcons();
+      await Promise.all([loadScheduleIcons(), loadStickerTheme(theme)]);
       let pages: Page[];
       let file: string;
       if (k === 'list') {
@@ -128,6 +134,14 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
 
         {kind === 'stickers' ? (
           <div class="mb-5">
+            <label class="block mb-3">
+              <span class="block text-[15px] font-bold mb-2">Pictures in the circles</span>
+              <select value={theme} onChange={(e) => setTheme((e.target as HTMLSelectElement).value as StickerTheme)}
+                class="w-full rounded-lg border border-hairline bg-white px-4 py-3 text-lg text-ink focus:border-rule focus:outline-none">
+                {STICKER_THEMES.map((t) => <option value={t.v}>{t.label}</option>)}
+              </select>
+              <span class="block text-[13px] text-muted mt-2">A light picture in every circle to cover with a sticker or color in.</span>
+            </label>
             <label class="block mb-3">
               <span class="block text-[15px] font-bold mb-2">Boxes for each day</span>
               <select value={boxes} onChange={(e) => setBoxes(Number((e.target as HTMLSelectElement).value))}
