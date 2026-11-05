@@ -134,6 +134,7 @@ export default function AccountPanel() {
             <li>A personalized plan for each child, with weekly packs themed on what they love</li>
             <li>A new story starring your child each week, plus word problems and a parent note</li>
             <li>The weekly check-in and a printable progress report</li>
+            <li>A potty sticker chart in each Pre-K child’s own theme, with their name</li>
             <li>No footer line on any printable, and no email prompts on downloads</li>
             {!legacy && <li>A saved list of names that works in <a href="/name-tracing/" class={linkCls}>name tracing</a>, <a href="/cursive/" class={linkCls}>cursive</a> and <a href="/name-coloring-pages/" class={linkCls}>name coloring pages</a></li>}
           </ul>

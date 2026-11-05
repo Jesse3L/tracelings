@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-03",
+  "updated": "2026-11-05",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -797,7 +797,7 @@
     },
     {
       "id": "potty-chart-in-program",
-      "status": "todo",
+      "status": "done",
       "side": "program",
       "needs": [
         "potty-sticker-chart-themes"
@@ -806,7 +806,23 @@
       "linkTo": [
         "/program/",
         "/preschool-schedule/potty-training-chart/"
-      ]
+      ],
+      "date": "2026-11-05",
+      "urls": [
+        "/account/ (members)",
+        "/program/ (new FAQ)"
+      ],
+      "keywords": {
+        "potty training chart": "12,100 / SD 35",
+        "potty training chart and stickers": "8,100 / 35",
+        "potty training chart stickers": "6,600 / 36",
+        "dinosaur potty chart": "170 / 26",
+        "potty training chart dinosaurs": "170 / 33",
+        "potty training chart princess": "170 / 25",
+        "personalised potty training chart": "10 / 5",
+        "personalized potty training chart": "no data"
+      },
+      "result": "Members on the Pre-K track print the potty sticker chart in their child's first interest theme (picture select to change it) from a new card on /account/, or tick a box to add it as the last page of week 1. Built in the browser; no new URLs."
     },
     {
       "id": "faq-plus-icon-overflow",
@@ -815,6 +831,37 @@
       "needs": [],
       "title": "Small fix: 15 pages copy the FAQ summary markup inline (membership, word tracing, letter tracing, name tracing, cursive pages, sight words, number tracing, alphabet chart, coloring collections) and their rotated + sign stretches to the full height of a two-line question, which adds about 2px of sideways scroll on phones when a long question is open. Add shrink-0 self-start to that span, as done in src/components/homeschool/Faqs.astro on Nov 3, or switch those pages to the Faqs component.",
       "linkTo": []
+    },
+    {
+      "id": "potty-chart-in-free-week",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-in-program"
+      ],
+      "title": "Free week 1 from the placement check (/program/ ProgramPlacement): for a Pre-K child, an optional 'add a potty sticker chart in their theme' tick box, like the member dashboard has. The single chart is already free on /preschool-schedule/potty-training-chart/, so this adds no paid depth to the free side; it shows new families the themed extras. Check that the free week stays one week.",
+      "linkTo": [
+        "/program/"
+      ]
+    },
+    {
+      "id": "potty-steps-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "potty-chart-in-program"
+      ],
+      "title": "Program (members): add the potty steps chart (the child's picture steps, potty chair or big toilet) next to the themed sticker chart on /account/, both in one PDF with one tap. Reuse PRESETS potty-chair / potty-toilet in src/lib/schedule.ts."
+    },
+    {
+      "id": "routine-picker-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "potty-chart-in-program",
+        "routine-chart-in-program"
+      ],
+      "title": "Program (members): turn the potty card on /account/ into an 'Extras for <child>' card: potty chart, morning chart and bedtime chart in the child's theme, pick any, one PDF. Kindergarten children get the morning and bedtime charts only."
     },
     {
       "id": "potty-training-guide",

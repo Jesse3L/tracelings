@@ -13,6 +13,7 @@ import { savePdf } from '../lib/download';
 import { whatLabel } from '../lib/what';
 import { pageToSvg, imagesIn, loadImages } from '../lib/render';
 import type { Page } from '../lib/sheet';
+import { buildSchedulePage, loadScheduleIcons, loadStickerTheme, stickerThemeWord, STICKER_THEMES, type StickerTheme } from '../lib/schedule';
 
 // The member's program dashboard. Profiles and plans come from the server (no names); names come from this
 // browser's localStorage and are only ever used here, to build the PDF.
@@ -26,6 +27,12 @@ const PAPER_KEY = 'tl-paper';
 /** Only the ChildProfile fields, so nothing else (like a name) can ride along to the server. */
 const profileOnly = (p: ChildProfile): ChildProfile => Object.fromEntries(PROFILE_KEYS.map((k) => [k, p[k]])) as unknown as ChildProfile;
 const same = (a: ChildProfile, b: ChildProfile) => JSON.stringify(profileOnly(a)) === JSON.stringify(profileOnly(b));
+/** The child's potty sticker chart (the free one-page chart from /preschool-schedule/potty-training-chart/), drawn with
+ *  their theme and name. Built here in the browser; nothing about it goes to the server. */
+const pottyPage = (name: string, paper: Paper, theme: StickerTheme) =>
+  buildSchedulePage({ kind: 'stickers', name, paper, credit: false, steps: [], subjects: [], routine: 'potty', boxes: 5, reward: '', theme });
+/** The child's first interest that has sticker pictures, else stars. */
+const pottyThemeFor = (p: ChildProfile): StickerTheme => (p.interests.find((t) => STICKER_THEMES.some((x) => x.v === t)) ?? 'stars') as StickerTheme;
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 async function api<T>(path: string, body?: unknown): Promise<{ ok: true; data: T } | { ok: false; status: number; error: string; data?: any }> {
@@ -60,6 +67,8 @@ export default function ProgramDashboard() {
   const [nameDraft, setNameDraft] = useState('');
   const [confirmRemove, setConfirmRemove] = useState('');
   const [font, setFont] = useState<LoadedFont | null>(null);
+  const [pottyTheme, setPottyTheme] = useState<StickerTheme | ''>('');
+  const [addPotty, setAddPotty] = useState(false);
   const [restartFor, setRestartFor] = useState<{ profile: ChildProfile; level: string } | null>(null);
   const autoSynced = useRef(false);
 
@@ -98,7 +107,7 @@ export default function ProgramDashboard() {
       setSel(kids.find((k) => k.profile.id === want)?.profile.id ?? kids[0].profile.id);
     }
   }, [kids]);
-  useEffect(() => { setCheck({}); setMsg(null); setShowAll(false); setNameDraft(''); setBook([]); }, [sel]);
+  useEffect(() => { setCheck({}); setMsg(null); setShowAll(false); setNameDraft(''); setBook([]); setPottyTheme(''); setAddPotty(false); }, [sel]);
 
   // Back from the placement check (?sync=1&child=<id>): save that child's new or changed answers to the account,
   // through the same sync() as the buttons below. Only the profile goes, never the name.
@@ -123,6 +132,8 @@ export default function ProgramDashboard() {
   const wkKey = plan ? `${plan.childId}:${plan.current}` : '';
   const left = wkKey in redosLeft ? redosLeft[wkKey] : Math.max(0, (fam?.limits.redosPerWeek ?? 2) - (fam?.redos[wkKey] ?? 0));
   const maxKids = fam?.limits.maxChildren ?? 4;
+  const potty: StickerTheme = pottyTheme || (kid ? pottyThemeFor(kid.profile) : 'stars');
+  const pottyWord = stickerThemeWord(potty);
   const lastCheck: CheckIn | undefined = plan && fam ? fam.checkIns.filter((c) => c.childId === plan.childId && c.weekIndex === plan.current).at(-1) : undefined;
 
   /** Saves a profile. restart: the parent agreed that new answers which change the track start the plan over. */
@@ -175,13 +186,16 @@ export default function ProgramDashboard() {
     try {
       // The theme's pictures must be loaded first, or every picture prints as a plain star.
       await loadThemeIcons([wk.theme]);
+      const withPotty = addPotty && wk.index === 1;
+      if (withPotty) await Promise.all([loadScheduleIcons(), loadStickerTheme(potty)]);
       const pages = buildProgramWeek({ name, profile: kid.profile, week: wk, content: r.data.content, paper, credit: false, bubble: font, planLength: plan.weeks.length });
+      if (withPotty) pages.push(pottyPage(name, paper, potty));
       // The story's scene pictures are loaded before the PDF is made (savePdf also does this, cached).
       await loadImages(imagesIn(pages));
       // Show the picture book sheets on screen too.
       setBook(pages.filter((pg) => pg.items.some((it) => it.kind === 'image')));
       const title = `${PLANS[wk.level].label} at home, week ${wk.index}: ${weekTitle(wk)}`;
-      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, title, whatLabel('Personalized plan', `${PLANS[wk.level].label} week ${wk.index}`, weekTitle(wk), redo && 'new story'));
+      await savePdf(pages, `${name ? `${slug(name)}-` : ''}week-${wk.index}-${slug(weekTitle(wk))}.pdf`, title, whatLabel('Personalized plan', `${PLANS[wk.level].label} week ${wk.index}`, weekTitle(wk), redo && 'new story', withPotty && 'potty chart'));
       const notes: Record<string, string> = {
         'redo-limit': 'You’ve used both new stories for this week, so this is the last one made.',
         'not-yet': 'This week prints with our ready-made story for now. Its personal story is made when the plan reaches it.',
@@ -189,6 +203,22 @@ export default function ProgramDashboard() {
         fallback: 'Our story writer is busy, so this week uses a ready-made themed story. Try again later for a personal one.',
       };
       setMsg({ kind: 'ok', text: r.data.note ? notes[r.data.note] : redo ? 'Here’s a new story. Your PDF is downloading.' : 'Your PDF is downloading.' });
+    } catch {
+      setMsg({ kind: 'error', text: 'The PDF didn’t build. Please try again.' });
+    } finally {
+      setBusy('');
+    }
+  }
+
+  async function printPotty() {
+    if (!kid) return;
+    setBusy('potty');
+    setMsg(null);
+    try {
+      await Promise.all([loadScheduleIcons(), loadStickerTheme(potty)]);
+      const file = `${name ? `${slug(name)}-` : ''}${pottyWord ? `${pottyWord}-` : ''}potty-sticker-chart.pdf`;
+      await savePdf([pottyPage(name, paper, potty)], file, 'Potty sticker chart', whatLabel('Personalized plan', 'potty chart', pottyWord || 'stars'));
+      setMsg({ kind: 'ok', text: 'Your potty chart is downloading. Print at 100% size.' });
     } catch {
       setMsg({ kind: 'error', text: 'The PDF didn’t build. Please try again.' });
     } finally {
@@ -341,6 +371,12 @@ export default function ProgramDashboard() {
                 <button type="button" disabled={Boolean(busy) || left <= 0} onClick={() => printWeek(week, true)} class={btn}>{busy === 'redo' ? 'Writing a new story…' : `Make a new story (${left} left)`}</button>
               </div>
               <p class="mt-2 text-[13px] text-muted">One PDF: the plan page, the day pages, the story as a picture book to cut, staple and color, word problems and a note for you.</p>
+              {week.index === 1 && plan.level === 'pre-k' && (
+                <label class="mt-3 flex items-start gap-2 text-[14px] text-ink">
+                  <input type="checkbox" checked={addPotty} onChange={(e) => setAddPotty((e.target as HTMLInputElement).checked)} class="mt-0.5 h-4 w-4 shrink-0" />
+                  <span>Add {name ? `${name}’s` : 'a'} {pottyWord || 'star'} potty sticker chart as the last page</span>
+                </label>
+              )}
               {book.length > 0 && (
                 <details class="mt-3" open>
                   <summary class="cursor-pointer text-[14px] font-bold text-ink">This week’s picture book ({book.length} sheets)</summary>
@@ -407,6 +443,22 @@ export default function ProgramDashboard() {
               </li>
             ))}
           </ol>
+        </div>
+      )}
+
+      {kid && kid.onServer && plan && plan.level === 'pre-k' && (
+        <div class="rounded-xl border border-hairline bg-white p-5 sm:p-6 text-[15px]">
+          <h3 class="text-lg font-bold">Potty sticker chart</h3>
+          <p class="mt-1 text-muted">A week of circles to cover with a sticker every time {name || 'your child'} tries, drawn with {pottyWord || 'star'} pictures and {name ? 'their name' : 'room for a name'} in the title. Print a new one each week.</p>
+          <div class="mt-3 flex flex-wrap items-center gap-3">
+            <button type="button" disabled={Boolean(busy)} onClick={printPotty} class={btn}>{busy === 'potty' ? 'Making…' : `Print ${pottyWord ? `the ${pottyWord}` : 'the star'} potty chart`}</button>
+            <label class="text-[14px] text-muted">Pictures{' '}
+              <select value={potty} onChange={(e) => setPottyTheme((e.target as HTMLSelectElement).value as StickerTheme)} class="ml-1 rounded-md border border-hairline bg-white px-2 py-1 text-ink">
+                {STICKER_THEMES.map((t) => <option value={t.v}>{t.label}</option>)}
+              </select>
+            </label>
+          </div>
+          <p class="mt-2 text-[13px] text-muted">Want the potty steps chart or picture cards too? They’re on the <a href="/preschool-schedule/potty-training-chart/" class={link}>potty training chart</a> page.</p>
         </div>
       )}
 
