@@ -168,7 +168,7 @@
     },
     {
       "id": 5,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-06",
       "primaryKeyword": "tripod grasp",
       "volume": 1300,
@@ -180,7 +180,9 @@
         "/name-tracing/",
         "/coloring-pages/simple-coloring-pages/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "tripod-grasp",
+      "publishedOn": "2026-11-06"
     },
     {
       "id": 12,
