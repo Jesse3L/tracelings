@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05",
+  "updated": "2026-11-07",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -826,11 +826,22 @@
     },
     {
       "id": "faq-plus-icon-overflow",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [],
       "title": "Small fix: 15 pages copy the FAQ summary markup inline (membership, word tracing, letter tracing, name tracing, cursive pages, sight words, number tracing, alphabet chart, coloring collections) and their rotated + sign stretches to the full height of a two-line question, which adds about 2px of sideways scroll on phones when a long question is open. Add shrink-0 self-start to that span, as done in src/components/homeschool/Faqs.astro on Nov 3, or switch those pages to the Faqs component.",
-      "linkTo": []
+      "linkTo": [],
+      "date": "2026-11-07",
+      "urls": [
+        "no new URLs (15 existing pages fixed)"
+      ],
+      "keywords": {
+        "name tracing": "14,800 / SD 25",
+        "letter tracing worksheets": "14,800 / 30",
+        "sight words": "49,500 / 31",
+        "cursive alphabet": "368,000 / 78"
+      },
+      "result": "Added shrink-0 self-start to the FAQ + sign on the 15 pages that copy the FAQ markup inline. Before: every one of them was 392px wide at 390px with the FAQs open; after: 390. New scripts/qa/wide-scan.cjs checks all 303 built pages at 390px with every FAQ open: 0 too wide."
     },
     {
       "id": "potty-chart-in-free-week",
@@ -1478,6 +1489,26 @@
       },
       "buildOn": "Small volume but buyer-friendly audience; reuse versePage() and the cursive tool. Check volume again before building.",
       "side": "free"
+    },
+    {
+      "id": "faq-component-everywhere",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "faq-plus-icon-overflow"
+      ],
+      "title": "Small cleanup: switch the 15 pages that copy the FAQ markup inline (membership, word tracing, letter tracing, name tracing, cursive pages, sight words, number tracing, alphabet chart, coloring collections) to src/components/homeschool/Faqs.astro, so a future fix lands in one place. Keep each page's FAQPage schema and its html answers (links) as they are; check the rendered FAQ text is unchanged.",
+      "linkTo": []
+    },
+    {
+      "id": "wide-scan-in-playbook",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "faq-plus-icon-overflow"
+      ],
+      "title": "Add scripts/qa/wide-scan.cjs (every built page at 390px, all FAQs open, report anything wider than the screen) to the step 7 checks in docs/growth-playbook.md, and extend it to 360px (small Android phones) and fix anything it finds there.",
+      "linkTo": []
     }
   ]
 }
