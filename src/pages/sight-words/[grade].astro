@@ -3,7 +3,9 @@ import Preview from '../../components/site/Preview.astro';
 import Base from '../../layouts/Base.astro';
 import Tracer from '../../components/Tracer.tsx';
 import FlashCards from '../../components/FlashCards.tsx';
+import Faqs from '../../components/homeschool/Faqs.astro';
 import { SITE } from '../../config';
+import { faqText, type Faq } from '../../lib/seo';
 import levels from '../../data/sight-words.json';
 
 export function getStaticPaths() {
@@ -18,7 +20,18 @@ const title = L.seoTitle;
 const label = (l: typeof L) => `${l.short} sight words`;
 const shown = (w: string) => (w === 'I' ? w : w.toLowerCase());
 
-const schema = [
+const isK = L.slug === 'kindergarten';
+const faqs: Faq[] = isK
+  ? [
+      { q: 'Where can I find free sight word worksheets for kindergarten?', a: 'On this page. Tap the words you want from the 52 word Dolch primer list, then print a tracing worksheet as a PDF on US Letter or A4. The flash cards for the same words print 8 to a page. Both are free. The site asks for your email once before the first download, with no password.' },
+      { q: 'What sight words should a kindergartner learn?', a: 'Many schools use the Dolch primer list of 52 words, which is printed in full on this page. Your child\'s school may use a different list or order, so ask the teacher if you want to match class work.' },
+      { q: 'How many sight words do kindergartners usually learn?', a: 'It varies a lot by school and by child. Some classes work through a list of 50 or more words during the year, and others use fewer. Adding a few new words at a time usually works better than the whole list at once. If you have concerns, ask your child\'s teacher or pediatrician.' },
+      { q: 'How do you practice sight words at home?', a: 'About 5 minutes a day works well: read 3 flash cards together, trace 2 rows on the worksheet, and find one of the words in a book you are already reading.' },
+      { q: 'Are sight words part of a kindergarten homeschool plan?', a: 'Yes. The Tracelings kindergarten homeschool plan includes Dolch sight words along with letters, word families and early math. The sheets on this page stay free, week 1 of the plan is free, and the full 36 weeks are part of the membership.', html: 'Yes. The <a href="/homeschool/kindergarten/">kindergarten homeschool curriculum</a> includes Dolch sight words along with letters, word families and early math. The sheets on this page stay free, <a href="/program/">week 1 of the plan is free</a>, and the full 36 weeks are part of the membership.' },
+    ]
+  : [];
+
+const schema: Record<string, unknown>[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'LearningResource',
@@ -42,6 +55,13 @@ const schema = [
     ],
   },
 ];
+if (faqs.length) {
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })),
+  });
+}
 ---
 <Base title={title} description={L.metaDescription} schema={schema}>
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -50,7 +70,11 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{L.title}</span></h1>
-      <p class="mt-4 text-lg text-muted">All {L.words.length} words from the Dolch {L.dolch.toLowerCase()} list, with a word tracing worksheet and printable flash cards.</p>
+      {isK ? (
+        <p class="mt-4 text-lg text-muted">Free kindergarten sight word worksheets: pick from all 52 words on the Dolch primer list and print a tracing worksheet and flash cards (8 to a page) as a PDF, on US Letter or A4.</p>
+      ) : (
+        <p class="mt-4 text-lg text-muted">All {L.words.length} words from the Dolch {L.dolch.toLowerCase()} list, with a word tracing worksheet and printable flash cards.</p>
+      )}
     </header>
 
     <article class="prose-tl max-w-[68ch]">
@@ -98,6 +122,13 @@ const schema = [
         then come back to the word. For a word that matters even more to your child, make a <a href="/name-tracing/">name tracing worksheet</a>.
       </p>
     </article>
+
+    {faqs.length > 0 && (
+      <section class="prose-tl max-w-[68ch] mt-12" aria-labelledby="faq-h">
+        <h2 id="faq-h">Questions about kindergarten sight words</h2>
+        <Faqs faqs={faqs} />
+      </section>
+    )}
 
     <nav aria-label="Other sight word levels" class="mt-12">
       <div class="flex justify-between gap-4 max-w-[68ch] text-[1.05rem]">
