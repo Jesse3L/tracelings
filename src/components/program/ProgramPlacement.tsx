@@ -13,6 +13,7 @@ import { templateContentFor, weekBlurb } from '../../lib/program/templates';
 import { buildProgramWeek, showMePage } from '../../lib/program/pages';
 import { imagesIn, loadImages } from '../../lib/render';
 import { loadLocalProgram, upsertLocalChild, newChildId } from '../../lib/program/local';
+import { buildSchedulePage, loadScheduleIcons, loadStickerTheme, stickerThemeWord, STICKER_THEMES, type StickerTheme } from '../../lib/schedule';
 import { Segmented } from '../Tracer';
 import EmailGate from '../EmailGate';
 
@@ -69,6 +70,8 @@ export default function ProgramPlacement() {
   const [gate, setGate] = useState<null | 'week' | 'showme'>(null);
   const [done, setDone] = useState('');
   const [error, setError] = useState('');
+  const [addPotty, setAddPotty] = useState(false);
+  const [pottyReady, setPottyReady] = useState('');
   const member = useMember();
   const top = useRef<HTMLDivElement>(null);
 
@@ -136,11 +139,30 @@ export default function ProgramPlacement() {
   }, [step, profile?.interests.join(',')]);
 
   const week1 = plan?.weeks[0];
+  // Pre-K only: the free potty sticker chart in the week's theme, as an optional last page. Same page as /account/ (one page, drawn here).
+  const pottyOffer = step === 'plan' && week1?.level === 'pre-k';
+  const pottyTheme = (week1 && STICKER_THEMES.some((x) => x.v === week1.theme) ? week1.theme : 'stars') as StickerTheme;
+  const pottyWord = stickerThemeWord(pottyTheme);
+  const wantPotty = pottyOffer && addPotty;
+  const withPotty = wantPotty && pottyReady === pottyTheme;
+  useEffect(() => {
+    if (!wantPotty) return;
+    let live = true;
+    Promise.all([loadScheduleIcons(), loadStickerTheme(pottyTheme)])
+      .then(() => { if (live) setPottyReady(pottyTheme); })
+      .catch(() => { if (live) { setAddPotty(false); setDone('The potty chart did not load. Please tick the box again.'); } });
+    return () => { live = false; };
+  }, [wantPotty, pottyTheme]);
   const pages = useMemo<Page[]>(() => {
     if (!profile || !plan || !week1 || step !== 'plan') return [];
     const content = templateContentFor(profile, week1);
-    return buildProgramWeek({ name, profile, week: week1, content, paper, credit: !member.member, bubble: font, planLength: plan.weeks.length });
-  }, [JSON.stringify(profile), plan, name, paper, font, iconsOk, member.member, step]);
+    const out = buildProgramWeek({ name, profile, week: week1, content, paper, credit: !member.member, bubble: font, planLength: plan.weeks.length });
+    if (withPotty) out.push(buildSchedulePage({ kind: 'stickers', name, paper, credit: !member.member, steps: [], subjects: [], routine: 'potty', boxes: 5, reward: '', theme: pottyTheme }));
+    return out;
+  }, [JSON.stringify(profile), plan, name, paper, font, iconsOk, member.member, step, withPotty, pottyTheme]);
+  // Show the chart when it is added; go back to the first page if the page being shown is gone.
+  useEffect(() => { setShown(withPotty ? pages.length - 1 : 0); }, [withPotty]);
+  useEffect(() => { if (shown >= pages.length && pages.length) setShown(0); }, [pages.length, shown]);
   const svgs = useMemo(() => pages.map(pageToSvg), [pages]);
   // The picture book's scene drawings: the preview shows them straight from their URLs; fetch them early for the PDF.
   const bigBook = pages.some((p) => p.items.some((it) => it.kind === 'image'));
@@ -193,7 +215,7 @@ export default function ProgramPlacement() {
         setDone('Downloaded the placement check. Tick what your child gets right, then come back to answer the questions.');
       } else if (week1 && plan) {
         const who = slug(name);
-        await savePdf(pages, `${who ? `${who}-` : ''}tracelings-week-1-${slug(THEMES[week1.theme].label)}.pdf`, `Tracelings at Home, personalized: week 1`, whatLabel('Personalized plan', 'free week 1', `${THEMES[week1.theme].label.toLowerCase()} theme`));
+        await savePdf(pages, `${who ? `${who}-` : ''}tracelings-week-1-${slug(THEMES[week1.theme].label)}.pdf`, `Tracelings at Home, personalized: week 1`, whatLabel('Personalized plan', 'free week 1', `${THEMES[week1.theme].label.toLowerCase()} theme`, withPotty && 'potty chart'));
         setDone(`Downloaded week 1. Print at 100% size, start with the plan page, and ${bigBook ? 'make the picture book together (cut, stack and staple)' : 'cut out the little book together'}.`);
       }
     } finally {
@@ -393,11 +415,17 @@ export default function ProgramPlacement() {
               )}
               <p class="text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">{isMember ? 'Included' : 'Free'}</p>
               <h3 class="mt-1 text-xl font-bold text-ink">Week 1: {weekTitle(week1)}</h3>
-              <p class="mt-1 text-[15px] text-muted leading-snug">{THEMES[week1.theme].label} week. A plan page for you, then {pages.length - 1} pages across the week, including {bigBook ? 'a picture book' : 'a little book'} starring {who}.</p>
+              <p class="mt-1 text-[15px] text-muted leading-snug">{THEMES[week1.theme].label} week. A plan page for you, then {pages.length - 1 - (withPotty ? 1 : 0)} pages across the week, including {bigBook ? 'a picture book' : 'a little book'} starring {who}.</p>
               <div class="mt-5">
                 <Segmented legend="Paper" name="pc-paper" value={paper} onChange={setPaper} options={[{ v: 'letter', label: 'US Letter' }, { v: 'a4', label: 'A4' }]} />
               </div>
-              <button type="button" disabled={busy || !pages.length} onClick={() => ask('week')} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
+              {pottyOffer && (
+                <label class="mt-4 mb-4 flex items-start gap-2 text-[14px] text-muted">
+                  <input type="checkbox" checked={addPotty} onChange={(e) => { setAddPotty((e.target as HTMLInputElement).checked); setDone(''); }} class="mt-0.5 h-4 w-4 shrink-0" />
+                  <span>Add {name.trim() ? `${name.trim()}’s` : 'a'} {pottyWord || 'star'} potty sticker chart as the last page</span>
+                </label>
+              )}
+              <button type="button" disabled={busy || !pages.length || (wantPotty && !withPotty)} onClick={() => ask('week')} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">
                 {busy ? 'Making your PDF…' : `Download week 1 (${pages.length} pages)`}
               </button>
               {!font && <p class="mt-2 text-[13px] text-muted">Loading the coloring page letters…</p>}

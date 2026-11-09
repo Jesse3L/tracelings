@@ -95,6 +95,7 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Bedtime routine chart (printable checklist or picture cards, toddler and preschool tips) | `/preschool-schedule/bedtime-routine-chart/` | live |
 | Potty training chart (printable sticker chart with stars or 12 picture themes such as dinosaurs and unicorns, a reward line, potty steps checklist, picture cards) | `/preschool-schedule/potty-training-chart/` | live |
 | Members: the potty sticker chart in the child's own theme on the program dashboard, or as the last page of week 1 (Pre-K track) | `/account/` | live |
+| Free week 1 from the placement check: tick box adds the potty sticker chart in the child's theme as the last page (Pre-K track) | `/program/` | live |
 | Pre-K math worksheets | `/math-worksheets/pre-k/` | live |
 | Ten frame printables and worksheets | `/math-worksheets/ten-frames/` | live |
 | Kindergarten math worksheets (hub, free sampler) | `/math-worksheets/kindergarten/` | live |
