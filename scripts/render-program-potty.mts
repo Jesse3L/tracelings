@@ -16,7 +16,9 @@ const rp = (u: string) => readFile(path.join(R, 'public', u), 'utf8');
 await sch.loadScheduleIcons(rp); await loadThemeIcons(THEME_IDS, rp);
 setSceneArt(JSON.parse(await readFile(R + '/src/lib/program/sceneArt.json', 'utf8')));
 // Same call as ProgramDashboard's pottyPage.
-const potty = (name: string, paper: any, theme: any) => sch.buildSchedulePage({ kind: 'stickers', name, paper, credit: false, steps: [], subjects: [], routine: 'potty', boxes: 5, reward: '', theme });
+// Pass 'credit' as the second argument for the free week's version (footer line on), as ProgramPlacement builds it.
+const credit = process.argv[3] === 'credit';
+const potty = (name: string, paper: any, theme: any) => sch.buildSchedulePage({ kind: 'stickers', name, paper, credit, steps: [], subjects: [], routine: 'potty', boxes: 5, reward: '', theme });
 let issues = 0, n = 0;
 for (const paper of ['letter', 'a4']) for (const name of ['Maximiliano Alexander Montgomery', 'Christabel-Anastasia', 'Mo', '']) for (const theme of ['stars', ...THEME_IDS]) {
   const pg = potty(name, paper, theme); n++;
@@ -36,7 +38,7 @@ for (const paper of ['letter', 'a4']) for (const name of ['Maximiliano Alexander
 const kid = { id: 'c_test0001', ageYears: 4, skills: {}, interests: ['dinosaurs', 'space'], daysPerWeek: 5, minutesPerDay: 15, faith: false, createdAt: '2026-11-05T00:00:00.000Z' } as any;
 const plan = placeChild(kid); const wk = plan.weeks[0];
 for (const paper of ['letter', 'a4']) {
-  const pages = buildProgramWeek({ name: 'Maximiliano Alexander', profile: kid, week: wk, content: templateContentFor(kid, wk), paper, credit: false, bubble: null, planLength: plan.weeks.length });
+  const pages = buildProgramWeek({ name: 'Maximiliano Alexander', profile: kid, week: wk, content: templateContentFor(kid, wk), paper, credit, bubble: null, planLength: plan.weeks.length });
   pages.push(potty('Maximiliano Alexander', paper, 'dinosaurs'));
   const textOnly = pages.map((p: any) => ({ ...p, items: p.items.filter((i: any) => i.kind !== 'image') }));
   const pdf = await pagesToPdf(textOnly, 'test'); await writeFile(path.join(out, `week1-${paper}.pdf`), pdf);

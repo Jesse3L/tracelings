@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-07",
+  "updated": "2026-11-09",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -845,7 +845,7 @@
     },
     {
       "id": "potty-chart-in-free-week",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "potty-chart-in-program"
@@ -853,6 +853,46 @@
       "title": "Free week 1 from the placement check (/program/ ProgramPlacement): for a Pre-K child, an optional 'add a potty sticker chart in their theme' tick box, like the member dashboard has. The single chart is already free on /preschool-schedule/potty-training-chart/, so this adds no paid depth to the free side; it shows new families the themed extras. Check that the free week stays one week.",
       "linkTo": [
         "/program/"
+      ],
+      "date": "2026-11-09",
+      "urls": [
+        "/program/ (placement check, Their plan step)",
+        "/preschool-schedule/potty-training-chart/ (copy)"
+      ],
+      "keywords": {
+        "potty training sticker chart": "6,600 / SD 25",
+        "free printable potty chart": "2,400 / 19",
+        "printable potty training sticker chart": "1,300 / 28",
+        "free printable potty training sticker chart": "390 / 34",
+        "potty training sticker chart free printable": "320 / 30",
+        "free homeschool preschool curriculum": "880 / 19"
+      },
+      "result": "Pre-K children in the free placement check get a tick box under Paper: 'Add <name>'s dinosaur potty sticker chart as the last page'. Uses week 1's theme, built in the browser, footer line on for free users. The preview jumps to the chart and the page count goes from 11 to 12. Kindergarten track shows no box. The free week is still one week."
+    },
+    {
+      "id": "potty-chart-free-week-cta",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-in-free-week"
+      ],
+      "title": "On /preschool-schedule/potty-training-chart/, add a small card under the maker: 'Get this chart in your child's theme inside a free week of homeschool', linking /program/?level=pre-k#placement. The potty page is the site's biggest keyword (12,100), so it should point at the free week more clearly than the one sentence it has now. One-page chart stays exactly as free as it is.",
+      "linkTo": [
+        "/program/"
+      ]
+    },
+    {
+      "id": "routine-chart-in-free-week",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-in-free-week",
+        "routine-chart-in-program"
+      ],
+      "title": "Free week 1 from the placement check: a tick box for the morning routine chart (the one page already free on /preschool-schedule/morning-routine-chart/), so Kindergarten children get an extra too; they have no potty box today. Keep the free week to one week.",
+      "linkTo": [
+        "/program/",
+        "/preschool-schedule/morning-routine-chart/"
       ]
     },
     {
