@@ -75,9 +75,11 @@ export const pageSentences = (s: string) => s.split(/(?<=[.!?]["”]?)\s+(?=["�
 export function pageLengthProblem(level: Level, text: string): string | null {
   const r = PAGE_RULES[level];
   const real = pageSentences(text).filter((x) => !(/!["”]?$/.test(x) && pageWords(x) <= 3));
-  if (real.length > r.sentences) return 'too many sentences for the level';
-  if (pageWords(text) > r.words) return 'too long for the level';
-  if (real.some((x) => pageWords(x) > r.sentenceWords)) return 'sentence too long';
+  // The counts go in the message: the AI repair retry is told exactly how far over the page is.
+  if (real.length > r.sentences) return `too many sentences for the level (${real.length} sentences, at most ${r.sentences})`;
+  if (pageWords(text) > r.words) return `too long for the level (${pageWords(text)} words, at most ${r.words})`;
+  const long = real.find((x) => pageWords(x) > r.sentenceWords);
+  if (long) return `sentence too long (${pageWords(long)} words in one sentence, at most ${r.sentenceWords})`;
   return null;
 }
 export const BOOK_SHEETS: Record<Level, number> = { 'pre-k': 2, kindergarten: 3 };
