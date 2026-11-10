@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-20",
+  "updated": "2026-11-10",
   "items": [
     {
       "id": 2,
@@ -186,7 +186,7 @@
     },
     {
       "id": 12,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-10",
       "primaryKeyword": "winter activities for preschoolers",
       "volume": 1300,
@@ -199,7 +199,9 @@
         "/number-tracing/1-10/",
         "/name-tracing/"
       ],
-      "season": "winter"
+      "season": "winter",
+      "slug": "winter-activities-for-preschoolers",
+      "publishedOn": "2026-11-10"
     },
     {
       "id": 19,
