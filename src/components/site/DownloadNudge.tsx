@@ -4,9 +4,10 @@ import CoffeeButtons from '../CoffeeButtons';
 // A small, dismissible card shown after a successful download, inviting free visitors to membership.
 // Never shown to members, never blocks anything, and stays quiet for a day after being closed.
 const SNOOZE_KEY = 'tl-nudge-snooze';
-// "Buy us a coffee" card: shows from the 4th download on a device, then rests for 3 weeks after it's closed.
+// "Buy us a coffee" card: can show from the 1st download on a device, then rests for 3 weeks after it's shown.
 // Never shown again once someone has tipped (the thank-you page sets COFFEE_DONE).
-const COFFEE_AFTER = 4;
+// (Before Nov 10, 2026 it waited for the 4th download; most visitors download 2 or 3 times, so almost nobody saw it.)
+const COFFEE_AFTER = 1;
 const COFFEE_SNOOZE = 'tl-coffee-snooze';
 export const COFFEE_DONE = 'tl-coffee-done';
 function coffeeDue(): boolean {
@@ -22,6 +23,9 @@ function snoozeCoffee(days: number) {
 const NAME_TOOLS = /^\/(name-tracing|cursive|cursive-name-tracing|name-coloring-pages|class-pack|$)/;
 // Pages where the free-week program offer replaces the coffee card: the visitor is already doing school-style work.
 export const PROGRAM_PAGES = /^\/(homeschool|math-worksheets|word-families|sight-words|letter-of-the-week)(\/|$)/;
+// Preschool tools (name, letter and number tracing and friends): these parents are who the program is for, so the
+// free-week offer shows first; once it's closed or clicked, the coffee card takes the next download.
+export const PRESCHOOL_TOOLS = /^\/(name-tracing|letter-tracing|number-tracing|name-coloring-pages|alphabet-chart|bubble-letters)(\/|$)/;
 const PROGRAM_SNOOZE = 'tl-program-snooze';
 function programSnoozed(): boolean {
   try { return Number(localStorage.getItem(PROGRAM_SNOOZE) || 0) > Date.now(); } catch { return false; }
@@ -48,17 +52,27 @@ export default function DownloadNudge() {
     let t: number | undefined;
     const onDownload = () => {
       if ((window as any).__tlMember === true) return;
-      if (PROGRAM_PAGES.test(location.pathname)) {
-        // Program offer first on school-style pages; coffee stays on the other tools.
-        if (programSnoozed()) return;
+      const path = location.pathname;
+      const showProgram = () => {
         clearTimeout(t);
         t = window.setTimeout(() => { setCoffee(false); setProgram(true); setShow(true); track('program_nudge_shown'); }, 1200);
+      };
+      if (PROGRAM_PAGES.test(path)) {
+        // Program offer only on school-style pages.
+        if (programSnoozed()) return;
+        showProgram();
         return;
       }
+      const preschool = PRESCHOOL_TOOLS.test(path);
+      // Shown once, then the next download here gets the coffee card instead (even if this one was ignored).
+      if (preschool && !programSnoozed()) { snoozeProgram(3); showProgram(); return; }
       const wantCoffee = coffeeDue();
+      // On preschool tools the program offer already ran; after the coffee card, stay quiet.
+      if (preschool && !wantCoffee) return;
       if (!wantCoffee && snoozed()) return;
       clearTimeout(t);
       t = window.setTimeout(() => {
+        setProgram(false);
         setCoffee(wantCoffee);
         if (wantCoffee) { snoozeCoffee(21); setShow(true); track('coffee_prompt_shown'); return; }
         setNames(NAME_TOOLS.test(location.pathname));

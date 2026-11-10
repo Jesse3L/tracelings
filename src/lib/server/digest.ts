@@ -4,6 +4,7 @@
 import { rs } from './resend';
 import { AI_SOURCES } from '../source';
 import { loadDay, chicagoYesterday, pruneOld, addDays, type DayRecords, type DownloadEvent } from './events';
+import { emailHealth, type EmailHealth } from './emailHealth';
 
 const env = (k: string): string | undefined => ((import.meta.env ?? {}) as Record<string, string | undefined>)[k] ?? process.env[k];
 
@@ -29,6 +30,8 @@ export interface DigestSummary {
   checkouts: { at: string; time: string; plan: string }[];
   /** Monday emails (the digest of a Sunday) also cover the 7 days that end on that day. */
   week?: WeekSummary;
+  /** Email list numbers (lib/server/emailHealth.ts), added when the digest is sent. */
+  email?: EmailHealth | { error: string };
 }
 export interface WeekSummary {
   from: string; to: string;
@@ -111,7 +114,8 @@ export function summarizeWeek(days: DayRecords[]): WeekSummary {
 /** The digest of a Sunday (sent Monday morning) carries the week. */
 export const isWeekDigest = (date: string) => new Date(`${date}T12:00:00Z`).getUTCDay() === 0;
 
-export const isEmpty = (s: DigestSummary) => !s.totals.downloads && !s.totals.signups && !s.totals.checkouts && !(s.week && (s.week.totals.downloads || s.week.totals.signups));
+export const isEmpty = (s: DigestSummary) => !s.totals.downloads && !s.totals.signups && !s.totals.checkouts && !(s.week && (s.week.totals.downloads || s.week.totals.signups))
+  && !(s.email && 'newUnsubscribes' in s.email && s.email.newUnsubscribes?.length);
 
 // ---------- Rendering ----------
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -127,6 +131,19 @@ export function digestSubject(s: DigestSummary, yesterday = chicagoYesterday()):
 
 const dlText = (d: VisitorDownload) => `${d.what ?? 'A PDF'}${d.pages ? ` (${plural(d.pages, 'page')})` : ''} on ${d.path}`;
 const visitorHead = (v: Visitor) => `Visitor ${v.n}${v.place ? ` (${v.place})` : ''}${v.src ? `, from ${v.src}` : ''}${v.member ? ', member' : ''}, ${plural(v.downloads.length, 'download')}`;
+
+function emailLine(e: EmailHealth): string {
+  const offWelcome = e.welcome.filter((w) => w.status !== 'enabled').map((w) => w.variant);
+  const welcome = !e.welcome.length ? 'Welcome emails: unknown.'
+    : !offWelcome.length ? 'Welcome emails: on.'
+    : offWelcome.length === e.welcome.length ? 'Welcome emails: OFF (new sign-ups get no follow-up).'
+    : `Welcome emails: off for ${offWelcome.join(', ')}.`;
+  return `${plural(e.subscribed, 'subscriber')} (${e.members} paying), ${e.unsubscribed} unsubscribed in total, ${plural(e.newContacts, 'new contact')} this day. ${welcome}`;
+}
+function trackingNote(e: EmailHealth): string {
+  const off = [e.openTracking === false ? 'opens' : '', e.clickTracking === false ? 'clicks' : ''].filter(Boolean);
+  return off.length ? `${off.join(' and ')} aren't tracked: tracking is switched off for ${off.length === 2 ? 'both' : 'it'} on the sending domain.`.replace(/^./, (c) => c.toUpperCase()) : '';
+}
 
 export function renderDigest(s: DigestSummary, yesterday = chicagoYesterday()): { subject: string; html: string; text: string } {
   const subject = digestSubject(s, yesterday);
@@ -146,6 +163,29 @@ export function renderDigest(s: DigestSummary, yesterday = chicagoYesterday()): 
   parts.push(`<p style="${small}margin:0 0 16px;">${esc(longDate(s.date))}, Central time</p>`);
   parts.push(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 -6px 4px;"><tr>${stat(t.downloads, plural(t.downloads, 'download').replace(/^\d+ /, ''))}${stat(t.visitors, t.visitors === 1 ? 'visitor' : 'visitors')}${stat(t.signups, t.signups === 1 ? 'new email' : 'new emails')}</tr></table>`);
   parts.push(`<p style="${small}margin:4px 0 0;">${esc(`${t.freeDownloads} free, ${t.memberDownloads} by members. ${plural(t.checkouts, 'checkout')} started.`)}</p>`);
+
+  if (s.email) {
+    const e = s.email;
+    parts.push(`<h2 style="${H}">Email list</h2>`);
+    if (!('contacts' in e)) parts.push(`<p style="${P}">${esc(`Couldn't load the email numbers today (${e.error}).`)}</p>`);
+    else {
+      const td = `font-family:${FONT};font-size:15px;line-height:1.5;padding:6px 0;border-bottom:1px solid ${C.hair};`;
+      const num = `${td}color:${C.ink};font-weight:700;white-space:nowrap;`;
+      parts.push(`<p style="${P}">${esc(emailLine(e))}</p>`);
+      if (e.newUnsubscribes?.length) parts.push(`<p style="${P}"><strong>Unsubscribed since the last report:</strong> ${e.newUnsubscribes.map((x) => esc(x)).join(', ')}</p>`);
+      else if (e.newUnsubscribes === null) parts.push(`<p style="${small}margin:0 0 12px;">New unsubscribes will be listed from tomorrow's report on.</p>`);
+      if (e.broadcasts.length) {
+        const cell = (n: number | null, off = false) => off ? 'off' : n === null ? '?' : String(n);
+        parts.push(`<p style="${small}margin:14px 0 4px;">Recent email blasts (last 30 days)</p>`);
+        parts.push(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">`
+          + `<tr><td style="${small}padding:0 0 4px;">Email</td><td align="right" width="58" style="${small}padding:0 0 4px;">Sent</td><td align="right" width="52" style="${small}padding:0 0 4px;">Opens</td><td align="right" width="52" style="${small}padding:0 0 4px;">Clicks</td><td align="right" width="52" style="${small}padding:0 0 4px;">Unsubs</td></tr>`
+          + e.broadcasts.map((b) => `<tr><td style="${td}color:${C.body};">${esc(b.name)}${b.sentAt ? `<br><span style="${small}">${esc(shortDate(b.sentAt.slice(0, 10)))}</span>` : ''}</td><td align="right" style="${num}">${cell(b.delivered)}</td><td align="right" style="${num}">${cell(b.opened, e.openTracking === false)}</td><td align="right" style="${num}">${cell(b.clicked, e.clickTracking === false)}</td><td align="right" style="${num}">${cell(b.unsubscribed)}</td></tr>`).join('')
+          + `</table>`);
+      }
+      const note = trackingNote(e);
+      if (note) parts.push(`<p style="${small}margin:8px 0 0;">${esc(note)}</p>`);
+    }
+  }
 
   if (s.sources.length) {
     const td = `font-family:${FONT};font-size:15px;line-height:1.5;padding:6px 0;border-bottom:1px solid ${C.hair};`;
@@ -242,6 +282,18 @@ ${parts.join('\n')}
   const lines: string[] = [`Your Tracelings day: ${longDate(s.date)} (Central time)`, ''];
   lines.push(`${plural(t.downloads, 'download')} by ${plural(t.visitors, 'visitor')} (${t.freeDownloads} free, ${t.memberDownloads} by members)`);
   lines.push(`${plural(t.signups, 'new email sign-up')}, ${plural(t.checkouts, 'checkout')} started`);
+  if (s.email) {
+    const e = s.email;
+    lines.push('', 'EMAIL LIST');
+    if (!('contacts' in e)) lines.push(`Couldn't load the email numbers today (${e.error}).`);
+    else {
+      lines.push(emailLine(e));
+      if (e.newUnsubscribes?.length) lines.push(`Unsubscribed since the last report: ${e.newUnsubscribes.join(', ')}`);
+      for (const b of e.broadcasts) lines.push(`${b.name}: ${b.delivered ?? '?'} sent, ${e.openTracking === false ? 'opens off' : `${b.opened ?? '?'} opens`}, ${e.clickTracking === false ? 'clicks off' : `${b.clicked ?? '?'} clicks`}, ${b.unsubscribed ?? '?'} unsubs`);
+      const note = trackingNote(e);
+      if (note) lines.push(note);
+    }
+  }
   if (s.sources.length) {
     lines.push('', 'WHERE THEY CAME FROM (visitors / downloads / emails)');
     if (s.ai.visitors || s.ai.signups) lines.push(`AI assistants: ${plural(s.ai.visitors, 'visitor')}, ${plural(s.ai.downloads, 'download')}, ${plural(s.ai.signups, 'new email')}`);
@@ -274,7 +326,7 @@ export interface DigestResult { date: string; sent: boolean; skipped?: 'empty' |
 /** Loads a day (default: yesterday in Chicago), and emails the owner when `send` is true and there is something
  *  to report (or `force`). `prune` also deletes records older than 35 days. A Sunday's digest (sent Monday) also
  *  covers the 7 days ending that day (`week` forces it on or off). */
-export async function runDigest(o: { date?: string; send: boolean; force?: boolean; prune?: boolean; idempotencyKey?: string; week?: boolean }): Promise<DigestResult> {
+export async function runDigest(o: { date?: string; send: boolean; force?: boolean; prune?: boolean; idempotencyKey?: string; week?: boolean; email?: boolean }): Promise<DigestResult> {
   const date = o.date ?? chicagoYesterday();
   const day = await loadDay(date);
   const summary = summarize(day);
@@ -285,9 +337,11 @@ export async function runDigest(o: { date?: string; send: boolean; force?: boole
   const result: DigestResult = { date, sent: false, summary };
   if (o.prune) result.pruned = await pruneOld().catch((e) => { console.error('digest prune failed', (e as Error).message); return 0; });
   if (!o.send) return result;
-  if (isEmpty(summary) && !o.force) return { ...result, skipped: 'empty' };
   const owner = env('OWNER_EMAIL')?.trim();
   if (!owner) return { ...result, skipped: 'no_owner' };
+  // Email list numbers only when actually sending: it saves the day's unsubscribe snapshot. `email: false` skips it.
+  if (o.email !== false) summary.email = await emailHealth(date);
+  if (isEmpty(summary) && !o.force) return { ...result, skipped: 'empty' };
   const { subject, html, text } = renderDigest(summary);
   const r = await rs<{ id?: string }>('/emails', { body: { from: DIGEST_FROM, to: [owner], subject, html, text }, idempotencyKey: o.idempotencyKey });
   return { ...result, sent: true, id: r?.id };

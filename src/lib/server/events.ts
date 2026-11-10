@@ -163,3 +163,33 @@ export async function pruneOld(today = chicagoDate(), keepDays = KEEP_DAYS): Pro
   }
   return n;
 }
+
+// ---------- Email list snapshots (lib/server/emailHealth.ts) ----------
+// One small file per digest day with the unsubscribed contact ids (Resend ids, never addresses), so the next digest
+// can say who unsubscribed in between. Kept 14 days.
+const SNAP = 'email-snap/';
+export interface EmailSnapshot { unsub: string[] }
+export async function readSnapshot(date: string): Promise<EmailSnapshot | null> {
+  const s = current();
+  if (!s || !isDate(date)) return null;
+  const text = await s.read(`${SNAP}${date}.json`).catch(() => null);
+  if (!text) return null;
+  try { const d = JSON.parse(text); return Array.isArray(d?.unsub) ? { unsub: d.unsub.map(String) } : null; } catch { return null; }
+}
+/** Saves the day's snapshot once; a second run the same day keeps the first. */
+export async function writeSnapshot(date: string, snap: EmailSnapshot): Promise<void> {
+  const s = current();
+  if (!s || !isDate(date)) return;
+  if (await s.read(`${SNAP}${date}.json`).catch(() => null)) return;
+  await s.put(`${SNAP}${date}.json`, JSON.stringify(snap));
+}
+export async function listSnapshots(): Promise<string[]> {
+  const s = current();
+  if (!s) return [];
+  return (await s.list(SNAP)).map((p) => p.slice(SNAP.length, SNAP.length + 10)).filter(isDate);
+}
+export async function deleteSnapshots(dates: string[]): Promise<void> {
+  const s = current();
+  if (!s || !dates.length) return;
+  await s.del(dates.filter(isDate).map((d) => `${SNAP}${d}.json`));
+}
