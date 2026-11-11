@@ -66,6 +66,10 @@ export default function ScheduleMaker(props: { source?: string; preset?: string;
   useEffect(() => setDone(''), [kind]);
   // A sticker theme's pictures load when it is picked; until then the page shows the plain stars.
   useEffect(() => { loadStickerTheme(theme).then(() => setIcons((n) => n + 1)); }, [theme]);
+  // Tell the page which picture theme is picked (the potty page's free-week card follows it). The theme only, never the name.
+  useEffect(() => {
+    try { (window as any).__tlStickerTheme = theme; window.dispatchEvent(new CustomEvent('tl:sticker-theme', { detail: theme })); } catch { /* ignore */ }
+  }, [theme]);
 
   const opts = { kind, name, paper, credit, steps, subjects, routine, boxes, reward, theme };
   const page = useMemo(() => buildSchedulePage(opts), [kind, name, paper, credit, steps, subjects, routine, boxes, reward, theme, icons]);

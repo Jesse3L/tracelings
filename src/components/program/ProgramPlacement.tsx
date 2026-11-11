@@ -122,6 +122,9 @@ export default function ProgramPlacement() {
       if (lv === 'pre-k') setAge(4);
       else if (lv === 'kindergarten') setAge(5);
       if (q?.get('faith') === '1') setFaith(true);
+      // From the potty chart page: ?interest=dinosaurs ticks that theme first, so week 1 (and its potty chart) uses it.
+      const it = q?.get('interest') as ThemeId | null;
+      if (it && THEME_IDS.includes(it)) setInterests([it]);
     }
     loadThemeIcons(THEME_IDS.slice(0, 1)).then(() => setIconsOk((n) => n + 1));
   }, []);
