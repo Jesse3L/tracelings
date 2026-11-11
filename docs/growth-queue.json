@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-09",
+  "updated": "2026-11-11",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -871,12 +871,80 @@
     },
     {
       "id": "potty-chart-free-week-cta",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "potty-chart-in-free-week"
       ],
       "title": "On /preschool-schedule/potty-training-chart/, add a small card under the maker: 'Get this chart in your child's theme inside a free week of homeschool', linking /program/?level=pre-k#placement. The potty page is the site's biggest keyword (12,100), so it should point at the free week more clearly than the one sentence it has now. One-page chart stays exactly as free as it is.",
+      "linkTo": [
+        "/program/"
+      ],
+      "done": "2026-11-11",
+      "urls": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "keywords": {
+        "potty training chart": [
+          12100,
+          33
+        ],
+        "potty training chart with stickers": [
+          8100,
+          27
+        ],
+        "potty training sticker chart": [
+          6600,
+          25
+        ],
+        "potty training chart free printable": [
+          2400,
+          34
+        ],
+        "free homeschool preschool curriculum": [
+          880,
+          19
+        ],
+        "preschool potty training chart": [
+          30,
+          29
+        ]
+      },
+      "note": "Ubersuggest US, Nov 11, 2026. Card under the maker (src/components/site/PottyFreeWeekCard.tsx) follows the theme picked in the maker and links /program/?level=pre-k&interest=<theme>#placement; the placement check now reads ?interest= and ticks that theme first. Members see a link to their plan instead. FAQ added. No new URLs."
+    },
+    {
+      "id": "coloring-free-week-cta",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-free-week-cta"
+      ],
+      "title": "Coloring collections that match a program theme (dinosaur, unicorn, car and truck coloring pages): the same kind of card under the coloring tool, 'Get a week of preschool themed on dinosaurs, free', linking /program/?level=pre-k&interest=<theme>#placement (the ?interest= param from Nov 11). One-page coloring stays exactly as free as it is; reuse PottyFreeWeekCard's layout as a shared component. Check 'dinosaur coloring pages' and 'unicorn coloring pages' numbers for the wording.",
+      "linkTo": [
+        "/program/"
+      ]
+    },
+    {
+      "id": "routine-chart-free-week-cta",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "routine-chart-in-free-week"
+      ],
+      "title": "When the morning chart tick box is in the free week: a card under the maker on /preschool-schedule/morning-routine-chart/ (and bedtime if it gets a box) pointing at the free week, like the potty page's card, with level picked by age (Pre-K or Kindergarten).",
+      "linkTo": [
+        "/program/",
+        "/preschool-schedule/morning-routine-chart/"
+      ]
+    },
+    {
+      "id": "schedule-pages-download-card",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-free-week-cta"
+      ],
+      "title": "After a download on the /preschool-schedule/ pages (potty, morning, bedtime, daily schedule), show the 'Build my free week' download card first, as the tracing tools do since Nov 10 (add the path to PRESCHOOL_TOOLS in src/components/site/DownloadNudge.tsx). Same snooze rules, no new cards. Check the email_ui.py card checks still pass.",
       "linkTo": [
         "/program/"
       ]

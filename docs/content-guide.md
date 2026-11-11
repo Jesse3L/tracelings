@@ -93,7 +93,7 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Preschool daily schedule maker (visual schedule, picture cards, weekly homeschool chart) | `/preschool-schedule/` | live |
 | Morning routine chart for preschoolers (printable checklist or picture cards, school and home mornings) | `/preschool-schedule/morning-routine-chart/` | live |
 | Bedtime routine chart (printable checklist or picture cards, toddler and preschool tips) | `/preschool-schedule/bedtime-routine-chart/` | live |
-| Potty training chart (printable sticker chart with stars or 12 picture themes such as dinosaurs and unicorns, a reward line, potty steps checklist, picture cards) | `/preschool-schedule/potty-training-chart/` | live |
+| Potty training chart (printable sticker chart with stars or 12 picture themes such as dinosaurs and unicorns, a reward line, potty steps checklist, picture cards; a card under the maker offers the chart in the picked theme inside the free week) | `/preschool-schedule/potty-training-chart/` | live |
 | Members: the potty sticker chart in the child's own theme on the program dashboard, or as the last page of week 1 (Pre-K track) | `/account/` | live |
 | Free week 1 from the placement check: tick box adds the potty sticker chart in the child's theme as the last page (Pre-K track) | `/program/` | live |
 | Pre-K math worksheets | `/math-worksheets/pre-k/` | live |
@@ -107,7 +107,7 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Word family worksheets (hub) | `/word-families/` | live |
 | Single word family | `/word-families/at/`, `/an/`, `/ap/`, `/ag/`, `/ig/`, `/it/`, `/in/`, `/ip/`, `/op/`, `/ot/`, `/og/`, `/ug/`, `/un/`, `/ut/`, `/en/`, `/et/`, `/ed/` | live |
 | Letter of the week (pages free, weekly packs for members) | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
-| Personalized homeschool program (paid, free placement check and week 1) | `/program/` | live |
+| Personalized homeschool program (paid, free placement check and week 1; `?level=pre-k` or `kindergarten` picks the age, `?interest=dinosaurs` ticks that theme first) | `/program/` | live |
 | Membership | `/membership/` | live |
 | Class packs | `/class-pack/` | members only |
 
