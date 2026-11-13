@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-10",
+  "updated": "2026-11-13",
   "items": [
     {
       "id": 2,
@@ -205,7 +205,7 @@
     },
     {
       "id": 19,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-13",
       "primaryKeyword": "playdough mats",
       "volume": 1600,
@@ -218,7 +218,9 @@
         "/bubble-letters/",
         "/name-tracing/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "playdough-mats",
+      "publishedOn": "2026-11-13"
     },
     {
       "id": 45,
