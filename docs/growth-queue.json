@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-11",
+  "updated": "2026-11-13",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -914,7 +914,7 @@
     },
     {
       "id": "coloring-free-week-cta",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "potty-chart-free-week-cta"
@@ -922,6 +922,69 @@
       "title": "Coloring collections that match a program theme (dinosaur, unicorn, car and truck coloring pages): the same kind of card under the coloring tool, 'Get a week of preschool themed on dinosaurs, free', linking /program/?level=pre-k&interest=<theme>#placement (the ?interest= param from Nov 11). One-page coloring stays exactly as free as it is; reuse PottyFreeWeekCard's layout as a shared component. Check 'dinosaur coloring pages' and 'unicorn coloring pages' numbers for the wording.",
       "linkTo": [
         "/program/"
+      ],
+      "done": "2026-11-13",
+      "urls": [
+        "/coloring-pages/dinosaur-coloring-pages/",
+        "/coloring-pages/unicorn-coloring-pages/",
+        "/coloring-pages/car-and-truck-coloring-pages/"
+      ],
+      "keywords": {
+        "dinosaur coloring pages": [
+          49500,
+          28
+        ],
+        "unicorn coloring pages": [
+          49500,
+          23
+        ],
+        "car coloring pages": [
+          22200,
+          27
+        ],
+        "unicorn coloring pages for free": [
+          9900,
+          8
+        ],
+        "dinosaur coloring pages t rex": [
+          9900,
+          23
+        ],
+        "truck coloring pages": [
+          8100,
+          27
+        ],
+        "free printable dinosaur coloring pages pdf": [
+          720,
+          15
+        ]
+      },
+      "note": "Ubersuggest MCP failed to connect on Nov 13, so these are the Ubersuggest US numbers from Oct 4, 2026 (src/data/coloring-plan.json). Shared card layout in src/components/site/FreeWeekCard.tsx (the potty card now uses it too); ThemeFreeWeekCard.tsx on the three collection pages and their 24 page pages, under the coloring. Link has ?interest=<theme> but no level (coloring families span Pre-K and K; the placement check asks the age). Members see 'Make dinosaurs one of your child's themes' linking /account/. One new FAQ per collection. No new URLs."
+    },
+    {
+      "id": "ocean-space-coloring-collections",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "coloring-free-week-cta"
+      ],
+      "title": "New coloring collections that match more program themes (ocean animals, space, farm animals, bugs): 8 pages each with per-page talk-about, color tips and learning text like the existing collections, and the ThemeFreeWeekCard under each (add the slug to COLORING_THEMES). Check 'ocean coloring pages', 'space coloring pages', 'farm animal coloring pages', 'bug coloring pages' in Ubersuggest first and build the two with the best volume and SD under 35 (at most 2 new collections, so 2 new hub URLs plus their pages as one template).",
+      "linkTo": [
+        "/program/",
+        "/coloring-pages/"
+      ]
+    },
+    {
+      "id": "letter-page-free-week-card",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "coloring-free-week-cta"
+      ],
+      "title": "Letter of the week pages whose word is a program theme (D for dinosaur, U for unicorn, T for truck, and others that fit): the FreeWeekCard under the free letter pages, linking /program/?interest=<theme>#placement. Free letter pages unchanged. Check 'letter of the week' and 'letter d activities for preschool' numbers for the wording.",
+      "linkTo": [
+        "/program/",
+        "/letter-of-the-week/"
       ]
     },
     {
