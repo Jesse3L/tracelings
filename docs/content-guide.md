@@ -85,7 +85,7 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Bubble letters | `/bubble-letters/`, `/bubble-letters/a/` ... `/bubble-letters/z/` | live |
 | Name coloring pages | `/name-coloring-pages/` | live |
 | Coloring pages | `/coloring-pages/` | live |
-| Coloring collections | `/coloring-pages/<collection>/` (see below) | live |
+| Coloring collections | `/coloring-pages/<collection>/` (see below; the dinosaur, unicorn and car and truck collections and their pages have a card under the coloring that offers a free week themed on the same thing, `/program/?interest=<theme>#placement`) | live |
 | Homeschool hub | `/homeschool/` | live |
 | Pre-K homeschool plan (36 weeks, members; week 1 free) | `/homeschool/preschool/` | live |
 | Kindergarten homeschool plan (36 weeks, members; week 1 free) | `/homeschool/kindergarten/` | live |
