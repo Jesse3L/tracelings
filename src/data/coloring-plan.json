@@ -169,7 +169,52 @@
       "Long-tail modifiers with \"free\", \"printable\", \"pdf\", \"easy\", \"cute\", \"preschool\" carry SD 15-30 and real volume (e.g. \"free printables thanksgiving coloring pages\" 1.9k SD 7, \"free printable dinosaur coloring pages pdf\" 720 SD 15).",
       "Large share of seasonal long tail is character-based (Disney, Bluey, Hello Kitty, Snoopy, Grinch, Nightmare Before Christmas, Stitch, Pokemon) and was excluded per brief."
     ],
-    "priorityLogic": "Ordered by publishBy: Thanksgiving is live-now (Nov spike), Christmas by Oct 20 to get indexed before the Nov ramp; evergreen dinosaur/unicorn slotted early since they earn year-round; Hanukkah (begins Dec 4, 2026) and Winter by Nov 1; later holidays ~6-8 weeks before their spike month."
+    "priorityLogic": "Ordered by publishBy: Thanksgiving is live-now (Nov spike), Christmas by Oct 20 to get indexed before the Nov ramp; evergreen dinosaur/unicorn slotted early since they earn year-round; Hanukkah (begins Dec 4, 2026) and Winter by Nov 1; later holidays ~6-8 weeks before their spike month.",
+    "added": [
+      {
+        "date": "2026-11-15",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "ocean animal coloring pages": [
+            6600,
+            28
+          ],
+          "sea animal coloring pages": [
+            6600,
+            22
+          ],
+          "ocean coloring pages": [
+            4400,
+            21
+          ],
+          "bug coloring pages": [
+            5400,
+            22
+          ],
+          "insect coloring pages": [
+            5400,
+            24
+          ],
+          "space coloring pages": [
+            6600,
+            30
+          ],
+          "farm animal coloring pages": [
+            3600,
+            24
+          ],
+          "farm coloring pages": [
+            4400,
+            23
+          ],
+          "astronaut coloring page": [
+            2400,
+            27
+          ]
+        },
+        "note": "Ocean animals and bugs built Nov 15, 2026 (program themes ocean and bugs). Space and farm left for later."
+      }
+    ]
   },
   "collections": [
     {
@@ -713,6 +758,142 @@
           "prompt": "children's coloring book page, a garbage truck with a large rear loader and a lifting arm holding a trash can, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
           "alt": "Garbage truck lifting a trash can, kids coloring page",
           "description": "A garbage truck lifts a trash can with its mechanical arm. Many toddlers watch for this truck every week, so it's an instant favorite. Use it to talk about recycling and which items go in which bin."
+        }
+      ]
+    },
+    {
+      "slug": "ocean-animal-coloring-pages",
+      "title": "Ocean Animal Coloring Pages",
+      "primaryKeyword": "ocean animal coloring pages",
+      "volume": 6600,
+      "sd": 28,
+      "season": "evergreen",
+      "publishBy": "2026-11-15",
+      "intro": "These free ocean animal coloring pages bring the sea to your kitchen table: a spouting whale, an octopus, a sea turtle, a leaping dolphin, a friendly shark, a beach crab, a seahorse and two jellyfish. Each sea animal coloring page has thick outlines and big open spaces, so preschoolers can color without frustration and older kids can add scales, spots and stripes. Every page comes with a simple fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "whale-coloring-page",
+          "title": "Whale Coloring Page",
+          "prompt": "children's coloring book page, a big friendly whale swimming in the ocean, spouting a fountain of water from its blowhole, a few small waves and bubbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly whale spouting water from its blowhole, printable coloring page",
+          "description": "A big friendly whale spouts a fountain of water from its blowhole. Quick fact to share: whales are mammals, so they swim up to the surface to breathe air, just like we do. The wide body leaves lots of room for chunky crayons."
+        },
+        {
+          "slug": "octopus-coloring-page",
+          "title": "Octopus Coloring Page",
+          "prompt": "children's coloring book page, a smiling octopus sitting on the sandy sea floor with exactly eight curly arms spread out, a few seashells and seaweed around it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling octopus with curly arms on the sea floor, coloring sheet",
+          "description": "A smiling octopus sits on the sea floor with its curly arms spread wide, next to seaweed and two seashells. Quick fact to share: an octopus has three hearts and can squirt ink to hide. The swirly arms are fun to color one at a time."
+        },
+        {
+          "slug": "sea-turtle-coloring-page",
+          "title": "Sea Turtle Coloring Page",
+          "prompt": "children's coloring book page, a friendly sea turtle swimming with flippers spread wide, a big shell with large plate shapes, a little seaweed and bubbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Sea turtle swimming with a big patterned shell, printable coloring page",
+          "description": "A sea turtle glides through the water with its flippers spread wide. The big plates on its shell are perfect for practicing patterns. Quick fact to share: sea turtles can't pull their heads into their shells the way many land turtles can."
+        },
+        {
+          "slug": "dolphin-coloring-page",
+          "title": "Dolphin Coloring Page",
+          "prompt": "children's coloring book page, a happy dolphin leaping out of the ocean in an arc above simple waves, a round sun and two clouds in the sky, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy dolphin leaping over the waves under the sun, coloring page",
+          "description": "A happy dolphin leaps out of the waves under a bright sun and two clouds. Quick fact to share: dolphins breathe air through a blowhole, and they talk to each other with clicks and whistles. Kids can pick their own colors for the sky and sea."
+        },
+        {
+          "slug": "shark-coloring-page",
+          "title": "Shark Coloring Page",
+          "prompt": "children's coloring book page, a friendly cartoon shark with a gentle closed-mouth smile swimming past seaweed and a few small fish, not scary, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly smiling shark swimming with small fish, printable coloring page",
+          "description": "A friendly shark with a gentle smile swims past seaweed and three little fish. It is drawn cute, not scary, so it suits younger kids who love sharks. Quick fact to share: sharks were swimming in the ocean long before the first dinosaurs."
+        },
+        {
+          "slug": "crab-coloring-page",
+          "title": "Crab Coloring Page",
+          "prompt": "children's coloring book page, a cute crab with two big claws raised, standing on a sandy beach next to a starfish, a seashell and a small sand bucket, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute crab with raised claws on the beach with a starfish and bucket, coloring sheet",
+          "description": "A cute crab raises its two big claws on a sandy beach next to a starfish, a seashell and a sand bucket. Quick fact to share: crabs usually walk sideways. Try a sideways crab walk together after coloring."
+        },
+        {
+          "slug": "seahorse-coloring-page",
+          "title": "Seahorse Coloring Page",
+          "prompt": "children's coloring book page, a cute seahorse with a curled tail holding onto a strand of seaweed, a few bubbles and small coral shapes, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute seahorse with a curly tail beside seaweed and coral, coloring page",
+          "description": "A cute seahorse with a curly tail holds onto a strand of seaweed beside some coral. Quick fact to share: seahorse dads carry the eggs in a pouch until the babies hatch. The stripes on its body make a calm page for careful coloring."
+        },
+        {
+          "slug": "jellyfish-coloring-page",
+          "title": "Jellyfish Coloring Page",
+          "prompt": "children's coloring book page, two smiling jellyfish floating in the sea with long wavy tentacles, round bell-shaped tops, a few bubbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Two smiling jellyfish with wavy tentacles, printable coloring page",
+          "description": "Two smiling jellyfish float through the sea, trailing long wavy tentacles. The round tops and wiggly lines are easy for little hands. Quick fact to share: jellyfish have no brain, no heart and no bones."
+        }
+      ]
+    },
+    {
+      "slug": "bug-coloring-pages",
+      "title": "Bug Coloring Pages",
+      "primaryKeyword": "bug coloring pages",
+      "volume": 5400,
+      "sd": 22,
+      "season": "evergreen",
+      "publishBy": "2026-11-15",
+      "intro": "These free bug coloring pages are full of garden friends kids love to spot outside: a ladybug, a butterfly, a bumble bee, a caterpillar, an ant, a dragonfly, a grasshopper and a firefly. Each insect coloring page has bold outlines and big spaces for spots, stripes and wings, so preschoolers can color easily and older kids can add their own patterns. Every page comes with a quick fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "ladybug-coloring-page",
+          "title": "Ladybug Coloring Page",
+          "prompt": "children's coloring book page, a big friendly ladybug with round spots on its shell sitting on a large leaf, a small flower beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly ladybug with round spots sitting on a leaf, printable coloring page",
+          "description": "A friendly ladybug rests on a big leaf beside a small flower. Count the spots together before and after coloring. Quick fact to share: a ladybug's bright colors warn birds that it tastes bad."
+        },
+        {
+          "slug": "butterfly-coloring-page",
+          "title": "Butterfly Coloring Page",
+          "prompt": "children's coloring book page, a large butterfly with wide open wings decorated with big simple circles and teardrop shapes, flying above two flowers, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Butterfly with patterned wings above two flowers, coloring sheet",
+          "description": "A big butterfly spreads its wings above two flowers. The circles and teardrop shapes on the wings are ready for bright colors. Quick fact to share: butterflies taste with their feet."
+        },
+        {
+          "slug": "bee-coloring-page",
+          "title": "Bee Coloring Page",
+          "prompt": "children's coloring book page, a round fuzzy bumble bee with wide stripes and small wings flying next to a big sunflower, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Fuzzy bumble bee flying to a big sunflower, printable coloring page",
+          "description": "A round, fuzzy bumble bee buzzes over to a big sunflower. Quick fact to share: bees carry pollen from flower to flower, which helps plants make fruit and seeds. The wide stripes are easy to color."
+        },
+        {
+          "slug": "caterpillar-coloring-page",
+          "title": "Caterpillar Coloring Page",
+          "prompt": "children's coloring book page, a smiling caterpillar made of round body segments crawling along a leafy branch, a few leaves with a small bite taken out, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling caterpillar crawling on a branch with nibbled leaves, coloring page",
+          "description": "A smiling caterpillar crawls along a leafy branch, and two of the leaves have a bite taken out. Count its round body parts together. Quick fact to share: a caterpillar eats and eats so it can grow, then turns into a butterfly or a moth."
+        },
+        {
+          "slug": "ant-coloring-page",
+          "title": "Ant Coloring Page",
+          "prompt": "children's coloring book page, a friendly ant with six legs carrying a big leaf over its head, walking along the ground past a small anthill and a few pebbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly ant carrying a big leaf past an anthill, printable coloring page",
+          "description": "A busy ant carries a big leaf over its head, past its anthill. Quick fact to share: an ant can carry things much heavier than its own body. Ask your child what they could carry that is as big as they are."
+        },
+        {
+          "slug": "dragonfly-coloring-page",
+          "title": "Dragonfly Coloring Page",
+          "prompt": "children's coloring book page, a smiling dragonfly with four long wings flying over a small pond with cattails and a lily pad, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling dragonfly with four wings over a pond with cattails, coloring sheet",
+          "description": "A dragonfly with four long wings zips over a pond with cattails and a lily pad. Quick fact to share: dragonflies can fly forward, backward and hover in one spot, a bit like a tiny helicopter."
+        },
+        {
+          "slug": "grasshopper-coloring-page",
+          "title": "Grasshopper Coloring Page",
+          "prompt": "children's coloring book page, a cheerful grasshopper with long folded back legs standing on a thick blade of grass, a few flowers and a sun, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cheerful grasshopper on a grassy hill with flowers and sun, coloring page",
+          "description": "A cheerful grasshopper stands on a grassy hill with its long back legs ready to jump. Quick fact to share: a grasshopper can jump many times the length of its own body. See how far your child can hop after coloring."
+        },
+        {
+          "slug": "firefly-coloring-page",
+          "title": "Firefly Coloring Page",
+          "prompt": "children's coloring book page, a smiling firefly with a glowing tail flying at night above tall grass, a crescent moon and a few simple stars, the glow shown with simple outline rays, white background everywhere, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling firefly with a glowing tail under the moon and stars, coloring page",
+          "description": "A smiling firefly flies over tall grass on a summer night, with a moon and stars above. Quick fact to share: a firefly's tail glows because of a chemical reaction inside its body, and the light gives off almost no heat."
         }
       ]
     },

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-13",
+  "updated": "2026-11-15",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -963,7 +963,7 @@
     },
     {
       "id": "ocean-space-coloring-collections",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "coloring-free-week-cta"
@@ -972,6 +972,75 @@
       "linkTo": [
         "/program/",
         "/coloring-pages/"
+      ],
+      "done": "2026-11-15",
+      "urls": [
+        "/coloring-pages/ocean-animal-coloring-pages/",
+        "/coloring-pages/bug-coloring-pages/"
+      ],
+      "keywords": {
+        "ocean animal coloring pages": [
+          6600,
+          28
+        ],
+        "sea animal coloring pages": [
+          6600,
+          22
+        ],
+        "ocean coloring pages": [
+          4400,
+          21
+        ],
+        "bug coloring pages": [
+          5400,
+          22
+        ],
+        "insect coloring pages": [
+          5400,
+          24
+        ],
+        "space coloring pages": [
+          6600,
+          30
+        ],
+        "farm coloring pages": [
+          4400,
+          23
+        ],
+        "farm animal coloring pages": [
+          3600,
+          24
+        ],
+        "astronaut coloring page": [
+          2400,
+          27
+        ]
+      },
+      "note": "Built ocean animals (6,600 + 6,600 + 4,400 across ocean/sea animal/ocean, SD 21 to 28) and bugs (bug 5,400 / 22 plus insect 5,400 / 24). Space (6,600 / 30) and farm (4,400 / 23) are queued next. 16 pictures made on Higgsfield (gpt_image_2_6, high, 2k, 3:4, 2.75 credits each), padded to 1760x2336 and thresholded like scripts/process_coloring.py. ThemeFreeWeekCard under both (COLORING_THEMES ocean and bugs). Two hub URLs plus 16 page URLs from the existing template."
+    },
+    {
+      "id": "space-farm-coloring-collections",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "ocean-space-coloring-collections"
+      ],
+      "title": "Space and farm animal coloring collections (the two program themes left from Nov 15): 8 pages each with talk-about, color tips and learning text, ThemeFreeWeekCard under each (COLORING_THEMES space and farm). Nov 15 numbers: space coloring pages 6,600 / SD 30, farm coloring pages 4,400 / 23, farm animal coloring pages 3,600 / 24, astronaut coloring page 2,400 / 27. Recheck, then build both (2 hub URLs, one template).",
+      "linkTo": [
+        "/program/",
+        "/coloring-pages/"
+      ]
+    },
+    {
+      "id": "theme-coloring-in-pack",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "ocean-space-coloring-collections"
+      ],
+      "title": "Program (members): an optional coloring page at the end of each weekly pack, picked from the coloring collection that matches the child's theme that week (dinosaurs, unicorns, trucks, ocean, bugs), a checkbox in the pack maker. Week 1 free like the rest of the pack; the coloring pages stay free on their own pages.",
+      "linkTo": [
+        "/account/"
       ]
     },
     {
