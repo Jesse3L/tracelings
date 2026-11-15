@@ -335,6 +335,68 @@
           "a": "Yes. The lamb, chick, and egg pages fit a spring or life cycle unit even outside of Easter. The bunny painting eggs page also works well before an egg dyeing activity."
         }
       ]
+    },
+    "ocean-animal-coloring-pages": {
+      "skills": [
+        "Learning real sea animal names and body parts like fins, flippers, shells, claws and tentacles",
+        "Counting arms, bubbles, fish and shells",
+        "Sorting animals into fish and not fish (sharks and seahorses are fish; whales, dolphins, octopuses and crabs are not)"
+      ],
+      "ideas": [
+        "Make an ocean wall: color the pages, cut out the animals, and tape them onto a big sheet of blue paper.",
+        "Before a trip to an aquarium or the beach, color the animals you hope to see, then check them off when you spot them.",
+        "Sort the finished pages into animals that come up to breathe air (whale, dolphin, sea turtle) and animals that breathe underwater with gills (shark, seahorse).",
+        "Read an ocean picture book together and color the page that matches each animal you find in the story."
+      ],
+      "faq": [
+        {
+          "q": "What age are these ocean animal coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The whale, jellyfish and crab pages have the biggest open shapes for preschoolers. The sea turtle shell, octopus arms and seahorse stripes have more parts for kids who like detail. If a page feels too busy, color the animal together and let your child finish the water."
+        },
+        {
+          "q": "Which sea animals are included?",
+          "a": "A whale, an octopus, a sea turtle, a dolphin, a shark, a crab with a starfish, a seahorse and two jellyfish. Each page has a few simple facts to share and a letter, counting or sorting idea."
+        },
+        {
+          "q": "Is the shark page scary?",
+          "a": "No. The shark has a closed-mouth smile and swims next to little fish, so it suits younger kids who love sharks but don't want sharp teeth on the page."
+        },
+        {
+          "q": "Is there an ocean homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick ocean animals as their theme, the counting and ten frame pages are drawn with sea animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "bug-coloring-pages": {
+      "skills": [
+        "Naming insect body parts: head, wings, legs and antennae",
+        "Counting spots, stripes, wings and hops",
+        "Talking about life cycles, from caterpillar to butterfly"
+      ],
+      "ideas": [
+        "Take a few finished pages on a backyard or park bug hunt and look for the real thing. Check off each bug you find.",
+        "Make a bug jar picture: color and cut out the bugs, then glue them inside a big jar shape drawn on paper.",
+        "Sort the pages into bugs that fly and bugs that crawl or hop. Some do both, which makes for a good talk.",
+        "In a spring science unit, pair the caterpillar and butterfly pages to talk about how one turns into the other."
+      ],
+      "faq": [
+        {
+          "q": "What age are these bug coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The ladybug, caterpillar and bee have the biggest open shapes for preschoolers. The dragonfly, butterfly and grasshopper pages have more small parts for kids who like detail."
+        },
+        {
+          "q": "Which bugs and insects are included?",
+          "a": "A ladybug, a butterfly, a bumble bee, a caterpillar, an ant, a dragonfly, a grasshopper and a firefly. All of them are insects (a caterpillar is a young butterfly or moth), and each page has simple facts to share while coloring."
+        },
+        {
+          "q": "Are bugs and insects the same thing?",
+          "a": "In everyday talk, people call most small crawling and flying creatures bugs. Insects are one group: they have six legs and three main body parts. Spiders have eight legs, so they are not insects. Counting legs on a real ant or ladybug outside is an easy way to show the difference."
+        },
+        {
+          "q": "Is there a bug homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick bugs as their theme, the counting and ten frame pages are drawn with bugs, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
     }
   },
   "pages": {
@@ -817,6 +879,86 @@
       "talkAbout": "This bunny is busy painting stripes on an egg, with a little paint pot nearby and two finished eggs beside it. Some families dye real eggs with food coloring, and others use natural dyes like onion skins or beets. Ask your child what design they would paint on an egg if they had a brush and a pot of paint.",
       "colorTips": "Color the paint in the pot the same color as the stripes the bunny is painting, which is a fun little detail to notice. One finished egg has dots and the other has wavy lines, so give those patterns bright contrasting colors.",
       "learning": "Spotting stripes on one egg, dots on another, and wavy lines on the last builds pattern recognition and describing words. Counting all three eggs, the painted one and the two finished ones, adds a quick number job."
+    },
+    "whale-coloring-page": {
+      "talkAbout": "Whales breathe air through a blowhole on top of their head, and the spout is the warm breath they blow out when they come up. The blue whale is the biggest animal that has ever lived, even bigger than the largest dinosaurs. Ask your child to take a big breath and blow it out like a whale.",
+      "colorTips": "Real whales are often gray, blue or black, so a few shades of blue and gray work well, with a lighter belly. Color the water spout light blue and leave a few drops white. Older kids can color the waves in stripes of blue and green.",
+      "learning": "Whale starts with W. Say the W sound together and look for more W words on the page, like water and waves."
+    },
+    "octopus-coloring-page": {
+      "talkAbout": "An octopus has eight arms covered in suckers that help it grab and taste things. It has no bones, so it can squeeze into tiny cracks between rocks. Many octopuses can change color to blend in with sand and stones. Ask your child which hiding trick they would pick.",
+      "colorTips": "Octopuses can turn red, brown, orange or purple, so any of those fit. Try dots of a darker shade along each arm for the suckers. Color the sand light tan and the seaweed two greens so the octopus stands out.",
+      "learning": "Real octopuses have eight arms. Touch each arm on the page as you count it together, then color the arms one at a time. Touching each thing as you say a number is a great way to practice counting."
+    },
+    "sea-turtle-coloring-page": {
+      "talkAbout": "Sea turtles spend almost their whole lives in the ocean, but mother turtles crawl onto sandy beaches to dig a nest and lay their eggs. When the babies hatch, they scurry across the sand to the water. Ask your child how a flipper is different from a foot.",
+      "colorTips": "Color the shell plates in a pattern, like green, brown, green, brown, or give each plate its own color. The skin can be a lighter green or yellow brown. Add light blue bubbles and a darker green for the seaweed.",
+      "learning": "The shell plates make an easy pattern activity: say the pattern out loud as you color (green, brown, green, brown) and ask what comes next."
+    },
+    "dolphin-coloring-page": {
+      "talkAbout": "Dolphins live in groups called pods and often work together to find fish. They make clicks and whistles to talk to each other, and they listen for the echoes of their clicks to find food. Ask your child to make their best dolphin whistle.",
+      "colorTips": "Many dolphins are gray with a lighter belly, so try a soft gray or blue gray on top and white or very light gray underneath. Use yellow and orange for the sun, then blue for the waves and splashes.",
+      "learning": "Talk about the order of the jump: first the dolphin is in the water, next it flies up in the air, last it splashes back down. Words like first, next and last build early storytelling."
+    },
+    "shark-coloring-page": {
+      "talkAbout": "Sharks are fish, and they breathe through gills on the sides of their head. You can see the gill lines on this shark. Many sharks lose teeth all the time and grow new ones to replace them. Ask your child to show you their own teeth and count a few together.",
+      "colorTips": "Gray or blue gray on top with a white belly looks like a real shark, but a purple or green shark is fun too. Color the little fish in bright yellows and oranges so they pop, and the seaweed in two greens.",
+      "learning": "Shark starts with the SH sound. Say it slowly together, then think of other words that start with SH, like ship, shell and shoe."
+    },
+    "crab-coloring-page": {
+      "talkAbout": "Crabs have a hard shell on the outside of their body and usually scuttle sideways. As a crab grows, it climbs out of its old shell and grows a bigger one. The starfish next to it is not really a fish, so many scientists call it a sea star.",
+      "colorTips": "Red and orange are classic crab colors, with a lighter shade on the claws. Color the starfish yellow or pink, the bucket any bright color, and the sand light tan with the dots in brown.",
+      "learning": "Count the legs you can see on the crab, then count the starfish's arms. Which has more? Comparing two small groups is early math."
+    },
+    "seahorse-coloring-page": {
+      "talkAbout": "Seahorses are a kind of fish, even though they swim upright. They wrap their curly tails around seaweed so the moving water does not push them away. The dad carries the eggs in a pouch on his belly until the tiny babies are ready to swim out.",
+      "colorTips": "Seahorses come in yellow, orange, brown and even pink, so bright colors are fine. Color the bands on the body in two shades for stripes. Add green seaweed and pink or orange coral around it.",
+      "learning": "Seahorse is a compound word: sea plus horse. Clap the two parts together, then try a few more ocean words like starfish and seaweed."
+    },
+    "jellyfish-coloring-page": {
+      "talkAbout": "Jellyfish are mostly water, and they drift with the ocean currents. They have no brain, heart or bones. Some can sting, so if you see one on the beach, look but don't touch.",
+      "colorTips": "Pink, purple and light blue look lovely on jellyfish, and some real ones glow in the dark. Try a different color for each tentacle, or color them in rainbow order. Leave a few bubbles white.",
+      "learning": "Compare the two jellyfish: which is bigger, which is smaller, which has longer tentacles? Size words like big, small, long and short are early math words."
+    },
+    "ladybug-coloring-page": {
+      "talkAbout": "Ladybugs are a kind of beetle. Gardeners like them because they eat aphids, tiny bugs that hurt plants. When a ladybug flies, its hard spotted shell opens up and thin wings unfold from underneath. Ask your child where they have seen a ladybug.",
+      "colorTips": "Red with black spots is the classic look, but some real ladybugs are orange or yellow. Color the leaf green with darker green veins, and pick any color for the flower.",
+      "learning": "Count the spots on the ladybug's shell, then write the number on the back of the page. Counting things that are spread out is a good step up from counting things in a row."
+    },
+    "butterfly-coloring-page": {
+      "talkAbout": "Every butterfly starts as a tiny egg, hatches into a caterpillar, makes a chrysalis, and comes out with wings. Butterflies drink nectar from flowers through a long tongue that stays curled up when they are not using it.",
+      "colorTips": "Butterfly wings are a great place to practice matching: color one shape on the left wing, then the same shape on the right wing in the same color. Bright oranges, blues and yellows look cheerful. Color the flowers to match the wings or in a different color.",
+      "learning": "Matching the two wings is early symmetry and pattern work. Point to a shape on one side and ask your child to find its twin on the other side."
+    },
+    "bee-coloring-page": {
+      "talkAbout": "Bumble bees are fuzzy, and pollen sticks to their hair as they visit flowers. They make a loud buzz by beating their wings very fast. Bees can sting, so watch them from a little distance and let them get on with their work.",
+      "colorTips": "Alternate yellow and black for the stripes, and leave the wings white or color them very light blue. The sunflower petals can be yellow and orange, with a brown center. Follow the dotted flight path with a finger first, then trace it with a crayon.",
+      "learning": "The stripes make an AB pattern: yellow, black, yellow, black. Say the pattern out loud as you color and ask what color comes next."
+    },
+    "caterpillar-coloring-page": {
+      "talkAbout": "Caterpillars are baby butterflies and moths. They munch on leaves almost all day and grow so fast that they shed their skin several times. When they are ready, they make a chrysalis or a cocoon and change inside it. Next time you are outside, look for leaves with bites taken out.",
+      "colorTips": "Give each round body part its own color for a rainbow caterpillar, or alternate two colors in a pattern. Color the leaves in a few greens and the branch brown.",
+      "learning": "Count the caterpillar's round body parts, then count them again starting from the other end. Getting the same number both ways is an important counting idea."
+    },
+    "ant-coloring-page": {
+      "talkAbout": "Ants live together in big groups called colonies, and each ant has a job, like finding food, caring for babies or digging tunnels. They leave a scent trail on the ground so other ants can follow it to food. Ask your child where they have seen a line of ants.",
+      "colorTips": "Real ants are often black, brown or red, so pick one for the ant's body. Make the leaf bright green and the anthill tan or light brown. The pebbles and grass tufts are small spaces for careful coloring.",
+      "learning": "Ant starts with the short A sound, like apple. Say a-a-ant together and think of more short A words, such as cat, hat and map."
+    },
+    "dragonfly-coloring-page": {
+      "talkAbout": "Dragonflies begin life underwater as nymphs, then climb up a plant stem, shed their skin and fly away with wings. Their big eyes help them spot and catch flying insects like mosquitoes. You often see them near ponds and lakes in summer.",
+      "colorTips": "Blue, green and purple look great on a dragonfly's long body. The wings can stay white or be colored very lightly so they look see-through. Color the cattails brown, the lily pad green and the flower pink.",
+      "learning": "Count the dragonfly's wings, then compare: a dragonfly has four wings and a bird has two. Which has more? Comparing numbers like this is early math."
+    },
+    "grasshopper-coloring-page": {
+      "talkAbout": "Grasshoppers use their big back legs to leap and their wings to fly short distances. Many grasshoppers make a chirping sound by rubbing a back leg against a wing. Listen for chirps outside together on a warm day.",
+      "colorTips": "Green or brown helps a grasshopper hide in the grass, so those are natural picks. Try a lighter green for the body and a darker one for the legs. Color the flowers and sun in bright colors so the page feels like summer.",
+      "learning": "Jump and count: after coloring, take turns hopping like a grasshopper and count the hops out loud. Then try counting back down to zero."
+    },
+    "firefly-coloring-page": {
+      "talkAbout": "Fireflies, also called lightning bugs, are beetles that light up to signal to each other. Different kinds of fireflies blink in different patterns. On warm summer evenings, you can sometimes see them blinking over yards and fields.",
+      "colorTips": "Color the tail bright yellow or yellow green so it looks like it's glowing, and make the glow lines around it yellow too. Keep the moon and stars yellow, and color the tall grass in a few greens.",
+      "learning": "Talk about day and night: what do we see in the sky at night? Name the moon and stars, then count the stars on the page."
     }
   }
 }
