@@ -9,7 +9,8 @@ const title = `Name Coloring Pages: Free Custom Name Maker | ${SITE.name}`;
 const description = 'Make free name coloring pages with any name in big bubble letters, with stars, hearts or flowers to color. Personalized and printable, free with your email.';
 const url = new URL('/name-coloring-pages/', SITE.url).href;
 const faqs: { q: string; a: string; html?: string }[] = [
-  { q: 'Is it free?', a: 'Yes. Type a name and download the name coloring page as a PDF for free. Your first page needs nothing at all, and after that we ask for an email once per device.' },
+  { q: 'Where can I make a free name coloring page with my kid’s name?', a: 'Right on this page. Type your child’s name, pick stars, hearts, flowers or bubbles to fill the page, and download a free PDF for US Letter or A4. The name prints in big outline letters to color. You add your email once before the first download, and the name never leaves your browser.' },
+  { q: 'Is it free?', a: 'Yes. Every name coloring page is free to download as a PDF, one name at a time, for as many names as you like. We ask for an email once per device before the first download.' },
   { q: 'Can I add a last name?', a: 'Yes. You can type up to 24 characters, so most first and last names fit. Longer names break onto two or three lines between words, so the letters stay big enough to color.' },
   { q: 'Can I make name coloring pages for a whole class?', a: 'Yes. Anyone can make pages one name at a time for free, for as many names as you need. Members save their kids’ names once and print a page for each child in one PDF.', html: 'Yes. Anyone can make pages one name at a time for free, for as many names as you need. <a href="/membership/">Members</a> save their kids’ names once and print a page for each child in one PDF.' },
   { q: 'Is my child’s name stored anywhere?', a: 'No. The page is built in your browser and the name never leaves your device.' },
@@ -30,7 +31,7 @@ const schema = [
     </nav>
     <header class="pt-6 pb-8 max-w-3xl">
       <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">Free name coloring pages with your child's name</span></h1>
-      <p class="mt-4 text-lg text-muted">Type a name and get a personalized coloring page: big, round letters with shapes to color all around them.</p>
+      <p class="mt-4 text-lg text-muted">Type your child's name and print a free coloring page with the name in big outline letters, surrounded by stars, hearts, flowers or bubbles to color. Names up to 24 characters fit, in all capitals or just as you type them, on US Letter or A4. The name never leaves your browser.</p>
     </header>
 
     <FontTool client:load kind="coloring" source="name-coloring" />
@@ -48,6 +49,7 @@ const schema = [
         <li><strong>Classroom door or cubby tags.</strong> Print one for each child at the start of the year.</li>
         <li><strong>Party place cards.</strong> Kids color their own name while they wait for cake.</li>
         <li><strong>A quiet-time activity.</strong> Pair it with a <a href="/name-tracing/">name tracing worksheet</a> for a short practice session.</li>
+        <li><strong>Part of a weekly routine.</strong> <a href="/program/">Week 1 of the homeschool plan is free</a>, with name practice every day and pages themed on what your child likes.</li>
       </ul>
       <h2>Tips for little colorers</h2>
       <ul>
