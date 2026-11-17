@@ -9,6 +9,8 @@ export const COLORING_THEMES: Record<string, { theme: ThemeId; word: string; thi
   'car-and-truck-coloring-pages': { theme: 'trucks', word: 'truck', things: 'trucks and cars' },
   'ocean-animal-coloring-pages': { theme: 'ocean', word: 'ocean', things: 'sea animals' },
   'bug-coloring-pages': { theme: 'bugs', word: 'bug', things: 'bugs' },
+  'space-coloring-pages': { theme: 'space', word: 'space', things: 'rockets and planets' },
+  'farm-animal-coloring-pages': { theme: 'farm', word: 'farm', things: 'farm animals' },
 };
 
 /**

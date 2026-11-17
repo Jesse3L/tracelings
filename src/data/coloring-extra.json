@@ -397,6 +397,68 @@
           "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick bugs as their theme, the counting and ten frame pages are drawn with bugs, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
+    },
+    "space-coloring-pages": {
+      "skills": [
+        "Learning the names of the planets, the moon, the sun and the stars",
+        "Counting stars, planets, craters and wheels",
+        "Talking about what is real (planets, rockets, astronauts) and what is pretend (aliens)"
+      ],
+      "ideas": [
+        "Make a night sky wall: color the pages, cut out the rocket, planets and moon, and tape them onto a big sheet of black or dark blue paper.",
+        "Look at the moon together on a clear night, then color the moon page and talk about the shape you saw.",
+        "Line up the solar system page with a ruler and say the planets in order, from Mercury out to Neptune.",
+        "Play countdown: color the rocket, then count down from 10 together and lift it off the table on blast off."
+      ],
+      "faq": [
+        {
+          "q": "What age are these space coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The rocket, moon and planet pages have the biggest open shapes for preschoolers. The solar system, telescope and moon rover pages have more parts for kids who like detail. If a page feels too busy, color part of it together and let your child finish the sky."
+        },
+        {
+          "q": "What is included in these outer space coloring pages?",
+          "a": "A rocket, an astronaut, the sun and eight planets, Saturn with its rings, the moon with craters, a friendly alien in a flying saucer, a child with a telescope and a moon rover. Each page has a few simple facts to share and a letter or counting idea."
+        },
+        {
+          "q": "Does the solar system page show all the planets?",
+          "a": "Yes. It shows the sun and the eight planets in order, from Mercury closest to the sun out to Neptune. The planets are drawn as simple circles to color, not to size: in real life Jupiter is far bigger than the others."
+        },
+        {
+          "q": "Is there a space homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick space as their theme, the counting and ten frame pages are drawn with rockets and planets, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "farm-animal-coloring-pages": {
+      "skills": [
+        "Naming farm animals and their babies: foal, calf, piglet, lamb, chick, duckling and kid",
+        "Making animal sounds and matching them to the pictures",
+        "Counting legs, spots, chicks, eggs and fence posts"
+      ],
+      "ideas": [
+        "Build a paper farm: color and cut out the animals, then stand them around the barn page with a little tape on the back.",
+        "Sing Old MacDonald and hold up each finished page when its animal comes up in the song.",
+        "Before a trip to a farm, petting zoo or county fair, color the animals you hope to see, then check them off when you meet them.",
+        "Sort the finished pages into animals that give us food (cow, chicken) and animals that give us wool (sheep), and talk about the rest."
+      ],
+      "faq": [
+        {
+          "q": "What age are these farm animal coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The pig, sheep and goat pages have the biggest open shapes for preschoolers. The horse's mane, the barn and the duck pond have more small parts for kids who like detail."
+        },
+        {
+          "q": "Which farm animals are included?",
+          "a": "A horse, a cow, a pig, a sheep, a hen with her chicks, a mother duck with ducklings and a baby goat, plus a big barn with a silo. Each page has simple facts to share and the name of the animal's baby."
+        },
+        {
+          "q": "Is there a tractor coloring page?",
+          "a": "Yes. The tractor is in our car and truck coloring pages, so kids who love farm machines can print it next to these farm animals."
+        },
+        {
+          "q": "Is there a farm homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick farm animals as their theme, the counting and ten frame pages are drawn with farm animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
     }
   },
   "pages": {
@@ -959,6 +1021,86 @@
       "talkAbout": "Fireflies, also called lightning bugs, are beetles that light up to signal to each other. Different kinds of fireflies blink in different patterns. On warm summer evenings, you can sometimes see them blinking over yards and fields.",
       "colorTips": "Color the tail bright yellow or yellow green so it looks like it's glowing, and make the glow lines around it yellow too. Keep the moon and stars yellow, and color the tall grass in a few greens.",
       "learning": "Talk about day and night: what do we see in the sky at night? Name the moon and stars, then count the stars on the page."
+    },
+    "rocket-coloring-page": {
+      "talkAbout": "Rockets carry astronauts and machines up into space. Before a launch, everyone counts down: 10, 9, 8, all the way to blast off. Count down together from 10, then have your child jump up on blast off.",
+      "colorTips": "Real rockets are often white, but a pretend rocket can be any color. Try one color for the body and another for the fins. Color the smoke cloud gray, or orange and yellow near the bottom where the fire would be.",
+      "learning": "Rocket starts with R. Say the R sound together, then count the stars on the page and write the number at the bottom."
+    },
+    "astronaut-coloring-page": {
+      "talkAbout": "Astronauts float inside a space station because they are falling around the Earth all the time, so nothing feels heavy. They sleep in sleeping bags tied to the wall so they don't drift away. Ask your child what they would pack for a trip to space.",
+      "colorTips": "Space suits are usually white, so your child can color the patches, gloves and boots in bright colors. Color the helmet window light blue or leave it white. A dark blue or black crayon around the stars makes the sky look like night.",
+      "learning": "Astronaut starts with A. Your child can draw a mission patch with the first letter of their own name on the suit."
+    },
+    "solar-system-coloring-page": {
+      "talkAbout": "All eight planets travel around the sun. The four close to the sun (Mercury, Venus, Earth and Mars) are rocky, and the four far away are giant balls of gas and ice. The circles on this page are not drawn to size: Jupiter is the biggest planet, so big that more than a thousand Earths could fit inside it.",
+      "colorTips": "Color the sun yellow and orange. Make Earth blue and green, Mars red, Jupiter in orange and tan stripes, and Neptune deep blue. Count the planets out loud as your child colors each one.",
+      "learning": "Point to each planet and say its name. Older kids can write the first letter of each planet next to it, from M for Mercury to N for Neptune."
+    },
+    "planet-coloring-page": {
+      "talkAbout": "Saturn is the sixth planet from the sun and the second biggest, after Jupiter. It is made mostly of gas, so there is no ground to stand on. Saturn has many moons, and scientists keep finding more.",
+      "colorTips": "Real Saturn looks pale yellow and tan, with faint stripes. Kids can add stripes across the planet in yellow, orange and brown, then color each ring a different shade. Leave the stars white or make them gold.",
+      "learning": "Planet starts with P. Count the moons around Saturn, then count the stars, and talk about which group has more."
+    },
+    "moon-coloring-page": {
+      "talkAbout": "The moon goes around the Earth, and from here it seems to change shape over about a month, from a thin crescent to a full round moon and back. Astronauts first walked on the moon in 1969. Look for the moon together tonight and talk about its shape.",
+      "colorTips": "The moon looks gray and white, so a few shades of gray work well, with darker gray inside the craters. Color the sky dark blue or purple, and make the little rocket as bright as your child likes.",
+      "learning": "Moon starts with M. Count the craters, then trace a big circle in the air together, just like the shape of a full moon."
+    },
+    "alien-coloring-page": {
+      "talkAbout": "Ask your child to make up a name for the alien and the planet it comes from. What does it eat? What does it say when it waves hello? Inventing a story while coloring builds speaking and listening skills.",
+      "colorTips": "Aliens in stories are often green, but this one can be any color at all. The saucer looks great in silver gray with colored lights around the edge. Kids can draw more stars or a second planet in the empty sky.",
+      "learning": "Alien starts with A. Count the alien's antennae and eyes, then count your child's eyes and ears to compare."
+    },
+    "telescope-coloring-page": {
+      "talkAbout": "People have used telescopes to look at the sky for about 400 years, and they helped us learn about moons and planets we cannot see with just our eyes. On a clear night, step outside together and count how many stars you can see.",
+      "colorTips": "Color the telescope in bright colors, the crescent moon yellow and the stars gold or yellow. Your child can make the sky dark blue and the hill green. Kids can draw their own face looking through the telescope.",
+      "learning": "Telescope starts with T. Count the stars in the sky, then hold up the same number of fingers."
+    },
+    "moon-rover-coloring-page": {
+      "talkAbout": "A rover is a car built to drive where people are exploring, like the moon or Mars. Some rovers carry astronauts, and some drive themselves with cameras so scientists back on Earth can see where they go. Ask your child where they would drive a rover.",
+      "colorTips": "Rovers are often silver, gray or white, but your child can pick any colors. Make the moon ground gray, and color the Earth blue and green. Dark blue or black around the stars makes the sky look like space.",
+      "learning": "Rover starts with R, just like rocket. Count the wheels on the rover and the craters on the ground."
+    },
+    "horse-coloring-page": {
+      "talkAbout": "A baby horse is called a foal. Horses eat grass and hay, and they use their long tails to swish away flies. Ask your child what sound a horse makes, then gallop around the room together.",
+      "colorTips": "Horses can be brown, black, white, gray or golden. Try one color for the body and a darker one for the mane and tail. Color the fence brown and the flowers in any bright colors.",
+      "learning": "Horse starts with H. Count the horse's legs, then count the flowers in the grass."
+    },
+    "cow-coloring-page": {
+      "talkAbout": "A baby cow is called a calf. Cows spend a lot of the day eating grass and resting. Ask your child to name foods that come from milk, like cheese, butter and yogurt.",
+      "colorTips": "Many cows are black and white or brown and white, so your child can color the spots black or brown. Make the bell gold or yellow and the barn red. The flowers can be any color your child likes.",
+      "learning": "Cow starts with C. Count the cow's spots together, then say moo once for each spot."
+    },
+    "pig-coloring-page": {
+      "talkAbout": "A baby pig is called a piglet. Pigs use their flat snouts to sniff and dig for food in the ground. Ask your child what sound a pig makes, then see who can make the best oink.",
+      "colorTips": "Most cartoon pigs are pink, but real pigs can also be black, brown or spotted. Color the mud brown and the fence a lighter brown. Flowers in red, yellow and purple make the page bright.",
+      "learning": "Pig starts with P. Pig rhymes with big, dig and wig. Think of more rhyming words together."
+    },
+    "sheep-coloring-page": {
+      "talkAbout": "A baby sheep is called a lamb. Sheep like to stay together in a group called a flock. Ask your child to find something at home made of wool, like a hat, a sweater or a blanket.",
+      "colorTips": "Wool is often white or cream, so your child can leave the coat white or color it light gray. Make the face and legs black or brown. Color the sun yellow and the cloud light blue.",
+      "learning": "Sheep starts with SH. Say the sh sound together, then count the sheep's legs and the posts on the fence."
+    },
+    "chicken-coloring-page": {
+      "talkAbout": "A grown-up girl chicken is called a hen, a boy is a rooster, and a baby is a chick. Hens lay eggs, and some of the eggs people eat for breakfast come from hens on farms. Ask your child how they like their eggs.",
+      "colorTips": "Hens can be brown, red, white or black. Chicks are often yellow and fluffy. Color the eggs white, brown or even pale blue (some hens lay blue eggs), and the nest a straw yellow.",
+      "learning": "Chicken starts with CH. Count the chicks and the eggs, then talk about which group has more."
+    },
+    "barn-coloring-page": {
+      "talkAbout": "Many farms have a barn for the animals, the hay and the tools. Hay is dried grass, and farmers roll or stack it into bales so animals have food all winter. Ask your child which animals they think live in this barn.",
+      "colorTips": "Barns are often painted red with white trim, so a red crayon for the walls and white for the X on the doors looks classic. Color the silo gray or silver and the hay bales yellow.",
+      "learning": "Barn starts with B. Find the X shapes on the barn doors, then look for squares, rectangles and triangles on the page."
+    },
+    "duck-coloring-page": {
+      "talkAbout": "Baby ducks are called ducklings, and they follow their mother in a line soon after they hatch. Ducks eat plants, seeds and small bugs in and around the water. Ask your child to waddle and quack like a duck.",
+      "colorTips": "Ducklings are often yellow, and the mother can be brown, white or green and brown. Color the beaks and feet orange, the water blue and the lily pads green. The cattails are brown at the top.",
+      "learning": "Duck starts with D. Count the ducklings, then count how many ducks there are in all with the mother."
+    },
+    "goat-coloring-page": {
+      "talkAbout": "A baby goat is called a kid, just like a child. Goats nibble on grass, leaves and hay, and some goats give milk that is made into cheese. Ask your child to find something they can safely climb on, like a step.",
+      "colorTips": "Goats can be white, brown, black, gray or spotted. Color the rock gray and the grass green, and give the flowers bright colors. Kids can add spots or patches to the goat.",
+      "learning": "Goat starts with G. A baby goat is called a kid. Talk about other baby animal names on this page: foal, calf, piglet, lamb, chick and duckling."
     }
   }
 }

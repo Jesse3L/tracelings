@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-15",
+  "updated": "2026-11-17",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -1020,7 +1020,7 @@
     },
     {
       "id": "space-farm-coloring-collections",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "ocean-space-coloring-collections"
@@ -1029,6 +1029,92 @@
       "linkTo": [
         "/program/",
         "/coloring-pages/"
+      ],
+      "done": "2026-11-17",
+      "urls": [
+        "/coloring-pages/space-coloring-pages/",
+        "/coloring-pages/farm-animal-coloring-pages/"
+      ],
+      "keywords": {
+        "space coloring pages": [
+          6600,
+          30
+        ],
+        "solar system coloring page": [
+          4400,
+          22
+        ],
+        "planet coloring pages": [
+          2900,
+          36
+        ],
+        "astronaut coloring page": [
+          2400,
+          27
+        ],
+        "rocket coloring page": [
+          1600,
+          21
+        ],
+        "outer space coloring pages": [
+          1300,
+          35
+        ],
+        "alien coloring pages": [
+          1000,
+          24
+        ],
+        "farm coloring pages": [
+          4400,
+          23
+        ],
+        "farm animal coloring pages": [
+          3600,
+          24
+        ],
+        "tractor coloring page": [
+          4400,
+          25
+        ],
+        "horse coloring pages": [
+          18100,
+          24
+        ],
+        "cow coloring page": [
+          1900,
+          20
+        ],
+        "chicken coloring page": [
+          1300,
+          23
+        ]
+      },
+      "note": "Built both. Space: rocket, astronaut, solar system (sun and 8 planets in order, checked in the picture), Saturn, moon, friendly alien, telescope, moon rover. Farm: horse, cow, pig, sheep, hen and chicks, barn, ducks, baby goat (tractor stays in the car and truck collection, its slug is taken). 16 pictures on Higgsfield (gpt_image_2_6, high, 2k, 3:4), padded to 1760x2336 and thresholded. ThemeFreeWeekCard under both (COLORING_THEMES space: 'rockets and planets', farm: 'farm animals'). Pair-with tools: letter R + word problems (space theme); letter F + ten frames. Two hub URLs plus 16 page URLs from the existing template."
+    },
+    {
+      "id": "horse-coloring-collection",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "space-farm-coloring-collections"
+      ],
+      "title": "Horse coloring pages: its own collection of 8 (foal, pony, horse running, horse and rider with helmet, horse head, rocking horse, carousel horse, horse in a stable), the farm ThemeFreeWeekCard under it (COLORING_THEMES farm). Nov 17 numbers: horse coloring pages 18,100 / SD 24, the biggest steady coloring keyword we have checked; the single horse page in the farm collection can't rank for it alone. Recheck 'horse coloring pages', 'pony coloring pages' and 'cute horse coloring pages' first.",
+      "linkTo": [
+        "/coloring-pages/farm-animal-coloring-pages/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "train-castle-coloring-collections",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "space-farm-coloring-collections"
+      ],
+      "title": "Coloring collections for the next program themes without one (trains, castles, jungle, pets, sports): check volumes and build the best two, 8 pages each with talk-about, color tips and learning text, ThemeFreeWeekCard under each. Nov 17 numbers: train coloring pages 2,900 / SD 30, jungle animal coloring pages 880 / 22. Also check 'castle coloring pages', 'puppy coloring pages', 'sports coloring pages'.",
+      "linkTo": [
+        "/coloring-pages/",
+        "/program/"
       ]
     },
     {
@@ -1038,7 +1124,7 @@
       "needs": [
         "ocean-space-coloring-collections"
       ],
-      "title": "Program (members): an optional coloring page at the end of each weekly pack, picked from the coloring collection that matches the child's theme that week (dinosaurs, unicorns, trucks, ocean, bugs), a checkbox in the pack maker. Week 1 free like the rest of the pack; the coloring pages stay free on their own pages.",
+      "title": "Program (members): an optional coloring page at the end of each weekly pack, picked from the coloring collection that matches the child's theme that week (dinosaurs, unicorns, trucks, ocean, bugs, space, farm: 7 of the 12 themes now have a collection), a checkbox in the pack maker. Week 1 free like the rest of the pack; the coloring pages stay free on their own pages.",
       "linkTo": [
         "/account/"
       ]
@@ -1050,7 +1136,7 @@
       "needs": [
         "coloring-free-week-cta"
       ],
-      "title": "Letter of the week pages whose word is a program theme (D for dinosaur, U for unicorn, T for truck, and others that fit): the FreeWeekCard under the free letter pages, linking /program/?interest=<theme>#placement. Free letter pages unchanged. Check 'letter of the week' and 'letter d activities for preschool' numbers for the wording.",
+      "title": "Letter of the week pages whose word is a program theme (D for dinosaur, U for unicorn, T for truck, R for rocket, F for farm, O for ocean, B for bug, and others that fit): the FreeWeekCard under the free letter pages, linking /program/?interest=<theme>#placement. Free letter pages unchanged. Check 'letter of the week' and 'letter d activities for preschool' numbers for the wording.",
       "linkTo": [
         "/program/",
         "/letter-of-the-week/"
