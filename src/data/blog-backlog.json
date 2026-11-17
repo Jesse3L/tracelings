@@ -224,7 +224,7 @@
     },
     {
       "id": 45,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-17",
       "primaryKeyword": "left handed writing",
       "volume": 1300,
@@ -235,7 +235,9 @@
         "/letter-tracing/",
         "/name-tracing/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "left-handed-writing",
+      "publishedOn": "2026-11-17"
     },
     {
       "id": 31,
