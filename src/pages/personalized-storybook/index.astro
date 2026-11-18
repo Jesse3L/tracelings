@@ -1,0 +1,38 @@
+---
+import StorybookPage from '../../components/site/StorybookPage.astro';
+import { SITE } from '../../config';
+
+const faqs = [
+  { q: 'What is a personalized storybook?', a: 'It is a printable picture book where your child is part of the story. The characters talk to your child by name, and your child spots the idea that solves the problem. You type the name, see the cover and first page free, and download the whole book as a PDF for $5.' },
+  { q: 'Which stories can I choose?', a: 'There are stories about dinosaurs, trucks, unicorns, ocean animals, space, farm animals, bugs, castles, trains, sports, pets and jungle animals, plus two Christmas stories. Each theme has its own cast of friends who look the same on every page.' },
+  { q: 'Is it a printed book that gets mailed?', a: 'No. It is a printable PDF you download right away. Print it at home on US Letter or A4, as many times as you like.' },
+  { q: 'What ages is it for?', a: 'Shorter stories (about 6 to 8 pages, a sentence or two each) suit ages 3 to 5. Longer stories (10 pages, up to three short sentences each) suit ages 5 to 7 and make a good early reader to read together.' },
+  { q: 'Can my child color the pictures?', a: 'Yes. Every picture is black and white line art, so the book doubles as a coloring book, and the last page has a box to draw their favorite part.' },
+  { q: 'Is my child’s name stored anywhere?', a: 'No. The book is built in your browser and the name never leaves your device. We only see which book you bought and the email for your receipt.' },
+  { q: 'What if I lose the file?', a: 'We email you a link after you buy. Open it any time, type the name and download the book again.' },
+];
+---
+<StorybookPage
+  path="/personalized-storybook/"
+  crumb="Personalized storybook"
+  title={`Personalized Storybook for Kids with Their Name: $5 Printable | ${SITE.name}`}
+  description="A printable personalized children's book with your child's name in the story. Pick dinosaurs, trucks, unicorns, space and more. Free preview, then $5 for the PDF."
+  h1="A personalized storybook with your child's name in it"
+  lead="Pick a story about what your child loves, type their name, and see the cover and first page free. The friends in the story talk to your child by name, and your child has the idea that saves the day. Download the whole printable book for $5."
+  start="christmas/star"
+  faqs={faqs}
+  ogImage="/storybook/christmas/open-friends-thumb.webp"
+>
+  <p class="text-[1.15rem]!">
+    A personalized children's book with their name in it makes reading feel like it's about them, which is often what gets a
+    reluctant listener to sit for one more page. Each story here has one gentle problem, a small cast of friends, and a happy
+    ending your child helps bring about.
+  </p>
+  <h2>What's inside the book</h2>
+  <ul>
+    <li>A cover with the title, a big picture and "starring" your child's name, plus who it's from if it's a gift.</li>
+    <li>One story page per sheet: a large picture on top and big, easy-to-read words underneath.</li>
+    <li>A "the end" page with a box to draw their favorite part of the story.</li>
+  </ul>
+  <p>Looking for free practice too? Try the <a href="/name-tracing/">name tracing worksheet maker</a> or the <a href="/program/">free week 1 of a homeschool plan</a> built around your child's interests.</p>
+</StorybookPage>

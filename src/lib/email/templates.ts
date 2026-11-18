@@ -485,13 +485,55 @@ export function launchC(): EmailContent {
   return render({ subject: 'Tracelings at Home: $14.99 a month or $99 a year', preview: 'A homeschool plan built for your child. Covers up to 4 kids, cancel anytime.', blocks, medium: 'broadcast', campaign: 'launch-c', why: WHY_LIST });
 }
 
-export type LaunchKey = 'launch-a' | 'launch-a-teacher' | 'launch-b' | 'launch-c';
+// ---------- Christmas storybook broadcasts (Nov 2026) ----------
+// (a) Thanksgiving week: introduce the $5 personalized Christmas book. (b) about 9 days later: reminder with the
+// other themes and a print-by date. Families only. Drafts until Jesse approves; sent with broadcast-send.
+
+export function xmasBookA(): EmailContent {
+  const blocks: Block[] = [
+    { p: 'Hi there,' },
+    { p: 'We made something for the Christmas season: **a printable Christmas picture book with your child in the story.**' },
+    { p: 'Pip the reindeer, Flake the snowman and Snug the polar bear cub talk to your child by name, and your child has the idea that saves the day. Type their name and you can see the cover and first page free before you buy.' },
+    { pictures: [
+      { src: '/email/christmas-open-friends.png', alt: 'Black and white line drawing of a little reindeer, a snowman and a polar bear cub smiling in the snow by a pine tree', caption: 'Pip, Flake and Snug say hi to your child on page 1.' },
+      { src: '/email/christmas-help-pip-antlers.png', alt: 'Line drawing of the little reindeer lifting a knit hat off a high pine branch with her antlers', caption: 'Later, your child spots who is tall enough to reach the hat.' },
+    ] },
+    { list: [
+      '**Two stories:** The Star in the Snow (ages 3 to 5) and The Hat in the Tree (ages 5 to 7).',
+      '**Their name on the cover and in the story,** plus who it is from if it is a gift.',
+      '**Line art pictures,** so it doubles as a Christmas coloring book.',
+      '**$5, printable PDF.** Download it right away and print it as many times as you like.',
+    ] },
+    { button: { label: 'See your child\'s Christmas book', path: '/personalized-christmas-book/' } },
+    { small: 'The name stays on your device. We never see it.' },
+    { sign: true },
+  ];
+  return render({ subject: 'A Christmas story starring your child', preview: 'A printable picture book with their name in it. See the cover free.', blocks, medium: 'broadcast', campaign: 'xmas-book-a', why: WHY_LIST });
+}
+
+export function xmasBookB(): EmailContent {
+  const blocks: Block[] = [
+    { p: 'Hi there,' },
+    { p: 'A quick reminder before December gets busy: you can still make a **Christmas storybook starring your child** for $5. It downloads straight away, so there is no shipping to wait on.' },
+    { p: 'It makes a sweet Christmas Eve read-aloud or stocking stuffer, and the pictures are line art to color in afterward.' },
+    { button: { label: 'Make the Christmas book', path: '/personalized-christmas-book/' } },
+    { h: 'Not into Christmas stories?' },
+    { p: 'The same personalized storybook comes in 12 more themes: dinosaurs, trucks, unicorns, ocean animals, space, farm animals, bugs, castles, trains, sports, pets and jungle animals. [See them all](/personalized-storybook/).' },
+    { p: 'And as always, every one-page printable on Tracelings stays free, including the [Christmas coloring pages](/coloring-pages/christmas-coloring-pages/).' },
+    { sign: true },
+  ];
+  return render({ subject: 'Their name in a Christmas story (ready to print tonight)', preview: 'A $5 printable picture book starring your child. No shipping.', blocks, medium: 'broadcast', campaign: 'xmas-book-b', why: WHY_LIST });
+}
+
+export type LaunchKey = 'launch-a' | 'launch-a-teacher' | 'launch-b' | 'launch-c' | 'xmas-book-a' | 'xmas-book-b';
 /** Built-in broadcast templates and the segment each one is meant for. */
 export const LAUNCH: Record<LaunchKey, { segment: 'prospects' | 'teachers'; build: () => EmailContent; name: string; sendAfterDays: number }> = {
   'launch-a': { segment: 'prospects', build: launchA, name: 'Launch A: program intro (families)', sendAfterDays: 0 },
   'launch-a-teacher': { segment: 'teachers', build: launchATeacher, name: 'Launch A: teacher note', sendAfterDays: 0 },
   'launch-b': { segment: 'prospects', build: launchB, name: 'Launch B: picture book + seasonal (families)', sendAfterDays: 4 },
   'launch-c': { segment: 'prospects', build: launchC, name: 'Launch C: offer (families)', sendAfterDays: 8 },
+  'xmas-book-a': { segment: 'prospects', build: xmasBookA, name: 'Christmas storybook A: intro (families)', sendAfterDays: 0 },
+  'xmas-book-b': { segment: 'prospects', build: xmasBookB, name: 'Christmas storybook B: reminder (families)', sendAfterDays: 9 },
 };
 
 /** Every template by key, for previews, test sends and the Resend template sync. */

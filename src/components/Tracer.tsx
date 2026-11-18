@@ -147,6 +147,8 @@ export default function Tracer(props: { mode?: Mode; value?: string; pick?: bool
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
+      // The storybook offer after this download can show the same name (kept in this tab only, never sent).
+      if (mode === 'name' && !listNames.length && name.trim()) { try { sessionStorage.setItem('tl-story-name', name.trim()); } catch { /* ignore */ } }
       countDownload(mode === 'words' ? pages.length : listPages.length || 1,
         tracerWhat({ mode, value, style, letterCase, size, practice, list: listPages.length, group: props.value, chosen: chosen.length, total: allWords.length }));
       setDone(true);

@@ -383,3 +383,20 @@ export async function payTipInPlace(dollars: number, sourceId: string, email?: s
   if (pay.payment?.status !== 'COMPLETED') throw new PayError('not_completed', 'The payment did not go through. Try another card.');
   return order.order.id;
 }
+
+/** A one-time digital purchase from the in-page form (storybooks). Price and name come from our own catalog. */
+export async function payItemInPlace(item: { name: string; cents: number; note: string }, sourceId: string, email?: string, verificationToken?: string): Promise<string> {
+  const loc = await locationId();
+  const order = await sq<any>('/v2/orders', { body: { idempotency_key: keyFor('itemorder', sourceId), order: {
+    location_id: loc, line_items: [{ name: item.name.slice(0, 500), quantity: '1', base_price_money: { amount: item.cents, currency: 'USD' } }],
+  } } });
+  const pay = await sq<any>('/v2/payments', { body: {
+    idempotency_key: keyFor('item', sourceId), source_id: sourceId,
+    ...(verificationToken ? { verification_token: verificationToken } : {}),
+    amount_money: { amount: item.cents, currency: 'USD' }, order_id: order.order.id, location_id: loc, autocomplete: true,
+    ...(email ? { buyer_email_address: email } : {}),
+    note: item.note.slice(0, 500),
+  } });
+  if (pay.payment?.status !== 'COMPLETED') throw new PayError('not_completed', 'The payment did not go through. Try another card.');
+  return order.order.id;
+}

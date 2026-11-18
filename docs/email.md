@@ -16,3 +16,4 @@ How Tracelings email works, for future sessions.
 - **Env (production):** RESEND_API_KEY (full access), EMAIL_ADMIN_TOKEN, OWNER_EMAIL, RESEND_WEBHOOK_SECRET, CRON_SECRET (digest cron), BLOB_READ_WRITE_TOKEN (already set for the program).
 - **Footer (CAN-SPAM):** Tracelings, 17350 State Hwy 249, Ste 220 #35878, Houston, TX 77064, US, plus Resend's one-click unsubscribe.
 - **Tests:** `scripts/test-email.mts`, `scripts/test-inbound.mts`, `scripts/qa/email_api.py` (mock Resend, see scripts/qa/README.md).
+- **Christmas storybook broadcasts (Nov 2026):** drafts `xmas-book-a` (intro, send Thanksgiving week) and `xmas-book-b` (reminder, about 9 days later), families (`prospects`) only. Both point to `/personalized-christmas-book/`. Created and sent with the same `broadcast-create` / `broadcast-send` actions, only after Jesse approves.
