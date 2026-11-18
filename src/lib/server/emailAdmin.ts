@@ -237,6 +237,21 @@ export async function broadcastCreate(template: LaunchKey, segmentOverride?: Seg
   return { id: r.id, updated: false, ...out };
 }
 
+/** Creates a DRAFT broadcast from any built email (the weekly email). Never sends; a draft with the same name is refreshed. */
+export async function broadcastCreateFrom(c: { subject: string; preview: string; html: string; text: string }, name: string, segment: SegmentKey) {
+  const ids = await segmentIds(true);
+  const segment_id = ids[segment];
+  if (!segment_id) throw new ResendError(400, 'setup_needed', `Segment "${SEGMENTS[segment]}" not found. Run setup first.`);
+  const tid = await topicId();
+  const content = { name, segment_id, from: FROM, reply_to: [REPLY_TO], subject: c.subject, preview_text: c.preview, html: c.html, text: c.text, ...(tid ? { topic_id: tid } : {}) };
+  const same = (await listAll<{ id: string; name: string; status: string }>('/broadcasts', 300)).filter((b) => b.name === name);
+  if (same.some((b) => b.status !== 'draft')) throw new ResendError(409, 'already_sent', `"${name}" was already sent or scheduled.`);
+  const draft = same.find((b) => b.status === 'draft');
+  if (draft) { await rs(`/broadcasts/${enc(draft.id)}`, { method: 'PATCH', body: content }); return { id: draft.id }; }
+  const r = await rs<{ id: string }>('/broadcasts', { body: { ...content, send: false } });
+  return { id: r.id };
+}
+
 /**
  * Cancels a broadcast (POST /broadcasts/{id}/cancel). Resend only cancels `scheduled` broadcasts (they go back to
  * draft and nothing is sent) and `queued` ones (they become canceled; emails already sent stay sent).

@@ -13,6 +13,8 @@ export interface MemberState {
   paidThrough?: string | null;
   cancelsOn?: string | null;
   lapsed?: boolean;
+  /** Storybook Club subscription, separate from the program. */
+  club?: { status: string; paidThrough: string | null; cancelsOn: string | null } | null;
 }
 
 let cached: Promise<MemberState> | null = null;

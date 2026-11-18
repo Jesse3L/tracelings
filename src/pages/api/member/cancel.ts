@@ -10,7 +10,9 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
   const s = readSession(cookies);
   if (!s) return json(401, { error: 'signed_out' });
   try {
-    const sub = await activeMembership(s.cids);
+    const body = await request.json().catch(() => ({}));
+    const kind = body?.which === 'club' ? 'club' : 'program';
+    const sub = await activeMembership(s.cids, kind);
     if (!sub) return json(404, { error: 'not_found' });
     if (sub.canceled_date) return json(200, { ok: true, cancelsOn: sub.canceled_date });
     const out = await cancelSubscription(sub.id);

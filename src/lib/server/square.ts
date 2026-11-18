@@ -60,6 +60,12 @@ export const PLANS: Record<PlanKey, { label: string; cents: number; cadence: 'MO
 export const SELLABLE: readonly ProgramPlanKey[] = ['program-annual', 'program-monthly'];
 export const isSellable = (k: unknown): k is ProgramPlanKey => typeof k === 'string' && (SELLABLE as readonly string[]).includes(k);
 
+/** The Storybook Club: a separate, cheaper subscription (every storybook free, new ones monthly). It is NOT in PLANS,
+ *  so nothing that checks for a program member ever counts a club member. Matched in Square by price and cadence. */
+export const CLUB = { label: 'Tracelings Storybook Club (monthly)', cents: 999, cadence: 'MONTHLY' as const };
+const CLUB_PLAN_NAME = 'Tracelings Storybook Club';
+export type MembershipKind = 'program' | 'club';
+
 interface Variation { id: string; cents: number; cadence: string; name: string }
 let variationCache: { at: number; list: Variation[] } | null = null;
 
@@ -111,12 +117,20 @@ export async function subscriptionsFor(customerIds: string[]): Promise<Sub[]> {
 }
 
 /** The best current membership for these customers, if any. */
-export async function activeMembership(customerIds: string[]): Promise<(Sub & { plan?: PlanKey }) | undefined> {
+export async function clubVariation(): Promise<Variation | undefined> {
+  return (await planVariations()).find((v) => v.cents === CLUB.cents && v.cadence === CLUB.cadence);
+}
+
+/** The best current subscription of one kind: 'program' (default; every plan except the club) or 'club'. */
+export async function activeMembership(customerIds: string[], kind: MembershipKind = 'program'): Promise<(Sub & { plan?: PlanKey }) | undefined> {
   // In-page checkouts pay the first period up front and start the subscription at the end of it, so a member can be
   // PENDING for that first period, or CANCELED before it starts after canceling: both still have paid access.
   const today = chicagoToday();
   const prepaidThenCanceled = (s: Sub) => s.status === 'CANCELED' && !!s.start_date && s.start_date > today;
+  const clubId = (await clubVariation())?.id;
+  const isClub = (s: Sub) => !!clubId && s.plan_variation_id === clubId;
   const subs = (await subscriptionsFor(customerIds))
+    .filter((s) => (kind === 'club' ? isClub(s) : !isClub(s)))
     .filter((s) => s.status === 'ACTIVE' || s.status === 'PENDING' || prepaidThenCanceled(s))
     .map((s) => (prepaidThenCanceled(s) ? { ...s, canceled_date: s.canceled_date ?? s.start_date } : s));
   if (!subs.length) return undefined;
@@ -315,7 +329,17 @@ export async function startProgramInPlace(plan: ProgramPlanKey, email: string, s
   if (!(await variationFor(plan))) await ensureProgramPlans();
   const v = await variationFor(plan);
   if (!v) throw new Error(`No Square plan found for ${plan}`);
-  const p = PLANS[plan];
+  return startSubInPlace(PLANS[plan], v.id, email, sourceId, verificationToken);
+}
+
+/** Storybook Club sign-up from the in-page form; same steps as the program (see startSubInPlace). */
+export async function startClubInPlace(email: string, sourceId: string, verificationToken?: string): Promise<{ orderId: string; startDate: string }> {
+  const v = (await clubVariation()) ?? (await ensureClubPlan());
+  if (!v) throw new Error('No Square plan found for the Storybook Club');
+  return startSubInPlace(CLUB, v.id, email, sourceId, verificationToken);
+}
+
+async function startSubInPlace(p: { label: string; cents: number; cadence: 'MONTHLY' | 'ANNUAL' }, variationId: string, email: string, sourceId: string, verificationToken?: string): Promise<{ orderId: string; startDate: string }> {
   const loc = await locationId();
   const customerId = await findOrCreateCustomer(email, sourceId);
 
@@ -350,7 +374,7 @@ export async function startProgramInPlace(plan: ProgramPlanKey, email: string, s
   }
 
   const startDate = nextPeriod(chicagoToday(), p.cadence);
-  const subBody = { idempotency_key: keyFor('sub', sourceId), location_id: loc, plan_variation_id: v.id, customer_id: customerId, card_id: cardId, start_date: startDate, timezone: 'America/Chicago' };
+  const subBody = { idempotency_key: keyFor('sub', sourceId), location_id: loc, plan_variation_id: variationId, customer_id: customerId, card_id: cardId, start_date: startDate, timezone: 'America/Chicago' };
   try {
     await sq('/v2/subscriptions', { body: subBody });
   } catch {
@@ -399,4 +423,30 @@ export async function payItemInPlace(item: { name: string; cents: number; note: 
   } });
   if (pay.payment?.status !== 'COMPLETED') throw new PayError('not_completed', 'The payment did not go through. Try another card.');
   return order.order.id;
+}
+
+
+let ensuringClub: Promise<Variation | undefined> | null = null;
+/** Creates the Storybook Club plan in the Square catalog once (fixed idempotency keys, checks first). */
+export function ensureClubPlan(): Promise<Variation | undefined> {
+  ensuringClub ??= (async () => {
+    const have = await clubVariation();
+    if (have) return have;
+    let planId = await findPlanId(CLUB_PLAN_NAME);
+    if (!planId) {
+      const plan = await sq<any>('/v2/catalog/object', { body: { idempotency_key: 'tl-club-plan-v1', object: {
+        type: 'SUBSCRIPTION_PLAN', id: '#tl-club-plan', subscription_plan_data: { name: CLUB_PLAN_NAME },
+      } } });
+      planId = plan.catalog_object.id as string;
+    }
+    await sq('/v2/catalog/object', { body: { idempotency_key: `tl-club-var-v1-${planId}`, object: {
+      type: 'SUBSCRIPTION_PLAN_VARIATION', id: '#tl-club-monthly',
+      subscription_plan_variation_data: { name: CLUB.label, subscription_plan_id: planId,
+        phases: [{ cadence: CLUB.cadence, ordinal: 0, pricing: { type: 'STATIC', price_money: { amount: CLUB.cents, currency: 'USD' } } }] },
+    } } });
+    variationCache = null;
+    console.log('square club plan created');
+    return clubVariation();
+  })().finally(() => { ensuringClub = null; });
+  return ensuringClub;
 }

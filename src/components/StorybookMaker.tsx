@@ -8,6 +8,7 @@ import { savePdf } from '../lib/download';
 import { whatLabel } from '../lib/what';
 import type { Paper } from '../lib/sheet';
 import SquarePayForm from './SquarePayForm';
+import { useMember, fetchMember } from '../lib/member';
 
 type Owned = { t: string; id: string; title: string };
 const OWNED_KEY = 'tl-storybooks';
@@ -31,6 +32,11 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
   const [owned, setOwned] = useState<Owned[]>([]);
   const [busy, setBusy] = useState(false);
   const [linkErr, setLinkErr] = useState('');
+  const member = useMember();
+  const [joined, setJoined] = useState(false);
+  const [plan, setPlan] = useState<'book' | 'club'>('book');
+  // Storybook Club and program members get every book free.
+  const access = joined || Boolean(member.club) || member.member;
 
   useEffect(() => {
     setOwned(readOwned());
@@ -68,6 +74,39 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
       const file = `${bookName(name).replace(/[^A-Za-z0-9]+/g, '-')}-${b.title.replace(/[^A-Za-z0-9]+/g, '-')}.pdf`.toLowerCase();
       await savePdf(pages, file, b.title, whatLabel('Storybook', book.group));
     } finally { setBusy(false); }
+  }
+
+  async function clubDownload() {
+    setBusy(true); setLinkErr('');
+    try {
+      const r = await fetch(`/api/storybook/club-book/?id=${encodeURIComponent(bookId)}`, { credentials: 'same-origin' });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.book) { setLinkErr(r.status === 401 ? 'Please sign in on the account page first, then come back.' : 'That did not work just now. Please try again in a minute.'); return; }
+      try { localStorage.setItem('tl-child-name', name); } catch { /* ignore */ }
+      track('storybook_club_download', { book: bookId });
+      setBusy(false);
+      await download(d.book);
+    } finally { setBusy(false); }
+  }
+
+  async function joinClub(sourceId: string, verificationToken?: string) {
+    const r = await fetch('/api/storybook/club-join/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email.trim(), sourceId, verificationToken }) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) return { ok: false as const, message: d.message, code: d.code || d.error };
+    // Sign in right away with this browser's checkout (no password; same as a program sign-up).
+    let signed = false;
+    for (let i = 0; i < 4 && !signed; i++) {
+      const sr = await fetch('/api/member/signin/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email.trim() }) });
+      signed = sr.ok;
+      if (!signed) await new Promise((ok) => setTimeout(ok, 2500));
+    }
+    try { localStorage.setItem('tl-checkout-email', email.trim().toLowerCase()); } catch { /* ignore */ }
+    await fetchMember(true);
+    setJoined(true); setPaying(false);
+    track('storybook_club_joined', { book: bookId });
+    if (!signed) { setLinkErr('You are in! Sign in once on the account page with this email to switch on free downloads in this browser.'); return { ok: true as const }; }
+    await clubDownload();
+    return { ok: true as const };
   }
 
   async function pay(sourceId: string, verificationToken?: string) {
@@ -125,7 +164,7 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
               <label class={`cursor-pointer rounded-lg border p-2 flex gap-3 items-center ${b.id === bookId ? 'border-rule shadow-[inset_0_0_0_1px_var(--color-rule)] bg-[#f6f8fc]' : 'border-hairline bg-white'}`}>
                 <input type="radio" name="book" class="sr-only" checked={b.id === bookId} onChange={() => { setBookId(b.id); setPaying(false); track('storybook_pick', { book: b.id }); }} />
                 <img src={b.cover.src.replace('.png', '-thumb.webp')} alt="" width={96} height={72} loading="lazy" class="w-24 rounded border border-hairline bg-white" />
-                <span><span class="block font-bold text-ink leading-snug">{b.title}</span><span class="block text-[13px] text-muted">{ages(b)}</span></span>
+                <span><span class="block font-bold text-ink leading-snug">{b.title}{b.isNew && <span class="ml-1.5 rounded-full bg-[#e7f6ee] px-1.5 py-0.5 text-[11px] font-bold text-[#1f7a50] align-middle">New</span>}</span><span class="block text-[13px] text-muted">{ages(b)}</span></span>
               </label>
             ))}
           </div>
@@ -149,19 +188,44 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
 
         <div class="grid gap-3 lg:hidden">{previewBlock}</div>
 
+        {access ? (
+          <div class="rounded-xl border border-[#9fd3b8] bg-[#eef8f2] p-5">
+            <p class="text-[15px] font-bold">3. Download the whole book</p>
+            <p class="mt-1 text-[15px] text-muted">{member.member && !member.club && !joined ? 'Every storybook is included with Tracelings at Home.' : 'You are in the Storybook Club, so every storybook is free.'} {book.pages} story pages, a cover with {ready ? bookName(name) : 'their name'} and a "the end" page to draw on.</p>
+            {!ready && <p class="mt-2 text-[14px] text-muted">Type your child's name above first.</p>}
+            <button type="button" disabled={!ready || busy} onClick={clubDownload} class="btn-pencil mt-3 w-full px-5 py-3.5 text-lg disabled:opacity-60">{busy ? 'Making your PDF…' : 'Download this storybook'}</button>
+          </div>
+        ) : (
         <div class="rounded-xl border border-hairline bg-white p-5">
           <p class="text-[15px] font-bold">3. Get the whole book</p>
-          <p class="mt-1 text-[15px] text-muted">{book.pages} story pages, a cover with {ready ? bookName(name) : 'their name'} and a "the end" page to draw on. Printable PDF, yours to print again and again.</p>
-          <p class="mt-3 text-2xl font-bold text-ink">$5</p>
+          <div class="mt-3 grid gap-2" role="radiogroup" aria-label="How to buy">
+            <label class={`cursor-pointer rounded-lg border px-4 py-3 ${plan === 'book' ? 'border-rule shadow-[inset_0_0_0_1px_var(--color-rule)] bg-[#f6f8fc]' : 'border-hairline'}`}>
+              <input type="radio" name="sb-plan" class="sr-only" checked={plan === 'book'} onChange={() => { setPlan('book'); setPaying(false); }} />
+              <span class="flex items-baseline justify-between gap-3"><span class="font-bold text-ink">Just this book</span><span class="font-bold text-ink">$5</span></span>
+              <span class="block mt-1 text-[14px] text-muted leading-snug">{book.pages} story pages with {ready ? bookName(name) : 'their name'}, a cover and a page to draw on. Printable PDF, yours to keep.</span>
+            </label>
+            <label class={`cursor-pointer rounded-lg border px-4 py-3 ${plan === 'club' ? 'border-rule shadow-[inset_0_0_0_1px_var(--color-rule)] bg-[#f6f8fc]' : 'border-hairline'}`}>
+              <input type="radio" name="sb-plan" class="sr-only" checked={plan === 'club'} onChange={() => { setPlan('club'); setPaying(false); track('storybook_club_pick'); }} />
+              <span class="flex items-baseline justify-between gap-3"><span class="font-bold text-ink">Storybook Club<span class="ml-2 rounded-full bg-[#fff4d6] px-2 py-0.5 text-[12px] font-bold text-[#7a5a00] align-middle">Best value</span></span><span class="font-bold text-ink whitespace-nowrap">$9.99/month</span></span>
+              <span class="block mt-1 text-[14px] text-muted leading-snug">Every storybook free ({books.length} now, all 13 themes), with new stories added every month. Print one for every child. Cancel anytime.</span>
+            </label>
+          </div>
           {!paying ? (
             <div class="mt-3 grid gap-3">
               <label class="block">
-                <span class="block text-[14px] mb-1">Your email (for the receipt and a link to download again)</span>
+                <span class="block text-[14px] mb-1">{plan === 'club' ? 'Your email (you sign in with it)' : 'Your email (for the receipt and a link to download again)'}</span>
                 <input type="email" value={email} onInput={(e) => { setEmail((e.target as HTMLInputElement).value); setEmailErr(false); }} autoComplete="email" placeholder="you@example.com" class="w-full rounded-lg border border-hairline px-4 py-3 text-lg focus:border-rule focus:outline-none" />
               </label>
               {emailErr && <p class="text-[14px] text-[#b4232c]" role="alert">That email doesn't look quite right.</p>}
               {!ready && <p class="text-[14px] text-muted">Type your child's name above first.</p>}
-              <button type="button" disabled={!ready} onClick={() => { if (!okEmail) return setEmailErr(true); setPaying(true); track('storybook_pay_open', { book: bookId }); }} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">Buy the storybook for $5</button>
+              <button type="button" disabled={!ready} onClick={() => { if (!okEmail) return setEmailErr(true); setPaying(true); track('storybook_pay_open', { book: bookId, plan }); }} class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60">{plan === 'club' ? 'Join the Storybook Club' : 'Buy the storybook for $5'}</button>
+              <p class="text-[13px] text-muted">Already in the club? <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Sign in</a></p>
+            </div>
+          ) : plan === 'club' ? (
+            <div class="mt-3">
+              <SquarePayForm key="club" cents={999} label="Tracelings Storybook Club" intent="STORE" squarePage={false} buttonText="Pay {total} and join"
+                note={`Renews at $9.99 a month until you cancel (cancel anytime on your account page). Receipt goes to ${email.trim()}.`} source="storybook-club"
+                onToken={joinClub} onFallback={() => { setPaying(false); setLinkErr('The card form could not load. Please try again in a minute, or email hello@tracelings.com.'); }} onClose={() => setPaying(false)} />
             </div>
           ) : (
             <div class="mt-3">
@@ -171,6 +235,7 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
             </div>
           )}
         </div>
+        )}
 
         {owned.length > 0 && !bought && (
           <div class="rounded-xl border border-hairline bg-white p-4">
