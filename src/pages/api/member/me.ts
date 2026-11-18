@@ -25,7 +25,7 @@ export const GET: APIRoute = async ({ cookies }) => {
       maxChildren: MAX_CHILDREN,
       program: true, // every active plan, old or new, includes the personalized program
       status: sub.status,
-      paidThrough: sub.charged_through_date ?? null,
+      paidThrough: sub.charged_through_date ?? (sub.status === 'PENDING' ? sub.start_date ?? null : null),
       cancelsOn: sub.canceled_date ?? null,
     });
   } catch {
