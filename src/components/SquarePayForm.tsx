@@ -38,6 +38,8 @@ export default function SquarePayForm(props: {
   source: string; // analytics label
   onToken: (sourceId: string, verificationToken?: string) => Promise<PayResult>;
   onFallback: () => void;
+  /** False when there is no Square checkout page to send people to (storybooks): hides those links. */
+  squarePage?: boolean;
   onClose?: () => void;
 }) {
   const [state, setState] = useState<'loading' | 'ready' | 'paying' | 'done'>('loading');
@@ -136,11 +138,11 @@ export default function SquarePayForm(props: {
       <button type="button" class="btn-pencil w-full px-5 py-3.5 text-lg disabled:opacity-60" disabled={state !== 'ready'} onClick={() => pay('card')}>
         {state === 'paying' || state === 'done' ? 'Paying…' : props.buttonText.replace('{total}', money(props.cents))}
       </button>
-      {failed > 0 && (
+      {failed > 0 && props.squarePage !== false && (
         <button type="button" class="w-full rounded-lg border border-rule bg-white px-4 py-3 text-[15px] font-bold text-ink hover:bg-[#eef4ff]" onClick={squarePage}>Pay on Square’s secure checkout page instead</button>
       )}
       <p class="text-[12.5px] text-muted text-center">Processed by Square. Your card number goes to Square, never to Tracelings.{props.note ? ' ' + props.note : ''}</p>
-      {!failed && <button type="button" class="text-[12.5px] text-muted underline underline-offset-2" onClick={squarePage}>Prefer Square’s own checkout page? Open it instead</button>}
+      {!failed && props.squarePage !== false && <button type="button" class="text-[12.5px] text-muted underline underline-offset-2" onClick={squarePage}>Prefer Square’s own checkout page? Open it instead</button>}
     </div>
   );
 }
