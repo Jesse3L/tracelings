@@ -1,21 +1,30 @@
 import { useState } from 'preact/hooks';
+import SquarePayForm from './SquarePayForm';
 
 const AMOUNTS = [3, 5, 10, 20] as const;
 const MIN = 1, MAX = 200;
 const track = (name: string, params: Record<string, unknown> = {}) => { try { (window as any).gtag?.('event', name, { tool_page: location.pathname, ...params }); } catch { /* ignore */ } };
 
-/** "Buy us a coffee" amounts plus a custom amount. Each opens a secure Square checkout. */
+/** "Buy us a coffee" amounts plus a custom amount. Each opens Square's card form right on the page (Square's own checkout page is the backup). */
 export default function CoffeeButtons(props: { source: string; onStart?: () => void }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [custom, setCustom] = useState('');
+  const [tip, setTip] = useState<number | null>(null); // amount whose card form is open
+  const [email, setEmail] = useState('');
 
-  async function go(amount: number, key: string) {
+  function go(amount: number, key: string) {
     setError('');
     if (!Number.isInteger(amount) || amount < MIN || amount > MAX) { setError(`Enter a whole dollar amount from $${MIN} to $${MAX}.`); return; }
-    setBusy(key);
     track('coffee_click', { amount, source: props.source, custom: key === 'custom' });
     props.onStart?.();
+    setTip(amount);
+  }
+
+  // Backup: Square's hosted checkout page.
+  async function squarePage(amount: number) {
+    setTip(null);
+    setBusy(String(amount));
     try {
       const r = await fetch('/api/coffee/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount }) });
       const d = await r.json().catch(() => ({}));
@@ -25,6 +34,39 @@ export default function CoffeeButtons(props: { source: string; onStart?: () => v
       setError('Checkout isn’t available right now. Please try again in a minute.');
     }
     setBusy(null);
+  }
+
+  async function payInPage(amount: number, sourceId: string, verificationToken?: string) {
+    const r = await fetch('/api/coffee-pay/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount, sourceId, verificationToken, email: email.trim() }) });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.ok) { location.href = '/support/thank-you/'; return { ok: true as const }; }
+    return { ok: false as const, message: d.message, code: d.code || d.error };
+  }
+
+  if (tip !== null) {
+    return (
+      <div>
+        <p class="mb-2 text-[15px] font-bold text-ink">${tip} coffee for Tracelings</p>
+        <label class="block mb-3">
+          <span class="block text-[13px] text-muted mb-1">Email for a receipt (optional)</span>
+          <input type="email" autoComplete="email" value={email} onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
+            class="w-full rounded-lg border border-hairline bg-white px-3 py-2.5 text-[15px] text-ink focus:border-rule focus:outline-none" placeholder="you@example.com" />
+        </label>
+        <SquarePayForm
+          key={tip}
+          cents={tip * 100}
+          label="Coffee for Tracelings"
+          intent="CHARGE"
+          wallets
+          buttonText="Tip {total}"
+          note="One-time tip, nothing recurring."
+          source={`coffee-${props.source}`}
+          onToken={(t, v) => payInPage(tip, t, v)}
+          onFallback={() => squarePage(tip)}
+          onClose={() => setTip(null)}
+        />
+      </div>
+    );
   }
 
   return (

@@ -1,4 +1,6 @@
 // Minimal Square REST client (server only). Needs SQUARE_ACCESS_TOKEN; optional SQUARE_ENV=sandbox, SQUARE_LOCATION_ID, SQUARE_VERSION.
+import { createHmac } from 'node:crypto';
+
 const env = (k: string): string | undefined => (import.meta.env as Record<string, string | undefined>)[k] ?? process.env[k];
 
 export const squareConfigured = () => Boolean(env('SQUARE_ACCESS_TOKEN'));
@@ -100,7 +102,7 @@ export async function customersByEmail(email: string): Promise<{ id: string }[]>
   return r.customers ?? [];
 }
 
-export interface Sub { id: string; customer_id: string; plan_variation_id: string; status: string; charged_through_date?: string; canceled_date?: string; created_at?: string }
+export interface Sub { id: string; customer_id: string; plan_variation_id: string; status: string; start_date?: string; charged_through_date?: string; canceled_date?: string; created_at?: string }
 
 export async function subscriptionsFor(customerIds: string[]): Promise<Sub[]> {
   if (!customerIds.length) return [];
@@ -110,7 +112,13 @@ export async function subscriptionsFor(customerIds: string[]): Promise<Sub[]> {
 
 /** The best current membership for these customers, if any. */
 export async function activeMembership(customerIds: string[]): Promise<(Sub & { plan?: PlanKey }) | undefined> {
-  const subs = (await subscriptionsFor(customerIds)).filter((s) => s.status === 'ACTIVE' || s.status === 'PENDING');
+  // In-page checkouts pay the first period up front and start the subscription at the end of it, so a member can be
+  // PENDING for that first period, or CANCELED before it starts after canceling: both still have paid access.
+  const today = chicagoToday();
+  const prepaidThenCanceled = (s: Sub) => s.status === 'CANCELED' && !!s.start_date && s.start_date > today;
+  const subs = (await subscriptionsFor(customerIds))
+    .filter((s) => s.status === 'ACTIVE' || s.status === 'PENDING' || prepaidThenCanceled(s))
+    .map((s) => (prepaidThenCanceled(s) ? { ...s, canceled_date: s.canceled_date ?? s.start_date } : s));
   if (!subs.length) return undefined;
   subs.sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
   const s = subs[0];
@@ -245,4 +253,133 @@ export async function createTipCheckout(dollars: number, redirectUrl: string): P
     },
   });
   return r.payment_link.url;
+}
+
+
+// ---------- In-page payments (Square Web Payments SDK) ----------
+// The card form on the page sends Square's one-time token; card numbers never reach this server.
+
+/** Public values the in-page card form needs. The application ID is public by design. */
+export async function payConfig(): Promise<{ appId: string; locationId: string; sandbox: boolean } | null> {
+  const appId = (env('SQUARE_APPLICATION_ID') ?? '').trim();
+  if (!appId || !squareConfigured()) return null;
+  return { appId, locationId: await locationId(), sandbox: env('SQUARE_ENV') === 'sandbox' };
+}
+
+/** Idempotency key tied to the one-time card token, so a resent request never charges or creates twice (Square caps keys at 45). */
+const keyFor = (step: string, sourceId: string) => `tl-${step}-` + createHmac('sha256', 'tracelings-pay').update(sourceId).digest('hex').slice(0, 32);
+
+/** Today's date (YYYY-MM-DD) in the business time zone. */
+export function chicagoToday(at = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit' }).format(at);
+}
+
+/** One billing period after a YYYY-MM-DD date. Month-end days clamp (Jan 31 -> Feb 28). */
+export function nextPeriod(ymd: string, cadence: 'MONTHLY' | 'ANNUAL'): string {
+  const [y, m, d] = ymd.split('-').map(Number);
+  const ty = cadence === 'ANNUAL' ? y + 1 : y + (m === 12 ? 1 : 0);
+  const tm = cadence === 'ANNUAL' ? m : (m % 12) + 1;
+  const last = new Date(Date.UTC(ty, tm, 0)).getUTCDate();
+  return `${ty}-${String(tm).padStart(2, '0')}-${String(Math.min(d, last)).padStart(2, '0')}`;
+}
+
+export class PayError extends Error { constructor(public code: string, public userMessage: string) { super(code); } }
+
+/** Turns a Square card error into a plain sentence for the buyer. */
+export function cardMessage(e: unknown): { code: string; message: string } {
+  if (e instanceof PayError) return { code: e.code, message: e.userMessage };
+  const code = e instanceof SquareError ? String((e.detail as any)?.errors?.[0]?.code ?? '') : '';
+  const message = /CVV/.test(code) ? 'The security code (CVV) did not match. Check it and try again.'
+    : /EXPIR/.test(code) ? 'The card expiration date did not match. Check it and try again.'
+    : /POSTAL|ADDRESS/.test(code) ? 'The ZIP code did not match the card. Check it and try again.'
+    : /DECLIN|INSUFFICIENT|GENERIC|CARD/.test(code) ? 'The card was declined. Try another card.'
+    : 'The payment did not go through. Try again, or use Square’s checkout page below.';
+  return { code, message };
+}
+
+async function findOrCreateCustomer(email: string, sourceId: string): Promise<string> {
+  const found = await customersByEmail(email);
+  if (found[0]) return found[0].id;
+  const r = await sq<any>('/v2/customers', { body: { idempotency_key: keyFor('cust', sourceId), email_address: email, reference_id: 'tracelings' } });
+  return r.customer.id;
+}
+
+/**
+ * Program sign-up from the in-page form: saves the card to the customer, charges the first period now (so a declined
+ * card is known right away, and the buyer gets Square's receipt), then starts the Square subscription on the day the
+ * paid period ends. Square bills the saved card from then on. Returns the paid order's id, which the welcome sign-in
+ * checks exactly like a Square checkout-page order.
+ */
+export async function startProgramInPlace(plan: ProgramPlanKey, email: string, sourceId: string, verificationToken?: string): Promise<{ orderId: string; startDate: string }> {
+  if (!isSellable(plan)) throw new Error(`Plan ${plan} is not for sale`);
+  if (!(await variationFor(plan))) await ensureProgramPlans();
+  const v = await variationFor(plan);
+  if (!v) throw new Error(`No Square plan found for ${plan}`);
+  const p = PLANS[plan];
+  const loc = await locationId();
+  const customerId = await findOrCreateCustomer(email, sourceId);
+
+  const card = await sq<any>('/v2/cards', { body: {
+    idempotency_key: keyFor('card', sourceId), source_id: sourceId,
+    ...(verificationToken ? { verification_token: verificationToken } : {}),
+    card: { customer_id: customerId, reference_id: 'tracelings-program' },
+  } });
+  const cardId: string = card.card.id;
+
+  const order = await sq<any>('/v2/orders', { body: { idempotency_key: keyFor('order', sourceId), order: {
+    location_id: loc, customer_id: customerId,
+    line_items: [{ name: p.label, quantity: '1', base_price_money: { amount: p.cents, currency: 'USD' } }],
+  } } });
+  const orderId: string = order.order.id;
+  const total = Number(order.order.total_money?.amount ?? 0);
+  if (total !== p.cents) throw new Error('order total mismatch');
+
+  let paymentId = '';
+  try {
+    const pay = await sq<any>('/v2/payments', { body: {
+      idempotency_key: keyFor('pay', sourceId), source_id: cardId, customer_id: customerId,
+      amount_money: { amount: total, currency: 'USD' }, order_id: orderId, location_id: loc, autocomplete: true,
+      buyer_email_address: email, note: `${p.label}: first ${p.cadence === 'ANNUAL' ? 'year' : 'month'}`,
+    } });
+    paymentId = pay.payment?.id ?? '';
+    if (pay.payment?.status !== 'COMPLETED') throw new PayError('not_completed', 'The payment did not go through. Try another card.');
+  } catch (e) {
+    // A declined card is not kept on file.
+    await sq(`/v2/cards/${encodeURIComponent(cardId)}/disable`, { body: {} }).catch(() => {});
+    throw e;
+  }
+
+  const startDate = nextPeriod(chicagoToday(), p.cadence);
+  const subBody = { idempotency_key: keyFor('sub', sourceId), location_id: loc, plan_variation_id: v.id, customer_id: customerId, card_id: cardId, start_date: startDate, timezone: 'America/Chicago' };
+  try {
+    await sq('/v2/subscriptions', { body: subBody });
+  } catch {
+    try { await sq('/v2/subscriptions', { body: subBody }); }
+    catch (e2) {
+      // Paid but no subscription: refund in full rather than keep money for a program they can't open.
+      console.error('subscription create failed after payment; refunding', paymentId, (e2 as Error).message);
+      await sq(`/v2/cards/${encodeURIComponent(cardId)}/disable`, { body: {} }).catch(() => {});
+      if (paymentId) await sq('/v2/refunds', { body: { idempotency_key: keyFor('refund', sourceId), payment_id: paymentId, amount_money: { amount: total, currency: 'USD' }, reason: 'Subscription could not be started' } }).catch((e3) => console.error('refund failed', paymentId, (e3 as Error).message));
+      throw new PayError('subscription_failed', 'We couldn’t start the membership, so the charge was refunded in full. Please try Square’s checkout page below.');
+    }
+  }
+  return { orderId, startDate };
+}
+
+/** A one-time coffee tip from the in-page form. */
+export async function payTipInPlace(dollars: number, sourceId: string, email?: string, verificationToken?: string): Promise<string> {
+  if (!validTip(dollars)) throw new Error('invalid tip');
+  const loc = await locationId();
+  const order = await sq<any>('/v2/orders', { body: { idempotency_key: keyFor('tiporder', sourceId), order: {
+    location_id: loc, line_items: [{ name: `Coffee for Tracelings ($${dollars})`, quantity: '1', base_price_money: { amount: dollars * 100, currency: 'USD' } }],
+  } } });
+  const pay = await sq<any>('/v2/payments', { body: {
+    idempotency_key: keyFor('tip', sourceId), source_id: sourceId,
+    ...(verificationToken ? { verification_token: verificationToken } : {}),
+    amount_money: { amount: dollars * 100, currency: 'USD' }, order_id: order.order.id, location_id: loc, autocomplete: true,
+    ...(email ? { buyer_email_address: email } : {}),
+    note: 'Tracelings coffee tip: thank you for keeping the printables free',
+  } });
+  if (pay.payment?.status !== 'COMPLETED') throw new PayError('not_completed', 'The payment did not go through. Try another card.');
+  return order.order.id;
 }
