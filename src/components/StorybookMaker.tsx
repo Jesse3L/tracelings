@@ -165,7 +165,7 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
             </div>
           ) : (
             <div class="mt-3">
-              <SquarePayForm key={bookId} cents={500} label={`Storybook: ${book.title}`} intent="CHARGE" wallets buttonText="Pay {total} and download"
+              <SquarePayForm key={bookId} cents={500} label={`Storybook: ${book.title}`} intent="CHARGE" wallets squarePage={false} buttonText="Pay {total} and download"
                 note={`One-time purchase. Receipt and download link go to ${email.trim()}.`} source="storybook"
                 onToken={pay} onFallback={() => { setPaying(false); setLinkErr('The card form could not load. Please try again in a minute, or email hello@tracelings.com and we will send the book.'); }} onClose={() => setPaying(false)} />
             </div>
