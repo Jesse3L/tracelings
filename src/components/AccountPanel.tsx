@@ -14,6 +14,7 @@ const linkCls = 'text-[#2f5fc4] underline underline-offset-2';
 export default function AccountPanel() {
   const [m, setM] = useState<MemberState | null>(null);
   const [welcome, setWelcome] = useState(false);
+  const [confirmClub, setConfirmClub] = useState(false);
   const [email, setEmail] = useState('');
   const [last4, setLast4] = useState('');
   const [askLast4, setAskLast4] = useState(false);
@@ -76,6 +77,16 @@ export default function AccountPanel() {
     setMsg({ kind: 'error', text: text[r.error ?? ''] ?? 'Sign-in didn’t work just now. Please try again in a minute.' });
   }
 
+  async function cancelClub() {
+    setBusy(true);
+    setMsg(null);
+    const r = await post('/api/member/cancel/', { which: 'club' });
+    setBusy(false);
+    setConfirmClub(false);
+    if (r.ok) { await refresh(); setMsg({ kind: 'ok', text: 'Your Storybook Club membership is canceled. You won’t be charged again, and free storybooks stay on until the end of the month you paid for.' }); }
+    else setMsg({ kind: 'error', text: 'We couldn’t cancel just now. Please try again, or email hello@tracelings.com and we’ll do it for you.' });
+  }
+
   async function cancel() {
     setBusy(true);
     setMsg(null);
@@ -98,6 +109,30 @@ export default function AccountPanel() {
   }
 
   if (!m) return <div class="rounded-xl border border-hairline bg-white p-6 text-muted">Loading your account…</div>;
+
+  const clubCard = m.club ? (
+    <div class="rounded-xl border border-hairline bg-white p-6 text-[15px]">
+      <h2 class="text-xl font-bold">Storybook Club</h2>
+      <dl class="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2">
+        <dt class="text-muted">Plan</dt><dd class="text-ink font-bold">$9.99 a month</dd>
+        {m.club.paidThrough && !m.club.cancelsOn && <><dt class="text-muted">Renews</dt><dd class="text-ink">{fmt(m.club.paidThrough)}</dd></>}
+        {m.club.cancelsOn && <><dt class="text-muted">Ends</dt><dd class="text-ink">{fmt(m.club.cancelsOn)} (canceled, no further charges)</dd></>}
+      </dl>
+      <p class="mt-3 text-muted">Every storybook is free for you, in all 13 themes, with new stories each month. Type any name and print one for every child.</p>
+      <a href="/personalized-storybook/" class="btn-pencil mt-4 inline-block px-5 py-3 text-lg">Pick a storybook</a>
+      {!m.club.cancelsOn && (confirmClub ? (
+        <div class="mt-4 rounded-lg bg-[#fff4f4] p-4">
+          <p class="text-ink">Cancel the Storybook Club? Free storybooks stay on until {m.club.paidThrough ? fmt(m.club.paidThrough) : 'the end of the month you paid for'}, and you won’t be charged again.</p>
+          <div class="mt-3 flex flex-wrap gap-3">
+            <button type="button" disabled={busy} onClick={cancelClub} class="rounded-lg border border-[#b4232c] px-4 py-2 font-bold text-[#b4232c] disabled:opacity-60">{busy ? 'Canceling…' : 'Yes, cancel'}</button>
+            <button type="button" onClick={() => setConfirmClub(false)} class="rounded-lg border border-hairline px-4 py-2 font-bold text-ink">Keep the club</button>
+          </div>
+        </div>
+      ) : (
+        <p class="mt-4"><button type="button" onClick={() => setConfirmClub(true)} class="text-[#b4232c] underline underline-offset-2">Cancel the Storybook Club</button></p>
+      ))}
+    </div>
+  ) : null;
 
   if (!m.available) {
     return (
@@ -146,6 +181,7 @@ export default function AccountPanel() {
           )}
         </div>
 
+        {clubCard}
         {msg && <p class={`text-[14px] ${msg.kind === 'error' ? 'text-[#b4232c]' : 'text-[#1f7a50]'}`} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
 
         <div class="rounded-xl border border-hairline bg-white p-6 text-[15px]">
@@ -171,6 +207,19 @@ export default function AccountPanel() {
             </label>
             <p class="mt-3"><button type="button" disabled={busy} onClick={signOut} class={linkCls}>Sign out of this browser</button></p>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (m.club) {
+    return (
+      <div class="grid gap-5">
+        {clubCard}
+        {msg && <p class={`text-[14px] ${msg.kind === 'error' ? 'text-[#b4232c]' : 'text-[#1f7a50]'}`} role={msg.kind === 'error' ? 'alert' : 'status'}>{msg.text}</p>}
+        <div class="rounded-xl border border-hairline bg-white p-6 text-[15px]">
+          <p class="text-muted">Want a full homeschool plan built around your child too? <a href="/membership/" class={linkCls}>See Tracelings at Home</a>. Need a receipt or a card change? Email <a href="mailto:hello@tracelings.com" class={linkCls}>hello@tracelings.com</a>.</p>
+          <p class="mt-3"><button type="button" disabled={busy} onClick={signOut} class={linkCls}>Sign out of this browser</button></p>
         </div>
       </div>
     );

@@ -7,11 +7,12 @@ import { sceneSrc, SCENES } from '../program/scenes';
 import type { ThemeId } from '../program/types';
 import art from '../program/sceneArt.json';
 import { CHRISTMAS_STORIES } from './christmas';
+import { EXTRA_STORIES } from './extra';
 import type { GiftBook } from './giftbook';
 
 export type BookTheme = ThemeId | 'christmas';
-export interface BookEntry extends GiftBook { id: string; theme: BookTheme; group: string; level: 'pre-k' | 'kindergarten' }
-export interface BookMeta { id: string; theme: BookTheme; group: string; kind: string; title: string; level: 'pre-k' | 'kindergarten'; pages: number; cover: GiftBook['cover']; first: GiftBook['pages'][number] }
+export interface BookEntry extends GiftBook { id: string; theme: BookTheme; group: string; level: 'pre-k' | 'kindergarten'; added?: string }
+export interface BookMeta { id: string; theme: BookTheme; group: string; kind: string; title: string; level: 'pre-k' | 'kindergarten'; pages: number; cover: GiftBook['cover']; first: GiftBook['pages'][number]; isNew?: boolean }
 
 /** The storybook price, in cents. */
 export const BOOK_CENTS = 500;
@@ -50,11 +51,21 @@ function build(): BookEntry[] {
       });
     }
   }
+  for (const x of EXTRA_STORIES) {
+    const scenes = x.pages.map(([scene]) => scene);
+    const full = SCENES[x.theme].cast.length;
+    const happy = SCENES[x.theme].scenes.filter((sc) => sc.cast.length === full && ['opening', 'ending', 'rest', 'celebrate'].includes(sc.beat) && sc.id !== scenes[0] && manifest[x.theme]?.[sc.id]);
+    const coverId = x.cover ?? happy.find((sc) => !scenes.includes(sc.id))?.id ?? happy[0]?.id ?? scenes[1] ?? scenes[0];
+    out.push({
+      id: `${x.theme}/${x.id}`, theme: x.theme, group: THEMES[x.theme].label, kind: KIND[x.theme], level: x.level, title: x.title, added: x.added,
+      cover: themePic(x.theme, coverId), pages: x.pages.map(([scene, text]) => ({ ...themePic(x.theme, scene), text })),
+    });
+  }
   return out;
 }
 
 export const BOOKS: BookEntry[] = build();
 export const bookById = (id: string) => BOOKS.find((b) => b.id === id);
-export const bookMeta = (b: BookEntry): BookMeta => ({ id: b.id, theme: b.theme, group: b.group, kind: b.kind, title: b.title, level: b.level, pages: b.pages.length, cover: b.cover, first: b.pages[0] });
+export const bookMeta = (b: BookEntry): BookMeta => ({ id: b.id, theme: b.theme, group: b.group, kind: b.kind, title: b.title, level: b.level, pages: b.pages.length, cover: b.cover, first: b.pages[0], isNew: Boolean(b.added && Date.now() - Date.parse(b.added) < 45 * 86_400_000) });
 /** The full book the buyer's browser builds the PDF from (text keeps {{name}}). */
 export const bookBody = (b: BookEntry): GiftBook => ({ title: b.title, kind: b.kind, cover: b.cover, pages: b.pages });

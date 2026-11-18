@@ -193,3 +193,6 @@ export async function deleteSnapshots(dates: string[]): Promise<void> {
   if (!s || !dates.length) return;
   await s.del(dates.filter(isDate).map((d) => `${SNAP}${d}.json`));
 }
+
+/** The same private store, for other small records (the weekly email's approvals and sends). Null when not set up. */
+export const recordStore = (): EventStore | null => current();
