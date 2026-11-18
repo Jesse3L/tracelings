@@ -1,0 +1,52 @@
+---
+// Shared body for the personalized storybook pages (/personalized-christmas-book/ and /personalized-storybook/).
+import Base from '../../layouts/Base.astro';
+import StorybookMaker from '../StorybookMaker.tsx';
+import { BOOKS, bookMeta, BOOK_CENTS } from '../../lib/storybook/catalog';
+import { faqText } from '../../lib/seo';
+import { SITE } from '../../config';
+
+interface Faq { q: string; a: string; html?: string }
+interface Props { path: string; crumb: string; title: string; description: string; h1: string; lead: string; start: string; faqs: Faq[]; ogImage?: string }
+const { path, crumb, title, description, h1, lead, start, faqs, ogImage } = Astro.props;
+const url = new URL(path, SITE.url).href;
+const books = BOOKS.map(bookMeta);
+const startBook = BOOKS.find((b) => b.id === start)!;
+const schema = [
+  {
+    '@context': 'https://schema.org', '@type': 'Product', name: h1, description, url,
+    image: new URL(startBook.cover.src.replace('.png', '-thumb.webp'), SITE.url).href,
+    brand: { '@type': 'Brand', name: SITE.name },
+    offers: { '@type': 'Offer', price: (BOOK_CENTS / 100).toFixed(2), priceCurrency: 'USD', availability: 'https://schema.org/InStock', url },
+  },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: crumb, item: url },
+  ] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: faqText(f) } })) },
+];
+---
+<Base title={title} description={description} schema={schema} ogImage={ogImage}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <nav aria-label="Breadcrumb" class="pt-6 text-[14px] text-muted">
+      <a href="/" class="hover:text-ink">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">{crumb}</span>
+    </nav>
+    <header class="pt-6 pb-8 max-w-3xl">
+      <h1 class="text-[2.1rem] sm:text-[2.8rem] font-bold"><span class="ruled">{h1}</span></h1>
+      <p class="mt-4 text-lg text-muted">{lead}</p>
+    </header>
+
+    <StorybookMaker client:load books={books} start={start} />
+
+    <article class="prose-tl max-w-[68ch] mt-14">
+      <slot />
+      <h2>Questions parents ask</h2>
+      {faqs.map((f) => (
+        <>
+          <p><strong>{f.q}</strong></p>
+          {f.html ? <p set:html={f.html} /> : <p>{f.a}</p>}
+        </>
+      ))}
+    </article>
+  </div>
+</Base>

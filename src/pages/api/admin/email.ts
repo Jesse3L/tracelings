@@ -75,7 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
         return json(200, await importContacts(items, source, cleanEmail));
       }
       case 'broadcast-create': {
-        if (!isLaunchKey(body.template)) return json(400, { error: 'unknown_template', templates: ['launch-a', 'launch-a-teacher', 'launch-b', 'launch-c'] });
+        if (!isLaunchKey(body.template)) return json(400, { error: 'unknown_template', templates: ['launch-a', 'launch-a-teacher', 'launch-b', 'launch-c', 'xmas-book-a', 'xmas-book-b'] });
         const seg = body.segment;
         if (seg !== undefined && !(typeof seg === 'string' && seg in SEGMENTS)) return json(400, { error: 'unknown_segment', segments: Object.keys(SEGMENTS) });
         return json(200, await broadcastCreate(body.template, seg as SegmentKey | undefined, { fresh: body.fresh === true }));
