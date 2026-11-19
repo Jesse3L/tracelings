@@ -268,6 +268,45 @@
           ]
         },
         "note": "Space and farm animals built Nov 17, 2026 (program themes space and farm). Tractor stays in the car and truck collection."
+      },
+      {
+        "date": "2026-11-19",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "horse coloring pages": [
+            18100,
+            24
+          ],
+          "horse coloring pages to print": [
+            3600,
+            20
+          ],
+          "horse coloring pages print": [
+            2900,
+            21
+          ],
+          "horse coloring pages free": [
+            1600,
+            22
+          ],
+          "pony coloring pages": [
+            1000,
+            19
+          ],
+          "cute horse coloring pages": [
+            590,
+            23
+          ],
+          "carousel horse coloring pages": [
+            90,
+            23
+          ],
+          "rocking horse coloring pages": [
+            40,
+            21
+          ]
+        },
+        "note": "Horse collection built Nov 19, 2026 (program theme farm). The horse page in the farm collection stays there; the new pages use different slugs."
       }
     ]
   },
@@ -1085,6 +1124,74 @@
           "prompt": "children's coloring book page, a cute baby goat with small horns and a little beard standing on a rock, grass and a few flowers around, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
           "alt": "Cute baby goat with small horns standing on a rock in the grass, coloring page",
           "description": "A cute baby goat with small horns stands on a rock in the grass. Quick fact to share: goats are great climbers, and they love to stand on rocks and hills. The goat's body and the rock are big shapes that leave lots of room for crayons."
+        }
+      ]
+    },
+    {
+      "slug": "horse-coloring-pages",
+      "title": "Horse Coloring Pages",
+      "primaryKeyword": "horse coloring pages",
+      "volume": 18100,
+      "sd": 24,
+      "season": "evergreen",
+      "publishBy": "2026-11-19",
+      "intro": "These free horse coloring pages are made for young horse lovers: a mother horse with her foal, a cute pony with a bow, a horse running across a field, a child riding in a helmet, a big horse head, a toy rocking horse, a carousel horse and a horse looking out of its stable. Every page has thick outlines and big open shapes, so preschoolers can color with chunky crayons, while manes, flowers and saddles give older kids detail to fill in. Each horse coloring page comes with a simple fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "foal-coloring-page",
+          "title": "Foal Coloring Page (Mother and Baby Horse)",
+          "prompt": "children's coloring book page, a mother horse and her baby foal standing side by side in a meadow, the foal with long thin legs and a short fluffy mane, a few flowers in the grass, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Mother horse nuzzling her baby foal in a meadow with flowers, printable coloring page",
+          "description": "A baby foal with long legs and a fluffy mane stands close to its mother in a meadow full of flowers. Quick fact to share: many foals stand up and take wobbly first steps within an hour or two of being born. The two horses side by side make a nice big and small page to color."
+        },
+        {
+          "slug": "pony-coloring-page",
+          "title": "Pony Coloring Page",
+          "prompt": "children's coloring book page, a cute small cartoon pony with a short round body, a thick fluffy mane and tail and a little bow in its mane, standing on grass with a few flowers and a sun, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute little pony with a curly mane and a bow standing in the grass under the sun, coloring sheet",
+          "description": "A cute little pony with a curly mane, a bow and a big fluffy tail stands in the grass under a bright sun. Quick fact to share: a pony is not a baby horse. Ponies are a small kind of horse that stays short even when grown up, often with thick manes and tails. The round body is an easy shape for the youngest colorers."
+        },
+        {
+          "slug": "running-horse-coloring-page",
+          "title": "Running Horse Coloring Page",
+          "prompt": "children's coloring book page, a happy horse galloping across a grassy field with its mane and tail flowing in the wind, hills and a few clouds behind, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy horse galloping across a field with its mane and tail blowing, coloring page",
+          "description": "A happy horse gallops across a grassy field with its mane and tail blowing behind it, hills and clouds in the distance. Quick fact to share: a gallop is a horse's fastest way to move, and for a moment in each stride all four hooves are off the ground. Kids can add speed lines behind it."
+        },
+        {
+          "slug": "horse-and-rider-coloring-page",
+          "title": "Horse and Rider Coloring Page",
+          "prompt": "children's coloring book page, a smiling child wearing a riding helmet and boots sitting in a saddle on a calm walking horse, holding the reins, a fence and a tree behind, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling child in a riding helmet riding a horse by a fence and a tree, printable coloring page",
+          "description": "A smiling child in a riding helmet and boots rides a calm horse past a fence and a big tree. Quick fact to share: riders wear a helmet to protect their head, and they steer with the reins, which connect to the bridle on the horse's head. The saddle, boots and helmet are fun parts to color."
+        },
+        {
+          "slug": "horse-head-coloring-page",
+          "title": "Horse Head Coloring Page",
+          "prompt": "children's coloring book page, a big friendly horse head and neck seen from the side, with a long wavy mane, a forelock, a halter on its face and gentle eyes, filling most of the page, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Big friendly horse head with a long wavy mane and a halter, coloring sheet",
+          "description": "A big friendly horse head fills the page, with a long wavy mane and a halter around its nose. Quick fact to share: a horse's eyes are on the sides of its head, so it can see almost all the way around itself. The large shapes make this a good first horse page for toddlers and preschoolers."
+        },
+        {
+          "slug": "rocking-horse-coloring-page",
+          "title": "Rocking Horse Coloring Page",
+          "prompt": "children's coloring book page, a classic wooden toy rocking horse on curved rockers, with a saddle, a yarn mane and tail, and simple decorations, a few toy blocks on the floor beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Toy rocking horse with a yarn mane, a saddle with a heart and toy blocks beside it, coloring page",
+          "description": "A toy rocking horse with a yarn mane and tail, stars on its side and a heart on its saddle sits on curved rockers, with toy blocks beside it. Quick fact to share: rocking horses are toy horses that rock back and forth on curved rockers, and children have played on them for hundreds of years. The curved rocker is a fun long shape to color."
+        },
+        {
+          "slug": "carousel-horse-coloring-page",
+          "title": "Carousel Horse Coloring Page",
+          "prompt": "children's coloring book page, a carousel horse on a tall striped pole, with a fancy saddle, a flowing mane, flowers and ribbons on its harness, one front leg lifted, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Carousel horse on a striped pole with flowers, bows and a fancy saddle, printable coloring page",
+          "description": "A carousel horse prances on a striped pole, dressed up with flowers, bows and a fancy saddle. Quick fact to share: a carousel, also called a merry go round, turns in a circle while music plays, and the horses on it often move up and down. The flowers and bows give kids who like detail lots to color."
+        },
+        {
+          "slug": "horse-stable-coloring-page",
+          "title": "Horse in a Stable Coloring Page",
+          "prompt": "children's coloring book page, a friendly horse looking out over the open top half of a wooden stable door, a horseshoe hanging above the door, a bucket and a bale of hay beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly horse looking over a stable door with a horseshoe above and hay and a bucket beside it, coloring sheet",
+          "description": "A friendly horse peeks over the top of its stable door, with a horseshoe hanging above and a bucket and hay bale outside. Quick fact to share: a stable is a building where horses sleep and stay dry, and each horse often has its own room called a stall. The wooden boards are easy stripes to color."
         }
       ]
     },
