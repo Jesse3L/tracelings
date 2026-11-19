@@ -11,6 +11,7 @@ export const COLORING_THEMES: Record<string, { theme: ThemeId; word: string; thi
   'bug-coloring-pages': { theme: 'bugs', word: 'bug', things: 'bugs' },
   'space-coloring-pages': { theme: 'space', word: 'space', things: 'rockets and planets' },
   'farm-animal-coloring-pages': { theme: 'farm', word: 'farm', things: 'farm animals' },
+  'horse-coloring-pages': { theme: 'farm', word: 'farm', things: 'farm animals' },
 };
 
 /**

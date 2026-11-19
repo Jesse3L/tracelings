@@ -447,6 +447,10 @@
           "a": "Most pages suit ages 3 to 8. The pig, sheep and goat pages have the biggest open shapes for preschoolers. The horse's mane, the barn and the duck pond have more small parts for kids who like detail."
         },
         {
+          "q": "Do you have more horse coloring pages?",
+          "a": "Yes. Our horse coloring pages have 8 more: a mother horse and foal, a pony, a running horse, a child riding, a horse head, a rocking horse, a carousel horse and a horse in a stable."
+        },
+        {
           "q": "Which farm animals are included?",
           "a": "A horse, a cow, a pig, a sheep, a hen with her chicks, a mother duck with ducklings and a baby goat, plus a big barn with a silo. Each page has simple facts to share and the name of the animal's baby."
         },
@@ -456,6 +460,37 @@
         },
         {
           "q": "Is there a farm homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick farm animals as their theme, the counting and ten frame pages are drawn with farm animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "horse-coloring-pages": {
+      "skills": [
+        "Naming the parts of a horse: mane, tail, hooves, saddle and reins",
+        "Learning horse words: a baby is a foal, a small kind of horse is a pony, a horse's home is a stable",
+        "Counting legs, hooves, flowers, blocks and bows"
+      ],
+      "ideas": [
+        "Make a horse story: put the finished pages in order (the foal is born, it grows up, it runs in the field, a child rides it, it rests in the stable) and tell the story together.",
+        "Gallop, trot and walk: after coloring the running horse, move around the room at a walk, then a trot, then a gallop, and talk about which is fastest.",
+        "Before a pony ride, a farm visit or a fair with a carousel, color the matching page so your child knows what to expect.",
+        "Cut out the horse head, tape it to a paper towel tube or a wooden spoon, and make a simple hobby horse to ride around the house."
+      ],
+      "faq": [
+        {
+          "q": "What age are these horse coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The horse head, the pony and the rocking horse have the biggest open shapes for toddlers and preschoolers. The carousel horse and the horse and rider pages have more small parts, like flowers, bows and boots, for kids who like detail."
+        },
+        {
+          "q": "Which horse pictures are included?",
+          "a": "A mother horse with her foal, a pony with a bow, a horse running across a field, a child riding a horse in a helmet, a big horse head, a toy rocking horse, a carousel horse and a horse looking over its stable door. Each page has a simple fact to share and a letter or counting idea."
+        },
+        {
+          "q": "Is there a horse in the farm animal coloring pages too?",
+          "a": "Yes. Our farm animal coloring pages have a horse standing by a fence, next to a cow, a pig, a sheep, a hen with chicks, ducks, a baby goat and a barn. Print it with these if your child wants a whole farm."
+        },
+        {
+          "q": "Is there a farm animal homeschool week to go with these?",
           "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick farm animals as their theme, the counting and ten frame pages are drawn with farm animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
@@ -1101,6 +1136,46 @@
       "talkAbout": "A baby goat is called a kid, just like a child. Goats nibble on grass, leaves and hay, and some goats give milk that is made into cheese. Ask your child to find something they can safely climb on, like a step.",
       "colorTips": "Goats can be white, brown, black, gray or spotted. Color the rock gray and the grass green, and give the flowers bright colors. Kids can add spots or patches to the goat.",
       "learning": "Goat starts with G. A baby goat is called a kid. Talk about other baby animal names on this page: foal, calf, piglet, lamb, chick and duckling."
+    },
+    "foal-coloring-page": {
+      "talkAbout": "A baby horse is called a foal. A foal drinks its mother's milk at first, then starts nibbling grass while it is still small. Ask your child what they did when they were a baby, and what they can do now that they are bigger.",
+      "colorTips": "A foal often looks a lot like its mother, so your child can use the same color for both, or make them different on purpose. Color the manes a darker shade than the bodies. The flowers in the grass can be any bright color.",
+      "learning": "Foal starts with F. Talk about big and small: which horse is bigger? Count the horses' legs together (4 and 4 make 8)."
+    },
+    "pony-coloring-page": {
+      "talkAbout": "Ponies are a small kind of horse. Many children take their first ride on a pony because ponies are short and close to the ground. Ask your child to name other small and big pairs, like a cat and a lion.",
+      "colorTips": "Ponies can be any horse color, from brown and black to white and spotted, and a pretend pony can be pink or purple too. Make the bow a bright color, the sun yellow and the flowers in a rainbow of colors.",
+      "learning": "Pony starts with P. Count the flowers in the grass, then count the sun's rays and talk about which group has more."
+    },
+    "running-horse-coloring-page": {
+      "talkAbout": "Horses move at different speeds: a walk is slow, a trot is a bouncy middle speed, and a gallop is the fastest. Walk, trot and gallop around the room together, then talk about which one made you tired.",
+      "colorTips": "Pick one color for the horse's body and a darker color for the mane and tail so they stand out as they blow in the wind. Color the hills in two or three greens and the clouds light blue or gray.",
+      "learning": "Run starts with R. Say fast and slow words together: gallop, run and zoom are fast, walk and tiptoe are slow."
+    },
+    "horse-and-rider-coloring-page": {
+      "talkAbout": "Riders sit in a saddle and hold the reins to tell the horse where to go. They wear a helmet to keep their head safe and boots with a small heel so their feet stay in the stirrups. Ask your child what else people wear to stay safe, like a bike helmet or a seat belt.",
+      "colorTips": "Your child can make the rider look like themselves: their hair color, their favorite shirt color and a bright helmet. Color the horse brown, gray or black, the saddle a darker brown and the tree leaves green.",
+      "learning": "Helmet starts with H, just like horse. Find all the things on the page that keep the rider safe: the helmet, the boots and the reins."
+    },
+    "horse-head-coloring-page": {
+      "talkAbout": "Horses can move their ears in different directions to listen, and the way their ears point can show how they feel. Ears pointing forward often mean the horse is curious. Ask your child to show you how they look when they are curious or happy.",
+      "colorTips": "This big page is good for chunky crayons or markers. Color the face one color and the mane a darker shade, or try a few colors for a rainbow mane. The halter can be red, blue or any bright color.",
+      "learning": "Point to the parts of the horse's face together: ears, eyes, nose, mouth and mane. Then point to the same parts on your child's face (people have hair instead of a mane)."
+    },
+    "rocking-horse-coloring-page": {
+      "talkAbout": "A rocking horse is a toy horse that rocks back and forth on curved wood. Some are made of wood and painted, and some are soft. Ask your child which toy they would most like to ride and why.",
+      "colorTips": "Painted rocking horses are often white with bright saddles, but your child can pick any colors. Color the stars yellow, the heart red and the yarn mane brown or orange. Each toy block can be a different color.",
+      "learning": "Count the stars on the rocking horse, then count the toy blocks. Talk about shapes: the blocks are cubes, the stars have 5 points and the rocker is a long curve."
+    },
+    "carousel-horse-coloring-page": {
+      "talkAbout": "Carousel horses are painted in bright colors and decorated with flowers, jewels and ribbons. Each horse on a carousel can look a little different. Ask your child to design their own carousel horse: what colors and decorations would it have?",
+      "colorTips": "This is a page for lots of colors: the horse can be white or any color, the saddle and bows bright, and the pole striped in two colors, like red and white. Kids who like detail can color each flower petal a different color.",
+      "learning": "Carousel starts with C. Count the flowers on the horse and the base, then look for circles, bows and stripes on the page."
+    },
+    "horse-stable-coloring-page": {
+      "talkAbout": "Horses need fresh water, hay or grass to eat, and a clean place to rest. People who care for horses brush them, clean their hooves and fill their buckets every day. Ask your child how they help take care of a pet or a plant at home.",
+      "colorTips": "Stables are often brown or red wood, so your child can color the boards in two shades of brown. Make the horseshoe gray or silver, the hay yellow and the bucket any bright color.",
+      "learning": "Horseshoe has the word horse in it. Trace the U shape of the horseshoe with a finger, then find the bucket, the hay and the hinges on the door."
     }
   }
 }

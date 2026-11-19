@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-17",
+  "updated": "2026-11-19",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -1093,7 +1093,7 @@
     },
     {
       "id": "horse-coloring-collection",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "space-farm-coloring-collections"
@@ -1102,6 +1102,70 @@
       "linkTo": [
         "/coloring-pages/farm-animal-coloring-pages/",
         "/program/"
+      ],
+      "done": "2026-11-19",
+      "urls": [
+        "/coloring-pages/horse-coloring-pages/"
+      ],
+      "keywords": {
+        "horse coloring pages": [
+          18100,
+          24
+        ],
+        "horse coloring pages to print": [
+          3600,
+          20
+        ],
+        "horse coloring pages print": [
+          2900,
+          21
+        ],
+        "horse coloring pages free": [
+          1600,
+          22
+        ],
+        "pony coloring pages": [
+          1000,
+          19
+        ],
+        "cute horse coloring pages": [
+          590,
+          23
+        ],
+        "carousel horse coloring pages": [
+          90,
+          23
+        ],
+        "rocking horse coloring pages": [
+          40,
+          21
+        ]
+      },
+      "note": "Built as planned (8 pages: mother and foal, pony, running horse, horse and rider in a helmet, horse head, rocking horse, carousel horse, horse in a stable), farm ThemeFreeWeekCard under each. The farm collection keeps its horse page and gets an FAQ pointing here. 1 hub URL plus 8 page URLs from one template."
+    },
+    {
+      "id": "dog-cat-coloring-collections",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "horse-coloring-collection"
+      ],
+      "title": "Dog and cat coloring pages: two collections of 8 (puppy, dog with a ball, dog in a bed, cat with yarn, kitten in a basket, sleeping cat, and so on), each page with talk-about, color tips and learning text and pet care facts, with the pets ThemeFreeWeekCard under them (add 'pets' to COLORING_THEMES; the theme exists in src/lib/program/themes.ts). Nov 19 numbers: cat coloring pages 40,500 / SD 28, dog coloring pages 27,100 / SD 22, both flat year-round. Recheck 'puppy coloring pages', 'kitten coloring pages' and 'cute cat coloring pages' first. Comes before train-castle-coloring-collections (much bigger volume).",
+      "linkTo": [
+        "/coloring-pages/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "horse-pages-pinterest-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "horse-coloring-collection"
+      ],
+      "title": "Pinterest pins for the horse coloring pages: the pin set in scripts/pins/pins.json has only one coloring collection (Thanksgiving) so far. Add a collection pin (grid of 4 horse pages) and 2 or 3 single-page pins (foal, pony, carousel horse) linking to their own pages, render with make-pins.py, look at each pin. No new site URLs.",
+      "linkTo": [
+        "/coloring-pages/horse-coloring-pages/"
       ]
     },
     {
@@ -1136,7 +1200,7 @@
       "needs": [
         "coloring-free-week-cta"
       ],
-      "title": "Letter of the week pages whose word is a program theme (D for dinosaur, U for unicorn, T for truck, R for rocket, F for farm, O for ocean, B for bug, and others that fit): the FreeWeekCard under the free letter pages, linking /program/?interest=<theme>#placement. Free letter pages unchanged. Check 'letter of the week' and 'letter d activities for preschool' numbers for the wording.",
+      "title": "Letter of the week pages whose word is a program theme (D for dinosaur, U for unicorn, T for truck, R for rocket, F for farm, H for horse (farm theme), O for ocean, B for bug, and others that fit): the FreeWeekCard under the free letter pages, linking /program/?interest=<theme>#placement. Free letter pages unchanged. Check 'letter of the week' and 'letter d activities for preschool' numbers for the wording.",
       "linkTo": [
         "/program/",
         "/letter-of-the-week/"
