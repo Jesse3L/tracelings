@@ -241,7 +241,7 @@
     },
     {
       "id": 31,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-20",
       "primaryKeyword": "kindergarten readiness assessment",
       "volume": 1900,
@@ -254,7 +254,9 @@
         "/number-tracing/1-20/",
         "/sight-words/pre-k/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "kindergarten-readiness-assessment",
+      "publishedOn": "2026-11-20"
     },
     {
       "id": 4,
