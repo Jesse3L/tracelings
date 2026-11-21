@@ -3,12 +3,14 @@ import { squareConfigured, createCheckout, isSellable, PLANS } from '../../../li
 import { json, cleanEmail, setPending, sameOrigin } from '../../../lib/server/session';
 import { notify, placeFrom } from '../../../lib/server/notify';
 import { recordEvent } from '../../../lib/server/events';
+import { rateLimited, clientIp } from '../../../lib/server/programApi';
 
 export const prerender = false;
 
 // New checkouts can only buy the two program plans (program-annual, program-monthly).
 export const POST: APIRoute = async ({ request, url, cookies }) => {
   if (!sameOrigin(request, url)) return json(403, { error: 'bad_origin' });
+  if (rateLimited('checkout-ip', clientIp(request), 6, 10 * 60_000)) return json(429, { error: 'slow_down' });
   if (!squareConfigured()) return json(503, { error: 'not_configured' });
   const body = await request.json().catch(() => ({}));
   const email = cleanEmail(body?.email);

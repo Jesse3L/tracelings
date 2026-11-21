@@ -133,10 +133,13 @@ export async function activeMembership(customerIds: string[], kind: MembershipKi
     .filter((s) => (kind === 'club' ? isClub(s) : !isClub(s)))
     .filter((s) => s.status === 'ACTIVE' || s.status === 'PENDING' || prepaidThenCanceled(s))
     .map((s) => (prepaidThenCanceled(s) ? { ...s, canceled_date: s.canceled_date ?? s.start_date } : s));
-  if (!subs.length) return undefined;
-  subs.sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
-  const s = subs[0];
-  return { ...s, plan: await planForVariation(s.plan_variation_id) };
+  // A program membership must be one of the Tracelings plans (the 2 program plans and the 4 old ones): any other
+  // subscription sold at this Square location must not unlock the program. The club is matched by its variation above.
+  const withPlan = await Promise.all(subs.map(async (s) => ({ ...s, plan: await planForVariation(s.plan_variation_id) })));
+  const known = kind === 'club' ? withPlan : withPlan.filter((s) => s.plan !== undefined);
+  if (!known.length) return undefined;
+  known.sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
+  return known[0];
 }
 
 export async function cardLast4s(customerId: string): Promise<string[]> {

@@ -22,6 +22,9 @@ export function rateLimited(bucket: string, id: string, max: number, windowMs: n
 }
 export const _resetRateLimits = () => hits.clear();
 
+/** The caller's IP as Vercel reports it (first x-forwarded-for hop). For rate limits only, never stored. */
+export const clientIp = (request: Request) => request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown';
+
 /** POSTs must come from our own pages (shared with /api/member/*). */
 export { sameOrigin } from './session';
 
