@@ -207,7 +207,7 @@ export default function StorybookMaker({ books, start }: { books: BookMeta[]; st
             <label class={`cursor-pointer rounded-lg border px-4 py-3 ${plan === 'club' ? 'border-rule shadow-[inset_0_0_0_1px_var(--color-rule)] bg-[#f6f8fc]' : 'border-hairline'}`}>
               <input type="radio" name="sb-plan" class="sr-only" checked={plan === 'club'} onChange={() => { setPlan('club'); setPaying(false); track('storybook_club_pick'); }} />
               <span class="flex items-baseline justify-between gap-3"><span class="font-bold text-ink">Storybook Club<span class="ml-2 rounded-full bg-[#fff4d6] px-2 py-0.5 text-[12px] font-bold text-[#7a5a00] align-middle">Best value</span></span><span class="font-bold text-ink whitespace-nowrap">$9.99/month</span></span>
-              <span class="block mt-1 text-[14px] text-muted leading-snug">Every storybook free ({books.length} now, all 13 themes), with new stories added every month. Print one for every child. Cancel anytime.</span>
+              <span class="block mt-1 text-[14px] text-muted leading-snug">Every storybook free ({books.length} now, all 13 themes), new stories every month, and unlimited printable downloads across the site. Cancel anytime.</span>
             </label>
           </div>
           {!paying ? (

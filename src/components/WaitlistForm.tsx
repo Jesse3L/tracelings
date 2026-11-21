@@ -19,7 +19,7 @@ export default function WaitlistForm() {
     const r = await subscribe(email, 'waitlist', role || undefined);
     if (r === 'invalid') return setState('error');
     if (r === 'unavailable') return setState('down');
-    markEmailOk();
+    markEmailOk(email);
     setState('done');
   }
 
