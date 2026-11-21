@@ -10,7 +10,7 @@ import { templateContentFor, freeWeekContent, sceneStoryFor, PLANS } from '../sr
 import { bigBookPages, bookSlot, buildProgramWeek } from '../src/lib/program/pages';
 import { THEME_IDS } from '../src/lib/program/themes';
 import { placeChild } from '../src/lib/program/engine';
-import { validateStory, validateContent, storyFacts, weekFacts, generateWeekContent, requestBody, _prompts, ContentInvalid, BOOK_SCHEMA, CHECK_SCHEMA, PROGRAM_STORY_MODEL, PROGRAM_AI_MODEL, estimateWeekCost, type Caller, type StoryFacts } from '../src/lib/server/ai';
+import { validateStory, validateContent, storyPageProblems, storyFacts, weekFacts, generateWeekContent, requestBody, _prompts, ContentInvalid, BOOK_SCHEMA, CHECK_SCHEMA, PROGRAM_STORY_MODEL, PROGRAM_AI_MODEL, estimateWeekCost, type Caller, type StoryFacts } from '../src/lib/server/ai';
 import { pickPath, PAGE_RULES, pageLengthProblem, pageRuleText } from '../src/lib/program/story';
 
 let passed = 0;
@@ -161,13 +161,44 @@ await test('generate: picture book mode uses the story model, one call when vali
   assert.equal(r.content.source, 'ai'); assert.equal(r.calls, 2); assert.deepEqual(c.modes, ['book', 'check']); assert.equal(r.failed, 0);
   assert.ok(storyHasArt('dinosaurs', r.content.story));
 });
-await test('generate: a mismatched picture retries once (told the rule), then falls back to the template book', async () => {
+await test('generate: a mismatched picture is repaired twice (told the rule), then falls back to the template book', async () => {
   const bad = goodK(); bad.pages[2] = 'Dot finds a nest with one big egg.';
-  const c = seq(reply({ story: bad, ...rest() }), reply({ story: bad, ...rest() }));
+  const c = seq(reply({ story: bad, ...rest() }), reply({ story: bad, ...rest() }), reply({ story: bad, ...rest() }));
   const r = await generateWeekContent(profile(), kWeek, { caller: c, path: { id: 'lost-egg' } });
-  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 2); assert.equal(r.failed, 2);
-  assert.ok(c.users[1].includes('not in the picture') && !c.users[1].includes('Dot finds'), 'retry names the rule, not the text');
+  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 3); assert.equal(r.failed, 3);
+  assert.ok(c.users[1].includes('not in the picture') && !c.users[1].includes('Dot finds'), 'repair note names the rule, not the text');
   assert.ok(storyHasArt('dinosaurs', r.content.story), 'template fallback is a picture book too');
+});
+await test('repair: every bad page is listed at once with counts, and the model gets its own answer back', async () => {
+  // The Nov 9 failure: one page too long on the first try; fixing it the old way broke another page.
+  const bad = goodK();
+  bad.pages[0] = `${bad.pages[0]} Stomp and Tops see the sun and the sand and the big hill by the path.`;
+  bad.pages[5] = `${bad.pages[5]} They hop. They step. They look and look.`;
+  const c = seq(reply({ story: bad, ...rest() }), reply({ story: goodK(), ...rest() }));
+  const hist: any[] = [];
+  const spy: Caller = async (req) => { hist.push(req.history); return c(req); };
+  const r = await generateWeekContent(profile(), kWeek, { caller: spy, path: { id: 'lost-egg' } });
+  assert.equal(r.content.source, 'ai'); assert.equal(r.failed, 1);
+  const note = c.users[1];
+  assert.ok(/page 1: .*(too long|too many sentences)/.test(note), 'page 1 listed');
+  assert.ok(/page 6: .*(too long|too many sentences)/.test(note), 'page 6 listed in the same repair');
+  assert.ok(/at most \d+/.test(note), 'counts are given');
+  assert.ok(note.includes('keep everything else exactly the same'), 'asks to keep the good pages');
+  assert.equal(hist[0], undefined, 'first try has no history');
+  assert.equal(hist[1][0].role, 'user'); assert.equal(hist[1][1].role, 'assistant');
+  assert.ok(hist[1][1].content.includes('"scenes"'), 'its own JSON answer comes back');
+});
+await test('repair: request body puts the history before the repair note', () => {
+  const b = requestBody({ system: 's', user: 'fix', mode: 'book', history: [{ role: 'user', content: 'u' }, { role: 'assistant', content: '{}' }] }) as any;
+  assert.deepEqual(b.messages.map((m: any) => m.role), ['user', 'assistant', 'user']);
+  assert.equal(b.messages[2].content, 'fix');
+  assert.equal((requestBody({ system: 's', user: 'u', mode: 'book' }) as any).messages.length, 1);
+});
+await test('repair: storyPageProblems lists every bad page, none for a good book', () => {
+  assert.deepEqual(storyPageProblems({ story: goodK() }, kFacts), []);
+  const bad = goodK(); bad.pages[1] = 'Stomp and Tops walk on the path. They step and step. They hop and hop. They go and go and go.'; bad.pages[3] = 'Liam sat by the egg.';
+  const ps = storyPageProblems({ story: bad }, kFacts);
+  assert.equal(ps.length, 2); assert.ok(ps[0].startsWith('page 2:') && ps[1].startsWith('page 4:'));
 });
 await test('generate: caps and reserve are unchanged (one reserve per call)', async () => {
   let n = 0; const c = seq(reply('x'), reply({ story: goodK(), ...rest() }));
@@ -178,9 +209,10 @@ await test('generate: caps and reserve are unchanged (one reserve per call)', as
   assert.equal(capped.reason, 'capped'); assert.equal(capped.calls, 0);
 });
 await test('picture check: a "no" on any page fails the story, retries once, then the template', async () => {
-  const c = seq(reply({ story: goodK(), ...rest() }), check(checkOk(10, [3])), check(checkOk(10, [7])));
+  const c = seq(reply({ story: goodK(), ...rest() }), check(checkOk(10, [3, 5])), check(checkOk(10, [7])), check(checkOk(10, [7])));
   const r = await generateWeekContent(profile(), kWeek, { caller: c, path: { id: 'lost-egg' } });
-  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.deepEqual(c.modes, ['book', 'check', 'book', 'check']);
+  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.deepEqual(c.modes, ['book', 'check', 'book', 'check', 'book', 'check']);
+  assert.ok(c.users[2].includes('page 3:') && c.users[2].includes('page 5:'), 'every mismatched page in one repair');
   assert.ok(c.users[2].includes('the words say something the picture does not show'), 'retry names the failed rule');
   const ok = seq(reply({ story: goodK(), ...rest() }), check(checkOk(10, [3])), check(checkOk(10)));
   const r2 = await generateWeekContent(profile(), kWeek, { caller: ok, path: { id: 'lost-egg' } });

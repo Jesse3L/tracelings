@@ -85,11 +85,17 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Bubble letters | `/bubble-letters/`, `/bubble-letters/a/` ... `/bubble-letters/z/` | live |
 | Name coloring pages | `/name-coloring-pages/` | live |
 | Coloring pages | `/coloring-pages/` | live |
-| Coloring collections | `/coloring-pages/<collection>/` (see below) | live |
+| Coloring collections | `/coloring-pages/<collection>/` (see below; the dinosaur, unicorn, car and truck, ocean animal, bug, space, farm animal, horse, dog and cat collections and their pages have a card under the coloring that offers a free week themed on the same thing, `/program/?interest=<theme>#placement`) | live |
 | Homeschool hub | `/homeschool/` | live |
 | Pre-K homeschool plan (36 weeks, members; week 1 free) | `/homeschool/preschool/` | live |
 | Kindergarten homeschool plan (36 weeks, members; week 1 free) | `/homeschool/kindergarten/` | live |
 | Christian homeschool (faith track, BSB verses; members, week 1 free) | `/homeschool/christian/` | live |
+| Preschool daily schedule maker (visual schedule, picture cards, weekly homeschool chart) | `/preschool-schedule/` | live |
+| Morning routine chart for preschoolers (printable checklist or picture cards, school and home mornings) | `/preschool-schedule/morning-routine-chart/` | live |
+| Bedtime routine chart (printable checklist or picture cards, toddler and preschool tips) | `/preschool-schedule/bedtime-routine-chart/` | live |
+| Potty training chart (printable sticker chart with stars or 12 picture themes such as dinosaurs and unicorns, a reward line, potty steps checklist, picture cards; a card under the maker offers the chart in the picked theme inside the free week) | `/preschool-schedule/potty-training-chart/` | live |
+| Members: the potty sticker chart in the child's own theme on the program dashboard, or as the last page of week 1 (Pre-K track) | `/account/` | live |
+| Free week 1 from the placement check: tick box adds the potty sticker chart in the child's theme as the last page (Pre-K track) | `/program/` | live |
 | Pre-K math worksheets | `/math-worksheets/pre-k/` | live |
 | Ten frame printables and worksheets | `/math-worksheets/ten-frames/` | live |
 | Kindergarten math worksheets (hub, free sampler) | `/math-worksheets/kindergarten/` | live |
@@ -101,11 +107,11 @@ Every article links to **2 to 4 Tracelings tools**, placed naturally where the r
 | Word family worksheets (hub) | `/word-families/` | live |
 | Single word family | `/word-families/at/`, `/an/`, `/ap/`, `/ag/`, `/ig/`, `/it/`, `/in/`, `/ip/`, `/op/`, `/ot/`, `/og/`, `/ug/`, `/un/`, `/ut/`, `/en/`, `/et/`, `/ed/` | live |
 | Letter of the week (pages free, weekly packs for members) | `/letter-of-the-week/`, `/letter-of-the-week/a/` ... `/z/` | live |
-| Personalized homeschool program (paid, free placement check and week 1) | `/program/` | live |
+| Personalized homeschool program (paid, free placement check and week 1; `?level=pre-k` or `kindergarten` picks the age, `?interest=dinosaurs` ticks that theme first) | `/program/` | live |
 | Membership | `/membership/` | live |
 | Class packs | `/class-pack/` | members only |
 
-Coloring collections: `thanksgiving-coloring-pages`, `christmas-coloring-pages`, `dinosaur-coloring-pages`, `unicorn-coloring-pages`, `winter-coloring-pages`, `hanukkah-coloring-pages`, `simple-coloring-pages`, `car-and-truck-coloring-pages`, `new-years-coloring-pages`, `valentines-day-coloring-pages`, `st-patricks-day-coloring-pages`, `easter-coloring-pages`. Link the collection that matches the article's season or theme (a Thanksgiving article links `/coloring-pages/thanksgiving-coloring-pages/`).
+Coloring collections: `thanksgiving-coloring-pages`, `christmas-coloring-pages`, `dinosaur-coloring-pages`, `unicorn-coloring-pages`, `winter-coloring-pages`, `hanukkah-coloring-pages`, `simple-coloring-pages`, `car-and-truck-coloring-pages`, `ocean-animal-coloring-pages`, `bug-coloring-pages`, `space-coloring-pages`, `farm-animal-coloring-pages`, `horse-coloring-pages`, `dog-coloring-pages`, `cat-coloring-pages`, `new-years-coloring-pages`, `valentines-day-coloring-pages`, `st-patricks-day-coloring-pages`, `easter-coloring-pages`. Link the collection that matches the article's season or theme (a Thanksgiving article links `/coloring-pages/thanksgiving-coloring-pages/`).
 
 The paid product is **Tracelings at Home, Personalized** at `/membership/` ($14.99/month or $99/year, up to 4 kids in one family, week 1 free at `/program/`): a homeschool plan built for each child at their level and pace, weekly packs themed on their interests, a new story starring the child each week, word problems, a parent note, a weekly check-in and a progress report. Since Oct 24, 2026 the full homeschool plans (36-week Pre-K and kindergarten, the faith track, weekly packs and letter of the week packs) are part of the membership; week 1 of each is free, and every one-page tool stays free. Never call the plans free in an article: say "week 1 is free" and link the plan page or `/program/`. Members also get sheets without the credit line, a saved list of names for the name tools, and batch printing. Older Family, Classroom and Founding plans are no longer sold; those members keep class lists and class packs. `/class-pack/` is a members-only page: never link it as a free resource or upsell it. When a homeschool or planning article needs it, mention the personalized program once and link `/membership/` (or the free week at `/program/`).
 
@@ -166,6 +172,6 @@ The filename is the slug: lowercase, hyphenated, and usually the primary keyword
 - [ ] The backlog item's `status` is set to `done`.
 
 
-## Live pages you can link to (updated Oct 25, 2026)
+## Live pages you can link to (updated Oct 31, 2026)
 
-/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /homeschool/christian/, /program/, /letter-of-the-week/ and /a/ to /z/, /math-worksheets/pre-k/, /math-worksheets/ten-frames/, /math-worksheets/kindergarten/, /math-worksheets/more-or-less/, /math-worksheets/kindergarten-addition/, /math-worksheets/kindergarten-subtraction/, /math-worksheets/kindergarten-addition-and-subtraction/, /math-worksheets/kindergarten-word-problems/, /word-families/ and /at/, /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/ (including /learn/how-to-homeschool-preschool/).
+/homeschool/, /homeschool/preschool/, /homeschool/kindergarten/, /homeschool/christian/, /program/, /letter-of-the-week/ and /a/ to /z/, /math-worksheets/pre-k/, /math-worksheets/ten-frames/, /math-worksheets/kindergarten/, /math-worksheets/more-or-less/, /math-worksheets/kindergarten-addition/, /math-worksheets/kindergarten-subtraction/, /math-worksheets/kindergarten-addition-and-subtraction/, /math-worksheets/kindergarten-word-problems/, /word-families/ and /at/, /an/, /ap/, /ag/, /ig/, /it/, /in/, /ip/, /op/, /ot/, /og/, /ug/, /un/, /ut/, /en/, /et/, /ed/, /name-tracing/, /letter-tracing/ and /letter-tracing/a/ to /z/, /alphabet-chart/, /number-tracing/ and /0/ to /9/, /number-tracing/1-10/, /number-tracing/1-20/, /word-tracing/, /sight-words/ and /pre-k/, /kindergarten/, /first-grade/, /second-grade/, /third-grade/, /cursive/, /cursive-name-tracing/, /cursive-alphabet/ and /a/ to /z/, /bubble-letters/ and /a/ to /z/, /name-coloring-pages/, /coloring-pages/ and its collections (listed above), /membership/, /learn/<existing-slug>/ (including /learn/how-to-homeschool-preschool/ and /learn/preschool-homeschool-schedule/), /preschool-schedule/, /preschool-schedule/morning-routine-chart/, /preschool-schedule/bedtime-routine-chart/, /preschool-schedule/potty-training-chart/.

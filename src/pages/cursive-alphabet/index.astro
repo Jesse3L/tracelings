@@ -13,7 +13,7 @@ const chartAlt = 'Cursive alphabet chart showing capital and lowercase cursive l
 const faqs = [
   { q: 'Which cursive letters should kids learn first?', a: 'Most teachers start with lowercase letters that share a stroke rather than going in ABC order. Easy upstroke letters like i, t, u and w come first, then the round letters a, c, d, g, o and q, then the loop letters e, l, h, k, b and f, and finally the hump letters n, m, v, x, y and z. Capitals usually come after the lowercase letters, since kids write them less often.' },
   { q: 'How long does it take to learn the cursive alphabet?', a: 'It varies a lot. With five to ten minutes of practice most days, many kids can form every lowercase letter within a few weeks and the capitals within a couple of months. Writing whole words smoothly takes longer, often most of a school year. Adults relearning cursive are often comfortable within two to four weeks.' },
-  { q: 'Are these cursive alphabet worksheets free?', a: 'Yes. Add your email once and every sheet on that device stays free, with no password and no limit.' },
+  { q: 'Are these cursive alphabet worksheets free?', a: 'Yes. Add your email once and every sheet on that device is free to print, up to 7 downloads a day, with no password.' },
   { q: 'What style of cursive is this?', a: 'A traditional looped cursive close to what most US schools teach, drawn from an open-licensed handwriting font made for teaching. A few capitals, such as Q, Z, F and S, differ between handwriting programs. If your child’s school uses another form, follow the school.' },
   { q: 'Is there a cursive alphabet chart I can print?', a: 'Yes. The chart on this page shows every capital and lowercase cursive letter from A to Z on handwriting lines. Use the download button under it to get a PDF for the wall or a homework folder.' },
 ];
@@ -114,7 +114,7 @@ const schema = [
       <div class="divide-y divide-hairline border-y border-hairline">
         {faqs.map((f) => (
           <details class="group py-4">
-            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="shrink-0 self-start text-muted group-open:rotate-45 transition-transform">+</span></summary>
             <p class="mt-3 mb-0!">{f.a}</p>
           </details>
         ))}

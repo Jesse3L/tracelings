@@ -5,6 +5,7 @@ import { SITE } from '../../../config';
 import { getCollections } from '../../../lib/coloring-data';
 import { fitTitle } from '../../../lib/seo';
 import extra from '../../../data/coloring-extra.json';
+import ThemeFreeWeekCard, { COLORING_THEMES } from '../../../components/site/ThemeFreeWeekCard.tsx';
 
 export function getStaticPaths() {
   return getCollections().flatMap((c) => c.pages.map((p, i) => ({ params: { collection: c.slug, page: p.slug }, props: { c, i } })));
@@ -46,6 +47,8 @@ const schema = [
         <p class="mt-4 text-[14px] text-muted">Free for personal and classroom use.</p>
       </div>
     </div>
+
+    {COLORING_THEMES[c.slug] && <div class="mt-4"><ThemeFreeWeekCard client:load collection={c.slug} /></div>}
 
     {x && (
       <article class="prose-tl max-w-[68ch] mt-12">

@@ -1,0 +1,46 @@
+---
+import StorybookPage from '../../components/site/StorybookPage.astro';
+import { SITE } from '../../config';
+
+const faqs = [
+  { q: 'What is a personalized Christmas book from Tracelings?', a: 'It is a printable Christmas picture book where your child is part of the story. Pip the reindeer, Flake the snowman and Snug the polar bear cub talk to your child by name, and your child spots the clue that saves the day. You type the name, see the cover and first page free, and download the whole book as a PDF for $5.' },
+  { q: 'Is the book printed and mailed to me?', a: 'No. It is a printable PDF you download right away, so there is no shipping and no waiting. Print it at home on US Letter or A4 paper, as many times as you like.' },
+  { q: 'What ages is it for?', a: 'The Star in the Snow has short pages for ages 3 to 5. The Hat in the Tree has a few more words on each page for ages 5 to 7, and works well as an early reader to read together.' },
+  { q: 'Can my child color the pictures?', a: 'Yes. Every picture is black and white line art, so the book doubles as a Christmas coloring book. The last page has a box to draw their favorite part of the story.' },
+  { q: 'How do I put the book together?', a: 'Print the pages one-sided, stack them in order with the cover on top, and staple the left edge or punch two holes and tie them with ribbon. A folder or clear sheet protector works too.' },
+  { q: 'Is my child’s name stored anywhere?', a: 'No. The book is built in your browser and the name never leaves your device. We only see which book you bought and the email for your receipt.' },
+  { q: 'What if I lose the file?', a: 'We email you a link after you buy. Open it any time, type the name and download the book again. The same device also keeps a list of your storybooks on this page.' },
+  { q: 'Do you have stories that are not about Christmas?', a: 'Yes. Pick from dinosaurs, trucks, unicorns, ocean animals, space, farm animals, bugs, castles, trains, sports, pets and jungle animals in the list above. Each one is $5 and stars your child the same way.' },
+  { q: 'What is the Storybook Club?', a: 'The Storybook Club is $9.99 a month. Members download every storybook free, in all 13 themes, and new stories are added every month. Type any name, so you can print a book for each of your kids. Cancel anytime from your account page, and you keep free downloads until the end of the month you paid for.' },
+];
+---
+<StorybookPage
+  path="/personalized-christmas-book/"
+  crumb="Personalized Christmas book"
+  title={`Personalized Christmas Book for Kids: Printable, $5 | ${SITE.name}`}
+  description="A printable personalized Christmas book starring your child by name. Pip the reindeer, Flake the snowman and Snug the bear need their help. Free preview, then $5 for the PDF."
+  h1="A personalized Christmas book starring your child"
+  lead="Type your child's name and see the cover and first page free. In the story, Pip the reindeer, Flake the snowman and Snug the polar bear cub call your child by name, and your child has the idea that saves the day. Download the whole printable book for $5, then color the pictures together."
+  start="christmas/star"
+  faqs={faqs}
+  ogImage="/storybook/christmas/open-friends-thumb.webp"
+>
+  <p class="text-[1.15rem]!">
+    This personalized Christmas story for kids is a printable picture book with your child's name on the cover and in the story.
+    It's a sweet stocking stuffer, an Advent calendar night or a Christmas Eve read-aloud, and because the pictures are line art,
+    it turns into a Christmas coloring book once you've read it.
+  </p>
+  <h2>Two Christmas stories to choose from</h2>
+  <ul>
+    <li><strong>The Star in the Snow (ages 3 to 5).</strong> Snug the bear drops the star for the top of the tree into a deep pile of snow. Your child has the idea that helps Pip the reindeer sniff it out.</li>
+    <li><strong>The Hat in the Tree (ages 5 to 7).</strong> A gust of wind blows Flake the snowman's hat up into the pine tree. Snowballs miss, so your child spots who is tall enough to reach it.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ol>
+    <li><strong>Pick a story.</strong> Christmas is first, and there are 12 more themes if your child has a favorite.</li>
+    <li><strong>Type their name.</strong> Add who it's from if it's a gift ("from Grandma"). The cover and first page update as you type.</li>
+    <li><strong>Pay $5 right on this page.</strong> Card, Apple Pay or Google Pay through Square. The PDF downloads straight away, and we email you a link to get it again.</li>
+    <li><strong>Print, read, color.</strong> One story page per sheet with a big picture and big words, plus a cover and a "the end" page to draw on.</li>
+  </ol>
+  <p>Want more holiday pages? Pair the book with free <a href="/coloring-pages/christmas-coloring-pages/">Christmas coloring pages</a> or a <a href="/name-tracing/">name tracing worksheet</a> for practice writing their name.</p>
+</StorybookPage>

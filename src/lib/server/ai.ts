@@ -1,7 +1,7 @@
 // AI content for one child-week of the personalized program (server only).
 // Calls the Anthropic Messages API with fetch (env ANTHROPIC_API_KEY, model PROGRAM_AI_MODEL). Everything the model
 // returns is checked in code; word problem answers are always recomputed here. When the key is missing, the call fails,
-// times out, or the output fails validation twice, the parent gets the themed template instead. Never an error.
+// times out, or the output still fails validation after its repairs, the parent gets the themed template instead. Never an error.
 // The child's name is never sent: the model writes the literal placeholder {{name}}, and the browser swaps it in.
 import type { ChildProfile, ProgramWeek, ThemeId, WeekContent } from '../program/types';
 import { templateContentFor } from '../program/templates';
@@ -428,6 +428,7 @@ function storySystemPrompt(): string {
     '- scenes: copy the given scene ids exactly, in the given order. Do not add, drop, swap or reorder scenes. pathId: the given path id.',
     '- pages: one string per scene, the same count and order as scenes.',
     '- title: 2 to 6 words. It may include {{name}}.',
+    '- Before you answer, check every page against the page rule: count its sentences and its words ({{name}} is one word). If a page is over, cut words or split the idea differently. Shorter is always fine.',
   ].join('\n');
 }
 
@@ -548,9 +549,7 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
   if (typeof raw !== 'object' || raw === null) fail('story: not an object');
   const r = raw as Record<string, any>;
   const T = SCENES[s.theme];
-  const castNames = T.cast.map((c) => c.name);
-  const okCaps = new Set([...castNames.flatMap((n) => n.toLowerCase().split(' ')), ...T.cast.flatMap((c) => c.words.flatMap((w) => w.toLowerCase().split(/[\s-]+/))),
-    ...THEMES[s.theme].nouns.flatMap((w) => w.toLowerCase().split(/[\s-]+/)), ...THEMES[s.theme].icons.flatMap((i) => [i.one, i.many]).flatMap((w) => w.toLowerCase().split(/[\s-]+/)), 'coach']);
+  const okCaps = storyOkCaps(s.theme);
 
   const title = tidy(r.title, 60, 'title');
   checkText(title, 'title');
@@ -570,32 +569,7 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
   if (pages.length !== scenes.length) fail('pages and scenes differ in count');
 
   const allTerms = castTerms(s.theme);
-  pages.forEach((p, i) => {
-    const what = `page ${i + 1}`;
-    checkText(p, what);
-    checkCaps(p, what, okCaps);
-    checkStartNames(p, what, okCaps);
-    if (CRYING.test(p)) fail(`${what}: crying`);
-    const sc = sceneById(s.theme, scenes[i])!;
-    // True of the picture: names something in it, and no cast member who isn't in it.
-    if (!sceneTerms(s.theme, sc).some((t) => hasPhrase(p, t))) fail(`${what}: does not name anything in its picture (${sc.id})`);
-    // A name counts only capitalized ("chug!" the sound is not Chug the engine). Someone not in the picture may be
-    // named only to say they are missing ("Where is Nibs?" over the empty cage), which is true of that picture.
-    for (const sent of sentences(p)) {
-      if (/\b(where|gone|lost|missing|not here)\b/i.test(sent)) continue;
-      for (const c of allTerms) {
-        if (sc.cast.includes(c.name)) continue;
-        const named = c.terms.some((t) => (c.name.toLowerCase().split(' ').includes(t)
-          ? new RegExp(`(^|[^A-Za-z])${t.charAt(0).toUpperCase()}${t.slice(1)}([^a-z]|$)`).test(sent)
-          : hasPhrase(sent, t)));
-        if (named) fail(`${what}: names ${c.name}, who is not in the picture (${sc.id})`);
-      }
-    }
-    // The child is never drawn, so the child only talks, looks, cheers and has ideas.
-    for (const sent of childSentences(p)) { const why = childActionProblem(sent); if (why) fail(`${what}: ${why}`); }
-    const len = pageLengthProblem(s.level, p);
-    if (len) fail(`${what}: ${len}`);
-  });
+  pages.forEach((p, i) => checkStoryPage(p, i, scenes, s, okCaps, allTerms));
 
   const text = pages.join(' ');
   const withName = pages.map((p, i) => (p.includes('{{name}}') ? i : -1)).filter((i) => i >= 0);
@@ -630,6 +604,59 @@ export function validateStory(raw: unknown, s: StoryFacts, opts: { teaching?: bo
     if (hits < Math.ceil((letters.length * 2) / 3)) fail('story misses the week\'s letters');
   }
   return { title, pages, scenes, pathId };
+}
+
+/** The rules for one picture book page (true of its picture, names, the child's actions, length). Throws ContentInvalid. */
+function checkStoryPage(p: string, i: number, scenes: string[], s: StoryFacts, okCaps: Set<string>, allTerms: ReturnType<typeof castTerms>): void {
+  const what = `page ${i + 1}`;
+  checkText(p, what);
+  checkCaps(p, what, okCaps);
+  checkStartNames(p, what, okCaps);
+  if (CRYING.test(p)) fail(`${what}: crying`);
+  const sc = sceneById(s.theme, scenes[i])!;
+  // True of the picture: names something in it, and no cast member who isn't in it.
+  if (!sceneTerms(s.theme, sc).some((t) => hasPhrase(p, t))) fail(`${what}: does not name anything in its picture (${sc.id})`);
+  // A name counts only capitalized ("chug!" the sound is not Chug the engine). Someone not in the picture may be
+  // named only to say they are missing ("Where is Nibs?" over the empty cage), which is true of that picture.
+  for (const sent of sentences(p)) {
+    if (/\b(where|gone|lost|missing|not here)\b/i.test(sent)) continue;
+    for (const c of allTerms) {
+      if (sc.cast.includes(c.name)) continue;
+      const named = c.terms.some((t) => (c.name.toLowerCase().split(' ').includes(t)
+        ? new RegExp(`(^|[^A-Za-z])${t.charAt(0).toUpperCase()}${t.slice(1)}([^a-z]|$)`).test(sent)
+        : hasPhrase(sent, t)));
+      if (named) fail(`${what}: names ${c.name}, who is not in the picture (${sc.id})`);
+    }
+  }
+  // The child is never drawn, so the child only talks, looks, cheers and has ideas.
+  for (const sent of childSentences(p)) { const why = childActionProblem(sent); if (why) fail(`${what}: ${why}`); }
+  const len = pageLengthProblem(s.level, p);
+  if (len) fail(`${what}: ${len}`);
+}
+
+/** Capitalized words a story page may use mid-sentence: cast names and words, theme nouns and picture names. */
+function storyOkCaps(theme: ThemeId): Set<string> {
+  const T = SCENES[theme];
+  const split = (w: string) => w.toLowerCase().split(/[\s-]+/);
+  return new Set([...T.cast.flatMap((c) => c.name.toLowerCase().split(' ')), ...T.cast.flatMap((c) => c.words.flatMap(split)),
+    ...THEMES[theme].nouns.flatMap(split), ...THEMES[theme].icons.flatMap((i) => [i.one, i.many]).flatMap(split), 'coach']);
+}
+
+/**
+ * Every page of a picture book story that breaks a page rule, one line per page ("page 4: too many sentences for the
+ * level"). The repair retry gets the whole list, so it fixes all of them at once instead of one rule per try.
+ */
+export function storyPageProblems(raw: unknown, s: StoryFacts): string[] {
+  const r = (typeof raw === 'object' && raw !== null ? (raw as Record<string, any>).story : null) as Record<string, any> | null;
+  if (!r || !Array.isArray(r.pages) || !Array.isArray(r.scenes) || r.pages.length !== s.path.scenes.length) return [];
+  const scenes = s.path.scenes, okCaps = storyOkCaps(s.theme), allTerms = castTerms(s.theme);
+  const out: string[] = [];
+  r.pages.forEach((p: unknown, i: number) => {
+    try { checkStoryPage(tidy(p, 220, `page ${i + 1}`), i, scenes, s, okCaps, allTerms); } catch (e) {
+      if (e instanceof ContentInvalid) out.push(e.message); else throw e;
+    }
+  });
+  return out;
 }
 
 /** A capitalized word starting a sentence that is not a known word is an invented name ("Rosie waves too."). */
@@ -697,23 +724,29 @@ export function readPictureCheck(body: unknown, pages: number): void {
   const r = parseResponse(body) as { pages?: { page?: number; matches?: boolean; missing?: string }[] };
   if (!r || !Array.isArray(r.pages)) fail('picture check: no answer');
   const seen = new Set<number>();
+  const bad: string[] = [];
   for (const x of r.pages!) {
-    if (!Number.isInteger(x?.page) || x.page! < 1 || x.page! > pages) continue;
+    if (!Number.isInteger(x?.page) || x.page! < 1 || x.page! > pages || seen.has(x.page!)) continue;
     seen.add(x.page!);
-    if (x.matches !== true) fail(`page ${x.page}: the words say something the picture does not show${x.missing ? ` (${String(x.missing).slice(0, 80)})` : ''}`);
+    if (x.matches !== true) bad.push(`page ${x.page}: the words say something the picture does not show${x.missing ? ` (${String(x.missing).slice(0, 80)})` : ''}`);
   }
+  // Every mismatched page in one message, so the repair retry can fix them all at once.
+  if (bad.length) fail(bad.join('; '));
   if (seen.size < pages) fail('picture check: not every page was checked');
 }
 
 // ---------- The call ----------
 
-export interface CallRequest { system: string; user: string; signal: AbortSignal; mode: 'book' | 'classic' | 'check' }
+/** An earlier turn sent before user: the first prompt and the model's own answer, for a repair retry. */
+export interface Turn { role: 'user' | 'assistant'; content: string }
+export interface CallRequest { system: string; user: string; signal: AbortSignal; mode: 'book' | 'classic' | 'check'; history?: Turn[] }
 export type Caller = (req: CallRequest) => Promise<unknown>;
 
 /** The Messages API body for a call. Book mode: the story model writes the week in one call, with the story as a
  *  picture book. Classic: the cheap model and the old little book (themes without scene art yet). Check: the cheap
  *  model checks each page against its picture. Never a name. */
-export function requestBody(req: Pick<CallRequest, 'system' | 'user' | 'mode'>): Record<string, unknown> {
+export function requestBody(req: Pick<CallRequest, 'system' | 'user' | 'mode' | 'history'>): Record<string, unknown> {
+  const messages = [...(req.history ?? []), { role: 'user', content: req.user }];
   if (req.mode === 'book') {
     return {
       model: PROGRAM_STORY_MODEL,
@@ -722,7 +755,7 @@ export function requestBody(req: Pick<CallRequest, 'system' | 'user' | 'mode'>):
       max_tokens: 12000,
       thinking: { type: 'adaptive' },
       system: req.system,
-      messages: [{ role: 'user', content: req.user }],
+      messages,
       output_config: { effort: STORY_EFFORT, format: { type: 'json_schema', schema: BOOK_SCHEMA } },
     };
   }
@@ -733,17 +766,17 @@ export function requestBody(req: Pick<CallRequest, 'system' | 'user' | 'mode'>):
     max_tokens: req.mode === 'check' ? 1500 : 3000,
     thinking: { type: 'disabled' },
     system: req.system,
-    messages: [{ role: 'user', content: req.user }],
+    messages,
     output_config: { format: { type: 'json_schema', schema: req.mode === 'check' ? CHECK_SCHEMA : OUTPUT_SCHEMA } },
   };
 }
 
-const anthropicCaller: Caller = async ({ system, user, signal, mode }) => {
+const anthropicCaller: Caller = async ({ system, user, signal, mode, history }) => {
   const res = await fetch(API_URL, {
     method: 'POST',
     signal,
     headers: { 'content-type': 'application/json', 'x-api-key': env('ANTHROPIC_API_KEY')!, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify(requestBody({ system, user, mode })),
+    body: JSON.stringify(requestBody({ system, user, mode, history })),
   });
   if (!res.ok) {
     // Log the status only. Never log the prompt or the response text.
@@ -787,7 +820,7 @@ export interface GenerateResult {
   content: WeekContent;
   /** Model calls made, the picture checks included. */
   calls: number;
-  /** Story attempts that came back but failed a check (0, 1 or 2). */
+  /** Story attempts that came back but failed a check (0 to MAX_ATTEMPTS). */
   failed: number;
   reason?: 'no-key' | 'capped' | 'call-failed' | 'invalid';
 }
@@ -804,8 +837,8 @@ export async function generateWeekContent(profile: ChildProfile, week: ProgramWe
   const mode: CallRequest['mode'] = sf ? 'book' : 'classic';
   const system = sf ? bookSystemPrompt() : systemPrompt();
   const user = sf ? bookUserPrompt(facts, sf) : userPrompt(facts);
-  let retryNote = '';
   let calls = 0, failed = 0;
+  const started = Date.now();
   const call = async (req: Omit<CallRequest, 'signal'>, timeout: number): Promise<unknown> => {
     let ok = true;
     try { ok = opts.reserve ? await opts.reserve() : true; } catch (e) { console.error('program ai: reserve failed', (e as Error).message); ok = false; }
@@ -818,10 +851,18 @@ export async function generateWeekContent(profile: ChildProfile, week: ProgramWe
       throw new CallFailed();
     } finally { clearTimeout(timer); }
   };
-  for (let attempt = 0; attempt < 2; attempt++) {
+  // Attempt 1 writes the week. A failed attempt is not thrown away: the next call gets the model's own answer back
+  // with every rule it broke (all pages at once, with counts) and rewrites only what is wrong. Fixing one rule per
+  // try kept breaking another page, so both tries failed on real weeks.
+  let history: Turn[] | undefined;
+  let next = user;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    if (attempt > 0 && Date.now() - started > ATTEMPT_BUDGET_MS) break;
+    let raw: unknown;
     try {
-      const body = await call({ system, user: user + retryNote, mode }, sf ? STORY_TIMEOUT_MS : AI_TIMEOUT_MS);
-      const content = validateContent(parseResponse(body), facts, sf);
+      const body = await call({ system, user: next, mode, ...(history ? { history } : {}) }, sf ? STORY_TIMEOUT_MS : AI_TIMEOUT_MS);
+      raw = parseResponse(body);
+      const content = validateContent(raw, facts, sf);
       if (sf) readPictureCheck(await call({ system: checkSystemPrompt(), user: checkUserPrompt(content.story, sf.theme), mode: 'check' }, AI_TIMEOUT_MS), content.story.pages.length);
       return { content, calls, failed };
     } catch (e) {
@@ -829,13 +870,36 @@ export async function generateWeekContent(profile: ChildProfile, week: ProgramWe
       if (e instanceof CallFailed) return { content: template(), calls, failed, reason: 'call-failed' };
       if (!(e instanceof ContentInvalid)) throw e;
       failed++;
-      const why = e.message.replace(/"[^"]*"/g, '"…"').replace(/\([^)]*\)$/, '').trim();
-      console.warn('program ai: invalid output', why, `(attempt ${attempt + 1})`);
-      // The retry is told which rule failed (never any quoted text), so it can fix that one thing.
-      retryNote = `\n\nAn earlier answer was not used because of this rule: ${why}. Follow every rule this time.`;
+      const problems = [...new Set([e.message, ...(sf && raw ? storyPageProblems(raw, sf) : [])].flatMap((x) => x.split('; ')))];
+      // Logs name the rules only, never the story's words.
+      console.warn('program ai: invalid output', problems.map((x) => x.replace(/"[^"]*"/g, '"…"').replace(/\([^)]*\)$/, '').trim()).join(' | '), `(attempt ${attempt + 1})`);
+      if (raw) {
+        // A repair: the first prompt, the model's answer, then the list of what to fix.
+        history = [{ role: 'user', content: user }, { role: 'assistant', content: JSON.stringify(raw) }];
+        next = repairNote(problems);
+      } else {
+        history = undefined;
+        next = `${user}\n\nAn earlier answer was not used because it was not valid JSON for the schema. Return only the JSON.`;
+      }
     }
   }
   return { content: template(), calls, failed, reason: 'invalid' };
+}
+
+/** How many story calls one week may make: the first try and up to two repairs. */
+export const MAX_ATTEMPTS = 3;
+/** No new attempt starts after this long, so the request always ends well inside the function's time limit. */
+export const ATTEMPT_BUDGET_MS = 100_000;
+
+/** The repair turn: every broken rule, and what to keep. */
+export function repairNote(problems: string[]): string {
+  return [
+    'That answer cannot be printed yet. It broke these rules:',
+    ...problems.map((x) => `- ${x}`),
+    '',
+    'Return the whole JSON again with these fixed. Rewrite only the parts listed, and keep everything else exactly the same: the same scenes in the same order, the same pathId, and the other pages word for word.',
+    'For a page that is too long or has too many sentences, make it shorter. Shorter is always fine. Check the counts again before you answer, and make sure each fix does not break another rule (keep {{name}} on at least two pages, and keep each page true of its picture).',
+  ].join('\n');
 }
 class Capped extends Error {}
 class CallFailed extends Error {}

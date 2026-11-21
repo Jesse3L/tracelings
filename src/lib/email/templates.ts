@@ -485,13 +485,135 @@ export function launchC(): EmailContent {
   return render({ subject: 'Tracelings at Home: $14.99 a month or $99 a year', preview: 'A homeschool plan built for your child. Covers up to 4 kids, cancel anytime.', blocks, medium: 'broadcast', campaign: 'launch-c', why: WHY_LIST });
 }
 
-export type LaunchKey = 'launch-a' | 'launch-a-teacher' | 'launch-b' | 'launch-c';
+// ---------- Christmas storybook broadcasts (Nov 2026) ----------
+// (a) Thanksgiving week: introduce the $5 personalized Christmas book. (b) about 9 days later: reminder with the
+// other themes and a print-by date. Families only. Drafts until Jesse approves; sent with broadcast-send.
+
+export function xmasBookA(): EmailContent {
+  const blocks: Block[] = [
+    { p: 'Hi there,' },
+    { p: 'We made something for the Christmas season: **a printable Christmas picture book with your child in the story.**' },
+    { p: 'Pip the reindeer, Flake the snowman and Snug the polar bear cub talk to your child by name, and your child has the idea that saves the day. Type their name and you can see the cover and first page free before you buy.' },
+    { pictures: [
+      { src: '/email/christmas-open-friends.png', alt: 'Black and white line drawing of a little reindeer, a snowman and a polar bear cub smiling in the snow by a pine tree', caption: 'Pip, Flake and Snug say hi to your child on page 1.' },
+      { src: '/email/christmas-help-pip-antlers.png', alt: 'Line drawing of the little reindeer lifting a knit hat off a high pine branch with her antlers', caption: 'Later, your child spots who is tall enough to reach the hat.' },
+    ] },
+    { list: [
+      '**Two stories:** The Star in the Snow (ages 3 to 5) and The Hat in the Tree (ages 5 to 7).',
+      '**Their name on the cover and in the story,** plus who it is from if it is a gift.',
+      '**Line art pictures,** so it doubles as a Christmas coloring book.',
+      '**$5, printable PDF.** Download it right away and print it as many times as you like.',
+    ] },
+    { button: { label: 'See your child\'s Christmas book', path: '/personalized-christmas-book/' } },
+    { small: 'The name stays on your device. We never see it.' },
+    { sign: true },
+  ];
+  return render({ subject: 'A Christmas story starring your child', preview: 'A printable picture book with their name in it. See the cover free.', blocks, medium: 'broadcast', campaign: 'xmas-book-a', why: WHY_LIST });
+}
+
+export function xmasBookB(): EmailContent {
+  const blocks: Block[] = [
+    { p: 'Hi there,' },
+    { p: 'A quick reminder before December gets busy: you can still make a **Christmas storybook starring your child** for $5. It downloads straight away, so there is no shipping to wait on.' },
+    { p: 'It makes a sweet Christmas Eve read-aloud or stocking stuffer, and the pictures are line art to color in afterward.' },
+    { button: { label: 'Make the Christmas book', path: '/personalized-christmas-book/' } },
+    { h: 'Not into Christmas stories?' },
+    { p: 'The same personalized storybook comes in 12 more themes: dinosaurs, trucks, unicorns, ocean animals, space, farm animals, bugs, castles, trains, sports, pets and jungle animals. [See them all](/personalized-storybook/).' },
+    { p: 'And as always, every one-page printable on Tracelings stays free, including the [Christmas coloring pages](/coloring-pages/christmas-coloring-pages/).' },
+    { sign: true },
+  ];
+  return render({ subject: 'Their name in a Christmas story (ready to print tonight)', preview: 'A $5 printable picture book starring your child. No shipping.', blocks, medium: 'broadcast', campaign: 'xmas-book-b', why: WHY_LIST });
+}
+
+// ---------- weekly email (from Nov 2026) ----------
+// One email a week to families (`prospects`), built from a content file in src/data/weekly/<Sunday>.json that a
+// scheduled task writes each week: a short note, the free printables worth printing this week, one paid offer
+// (rotating) and a tip. Sent Sunday evening by /api/cron/weekly-email/ (see src/lib/server/weekly.ts).
+
+export type WeeklyFeature = 'storybook' | 'club' | 'program';
+export interface WeeklyContent {
+  date: string;              // the Sunday it goes out (YYYY-MM-DD, America/Chicago)
+  subject: string;
+  preview: string;
+  intro: string;             // 1 to 3 short sentences; [label](/path/) links and **bold** allowed
+  free: { title: string; path: string; blurb: string }[];   // 2 to 5 free printables
+  picture?: { src: string; alt: string; caption: string };  // optional, a free page to show (PNG under public/)
+  feature: WeeklyFeature;
+  featureNote?: string;      // optional extra line for the offer, written for this week
+  tip?: { title: string; body: string };
+}
+
+const FEATURE: Record<WeeklyFeature, (c: WeeklyContent) => Block[]> = {
+  storybook: (c) => {
+    const xmas = c.date.slice(5, 7) === '11' || (c.date.slice(5, 7) === '12' && Number(c.date.slice(8)) <= 22);
+    return xmas ? [
+      { h: 'A Christmas story starring your child' },
+      { p: 'Type your child\'s name and see the cover and first page free. Pip the reindeer, Flake the snowman and Snug the bear talk to them by name, and the pictures are line art to color in. **$5 for the printable book.**' },
+      { pictures: [{ src: '/email/christmas-open-friends.png', alt: 'Line drawing of a little reindeer, a snowman and a polar bear cub smiling in the snow', caption: 'Pip, Flake and Snug say hi to your child on page 1.' }] },
+      ...(c.featureNote ? [{ p: c.featureNote }] : []),
+      { button: { label: 'See your child\'s Christmas book', path: '/personalized-christmas-book/' } },
+    ] : [
+      { h: 'A storybook starring your child' },
+      { p: 'Pick dinosaurs, trucks, unicorns, space or 9 more themes, type their name, and see the cover and first page free. The friends in the story talk to your child by name. **$5 for the printable book.**' },
+      ...(c.featureNote ? [{ p: c.featureNote }] : []),
+      { button: { label: 'Make their storybook', path: '/personalized-storybook/' } },
+    ];
+  },
+  club: (c) => [
+    { h: 'The Storybook Club' },
+    { p: 'For **$9.99 a month**, print every storybook on Tracelings with your child\'s name in it: 13 themes, new stories added every month, and a book for each of your kids. Every picture is line art, so each book is a coloring book too. Cancel anytime.' },
+    ...(c.featureNote ? [{ p: c.featureNote }] : []),
+    { button: { label: 'Join the Storybook Club', path: '/personalized-storybook/' } },
+  ],
+  program: (c) => [
+    { h: 'A homeschool week built around your child' },
+    { p: 'Tell us what your child can do and what they love. We build a week at their level, themed on their favorite things, with a picture book starring them. **Week 1 is free to print, no card needed.**' },
+    ...(c.featureNote ? [{ p: c.featureNote }] : []),
+    { button: { label: 'Build a free week', path: '/program/' } },
+    { small: 'After week 1, Tracelings at Home is $14.99 a month or $99 a year for up to 4 kids.' },
+  ],
+};
+
+export function weeklyEmail(c: WeeklyContent): EmailContent {
+  const blocks: Block[] = [
+    { p: 'Hi there,' },
+    { p: c.intro },
+    { h: 'Free to print this week' },
+    { list: c.free.map((f) => `**[${f.title}](${f.path})** ${f.blurb}`) },
+    ...(c.picture ? [{ pictures: [c.picture] } as Block] : []),
+    ...FEATURE[c.feature](c),
+    ...(c.tip ? [{ h: c.tip.title } as Block, { p: c.tip.body } as Block] : []),
+    { small: 'Every one-page printable on Tracelings stays free, including [name tracing](/name-tracing/).' },
+    { sign: true },
+  ];
+  return render({ subject: c.subject, preview: c.preview, blocks, medium: 'weekly', campaign: `weekly-${c.date}`, why: WHY_LIST });
+}
+
+/** Checks a weekly content file. Returns the problems (empty when it can be sent). */
+export function weeklyProblems(c: Partial<WeeklyContent>): string[] {
+  const out: string[] = [];
+  const banned = /\bunlock|seamless|elevate|dive in|deep dive|whether you're|game[- ]changer|—/i;
+  if (!c.date || !/^\d{4}-\d{2}-\d{2}$/.test(c.date) || new Date(`${c.date}T12:00:00Z`).getUTCDay() !== 0) out.push('date must be a Sunday (YYYY-MM-DD)');
+  if (!c.subject || c.subject.length > 80) out.push('subject: 1 to 80 characters');
+  if (!c.preview || c.preview.length > 120) out.push('preview: 1 to 120 characters');
+  if (!c.intro) out.push('intro is required');
+  if (!Array.isArray(c.free) || c.free.length < 2 || c.free.length > 5) out.push('free: 2 to 5 printables');
+  for (const f of c.free ?? []) if (!f.title || !f.blurb || !/^\/[a-z0-9\-\/]*$/.test(f.path ?? '')) out.push(`free item "${f.title ?? '?'}" needs a title, blurb and a /path/`);
+  if (!c.feature || !(c.feature in FEATURE)) out.push('feature: storybook, club or program');
+  const text = JSON.stringify(c);
+  if (banned.test(text)) out.push('uses a banned word or an em dash');
+  return out;
+}
+
+export type LaunchKey = 'launch-a' | 'launch-a-teacher' | 'launch-b' | 'launch-c' | 'xmas-book-a' | 'xmas-book-b';
 /** Built-in broadcast templates and the segment each one is meant for. */
 export const LAUNCH: Record<LaunchKey, { segment: 'prospects' | 'teachers'; build: () => EmailContent; name: string; sendAfterDays: number }> = {
   'launch-a': { segment: 'prospects', build: launchA, name: 'Launch A: program intro (families)', sendAfterDays: 0 },
   'launch-a-teacher': { segment: 'teachers', build: launchATeacher, name: 'Launch A: teacher note', sendAfterDays: 0 },
   'launch-b': { segment: 'prospects', build: launchB, name: 'Launch B: picture book + seasonal (families)', sendAfterDays: 4 },
   'launch-c': { segment: 'prospects', build: launchC, name: 'Launch C: offer (families)', sendAfterDays: 8 },
+  'xmas-book-a': { segment: 'prospects', build: xmasBookA, name: 'Christmas storybook A: intro (families)', sendAfterDays: 0 },
+  'xmas-book-b': { segment: 'prospects', build: xmasBookB, name: 'Christmas storybook B: reminder (families)', sendAfterDays: 9 },
 };
 
 /** Every template by key, for previews, test sends and the Resend template sync. */

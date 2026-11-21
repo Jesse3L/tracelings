@@ -202,6 +202,10 @@ const year = new Date().getFullYear();
       </div>
     </footer>
     <script>
+      // Where this visit came from (ChatGPT, Google, Email...), worked out on the visit's first page. Only a fixed
+      // label is kept (lib/source.ts), never the referring URL.
+      import { visitSource } from '../lib/source';
+      visitSource();
       // Header dropdowns (click, keyboard, hover on mouse devices) and the mobile menu.
       const dds = [...document.querySelectorAll<HTMLElement>('[data-dd]')];
       const setDd = (dd: HTMLElement, open: boolean) => {

@@ -169,7 +169,197 @@
       "Long-tail modifiers with \"free\", \"printable\", \"pdf\", \"easy\", \"cute\", \"preschool\" carry SD 15-30 and real volume (e.g. \"free printables thanksgiving coloring pages\" 1.9k SD 7, \"free printable dinosaur coloring pages pdf\" 720 SD 15).",
       "Large share of seasonal long tail is character-based (Disney, Bluey, Hello Kitty, Snoopy, Grinch, Nightmare Before Christmas, Stitch, Pokemon) and was excluded per brief."
     ],
-    "priorityLogic": "Ordered by publishBy: Thanksgiving is live-now (Nov spike), Christmas by Oct 20 to get indexed before the Nov ramp; evergreen dinosaur/unicorn slotted early since they earn year-round; Hanukkah (begins Dec 4, 2026) and Winter by Nov 1; later holidays ~6-8 weeks before their spike month."
+    "priorityLogic": "Ordered by publishBy: Thanksgiving is live-now (Nov spike), Christmas by Oct 20 to get indexed before the Nov ramp; evergreen dinosaur/unicorn slotted early since they earn year-round; Hanukkah (begins Dec 4, 2026) and Winter by Nov 1; later holidays ~6-8 weeks before their spike month.",
+    "added": [
+      {
+        "date": "2026-11-15",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "ocean animal coloring pages": [
+            6600,
+            28
+          ],
+          "sea animal coloring pages": [
+            6600,
+            22
+          ],
+          "ocean coloring pages": [
+            4400,
+            21
+          ],
+          "bug coloring pages": [
+            5400,
+            22
+          ],
+          "insect coloring pages": [
+            5400,
+            24
+          ],
+          "space coloring pages": [
+            6600,
+            30
+          ],
+          "farm animal coloring pages": [
+            3600,
+            24
+          ],
+          "farm coloring pages": [
+            4400,
+            23
+          ],
+          "astronaut coloring page": [
+            2400,
+            27
+          ]
+        },
+        "note": "Ocean animals and bugs built Nov 15, 2026 (program themes ocean and bugs). Space and farm left for later."
+      },
+      {
+        "date": "2026-11-17",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "space coloring pages": [
+            6600,
+            30
+          ],
+          "solar system coloring page": [
+            4400,
+            22
+          ],
+          "planet coloring pages": [
+            2900,
+            36
+          ],
+          "astronaut coloring page": [
+            2400,
+            27
+          ],
+          "rocket coloring page": [
+            1600,
+            21
+          ],
+          "outer space coloring pages": [
+            1300,
+            35
+          ],
+          "alien coloring pages": [
+            1000,
+            24
+          ],
+          "farm coloring pages": [
+            4400,
+            23
+          ],
+          "farm animal coloring pages": [
+            3600,
+            24
+          ],
+          "horse coloring pages": [
+            18100,
+            24
+          ],
+          "cow coloring page": [
+            1900,
+            20
+          ],
+          "chicken coloring page": [
+            1300,
+            23
+          ]
+        },
+        "note": "Space and farm animals built Nov 17, 2026 (program themes space and farm). Tractor stays in the car and truck collection."
+      },
+      {
+        "date": "2026-11-19",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "horse coloring pages": [
+            18100,
+            24
+          ],
+          "horse coloring pages to print": [
+            3600,
+            20
+          ],
+          "horse coloring pages print": [
+            2900,
+            21
+          ],
+          "horse coloring pages free": [
+            1600,
+            22
+          ],
+          "pony coloring pages": [
+            1000,
+            19
+          ],
+          "cute horse coloring pages": [
+            590,
+            23
+          ],
+          "carousel horse coloring pages": [
+            90,
+            23
+          ],
+          "rocking horse coloring pages": [
+            40,
+            21
+          ]
+        },
+        "note": "Horse collection built Nov 19, 2026 (program theme farm). The horse page in the farm collection stays there; the new pages use different slugs."
+      },
+      {
+        "date": "2026-11-21",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "cat coloring pages": [
+            40500,
+            28
+          ],
+          "dog coloring pages": [
+            27100,
+            22
+          ],
+          "puppy coloring pages": [
+            18100,
+            30
+          ],
+          "kitten coloring pages": [
+            18100,
+            30
+          ],
+          "puppy dog coloring pages": [
+            18100,
+            23
+          ],
+          "cat coloring pages cute": [
+            5400,
+            28
+          ],
+          "cute puppy coloring pages": [
+            2900,
+            23
+          ],
+          "dog and cat coloring pages": [
+            2400,
+            29
+          ],
+          "sausage dog coloring pages": [
+            1900,
+            23
+          ],
+          "dachshund dog coloring pages": [
+            1600,
+            18
+          ],
+          "sleeping cat coloring pages": [
+            140,
+            13
+          ]
+        },
+        "note": "Dog and cat collections built Nov 21, 2026 (program theme pets). The easy puppy (simple collection) and valentine puppy pages stay where they are."
+      }
+    ]
   },
   "collections": [
     {
@@ -713,6 +903,482 @@
           "prompt": "children's coloring book page, a garbage truck with a large rear loader and a lifting arm holding a trash can, thick clean black outlines, no shading, no grayscale, white background, simple shapes, large areas to color, portrait 8.5x11",
           "alt": "Garbage truck lifting a trash can, kids coloring page",
           "description": "A garbage truck lifts a trash can with its mechanical arm. Many toddlers watch for this truck every week, so it's an instant favorite. Use it to talk about recycling and which items go in which bin."
+        }
+      ]
+    },
+    {
+      "slug": "ocean-animal-coloring-pages",
+      "title": "Ocean Animal Coloring Pages",
+      "primaryKeyword": "ocean animal coloring pages",
+      "volume": 6600,
+      "sd": 28,
+      "season": "evergreen",
+      "publishBy": "2026-11-15",
+      "intro": "These free ocean animal coloring pages bring the sea to your kitchen table: a spouting whale, an octopus, a sea turtle, a leaping dolphin, a friendly shark, a beach crab, a seahorse and two jellyfish. Each sea animal coloring page has thick outlines and big open spaces, so preschoolers can color without frustration and older kids can add scales, spots and stripes. Every page comes with a simple fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "whale-coloring-page",
+          "title": "Whale Coloring Page",
+          "prompt": "children's coloring book page, a big friendly whale swimming in the ocean, spouting a fountain of water from its blowhole, a few small waves and bubbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly whale spouting water from its blowhole, printable coloring page",
+          "description": "A big friendly whale spouts a fountain of water from its blowhole. Quick fact to share: whales are mammals, so they swim up to the surface to breathe air, just like we do. The wide body leaves lots of room for chunky crayons."
+        },
+        {
+          "slug": "octopus-coloring-page",
+          "title": "Octopus Coloring Page",
+          "prompt": "children's coloring book page, a smiling octopus sitting on the sandy sea floor with exactly eight curly arms spread out, a few seashells and seaweed around it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling octopus with curly arms on the sea floor, coloring sheet",
+          "description": "A smiling octopus sits on the sea floor with its curly arms spread wide, next to seaweed and two seashells. Quick fact to share: an octopus has three hearts and can squirt ink to hide. The swirly arms are fun to color one at a time."
+        },
+        {
+          "slug": "sea-turtle-coloring-page",
+          "title": "Sea Turtle Coloring Page",
+          "prompt": "children's coloring book page, a friendly sea turtle swimming with flippers spread wide, a big shell with large plate shapes, a little seaweed and bubbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Sea turtle swimming with a big patterned shell, printable coloring page",
+          "description": "A sea turtle glides through the water with its flippers spread wide. The big plates on its shell are perfect for practicing patterns. Quick fact to share: sea turtles can't pull their heads into their shells the way many land turtles can."
+        },
+        {
+          "slug": "dolphin-coloring-page",
+          "title": "Dolphin Coloring Page",
+          "prompt": "children's coloring book page, a happy dolphin leaping out of the ocean in an arc above simple waves, a round sun and two clouds in the sky, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy dolphin leaping over the waves under the sun, coloring page",
+          "description": "A happy dolphin leaps out of the waves under a bright sun and two clouds. Quick fact to share: dolphins breathe air through a blowhole, and they talk to each other with clicks and whistles. Kids can pick their own colors for the sky and sea."
+        },
+        {
+          "slug": "shark-coloring-page",
+          "title": "Shark Coloring Page",
+          "prompt": "children's coloring book page, a friendly cartoon shark with a gentle closed-mouth smile swimming past seaweed and a few small fish, not scary, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly smiling shark swimming with small fish, printable coloring page",
+          "description": "A friendly shark with a gentle smile swims past seaweed and three little fish. It is drawn cute, not scary, so it suits younger kids who love sharks. Quick fact to share: sharks were swimming in the ocean long before the first dinosaurs."
+        },
+        {
+          "slug": "crab-coloring-page",
+          "title": "Crab Coloring Page",
+          "prompt": "children's coloring book page, a cute crab with two big claws raised, standing on a sandy beach next to a starfish, a seashell and a small sand bucket, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute crab with raised claws on the beach with a starfish and bucket, coloring sheet",
+          "description": "A cute crab raises its two big claws on a sandy beach next to a starfish, a seashell and a sand bucket. Quick fact to share: crabs usually walk sideways. Try a sideways crab walk together after coloring."
+        },
+        {
+          "slug": "seahorse-coloring-page",
+          "title": "Seahorse Coloring Page",
+          "prompt": "children's coloring book page, a cute seahorse with a curled tail holding onto a strand of seaweed, a few bubbles and small coral shapes, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute seahorse with a curly tail beside seaweed and coral, coloring page",
+          "description": "A cute seahorse with a curly tail holds onto a strand of seaweed beside some coral. Quick fact to share: seahorse dads carry the eggs in a pouch until the babies hatch. The stripes on its body make a calm page for careful coloring."
+        },
+        {
+          "slug": "jellyfish-coloring-page",
+          "title": "Jellyfish Coloring Page",
+          "prompt": "children's coloring book page, two smiling jellyfish floating in the sea with long wavy tentacles, round bell-shaped tops, a few bubbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Two smiling jellyfish with wavy tentacles, printable coloring page",
+          "description": "Two smiling jellyfish float through the sea, trailing long wavy tentacles. The round tops and wiggly lines are easy for little hands. Quick fact to share: jellyfish have no brain, no heart and no bones."
+        }
+      ]
+    },
+    {
+      "slug": "bug-coloring-pages",
+      "title": "Bug Coloring Pages",
+      "primaryKeyword": "bug coloring pages",
+      "volume": 5400,
+      "sd": 22,
+      "season": "evergreen",
+      "publishBy": "2026-11-15",
+      "intro": "These free bug coloring pages are full of garden friends kids love to spot outside: a ladybug, a butterfly, a bumble bee, a caterpillar, an ant, a dragonfly, a grasshopper and a firefly. Each insect coloring page has bold outlines and big spaces for spots, stripes and wings, so preschoolers can color easily and older kids can add their own patterns. Every page comes with a quick fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "ladybug-coloring-page",
+          "title": "Ladybug Coloring Page",
+          "prompt": "children's coloring book page, a big friendly ladybug with round spots on its shell sitting on a large leaf, a small flower beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly ladybug with round spots sitting on a leaf, printable coloring page",
+          "description": "A friendly ladybug rests on a big leaf beside a small flower. Count the spots together before and after coloring. Quick fact to share: a ladybug's bright colors warn birds that it tastes bad."
+        },
+        {
+          "slug": "butterfly-coloring-page",
+          "title": "Butterfly Coloring Page",
+          "prompt": "children's coloring book page, a large butterfly with wide open wings decorated with big simple circles and teardrop shapes, flying above two flowers, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Butterfly with patterned wings above two flowers, coloring sheet",
+          "description": "A big butterfly spreads its wings above two flowers. The circles and teardrop shapes on the wings are ready for bright colors. Quick fact to share: butterflies taste with their feet."
+        },
+        {
+          "slug": "bee-coloring-page",
+          "title": "Bee Coloring Page",
+          "prompt": "children's coloring book page, a round fuzzy bumble bee with wide stripes and small wings flying next to a big sunflower, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Fuzzy bumble bee flying to a big sunflower, printable coloring page",
+          "description": "A round, fuzzy bumble bee buzzes over to a big sunflower. Quick fact to share: bees carry pollen from flower to flower, which helps plants make fruit and seeds. The wide stripes are easy to color."
+        },
+        {
+          "slug": "caterpillar-coloring-page",
+          "title": "Caterpillar Coloring Page",
+          "prompt": "children's coloring book page, a smiling caterpillar made of round body segments crawling along a leafy branch, a few leaves with a small bite taken out, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling caterpillar crawling on a branch with nibbled leaves, coloring page",
+          "description": "A smiling caterpillar crawls along a leafy branch, and two of the leaves have a bite taken out. Count its round body parts together. Quick fact to share: a caterpillar eats and eats so it can grow, then turns into a butterfly or a moth."
+        },
+        {
+          "slug": "ant-coloring-page",
+          "title": "Ant Coloring Page",
+          "prompt": "children's coloring book page, a friendly ant with six legs carrying a big leaf over its head, walking along the ground past a small anthill and a few pebbles, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly ant carrying a big leaf past an anthill, printable coloring page",
+          "description": "A busy ant carries a big leaf over its head, past its anthill. Quick fact to share: an ant can carry things much heavier than its own body. Ask your child what they could carry that is as big as they are."
+        },
+        {
+          "slug": "dragonfly-coloring-page",
+          "title": "Dragonfly Coloring Page",
+          "prompt": "children's coloring book page, a smiling dragonfly with four long wings flying over a small pond with cattails and a lily pad, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling dragonfly with four wings over a pond with cattails, coloring sheet",
+          "description": "A dragonfly with four long wings zips over a pond with cattails and a lily pad. Quick fact to share: dragonflies can fly forward, backward and hover in one spot, a bit like a tiny helicopter."
+        },
+        {
+          "slug": "grasshopper-coloring-page",
+          "title": "Grasshopper Coloring Page",
+          "prompt": "children's coloring book page, a cheerful grasshopper with long folded back legs standing on a thick blade of grass, a few flowers and a sun, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cheerful grasshopper on a grassy hill with flowers and sun, coloring page",
+          "description": "A cheerful grasshopper stands on a grassy hill with its long back legs ready to jump. Quick fact to share: a grasshopper can jump many times the length of its own body. See how far your child can hop after coloring."
+        },
+        {
+          "slug": "firefly-coloring-page",
+          "title": "Firefly Coloring Page",
+          "prompt": "children's coloring book page, a smiling firefly with a glowing tail flying at night above tall grass, a crescent moon and a few simple stars, the glow shown with simple outline rays, white background everywhere, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling firefly with a glowing tail under the moon and stars, coloring page",
+          "description": "A smiling firefly flies over tall grass on a summer night, with a moon and stars above. Quick fact to share: a firefly's tail glows because of a chemical reaction inside its body, and the light gives off almost no heat."
+        }
+      ]
+    },
+    {
+      "slug": "space-coloring-pages",
+      "title": "Space Coloring Pages",
+      "primaryKeyword": "space coloring pages",
+      "volume": 6600,
+      "sd": 30,
+      "season": "evergreen",
+      "publishBy": "2026-11-17",
+      "intro": "These free space coloring pages send your child on a trip past the stars: a rocket blasting off, a smiling astronaut, the sun and all eight planets, Saturn and its rings, the moon with its craters, a friendly alien, a child at a telescope and a moon rover. Every outer space coloring page has thick outlines and big open shapes, so preschoolers can color with chunky crayons and older kids can add their own stars and stripes. Each page comes with a simple fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "rocket-coloring-page",
+          "title": "Rocket Coloring Page",
+          "prompt": "children's coloring book page, a cartoon rocket ship blasting off into space with a round window, three fins and puffy clouds of smoke below it, a few stars around, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Rocket ship blasting off from a cloud of smoke with stars around it, printable coloring page",
+          "description": "A rocket ship blasts off from a big puffy cloud of smoke, with stars all around. Quick fact to share: a rocket pushes hot gas down hard so it can shoot up, fast enough to leave the sky behind. The round window and tall fins are big, easy shapes to color."
+        },
+        {
+          "slug": "astronaut-coloring-page",
+          "title": "Astronaut Coloring Page",
+          "prompt": "children's coloring book page, a smiling child astronaut in a puffy space suit and round helmet floating in space, holding a flag with no markings, a few stars and a small planet in the background, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling child astronaut in a space suit floating among stars, coloring sheet",
+          "description": "A smiling astronaut floats in space in a puffy suit and a round helmet. Quick fact to share: there is no air to breathe in space, so astronauts wear space suits that give them air and keep them warm or cool. The big suit leaves plenty of room to color."
+        },
+        {
+          "slug": "solar-system-coloring-page",
+          "title": "Solar System Coloring Page",
+          "prompt": "children's coloring book page, the sun on the left side and eight planets in a curved row going out from it, each planet a different size, Saturn with rings, a few small stars, every planet a separate simple circle, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "The sun and eight planets in a row, with Saturn's rings, solar system coloring page",
+          "description": "The sun shines on the left, and eight planets line up going out from it, with Saturn's rings easy to spot. Quick fact to share: the planets in order are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune. Earth is the third planet from the sun."
+        },
+        {
+          "slug": "planet-coloring-page",
+          "title": "Planet Coloring Page (Saturn)",
+          "prompt": "children's coloring book page, the planet Saturn, big and in the middle, with wide rings around it, a few small round moons and stars around it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "The planet Saturn with wide rings, small moons and stars, printable coloring page",
+          "description": "The planet Saturn sits in the middle of the page with its wide rings, small moons and twinkling stars. Quick fact to share: Saturn's rings are made of countless pieces of ice and rock, from tiny grains to chunks as big as a house. The big round planet is easy for little hands to fill in."
+        },
+        {
+          "slug": "moon-coloring-page",
+          "title": "Moon Coloring Page",
+          "prompt": "children's coloring book page, a big full moon with round craters on its surface, in a night sky with a few stars, a small rocket flying past in the corner, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Full moon with big round craters, stars and a small rocket, coloring page",
+          "description": "A big full moon fills the page, covered in round craters, with stars and a small rocket flying past. Quick fact to share: the moon does not make its own light. It shines because sunlight bounces off it. The craters are holes made long ago when space rocks crashed into it."
+        },
+        {
+          "slug": "alien-coloring-page",
+          "title": "Alien Coloring Page",
+          "prompt": "children's coloring book page, a cute friendly cartoon alien with big round eyes and two antennae, waving from a flying saucer, stars and a small planet around, not scary, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly cartoon alien waving from a flying saucer, printable coloring page",
+          "description": "A friendly little alien with big round eyes and two antennae waves from a flying saucer. It is drawn cute, not scary, so it suits younger kids. Talk about it as pretend: nobody has found aliens, but scientists do search the sky for signs of life on other planets."
+        },
+        {
+          "slug": "telescope-coloring-page",
+          "title": "Telescope Coloring Page",
+          "prompt": "children's coloring book page, a child looking through a telescope on a tripod at the night sky, a crescent moon and big stars above, standing on a grassy hill, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Child looking through a telescope at the moon and stars on a grassy hill, coloring sheet",
+          "description": "A child stands on a grassy hill and looks through a telescope at the moon and stars. Quick fact to share: a telescope makes faraway things look bigger and closer, so you can see craters on the moon. The tall telescope and big stars are easy shapes to color."
+        },
+        {
+          "slug": "moon-rover-coloring-page",
+          "title": "Moon Rover Coloring Page",
+          "prompt": "children's coloring book page, a cartoon moon rover with six big round wheels and a small antenna driving on the bumpy moon surface with craters, the Earth and stars in the sky, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cartoon moon rover with big wheels driving on the moon with Earth in the sky, coloring page",
+          "description": "A moon rover rolls across the bumpy moon on big round wheels, with the Earth and stars in the sky. Quick fact to share: astronauts drove a moon buggy on the moon more than 50 years ago. The big wheels are fun to color one by one."
+        }
+      ]
+    },
+    {
+      "slug": "farm-animal-coloring-pages",
+      "title": "Farm Animal Coloring Pages",
+      "primaryKeyword": "farm animal coloring pages",
+      "volume": 3600,
+      "sd": 24,
+      "season": "evergreen",
+      "publishBy": "2026-11-17",
+      "intro": "These free farm animal coloring pages bring the barnyard to your table: a horse by the fence, a spotted cow with a bell, a pig in a mud puddle, a fluffy sheep, a hen with her chicks, a big red barn, a duck family on a pond and a baby goat. Every farm coloring page has thick outlines and large open spaces for preschoolers, with fences, flowers and feathers for kids who like detail. Each page comes with a simple fact to share and the animal's baby name, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "horse-coloring-page",
+          "title": "Horse Coloring Page",
+          "prompt": "children's coloring book page, a friendly horse standing in a field next to a wooden fence, with a long flowing mane and tail, a few flowers in the grass, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly horse with a flowing mane standing by a fence in a field of flowers, printable coloring page",
+          "description": "A friendly horse with a long flowing mane stands by a wooden fence in a field of flowers. Quick fact to share: horses can doze standing up, because their legs can lock in place while they rest. The long mane and tail are fun to color strand by strand."
+        },
+        {
+          "slug": "cow-coloring-page",
+          "title": "Cow Coloring Page",
+          "prompt": "children's coloring book page, a happy cartoon cow with big spots and a bell on its collar standing in a meadow, a fence and a small barn behind it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy spotted cow with a bell on its collar in front of a barn, coloring sheet",
+          "description": "A happy spotted cow with a bell on its collar stands in a meadow, with a barn and fence behind it. Quick fact to share: a cow's stomach has four parts, and cows chew their food more than once. Many cows give milk that people drink and make into cheese."
+        },
+        {
+          "slug": "pig-coloring-page",
+          "title": "Pig Coloring Page",
+          "prompt": "children's coloring book page, a cute smiling pig with a curly tail standing in a mud puddle, a wooden fence and a few flowers around, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute smiling pig with a curly tail standing in a mud puddle, printable coloring page",
+          "description": "A cute smiling pig with a curly tail stands in a mud puddle by a wooden fence. Quick fact to share: pigs roll in mud to cool off, because they can't sweat to cool down the way people do. The round body is a big, easy shape for little hands."
+        },
+        {
+          "slug": "sheep-coloring-page",
+          "title": "Sheep Coloring Page",
+          "prompt": "children's coloring book page, a fluffy sheep with a round woolly body standing on grass, a fence and a sun with a cloud above, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Fluffy sheep with a curly woolly coat standing by a fence under the sun, coloring page",
+          "description": "A fluffy sheep with a round, curly coat stands by a fence under a bright sun and a cloud. Quick fact to share: a sheep's wool keeps growing, so farmers cut it off about once a year, like a big haircut. The wool is made into yarn for sweaters and socks."
+        },
+        {
+          "slug": "chicken-coloring-page",
+          "title": "Chicken Coloring Page",
+          "prompt": "children's coloring book page, a mother hen with three small chicks next to a nest with eggs, some grain on the ground and a fence behind, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Mother hen with her chicks and a nest of eggs by a fence, printable coloring page",
+          "description": "A mother hen stands with her fluffy chicks next to a nest of eggs. Quick fact to share: a chick grows inside its egg for about three weeks, then pecks its way out of the shell. The round eggs are easy shapes for the youngest colorers."
+        },
+        {
+          "slug": "barn-coloring-page",
+          "title": "Barn Coloring Page",
+          "prompt": "children's coloring book page, a big classic farm barn with big double doors and an X pattern, a silo beside it, a fence, a sun and clouds, a few hay bales, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Big farm barn with a silo, fence, hay bales and sun, coloring sheet",
+          "description": "A big farm barn stands next to a tall silo, with a fence, hay bales, a sun and clouds. Quick fact to share: a barn gives animals a dry place to sleep and stores hay for them to eat, and the tall silo holds food for the animals too. The barn's wide doors are big shapes to color."
+        },
+        {
+          "slug": "duck-coloring-page",
+          "title": "Duck Coloring Page",
+          "prompt": "children's coloring book page, a mother duck swimming in a pond followed by three ducklings, cattails and lily pads around the pond, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Mother duck swimming in a pond with ducklings, cattails and lily pads, printable coloring page",
+          "description": "A mother duck swims across a pond with her little ducklings paddling along with her. Quick fact to share: ducks have webbed feet that work like paddles, and an oily coat on their feathers keeps the water off. The round bodies and lily pads are easy shapes to color."
+        },
+        {
+          "slug": "goat-coloring-page",
+          "title": "Goat Coloring Page",
+          "prompt": "children's coloring book page, a cute baby goat with small horns and a little beard standing on a rock, grass and a few flowers around, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute baby goat with small horns standing on a rock in the grass, coloring page",
+          "description": "A cute baby goat with small horns stands on a rock in the grass. Quick fact to share: goats are great climbers, and they love to stand on rocks and hills. The goat's body and the rock are big shapes that leave lots of room for crayons."
+        }
+      ]
+    },
+    {
+      "slug": "horse-coloring-pages",
+      "title": "Horse Coloring Pages",
+      "primaryKeyword": "horse coloring pages",
+      "volume": 18100,
+      "sd": 24,
+      "season": "evergreen",
+      "publishBy": "2026-11-19",
+      "intro": "These free horse coloring pages are made for young horse lovers: a mother horse with her foal, a cute pony with a bow, a horse running across a field, a child riding in a helmet, a big horse head, a toy rocking horse, a carousel horse and a horse looking out of its stable. Every page has thick outlines and big open shapes, so preschoolers can color with chunky crayons, while manes, flowers and saddles give older kids detail to fill in. Each horse coloring page comes with a simple fact to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "foal-coloring-page",
+          "title": "Foal Coloring Page (Mother and Baby Horse)",
+          "prompt": "children's coloring book page, a mother horse and her baby foal standing side by side in a meadow, the foal with long thin legs and a short fluffy mane, a few flowers in the grass, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Mother horse nuzzling her baby foal in a meadow with flowers, printable coloring page",
+          "description": "A baby foal with long legs and a fluffy mane stands close to its mother in a meadow full of flowers. Quick fact to share: many foals stand up and take wobbly first steps within an hour or two of being born. The two horses side by side make a nice big and small page to color."
+        },
+        {
+          "slug": "pony-coloring-page",
+          "title": "Pony Coloring Page",
+          "prompt": "children's coloring book page, a cute small cartoon pony with a short round body, a thick fluffy mane and tail and a little bow in its mane, standing on grass with a few flowers and a sun, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute little pony with a curly mane and a bow standing in the grass under the sun, coloring sheet",
+          "description": "A cute little pony with a curly mane, a bow and a big fluffy tail stands in the grass under a bright sun. Quick fact to share: a pony is not a baby horse. Ponies are a small kind of horse that stays short even when grown up, often with thick manes and tails. The round body is an easy shape for the youngest colorers."
+        },
+        {
+          "slug": "running-horse-coloring-page",
+          "title": "Running Horse Coloring Page",
+          "prompt": "children's coloring book page, a happy horse galloping across a grassy field with its mane and tail flowing in the wind, hills and a few clouds behind, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy horse galloping across a field with its mane and tail blowing, coloring page",
+          "description": "A happy horse gallops across a grassy field with its mane and tail blowing behind it, hills and clouds in the distance. Quick fact to share: a gallop is a horse's fastest way to move, and for a moment in each stride all four hooves are off the ground. Kids can add speed lines behind it."
+        },
+        {
+          "slug": "horse-and-rider-coloring-page",
+          "title": "Horse and Rider Coloring Page",
+          "prompt": "children's coloring book page, a smiling child wearing a riding helmet and boots sitting in a saddle on a calm walking horse, holding the reins, a fence and a tree behind, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling child in a riding helmet riding a horse by a fence and a tree, printable coloring page",
+          "description": "A smiling child in a riding helmet and boots rides a calm horse past a fence and a big tree. Quick fact to share: riders wear a helmet to protect their head, and they steer with the reins, which connect to the bridle on the horse's head. The saddle, boots and helmet are fun parts to color."
+        },
+        {
+          "slug": "horse-head-coloring-page",
+          "title": "Horse Head Coloring Page",
+          "prompt": "children's coloring book page, a big friendly horse head and neck seen from the side, with a long wavy mane, a forelock, a halter on its face and gentle eyes, filling most of the page, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Big friendly horse head with a long wavy mane and a halter, coloring sheet",
+          "description": "A big friendly horse head fills the page, with a long wavy mane and a halter around its nose. Quick fact to share: a horse's eyes are on the sides of its head, so it can see almost all the way around itself. The large shapes make this a good first horse page for toddlers and preschoolers."
+        },
+        {
+          "slug": "rocking-horse-coloring-page",
+          "title": "Rocking Horse Coloring Page",
+          "prompt": "children's coloring book page, a classic wooden toy rocking horse on curved rockers, with a saddle, a yarn mane and tail, and simple decorations, a few toy blocks on the floor beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Toy rocking horse with a yarn mane, a saddle with a heart and toy blocks beside it, coloring page",
+          "description": "A toy rocking horse with a yarn mane and tail, stars on its side and a heart on its saddle sits on curved rockers, with toy blocks beside it. Quick fact to share: rocking horses are toy horses that rock back and forth on curved rockers, and children have played on them for hundreds of years. The curved rocker is a fun long shape to color."
+        },
+        {
+          "slug": "carousel-horse-coloring-page",
+          "title": "Carousel Horse Coloring Page",
+          "prompt": "children's coloring book page, a carousel horse on a tall striped pole, with a fancy saddle, a flowing mane, flowers and ribbons on its harness, one front leg lifted, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Carousel horse on a striped pole with flowers, bows and a fancy saddle, printable coloring page",
+          "description": "A carousel horse prances on a striped pole, dressed up with flowers, bows and a fancy saddle. Quick fact to share: a carousel, also called a merry go round, turns in a circle while music plays, and the horses on it often move up and down. The flowers and bows give kids who like detail lots to color."
+        },
+        {
+          "slug": "horse-stable-coloring-page",
+          "title": "Horse in a Stable Coloring Page",
+          "prompt": "children's coloring book page, a friendly horse looking out over the open top half of a wooden stable door, a horseshoe hanging above the door, a bucket and a bale of hay beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly horse looking over a stable door with a horseshoe above and hay and a bucket beside it, coloring sheet",
+          "description": "A friendly horse peeks over the top of its stable door, with a horseshoe hanging above and a bucket and hay bale outside. Quick fact to share: a stable is a building where horses sleep and stay dry, and each horse often has its own room called a stall. The wooden boards are easy stripes to color."
+        }
+      ]
+    },
+    {
+      "slug": "dog-coloring-pages",
+      "title": "Dog and Puppy Coloring Pages",
+      "primaryKeyword": "dog coloring pages",
+      "volume": 27100,
+      "sd": 22,
+      "season": "evergreen",
+      "publishBy": "2026-11-21",
+      "intro": "These free dog coloring pages are made for kids who love puppies: a fluffy puppy with a bone, a dog chasing a ball, a sleepy dog in its bed, a puppy in a bubble bath, a dachshund in a sweater, a child walking a dog, a dog in its dog house and three puppies in a basket. Every page has thick outlines and big open shapes, so preschoolers can color with chunky crayons, while collars, bubbles and flowers give older kids detail to fill in. Each puppy coloring page comes with a simple fact about dogs to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "puppy-coloring-page",
+          "title": "Puppy Coloring Page",
+          "prompt": "children's coloring book page, a cute fluffy cartoon puppy sitting and smiling with floppy ears and a collar with a round tag, a bone on the grass beside it, a few flowers, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Fluffy puppy with floppy ears and a collar tag sitting in the grass next to a bone, printable coloring page",
+          "description": "A fluffy puppy with floppy ears and a round tag on its collar sits in the grass, with a bone and flowers beside it. Quick fact to share: puppies are born with their eyes closed, and their eyes usually open when they are around two weeks old. The big round face is an easy first shape for little colorers."
+        },
+        {
+          "slug": "dog-with-ball-coloring-page",
+          "title": "Dog Playing Fetch Coloring Page",
+          "prompt": "children's coloring book page, a happy cartoon dog running on grass to fetch a big ball, tongue out, ears flapping, a fence and a tree in the background, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy dog running across a yard toward a striped ball, with a fence and a tree behind, coloring page",
+          "description": "A happy dog runs across the yard with its ears flapping, about to catch up to a big striped ball. Quick fact to share: a dog's nose is much stronger than ours, so a dog can often find a lost ball by sniffing for it. The stripes on the ball are fun to color in a pattern."
+        },
+        {
+          "slug": "dog-bed-coloring-page",
+          "title": "Sleepy Dog in a Bed Coloring Page",
+          "prompt": "children's coloring book page, a sleepy cartoon dog curled up in a round soft dog bed with a blanket and a chew toy, a food bowl and water bowl next to the bed, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Sleepy dog curled up in a round bed with a blanket and a bone toy, food and water bowls in front, coloring sheet",
+          "description": "A sleepy dog curls up in its round, puffy bed with a blanket and a bone toy, and its food and water bowls wait in front. Quick fact to share: dogs spend a big part of the day sleeping and resting, and puppies sleep even more than grown dogs. The paw print on the food bowl is a small detail to find."
+        },
+        {
+          "slug": "puppy-bath-coloring-page",
+          "title": "Puppy Bath Coloring Page",
+          "prompt": "children's coloring book page, a happy cartoon puppy sitting in a round bath tub full of bubbles, a rubber duck floating, a towel and a brush beside the tub, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy puppy in a bubble bath with a rubber duck, a towel and a brush beside the tub, printable coloring page",
+          "description": "A happy puppy sits in a tub full of bubbles with a bubble pile on its head, a rubber duck beside it, and a towel and brush waiting on the floor. Quick fact to share: dogs do not sweat all over like people do. They cool off mostly by panting with their tongue out. Kids can color each bubble a different color."
+        },
+        {
+          "slug": "dachshund-coloring-page",
+          "title": "Dachshund Coloring Page (Sausage Dog)",
+          "prompt": "children's coloring book page, a cute cartoon dachshund sausage dog with a long body and short legs wearing a little knitted sweater, standing on grass with a few flowers, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling dachshund with a long body and short legs wearing a zigzag sweater, standing by flowers, coloring sheet",
+          "description": "A smiling dachshund with a long body and short legs shows off its zigzag sweater in a garden of flowers. Quick fact to share: dachshund is a German word that means badger dog. These dogs were first bred to dig into burrows, which is one reason for their long, low bodies. The zigzag sweater is a fun pattern to color."
+        },
+        {
+          "slug": "dog-walk-coloring-page",
+          "title": "Walking the Dog Coloring Page",
+          "prompt": "children's coloring book page, a smiling young child walking a happy dog on a leash along a sidewalk path, a tree and a house in the background, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling girl walking a happy puppy on a leash along a sidewalk past a tree and a house, coloring page",
+          "description": "A smiling girl walks her happy puppy on a leash along the sidewalk, past a big tree and a house. Quick fact to share: dogs need exercise every day, and a walk lets them sniff, explore and burn off energy. Your child can color the girl to look like themselves."
+        },
+        {
+          "slug": "dog-house-coloring-page",
+          "title": "Dog House Coloring Page",
+          "prompt": "children's coloring book page, a friendly cartoon dog lying in the doorway of a wooden dog house with a pointed roof, a food bowl with a bone shape on it in front, a little fence and grass, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly dog peeking out of a wooden dog house with a food bowl in front and a fence on each side, coloring sheet",
+          "description": "A friendly dog peeks out of the door of its wooden dog house, with a full food bowl in front and a little fence on each side. Quick fact to share: the pattern of bumps and lines on each dog's nose is its own, a bit like a person's fingerprint. The boards on the dog house are easy stripes to color."
+        },
+        {
+          "slug": "puppies-in-basket-coloring-page",
+          "title": "Puppies in a Basket Coloring Page",
+          "prompt": "children's coloring book page, three cute cartoon puppies sitting together in a big woven basket with a soft blanket, one puppy with spots, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Three cute puppies, one with spots, sitting together in a woven basket with a blanket, printable coloring page",
+          "description": "Three cute puppies sit together in a big woven basket on a soft blanket, and one of them has spots. Quick fact to share: puppies born to the same mother at the same time are called a litter, and they are brothers and sisters. Kids can make each puppy a different color."
+        }
+      ]
+    },
+    {
+      "slug": "cat-coloring-pages",
+      "title": "Cat and Kitten Coloring Pages",
+      "primaryKeyword": "cat coloring pages",
+      "volume": 40500,
+      "sd": 28,
+      "season": "evergreen",
+      "publishBy": "2026-11-21",
+      "intro": "These free cat coloring pages are made for kids who love kittens: a cute kitten on a cushion, a cat playing with yarn, a mother cat with her kittens, a sleeping cat, a cat in a box, a cat watching a bird from the window, a cat and dog who are best friends and a cat looking at a goldfish. Every page has thick outlines and big open shapes, so preschoolers can color with chunky crayons, while stripes, whiskers and yarn give older kids detail to fill in. Each kitten coloring page comes with a simple fact about cats to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "kitten-coloring-page",
+          "title": "Kitten Coloring Page",
+          "prompt": "children's coloring book page, a cute cartoon kitten sitting with big eyes, pointy ears, whiskers and a curled tail, a little bow on its collar, sitting on a cushion, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute kitten with big eyes and a bow on its collar sitting on a cushion with tassels, printable coloring page",
+          "description": "A cute kitten with big eyes, long whiskers and a bow on its collar sits on a soft cushion with tassels. Quick fact to share: kittens are born with their eyes closed, and their eyes usually open when they are one to two weeks old. The big head and round cushion are easy shapes for young colorers."
+        },
+        {
+          "slug": "cat-with-yarn-coloring-page",
+          "title": "Cat Playing with Yarn Coloring Page",
+          "prompt": "children's coloring book page, a playful cartoon cat batting at a big ball of yarn with the yarn string looping across the floor, a second small ball of yarn nearby, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Playful striped cat batting at a big ball of yarn with a small ball beside it, coloring page",
+          "description": "A playful striped cat pounces on a big ball of yarn, and a smaller ball rolls away with its string looping across the floor. Quick fact to share: cats use their whiskers to feel what is around them, which helps them move in the dark and judge if they fit through a gap. The yarn balls can be any bright colors."
+        },
+        {
+          "slug": "cat-and-kittens-coloring-page",
+          "title": "Mother Cat and Kittens Coloring Page",
+          "prompt": "children's coloring book page, a mother cat lying in a basket with three small kittens cuddled next to her, a soft blanket, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Mother cat curled around three sleepy kittens in a woven basket, coloring sheet",
+          "description": "A smiling mother cat curls around her three small kittens in a cozy woven basket. Quick fact to share: a mother cat often has several kittens at once, and she keeps them warm, feeds them and cleans them with her tongue. Kids can make the kittens match their mother or give each one its own color."
+        },
+        {
+          "slug": "sleeping-cat-coloring-page",
+          "title": "Sleeping Cat Coloring Page",
+          "prompt": "children's coloring book page, a cartoon cat sleeping curled up in a ball on a round rug with its tail wrapped around, eyes closed, a little moon and stars in a window above, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Striped cat sleeping curled up on a round rug under a window with a moon and stars, coloring page",
+          "description": "A striped cat sleeps curled up on a round rug, its tail tucked around it, under a window with a moon and stars. Quick fact to share: cats sleep for a big part of the day, often in short naps, which is where the words cat nap come from. The stripes on the cat's back and tail are fun to color."
+        },
+        {
+          "slug": "cat-in-a-box-coloring-page",
+          "title": "Cat in a Box Coloring Page",
+          "prompt": "children's coloring book page, a cute cartoon cat peeking out of an open cardboard box, paws on the edge, ears up, a toy mouse on the floor beside the box, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute striped cat peeking out of a cardboard box with a toy mouse on the floor, printable coloring page",
+          "description": "A cute striped cat peeks out of a cardboard box with its paws on the edge, while a toy mouse waits on the floor. Quick fact to share: many cats love boxes because a small, snug space helps them feel safe and warm. The box is a big simple shape that is easy to color brown."
+        },
+        {
+          "slug": "cat-in-window-coloring-page",
+          "title": "Cat in the Window Coloring Page",
+          "prompt": "children's coloring book page, a cartoon cat sitting on a windowsill looking out the window at a bird on a tree branch, curtains on each side, a potted plant on the sill, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cat sitting on a windowsill watching a bird on a branch outside, with curtains and a potted plant, coloring sheet",
+          "description": "A cat sits on the windowsill next to a potted plant and watches a little bird on a branch outside, with curtains on each side. Quick fact to share: some cats make a fast chattering sound when they watch birds through a window. Your child can color the sky, the clouds and the leaves outside."
+        },
+        {
+          "slug": "cat-and-dog-coloring-page",
+          "title": "Cat and Dog Coloring Page",
+          "prompt": "children's coloring book page, a friendly cartoon cat and a friendly cartoon dog sitting side by side as best friends, smiling, a heart above them, grass under them, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling cat and dog sitting side by side as best friends with a heart above them, coloring page",
+          "description": "A smiling cat and a happy dog sit side by side on the grass with a big heart above them, best friends. Quick fact to share: cats and dogs can become good friends, often when they grow up together in the same home. Look for the bone on the dog's tag and the round tag on the cat's collar."
+        },
+        {
+          "slug": "cat-and-fishbowl-coloring-page",
+          "title": "Cat and Goldfish Coloring Page",
+          "prompt": "children's coloring book page, a curious cartoon cat sitting on a table looking at a round goldfish bowl with one goldfish inside, a plant in the bowl, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Curious cat sitting on a little table looking at a goldfish in a round fish bowl, printable coloring sheet",
+          "description": "A curious cat sits on a little table and looks at a goldfish swimming in a round bowl with a plant and pebbles. Quick fact to share: a cat can turn each ear on its own to follow a sound. Kids can color the goldfish orange and the pebbles in lots of colors."
         }
       ]
     },

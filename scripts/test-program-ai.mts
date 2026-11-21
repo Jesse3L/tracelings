@@ -116,7 +116,7 @@ const seq = (...rs: unknown[]): Caller & { n: number } => { const f = (async () 
 
 await test('generate: good first try', async () => { const c = seq(reply(fixture())); const r = await generateWeekContent(profile, famWeek, { caller: c }); assert.equal(r.content.source, 'ai'); assert.equal(r.calls, 1); });
 await test('generate: bad then good retries once', async () => { const c = seq(reply('oops'), reply(fixture())); const r = await generateWeekContent(profile, famWeek, { caller: c }); assert.equal(r.content.source, 'ai'); assert.equal(r.calls, 2); });
-await test('generate: bad twice falls back to template', async () => { const g = fixture(); g.story.pages[0] = 'Liam sat.'; const c = seq(reply(g), reply(g), reply(fixture())); const r = await generateWeekContent(profile, famWeek, { caller: c }); assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 2); });
+await test('generate: bad on every try falls back to template (first try plus two repairs)', async () => { const g = fixture(); g.story.pages[0] = 'Liam sat.'; const c = seq(reply(g), reply(g), reply(g), reply(fixture())); const r = await generateWeekContent(profile, famWeek, { caller: c }); assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 3); });
 await test('generate: network error falls back, no retry', async () => { const c = seq(new Error('boom')); const r = await generateWeekContent(profile, famWeek, { caller: c }); assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'call-failed'); });
 await test('generate: timeout falls back', async () => {
   const slow: Caller = ({ signal }) => new Promise((_, rej) => signal.addEventListener('abort', () => rej(Object.assign(new Error('t'), { name: 'TimeoutError' }))));
@@ -230,8 +230,8 @@ await test('story icons: missing icons array fails (every page would be unpictur
 });
 await test('generate: a story with mismatched pictures retries, then falls back to the template', async () => {
   const g = fixture(); g.story.icons = ['volcano', 'volcano', 'volcano', 'volcano', 'volcano', 'volcano'];
-  const c = seq(reply(g), reply(g)); const r = await generateWeekContent(profile, famWeek, { caller: c });
-  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 2);
+  const c = seq(reply(g), reply(g), reply(g)); const r = await generateWeekContent(profile, famWeek, { caller: c });
+  assert.equal(r.content.source, 'template'); assert.equal(r.reason, 'invalid'); assert.equal(c.n, 3);
   assert.equal(r.content.story.icons?.length, r.content.story.pages.length);
 });
 await test('prompt: lists every story picture id with its name and asks for story.icons', () => {

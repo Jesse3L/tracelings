@@ -1,12 +1,13 @@
 import { useState } from 'preact/hooks';
 import { useMember } from '../lib/member';
 import WaitlistForm from './WaitlistForm';
+import SquarePayForm from './SquarePayForm';
 
 type PlanKey = 'program-annual' | 'program-monthly';
 
-const PLANS: { v: PlanKey; label: string; price: string; sub: string; badge?: string }[] = [
-  { v: 'program-annual', label: 'Yearly', price: '$99/year', sub: '$8.25/month billed yearly. Every kid in your family, up to 4.', badge: 'Best value' },
-  { v: 'program-monthly', label: 'Monthly', price: '$14.99/month', sub: 'Every kid in your family, up to 4. Cancel anytime.' },
+const PLANS: { v: PlanKey; label: string; price: string; cents: number; sub: string; badge?: string }[] = [
+  { v: 'program-annual', label: 'Yearly', cents: 9900, price: '$99/year', sub: '$8.25/month billed yearly. Every kid in your family, up to 4.', badge: 'Best value' },
+  { v: 'program-monthly', label: 'Monthly', cents: 1499, price: '$14.99/month', sub: 'Every kid in your family, up to 4. Cancel anytime.' },
 ];
 
 export default function MembershipCheckout() {
@@ -14,6 +15,7 @@ export default function MembershipCheckout() {
   const [plan, setPlan] = useState<PlanKey>('program-annual');
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'sending' | 'error' | 'down' | 'off'>('idle');
+  const [paying, setPaying] = useState(false); // the in-page card form is open
 
   if (member.loaded && member.member) {
     return (
@@ -28,8 +30,20 @@ export default function MembershipCheckout() {
   if (member.loaded && !member.available) return <WaitlistForm />;
   if (state === 'off') return <WaitlistForm />;
 
-  async function submit(e: Event) {
+  const okEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+  const remember = () => { try { localStorage.setItem('tl-checkout-email', email.trim().toLowerCase()); } catch { /* storage unavailable */ } };
+
+  // Opens the card form right here on the page.
+  function submit(e: Event) {
     e.preventDefault();
+    if (!okEmail(email)) return setState('error');
+    setState('idle');
+    setPaying(true);
+  }
+
+  // Backup: Square's own hosted checkout page (used if the card form can't load, or the buyer prefers it).
+  async function squarePage() {
+    setPaying(false);
     setState('sending');
     try {
       const r = await fetch('/api/member/checkout/', {
@@ -39,7 +53,7 @@ export default function MembershipCheckout() {
       });
       const data = await r.json().catch(() => ({}));
       if (r.ok && data.url) {
-        try { localStorage.setItem('tl-checkout-email', email.trim().toLowerCase()); } catch { /* storage unavailable */ }
+        remember();
         window.location.href = data.url;
         return;
       }
@@ -50,6 +64,23 @@ export default function MembershipCheckout() {
       setState('down');
     }
   }
+
+  async function payInPage(sourceId: string, verificationToken?: string) {
+    const r = await fetch('/api/member/pay/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.trim(), plan, sourceId, verificationToken }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.ok) {
+      remember();
+      window.location.href = '/account/?welcome=1';
+      return { ok: true as const };
+    }
+    return { ok: false as const, message: d.message, code: d.code || d.error };
+  }
+
+  const chosen = PLANS.find((p) => p.v === plan)!;
 
   return (
     <form id="join" onSubmit={submit} class="rounded-xl border border-hairline bg-white p-6">
@@ -79,9 +110,26 @@ export default function MembershipCheckout() {
       </label>
       {state === 'error' && <p class="mt-3 text-[14px] text-[#b4232c]" role="alert">That email doesn't look quite right. Mind checking it?</p>}
       {state === 'down' && <p class="mt-3 text-[14px] text-[#b4232c]" role="alert">Checkout didn't open. Please try again in a minute.</p>}
-      <button type="submit" disabled={state === 'sending' || !member.loaded} class="btn-pencil mt-5 w-full px-5 py-3.5 text-lg disabled:opacity-60">
-        {state === 'sending' ? 'Opening secure checkout…' : 'Continue to secure checkout'}
-      </button>
+      {paying ? (
+        <div class="mt-5">
+          <SquarePayForm
+            key={plan}
+            cents={chosen.cents}
+            label={`Tracelings at Home (${chosen.label.toLowerCase()})`}
+            intent="STORE"
+            buttonText={`Pay {total} and start`}
+            note={`Renews at ${chosen.price} until you cancel. Receipt goes to ${email.trim()}.`}
+            source="membership"
+            onToken={payInPage}
+            onFallback={squarePage}
+            onClose={() => setPaying(false)}
+          />
+        </div>
+      ) : (
+        <button type="submit" disabled={state === 'sending' || !member.loaded} class="btn-pencil mt-5 w-full px-5 py-3.5 text-lg disabled:opacity-60">
+          {state === 'sending' ? 'Opening secure checkout…' : 'Continue to payment'}
+        </button>
+      )}
       <p class="mt-3 text-[13px] text-muted">Your plan renews automatically at the same price until you cancel. Cancel anytime from your account page, and get a full refund within 14 days if it's not for you. See the <a href="/terms/" class="text-[#2f5fc4] underline underline-offset-2">membership terms</a>. Payment is handled by Square; we never see your card number.</p>
       <p class="mt-2 text-[13px] text-muted">Already a member? <a href="/account/" class="text-[#2f5fc4] underline underline-offset-2">Sign in</a></p>
     </form>

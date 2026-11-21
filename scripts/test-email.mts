@@ -46,7 +46,7 @@ const pages = (p: string) => {
   return fs.existsSync(parent) && fs.readdirSync(parent).some((f) => /^\[.+\](\.astro)?$/.test(f));
 };
 const all = allTemplates();
-eq(Object.keys(all).length, 20, 'template count');
+eq(Object.keys(all).length, 22, 'template count'); // 20 + the two Christmas storybook broadcasts
 for (const [key, t] of Object.entries(all)) {
   const visible = (t.subject + ' ' + t.preview + ' ' + t.text);
   ok(!/[—–]/.test(visible + t.html), `${key}: no em or en dashes`);

@@ -4,9 +4,10 @@ import CoffeeButtons from '../CoffeeButtons';
 // A small, dismissible card shown after a successful download, inviting free visitors to membership.
 // Never shown to members, never blocks anything, and stays quiet for a day after being closed.
 const SNOOZE_KEY = 'tl-nudge-snooze';
-// "Buy us a coffee" card: shows from the 4th download on a device, then rests for 3 weeks after it's closed.
+// "Buy us a coffee" card: can show from the 1st download on a device, then rests for 3 weeks after it's shown.
 // Never shown again once someone has tipped (the thank-you page sets COFFEE_DONE).
-const COFFEE_AFTER = 4;
+// (Before Nov 10, 2026 it waited for the 4th download; most visitors download 2 or 3 times, so almost nobody saw it.)
+const COFFEE_AFTER = 1;
 const COFFEE_SNOOZE = 'tl-coffee-snooze';
 export const COFFEE_DONE = 'tl-coffee-done';
 function coffeeDue(): boolean {
@@ -22,7 +23,24 @@ function snoozeCoffee(days: number) {
 const NAME_TOOLS = /^\/(name-tracing|cursive|cursive-name-tracing|name-coloring-pages|class-pack|$)/;
 // Pages where the free-week program offer replaces the coffee card: the visitor is already doing school-style work.
 export const PROGRAM_PAGES = /^\/(homeschool|math-worksheets|word-families|sight-words|letter-of-the-week)(\/|$)/;
+// Preschool tools (name, letter and number tracing and friends): these parents are who the program is for, so the
+// free-week offer shows first; once it's closed or clicked, the coffee card takes the next download.
+export const PRESCHOOL_TOOLS = /^\/(name-tracing|letter-tracing|number-tracing|name-coloring-pages|alphabet-chart|bubble-letters)(\/|$)/;
 const PROGRAM_SNOOZE = 'tl-program-snooze';
+// The $5 personalized storybook: offered first on the name and coloring pages (most downloads), in the Christmas
+// season with the Christmas book, the rest of the year with the general storybook page. Rests 5 days once shown,
+// and never shows again on a device that bought a storybook.
+export const STORY_PAGES = /^\/(name-tracing|cursive-name-tracing|name-coloring-pages|letter-tracing|coloring-pages)(\/|$)/;
+const STORY_SNOOZE = 'tl-story-snooze';
+function storyDue(): boolean {
+  try {
+    if (JSON.parse(localStorage.getItem('tl-storybooks') ?? '[]').length) return false;
+    return Number(localStorage.getItem(STORY_SNOOZE) || 0) <= Date.now();
+  } catch { return false; }
+}
+const snoozeStory = (days: number) => { try { localStorage.setItem(STORY_SNOOZE, String(Date.now() + days * 86_400_000)); } catch { /* ignore */ } };
+/** Nov 1 to Dec 25: the Christmas book leads. */
+export const christmasSeason = (d = new Date()) => (d.getMonth() === 10) || (d.getMonth() === 11 && d.getDate() <= 25);
 function programSnoozed(): boolean {
   try { return Number(localStorage.getItem(PROGRAM_SNOOZE) || 0) > Date.now(); } catch { return false; }
 }
@@ -43,22 +61,42 @@ export default function DownloadNudge() {
   const [names, setNames] = useState(false);
   const [coffee, setCoffee] = useState(false);
   const [program, setProgram] = useState(false);
+  const [story, setStory] = useState<{ name: string; xmas: boolean } | null>(null);
 
   useEffect(() => {
     let t: number | undefined;
     const onDownload = () => {
       if ((window as any).__tlMember === true) return;
-      if (PROGRAM_PAGES.test(location.pathname)) {
-        // Program offer first on school-style pages; coffee stays on the other tools.
-        if (programSnoozed()) return;
+      const path = location.pathname;
+      if (STORY_PAGES.test(path) && storyDue()) {
+        snoozeStory(5);
+        let nm = '';
+        try { nm = sessionStorage.getItem('tl-story-name') ?? ''; } catch { /* ignore */ }
         clearTimeout(t);
-        t = window.setTimeout(() => { setCoffee(false); setProgram(true); setShow(true); track('program_nudge_shown'); }, 1200);
+        t = window.setTimeout(() => { setCoffee(false); setProgram(false); setStory({ name: nm.slice(0, 24), xmas: christmasSeason() }); setShow(true); track('story_nudge_shown'); }, 1200);
         return;
       }
+      const showProgram = () => {
+        clearTimeout(t);
+        t = window.setTimeout(() => { setStory(null); setCoffee(false); setProgram(true); setShow(true); track('program_nudge_shown'); }, 1200);
+      };
+      if (PROGRAM_PAGES.test(path)) {
+        // Program offer only on school-style pages.
+        if (programSnoozed()) return;
+        showProgram();
+        return;
+      }
+      const preschool = PRESCHOOL_TOOLS.test(path);
+      // Shown once, then the next download here gets the coffee card instead (even if this one was ignored).
+      if (preschool && !programSnoozed()) { snoozeProgram(3); showProgram(); return; }
       const wantCoffee = coffeeDue();
+      // On preschool tools the program offer already ran; after the coffee card, stay quiet.
+      if (preschool && !wantCoffee) return;
       if (!wantCoffee && snoozed()) return;
       clearTimeout(t);
       t = window.setTimeout(() => {
+        setStory(null);
+        setProgram(false);
         setCoffee(wantCoffee);
         if (wantCoffee) { snoozeCoffee(21); setShow(true); track('coffee_prompt_shown'); return; }
         setNames(NAME_TOOLS.test(location.pathname));
@@ -71,6 +109,32 @@ export default function DownloadNudge() {
   }, []);
 
   if (!show) return null;
+  if (story) {
+    const closeStory = () => { setShow(false); setStory(null); track('story_nudge_closed'); };
+    const who = story.name ? story.name.charAt(0).toUpperCase() + story.name.slice(1) : '';
+    const href = story.xmas ? '/personalized-christmas-book/' : '/personalized-storybook/';
+    return (
+      <div class="fixed inset-x-3 bottom-3 z-50 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[400px] nudge-in" role="status" aria-live="polite">
+        <div class="relative rounded-2xl border border-hairline bg-white p-5 shadow-[0_20px_50px_-20px_rgba(30,42,68,.55)]">
+          <button type="button" onClick={closeStory} class="absolute right-2.5 top-2.5 inline-flex size-9 items-center justify-center rounded-lg text-muted hover:bg-[#eef2f8] hover:text-ink" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+          </button>
+          <p class="pr-8 text-[13px] font-bold uppercase tracking-wider text-[#1f7a50]">Your PDF is downloading</p>
+          <div class="mt-3 flex gap-3.5">
+            <img src={story.xmas ? '/storybook/christmas/open-friends-thumb.webp' : '/program/scenes/dinosaurs/open-friends-thumb.webp'} alt="" width="480" height="360" class="h-[66px] w-[88px] shrink-0 rounded-md border border-hairline object-cover" />
+            <div class="min-w-0">
+              <p class="text-[17px] font-bold leading-snug text-ink">{story.xmas ? `A Christmas story starring ${who || 'your child'}` : `A storybook starring ${who || 'your child'}`}</p>
+              <p class="mt-1 text-[14px] leading-snug text-muted">{who || 'Your child'} is in the story by name. A printable picture book to read and color, $5. See the cover free.</p>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-3">
+            <a href={href} onClick={() => track('story_nudge_clicked')} class="btn-pencil px-4 py-2.5 text-[15px]">See {who ? `${who}'s` : 'the'} book</a>
+            <button type="button" onClick={closeStory} class="text-[13px] text-muted underline underline-offset-2">Maybe later</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (program) {
     const closeProgram = () => { setShow(false); snoozeProgram(3); track('program_nudge_closed'); };
     return (

@@ -75,7 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
         return json(200, await importContacts(items, source, cleanEmail));
       }
       case 'broadcast-create': {
-        if (!isLaunchKey(body.template)) return json(400, { error: 'unknown_template', templates: ['launch-a', 'launch-a-teacher', 'launch-b', 'launch-c'] });
+        if (!isLaunchKey(body.template)) return json(400, { error: 'unknown_template', templates: ['launch-a', 'launch-a-teacher', 'launch-b', 'launch-c', 'xmas-book-a', 'xmas-book-b'] });
         const seg = body.segment;
         if (seg !== undefined && !(typeof seg === 'string' && seg in SEGMENTS)) return json(400, { error: 'unknown_segment', segments: Object.keys(SEGMENTS) });
         return json(200, await broadcastCreate(body.template, seg as SegmentKey | undefined, { fresh: body.fresh === true }));
@@ -117,7 +117,8 @@ export const POST: APIRoute = async ({ request }) => {
         // The daily digest for one Chicago day (default yesterday). Returns the summary; emails OWNER_EMAIL only with send: true.
         if (body.date !== undefined && !isDate(body.date)) return json(400, { error: 'bad_date', hint: '"date": "YYYY-MM-DD"' });
         const send = body.send === true;
-        const r = await runDigest({ date: body.date, send, force: send });
+        const week = typeof body.week === 'boolean' ? body.week : undefined; // true adds the 7-day section to any day
+        const r = await runDigest({ date: body.date, send, force: send, week });
         return json(200, r);
       }
       case 'inbound-webhook':

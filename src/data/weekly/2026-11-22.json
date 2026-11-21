@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-22",
+  "subject": "Thanksgiving week printables (and a Christmas story starring your child)",
+  "preview": "Free turkey and pumpkin pie coloring pages, plus a printable book with their name in it.",
+  "intro": "Thanksgiving week is here, so this week's pages are made for keeping little hands busy while the turkey cooks. Everything below is free to print.",
+  "free": [
+    { "title": "Thanksgiving coloring pages", "path": "/coloring-pages/thanksgiving-coloring-pages/", "blurb": "Turkeys, pumpkin pie, a cornucopia and a Mayflower ship. Print a stack for the kids' table." },
+    { "title": "Name tracing", "path": "/name-tracing/", "blurb": "Type each guest's name and let your child trace them. It doubles as place cards." },
+    { "title": "Christmas coloring pages", "path": "/coloring-pages/christmas-coloring-pages/", "blurb": "For the weekend after, when the tree goes up: Santa, reindeer, stockings and gingerbread." },
+    { "title": "Winter coloring pages", "path": "/coloring-pages/winter-coloring-pages/", "blurb": "Snowmen, mittens and sledding for the first cold days." }
+  ],
+  "picture": { "src": "/coloring/thanksgiving-coloring-pages/cute-turkey-coloring-page-880.png", "alt": "Line drawing of a cute round turkey with fanned tail feathers, ready to color", "caption": "The cute turkey page is a favorite with preschoolers." },
+  "feature": "storybook",
+  "featureNote": "It prints in minutes, so it works as an Advent night surprise or a Christmas Eve read-aloud.",
+  "tip": { "title": "A 5-minute thankful page", "body": "Before dinner, ask your child to draw one thing they are thankful for on the back of a coloring page. Write their words under the picture for them. It's a sweet keepsake and keeps them busy while the table gets set." }
+}

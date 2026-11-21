@@ -36,7 +36,8 @@ export const POST: APIRoute = async ({ request, url, cookies }) => {
   try {
     const customers = await customersByEmail(email);
     const cids = customers.map((c) => c.id);
-    const sub = await activeMembership(cids);
+    // Program members and Storybook Club members both sign in here.
+    const sub = (await activeMembership(cids)) ?? (await activeMembership(cids, 'club'));
     if (!sub) return json(404, { error: 'not_found' });
 
     let fresh = false;

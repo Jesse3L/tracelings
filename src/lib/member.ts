@@ -13,6 +13,8 @@ export interface MemberState {
   paidThrough?: string | null;
   cancelsOn?: string | null;
   lapsed?: boolean;
+  /** Storybook Club subscription, separate from the program. */
+  club?: { status: string; paidThrough: string | null; cancelsOn: string | null } | null;
 }
 
 let cached: Promise<MemberState> | null = null;
@@ -21,7 +23,7 @@ export function fetchMember(force = false): Promise<MemberState> {
   if (!cached || force) {
     cached = fetch('/api/member/me/', { credentials: 'same-origin' })
       .then((r) => (r.ok ? r.json() : { member: false, available: false }))
-      .then((m) => { try { (window as any).__tlMember = m.member === true; } catch { /* ignore */ } return m; })
+      .then((m) => { try { (window as any).__tlMember = m.member === true; (window as any).__tlUnlimited = m.member === true || Boolean(m.club); } catch { /* ignore */ } return m; })
       .catch(() => ({ member: false, available: false }));
   }
   return cached;

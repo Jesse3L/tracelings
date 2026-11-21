@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-25",
+  "updated": "2026-11-21",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -518,7 +518,7 @@
     },
     {
       "id": "guide-preschool-homeschool-schedule",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "guide-how-to-homeschool-preschool"
@@ -533,6 +533,30 @@
           480,
           20
         ],
+        "visual schedule for preschool": [
+          1000,
+          25
+        ],
+        "preschool daily schedule": [
+          720,
+          19
+        ],
+        "preschool daily schedule template": [
+          110,
+          23
+        ],
+        "example of a preschool daily schedule": [
+          90,
+          19
+        ],
+        "free printable preschool daily schedule": [
+          70,
+          29
+        ],
+        "preschool schedule printable": [
+          70,
+          32
+        ],
         "daily preschool homeschool schedule": [
           40,
           30
@@ -542,13 +566,892 @@
           22
         ]
       },
-      "note": "Ubersuggest US, Oct 25, 2026. Its own intent (a schedule, not how to start), so it gets its own page and links back to /learn/how-to-homeschool-preschool/. The printable is one page and stays free.",
+      "note": "Ubersuggest US, Oct 25, 2026. Its own intent (a schedule, not how to start), so it gets its own page and links back to /learn/how-to-homeschool-preschool/. The printable is one page and stays free. Built Oct 27, 2026: the guide article plus a free maker at /preschool-schedule/ (picture schedule for the day, cut-apart picture cards, weekly homeschool chart) with 18 new routine pictures (public/schedule/). The maker page targets visual schedule for preschool and preschool daily schedule.",
       "linkTo": [
         "/homeschool/preschool/",
         "/letter-tracing/",
         "/math-worksheets/pre-k/",
         "/program/"
+      ],
+      "done": "2026-10-27",
+      "urls": [
+        "/learn/preschool-homeschool-schedule/",
+        "/preschool-schedule/"
       ]
+    },
+    {
+      "id": "bedtime-routine-chart",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "guide-preschool-homeschool-schedule"
+      ],
+      "title": "Bedtime routine chart: a Bedtime preset on the schedule maker (bath, pajamas, brush teeth, potty, story, lights out) plus its own page /preschool-schedule/bedtime-routine-chart/ with real help (a calm 20 to 30 minute routine, picture cards for toddlers). Needs 4 to 6 more routine pictures (pajamas, potty, wash hands, hug, lights out) made the same way as public/schedule/routine.json",
+      "keywords": {
+        "bedtime routine chart": [
+          720,
+          32
+        ],
+        "printable bedtime routine chart": [
+          170,
+          26
+        ],
+        "bedtime routine chart printable": [
+          110,
+          24
+        ],
+        "bedtime routine chart free printable pdf": [
+          110,
+          28
+        ],
+        "free printable bedtime routine chart printable": [
+          70,
+          27
+        ],
+        "editable bedtime routine chart": [
+          30,
+          22
+        ],
+        "diy bedtime routine chart": [
+          40,
+          20
+        ]
+      },
+      "note": "Ubersuggest US, Oct 27, 2026. One page at a time, free. Morning routine variants were near zero. Rechecked Oct 29, 2026 (volume held). Built Oct 29, 2026: Bedtime routine and Short bedtime presets on the schedule maker, titles \"Maya's Bedtime\", 9 new pictures (pajamas, potty, wash hands, wash face, drink of water, clothes for tomorrow, hugs, night light, lights out), and the page with the checklist and cut-apart cards. Toddler variants show 0 in Ubersuggest, so they are a section, not a page.",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/learn/preschool-homeschool-schedule/",
+        "/program/"
+      ],
+      "done": "2026-10-29",
+      "urls": [
+        "/preschool-schedule/bedtime-routine-chart/"
+      ]
+    },
+    {
+      "id": "morning-routine-chart",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "bedtime-routine-chart"
+      ],
+      "title": "Morning routine chart: a section and a Morning routine preset on /preschool-schedule/ (wake up, potty, get dressed, breakfast, brush teeth, shoes, backpack for school days), reusing the existing pictures plus shoes and backpack. A page only if \"morning routine chart\" volume holds when checked (Oct 27 check showed morning variants near zero).",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/preschool-schedule/bedtime-routine-chart/"
+      ],
+      "done": "2026-10-31",
+      "urls": [
+        "/preschool-schedule/morning-routine-chart/"
+      ],
+      "keywords": {
+        "morning routine chart for preschoolers": [
+          1000,
+          30
+        ],
+        "morning routine chart": [
+          390,
+          30
+        ],
+        "free editable morning routine chart": [
+          210,
+          24
+        ],
+        "printable morning routine chart": [
+          90,
+          30
+        ],
+        "free editable morning routine chart pdf": [
+          90,
+          24
+        ],
+        "free printable morning routine chart": [
+          40,
+          30
+        ],
+        "visual morning routine chart": [
+          40,
+          29
+        ],
+        "preschool morning routine chart": [
+          30,
+          30
+        ]
+      },
+      "note": "Ubersuggest US, Oct 31, 2026: volume held (the Oct 27 near-zero reading was for \"for kids\" variants, which still read 0), so it got its own page named for \"morning routine chart for preschoolers\". Built: School morning routine and Home morning routine presets, titles \"Maya's Morning\", 9 new pictures (shoes, backpack, coat, brush hair, make bed, lunchbox, feed pet, set table, water plants; the last four are ready for the chore chart), and the page with the checklist and cut-apart cards."
+    },
+    {
+      "id": "potty-training-chart",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "morning-routine-chart"
+      ],
+      "title": "Potty training chart: a one-page printable on the schedule maker (potty steps in pictures: pants down, potty, wipe, flush, wash hands, plus a sticker or star chart for the week) with its own page under /preschool-schedule/ if volume holds; check \"potty training chart\" and \"printable potty chart\" first. Needs 3 to 4 pictures (flush, toilet paper, sticker star).",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/preschool-schedule/morning-routine-chart/",
+        "/preschool-schedule/bedtime-routine-chart/"
+      ],
+      "done": "2026-11-01",
+      "urls": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "keywords": {
+        "potty training chart": [
+          12100,
+          35
+        ],
+        "potty training chart and stickers": [
+          8100,
+          35
+        ],
+        "potty training chart to print": [
+          3600,
+          28
+        ],
+        "printable potty training chart": [
+          2900,
+          38
+        ],
+        "free printable potty chart": [
+          2400,
+          19
+        ],
+        "printable potty chart": [
+          1900,
+          30
+        ],
+        "potty training chart printable": [
+          1900,
+          34
+        ],
+        "printable potty chart for stickers": [
+          1300,
+          32
+        ],
+        "free potty training chart": [
+          720,
+          28
+        ]
+      }
+    },
+    {
+      "id": "potty-sticker-chart-themes",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "potty-training-chart"
+      ],
+      "title": "Potty sticker chart picture themes: let the sticker chart use a theme picture in each circle instead of the star (dinosaurs, trucks, unicorns, ocean, space from public/program/icons), a select on /preschool-schedule/potty-training-chart/; character charts (Paw Patrol, Bluey, Minnie) show real demand but are trademarks, so use our own theme pictures only. Check 'dinosaur potty training chart' (50 / SD 27) and 'unicorn potty chart' first.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "done": "2026-11-03",
+      "urls": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "keywords": {
+        "potty training sticker chart": [
+          8100,
+          30
+        ],
+        "dinosaur potty training chart": [
+          50,
+          27
+        ],
+        "unicorn potty chart": [
+          40,
+          28
+        ],
+        "free printable dinosaur potty training chart": [
+          30,
+          30
+        ],
+        "unicorn potty training chart": [
+          20,
+          36
+        ],
+        "printable dinosaur potty training chart": [
+          10,
+          16
+        ],
+        "truck potty training chart": [
+          0,
+          4
+        ]
+      }
+    },
+    {
+      "id": "reward-chart-themes",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-sticker-chart-themes",
+        "reward-chart-kids"
+      ],
+      "title": "Carry the 12 sticker chart picture themes over to the reward chart for kids (when that page is built), so a 'Brush teeth' or 'Stay in bed' chart can use dinosaurs, unicorns or trucks too. No new URL; reuse STICKER_THEMES in src/lib/schedule.ts.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/"
+      ]
+    },
+    {
+      "id": "potty-chart-in-program",
+      "status": "done",
+      "side": "program",
+      "needs": [
+        "potty-sticker-chart-themes"
+      ],
+      "title": "Program (members): in the Pre-K program, offer the child's potty sticker chart in their own interest theme (the theme from the placement check) as an optional page in the welcome pack, one tap, no typing. The free one-page chart on /preschool-schedule/potty-training-chart/ stays free.",
+      "linkTo": [
+        "/program/",
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "date": "2026-11-05",
+      "urls": [
+        "/account/ (members)",
+        "/program/ (new FAQ)"
+      ],
+      "keywords": {
+        "potty training chart": "12,100 / SD 35",
+        "potty training chart and stickers": "8,100 / 35",
+        "potty training chart stickers": "6,600 / 36",
+        "dinosaur potty chart": "170 / 26",
+        "potty training chart dinosaurs": "170 / 33",
+        "potty training chart princess": "170 / 25",
+        "personalised potty training chart": "10 / 5",
+        "personalized potty training chart": "no data"
+      },
+      "result": "Members on the Pre-K track print the potty sticker chart in their child's first interest theme (picture select to change it) from a new card on /account/, or tick a box to add it as the last page of week 1. Built in the browser; no new URLs."
+    },
+    {
+      "id": "faq-plus-icon-overflow",
+      "status": "done",
+      "side": "free",
+      "needs": [],
+      "title": "Small fix: 15 pages copy the FAQ summary markup inline (membership, word tracing, letter tracing, name tracing, cursive pages, sight words, number tracing, alphabet chart, coloring collections) and their rotated + sign stretches to the full height of a two-line question, which adds about 2px of sideways scroll on phones when a long question is open. Add shrink-0 self-start to that span, as done in src/components/homeschool/Faqs.astro on Nov 3, or switch those pages to the Faqs component.",
+      "linkTo": [],
+      "date": "2026-11-07",
+      "urls": [
+        "no new URLs (15 existing pages fixed)"
+      ],
+      "keywords": {
+        "name tracing": "14,800 / SD 25",
+        "letter tracing worksheets": "14,800 / 30",
+        "sight words": "49,500 / 31",
+        "cursive alphabet": "368,000 / 78"
+      },
+      "result": "Added shrink-0 self-start to the FAQ + sign on the 15 pages that copy the FAQ markup inline. Before: every one of them was 392px wide at 390px with the FAQs open; after: 390. New scripts/qa/wide-scan.cjs checks all 303 built pages at 390px with every FAQ open: 0 too wide."
+    },
+    {
+      "id": "potty-chart-in-free-week",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "potty-chart-in-program"
+      ],
+      "title": "Free week 1 from the placement check (/program/ ProgramPlacement): for a Pre-K child, an optional 'add a potty sticker chart in their theme' tick box, like the member dashboard has. The single chart is already free on /preschool-schedule/potty-training-chart/, so this adds no paid depth to the free side; it shows new families the themed extras. Check that the free week stays one week.",
+      "linkTo": [
+        "/program/"
+      ],
+      "date": "2026-11-09",
+      "urls": [
+        "/program/ (placement check, Their plan step)",
+        "/preschool-schedule/potty-training-chart/ (copy)"
+      ],
+      "keywords": {
+        "potty training sticker chart": "6,600 / SD 25",
+        "free printable potty chart": "2,400 / 19",
+        "printable potty training sticker chart": "1,300 / 28",
+        "free printable potty training sticker chart": "390 / 34",
+        "potty training sticker chart free printable": "320 / 30",
+        "free homeschool preschool curriculum": "880 / 19"
+      },
+      "result": "Pre-K children in the free placement check get a tick box under Paper: 'Add <name>'s dinosaur potty sticker chart as the last page'. Uses week 1's theme, built in the browser, footer line on for free users. The preview jumps to the chart and the page count goes from 11 to 12. Kindergarten track shows no box. The free week is still one week."
+    },
+    {
+      "id": "potty-chart-free-week-cta",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "potty-chart-in-free-week"
+      ],
+      "title": "On /preschool-schedule/potty-training-chart/, add a small card under the maker: 'Get this chart in your child's theme inside a free week of homeschool', linking /program/?level=pre-k#placement. The potty page is the site's biggest keyword (12,100), so it should point at the free week more clearly than the one sentence it has now. One-page chart stays exactly as free as it is.",
+      "linkTo": [
+        "/program/"
+      ],
+      "done": "2026-11-11",
+      "urls": [
+        "/preschool-schedule/potty-training-chart/"
+      ],
+      "keywords": {
+        "potty training chart": [
+          12100,
+          33
+        ],
+        "potty training chart with stickers": [
+          8100,
+          27
+        ],
+        "potty training sticker chart": [
+          6600,
+          25
+        ],
+        "potty training chart free printable": [
+          2400,
+          34
+        ],
+        "free homeschool preschool curriculum": [
+          880,
+          19
+        ],
+        "preschool potty training chart": [
+          30,
+          29
+        ]
+      },
+      "note": "Ubersuggest US, Nov 11, 2026. Card under the maker (src/components/site/PottyFreeWeekCard.tsx) follows the theme picked in the maker and links /program/?level=pre-k&interest=<theme>#placement; the placement check now reads ?interest= and ticks that theme first. Members see a link to their plan instead. FAQ added. No new URLs."
+    },
+    {
+      "id": "coloring-free-week-cta",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "potty-chart-free-week-cta"
+      ],
+      "title": "Coloring collections that match a program theme (dinosaur, unicorn, car and truck coloring pages): the same kind of card under the coloring tool, 'Get a week of preschool themed on dinosaurs, free', linking /program/?level=pre-k&interest=<theme>#placement (the ?interest= param from Nov 11). One-page coloring stays exactly as free as it is; reuse PottyFreeWeekCard's layout as a shared component. Check 'dinosaur coloring pages' and 'unicorn coloring pages' numbers for the wording.",
+      "linkTo": [
+        "/program/"
+      ],
+      "done": "2026-11-13",
+      "urls": [
+        "/coloring-pages/dinosaur-coloring-pages/",
+        "/coloring-pages/unicorn-coloring-pages/",
+        "/coloring-pages/car-and-truck-coloring-pages/"
+      ],
+      "keywords": {
+        "dinosaur coloring pages": [
+          49500,
+          28
+        ],
+        "unicorn coloring pages": [
+          49500,
+          23
+        ],
+        "car coloring pages": [
+          22200,
+          27
+        ],
+        "unicorn coloring pages for free": [
+          9900,
+          8
+        ],
+        "dinosaur coloring pages t rex": [
+          9900,
+          23
+        ],
+        "truck coloring pages": [
+          8100,
+          27
+        ],
+        "free printable dinosaur coloring pages pdf": [
+          720,
+          15
+        ]
+      },
+      "note": "Ubersuggest MCP failed to connect on Nov 13, so these are the Ubersuggest US numbers from Oct 4, 2026 (src/data/coloring-plan.json). Shared card layout in src/components/site/FreeWeekCard.tsx (the potty card now uses it too); ThemeFreeWeekCard.tsx on the three collection pages and their 24 page pages, under the coloring. Link has ?interest=<theme> but no level (coloring families span Pre-K and K; the placement check asks the age). Members see 'Make dinosaurs one of your child's themes' linking /account/. One new FAQ per collection. No new URLs."
+    },
+    {
+      "id": "ocean-space-coloring-collections",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "coloring-free-week-cta"
+      ],
+      "title": "New coloring collections that match more program themes (ocean animals, space, farm animals, bugs): 8 pages each with per-page talk-about, color tips and learning text like the existing collections, and the ThemeFreeWeekCard under each (add the slug to COLORING_THEMES). Check 'ocean coloring pages', 'space coloring pages', 'farm animal coloring pages', 'bug coloring pages' in Ubersuggest first and build the two with the best volume and SD under 35 (at most 2 new collections, so 2 new hub URLs plus their pages as one template).",
+      "linkTo": [
+        "/program/",
+        "/coloring-pages/"
+      ],
+      "done": "2026-11-15",
+      "urls": [
+        "/coloring-pages/ocean-animal-coloring-pages/",
+        "/coloring-pages/bug-coloring-pages/"
+      ],
+      "keywords": {
+        "ocean animal coloring pages": [
+          6600,
+          28
+        ],
+        "sea animal coloring pages": [
+          6600,
+          22
+        ],
+        "ocean coloring pages": [
+          4400,
+          21
+        ],
+        "bug coloring pages": [
+          5400,
+          22
+        ],
+        "insect coloring pages": [
+          5400,
+          24
+        ],
+        "space coloring pages": [
+          6600,
+          30
+        ],
+        "farm coloring pages": [
+          4400,
+          23
+        ],
+        "farm animal coloring pages": [
+          3600,
+          24
+        ],
+        "astronaut coloring page": [
+          2400,
+          27
+        ]
+      },
+      "note": "Built ocean animals (6,600 + 6,600 + 4,400 across ocean/sea animal/ocean, SD 21 to 28) and bugs (bug 5,400 / 22 plus insect 5,400 / 24). Space (6,600 / 30) and farm (4,400 / 23) are queued next. 16 pictures made on Higgsfield (gpt_image_2_6, high, 2k, 3:4, 2.75 credits each), padded to 1760x2336 and thresholded like scripts/process_coloring.py. ThemeFreeWeekCard under both (COLORING_THEMES ocean and bugs). Two hub URLs plus 16 page URLs from the existing template."
+    },
+    {
+      "id": "space-farm-coloring-collections",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "ocean-space-coloring-collections"
+      ],
+      "title": "Space and farm animal coloring collections (the two program themes left from Nov 15): 8 pages each with talk-about, color tips and learning text, ThemeFreeWeekCard under each (COLORING_THEMES space and farm). Nov 15 numbers: space coloring pages 6,600 / SD 30, farm coloring pages 4,400 / 23, farm animal coloring pages 3,600 / 24, astronaut coloring page 2,400 / 27. Recheck, then build both (2 hub URLs, one template).",
+      "linkTo": [
+        "/program/",
+        "/coloring-pages/"
+      ],
+      "done": "2026-11-17",
+      "urls": [
+        "/coloring-pages/space-coloring-pages/",
+        "/coloring-pages/farm-animal-coloring-pages/"
+      ],
+      "keywords": {
+        "space coloring pages": [
+          6600,
+          30
+        ],
+        "solar system coloring page": [
+          4400,
+          22
+        ],
+        "planet coloring pages": [
+          2900,
+          36
+        ],
+        "astronaut coloring page": [
+          2400,
+          27
+        ],
+        "rocket coloring page": [
+          1600,
+          21
+        ],
+        "outer space coloring pages": [
+          1300,
+          35
+        ],
+        "alien coloring pages": [
+          1000,
+          24
+        ],
+        "farm coloring pages": [
+          4400,
+          23
+        ],
+        "farm animal coloring pages": [
+          3600,
+          24
+        ],
+        "tractor coloring page": [
+          4400,
+          25
+        ],
+        "horse coloring pages": [
+          18100,
+          24
+        ],
+        "cow coloring page": [
+          1900,
+          20
+        ],
+        "chicken coloring page": [
+          1300,
+          23
+        ]
+      },
+      "note": "Built both. Space: rocket, astronaut, solar system (sun and 8 planets in order, checked in the picture), Saturn, moon, friendly alien, telescope, moon rover. Farm: horse, cow, pig, sheep, hen and chicks, barn, ducks, baby goat (tractor stays in the car and truck collection, its slug is taken). 16 pictures on Higgsfield (gpt_image_2_6, high, 2k, 3:4), padded to 1760x2336 and thresholded. ThemeFreeWeekCard under both (COLORING_THEMES space: 'rockets and planets', farm: 'farm animals'). Pair-with tools: letter R + word problems (space theme); letter F + ten frames. Two hub URLs plus 16 page URLs from the existing template."
+    },
+    {
+      "id": "horse-coloring-collection",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "space-farm-coloring-collections"
+      ],
+      "title": "Horse coloring pages: its own collection of 8 (foal, pony, horse running, horse and rider with helmet, horse head, rocking horse, carousel horse, horse in a stable), the farm ThemeFreeWeekCard under it (COLORING_THEMES farm). Nov 17 numbers: horse coloring pages 18,100 / SD 24, the biggest steady coloring keyword we have checked; the single horse page in the farm collection can't rank for it alone. Recheck 'horse coloring pages', 'pony coloring pages' and 'cute horse coloring pages' first.",
+      "linkTo": [
+        "/coloring-pages/farm-animal-coloring-pages/",
+        "/program/"
+      ],
+      "done": "2026-11-19",
+      "urls": [
+        "/coloring-pages/horse-coloring-pages/"
+      ],
+      "keywords": {
+        "horse coloring pages": [
+          18100,
+          24
+        ],
+        "horse coloring pages to print": [
+          3600,
+          20
+        ],
+        "horse coloring pages print": [
+          2900,
+          21
+        ],
+        "horse coloring pages free": [
+          1600,
+          22
+        ],
+        "pony coloring pages": [
+          1000,
+          19
+        ],
+        "cute horse coloring pages": [
+          590,
+          23
+        ],
+        "carousel horse coloring pages": [
+          90,
+          23
+        ],
+        "rocking horse coloring pages": [
+          40,
+          21
+        ]
+      },
+      "note": "Built as planned (8 pages: mother and foal, pony, running horse, horse and rider in a helmet, horse head, rocking horse, carousel horse, horse in a stable), farm ThemeFreeWeekCard under each. The farm collection keeps its horse page and gets an FAQ pointing here. 1 hub URL plus 8 page URLs from one template."
+    },
+    {
+      "id": "dog-cat-coloring-collections",
+      "status": "done",
+      "side": "free",
+      "needs": [
+        "horse-coloring-collection"
+      ],
+      "title": "Dog and cat coloring pages: two collections of 8 (puppy, dog with a ball, dog in a bed, cat with yarn, kitten in a basket, sleeping cat, and so on), each page with talk-about, color tips and learning text and pet care facts, with the pets ThemeFreeWeekCard under them (add 'pets' to COLORING_THEMES; the theme exists in src/lib/program/themes.ts). Nov 19 numbers: cat coloring pages 40,500 / SD 28, dog coloring pages 27,100 / SD 22, both flat year-round. Recheck 'puppy coloring pages', 'kitten coloring pages' and 'cute cat coloring pages' first. Comes before train-castle-coloring-collections (much bigger volume).",
+      "linkTo": [
+        "/coloring-pages/",
+        "/program/"
+      ],
+      "done": "2026-11-21",
+      "urls": [
+        "/coloring-pages/dog-coloring-pages/",
+        "/coloring-pages/cat-coloring-pages/"
+      ],
+      "keywords": {
+        "cat coloring pages": [
+          40500,
+          28
+        ],
+        "dog coloring pages": [
+          27100,
+          22
+        ],
+        "puppy coloring pages": [
+          18100,
+          30
+        ],
+        "kitten coloring pages": [
+          18100,
+          30
+        ],
+        "puppy dog coloring pages": [
+          18100,
+          23
+        ],
+        "cat coloring pages cute": [
+          5400,
+          28
+        ],
+        "cute puppy coloring pages": [
+          2900,
+          23
+        ],
+        "dog and cat coloring pages": [
+          2400,
+          29
+        ],
+        "sausage dog coloring pages": [
+          1900,
+          23
+        ],
+        "dachshund dog coloring pages": [
+          1600,
+          18
+        ],
+        "sleeping cat coloring pages": [
+          140,
+          13
+        ]
+      },
+      "note": "Built as planned: Dog and Puppy Coloring Pages (puppy, fetch, dog bed, puppy bath, dachshund, walking the dog, dog house, puppies in a basket) and Cat and Kitten Coloring Pages (kitten, yarn, mother and kittens, sleeping cat, cat in a box, cat in the window, cat and dog, cat and goldfish). Pets ThemeFreeWeekCard under each (?interest=pets). 2 hub URLs plus 16 page URLs from one template."
+    },
+    {
+      "id": "pets-pages-pinterest-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "dog-cat-coloring-collections"
+      ],
+      "title": "Pinterest pins for the dog and cat coloring pages, same format as horse-pages-pinterest-pins (scripts/pins). Coloring pages are among the most pinned printables; one pin per collection plus the kitten and puppy pages (cat coloring pages 40,500 / SD 28, kitten coloring pages 18,100 / 30, puppy coloring pages 18,100 / 30).",
+      "linkTo": [
+        "/coloring-pages/dog-coloring-pages/",
+        "/coloring-pages/cat-coloring-pages/"
+      ]
+    },
+    {
+      "id": "pets-in-k-word-problems-link",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "dog-cat-coloring-collections"
+      ],
+      "title": "Let ?theme=pets preselect the pets theme on /math-worksheets/kindergarten-word-problems/ (theme only, never a name) and point the dog page's 'Pair it with a worksheet' card there, so a dog lover lands on puppy word problems instead of the farm default. Check 'kindergarten word problems' and 'word problems for kindergarten' volume first.",
+      "linkTo": [
+        "/math-worksheets/kindergarten-word-problems/",
+        "/coloring-pages/dog-coloring-pages/"
+      ]
+    },
+    {
+      "id": "bunny-coloring-pages",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "dog-cat-coloring-collections"
+      ],
+      "title": "Bunny coloring pages (8, the third big pet in the pets theme picture set), with the pets ThemeFreeWeekCard; publish by mid February so it ranks before Easter, and link from the Easter collection. Recheck 'bunny coloring pages', 'rabbit coloring pages' and 'cute bunny coloring pages' first; if volume is low outside spring, keep it for February.",
+      "linkTo": [
+        "/coloring-pages/easter-coloring-pages/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "horse-pages-pinterest-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "horse-coloring-collection"
+      ],
+      "title": "Pinterest pins for the horse coloring pages: the pin set in scripts/pins/pins.json has only one coloring collection (Thanksgiving) so far. Add a collection pin (grid of 4 horse pages) and 2 or 3 single-page pins (foal, pony, carousel horse) linking to their own pages, render with make-pins.py, look at each pin. No new site URLs.",
+      "linkTo": [
+        "/coloring-pages/horse-coloring-pages/"
+      ]
+    },
+    {
+      "id": "train-castle-coloring-collections",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "space-farm-coloring-collections"
+      ],
+      "title": "Coloring collections for the next program themes without one (trains, castles, jungle, pets, sports): check volumes and build the best two, 8 pages each with talk-about, color tips and learning text, ThemeFreeWeekCard under each. Nov 17 numbers: train coloring pages 2,900 / SD 30, jungle animal coloring pages 880 / 22. Also check 'castle coloring pages', 'puppy coloring pages', 'sports coloring pages'.",
+      "linkTo": [
+        "/coloring-pages/",
+        "/program/"
+      ]
+    },
+    {
+      "id": "theme-coloring-in-pack",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "ocean-space-coloring-collections"
+      ],
+      "title": "Program (members): an optional coloring page at the end of each weekly pack, picked from the coloring collection that matches the child's theme that week (dinosaurs, unicorns, trucks, ocean, bugs, space, farm: 7 of the 12 themes now have a collection), a checkbox in the pack maker. Week 1 free like the rest of the pack; the coloring pages stay free on their own pages.",
+      "linkTo": [
+        "/account/"
+      ]
+    },
+    {
+      "id": "letter-page-free-week-card",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "coloring-free-week-cta"
+      ],
+      "title": "Letter of the week pages whose word is a program theme (D for dinosaur, U for unicorn, T for truck, R for rocket, F for farm, H for horse (farm theme), O for ocean, B for bug, and others that fit): the FreeWeekCard under the free letter pages, linking /program/?interest=<theme>#placement. Free letter pages unchanged. Check 'letter of the week' and 'letter d activities for preschool' numbers for the wording.",
+      "linkTo": [
+        "/program/",
+        "/letter-of-the-week/"
+      ]
+    },
+    {
+      "id": "routine-chart-free-week-cta",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "routine-chart-in-free-week"
+      ],
+      "title": "When the morning chart tick box is in the free week: a card under the maker on /preschool-schedule/morning-routine-chart/ (and bedtime if it gets a box) pointing at the free week, like the potty page's card, with level picked by age (Pre-K or Kindergarten).",
+      "linkTo": [
+        "/program/",
+        "/preschool-schedule/morning-routine-chart/"
+      ]
+    },
+    {
+      "id": "schedule-pages-download-card",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-free-week-cta"
+      ],
+      "title": "After a download on the /preschool-schedule/ pages (potty, morning, bedtime, daily schedule), show the 'Build my free week' download card first, as the tracing tools do since Nov 10 (add the path to PRESCHOOL_TOOLS in src/components/site/DownloadNudge.tsx). Same snooze rules, no new cards. Check the email_ui.py card checks still pass.",
+      "linkTo": [
+        "/program/"
+      ]
+    },
+    {
+      "id": "routine-chart-in-free-week",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-chart-in-free-week",
+        "routine-chart-in-program"
+      ],
+      "title": "Free week 1 from the placement check: a tick box for the morning routine chart (the one page already free on /preschool-schedule/morning-routine-chart/), so Kindergarten children get an extra too; they have no potty box today. Keep the free week to one week.",
+      "linkTo": [
+        "/program/",
+        "/preschool-schedule/morning-routine-chart/"
+      ]
+    },
+    {
+      "id": "potty-steps-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "potty-chart-in-program"
+      ],
+      "title": "Program (members): add the potty steps chart (the child's picture steps, potty chair or big toilet) next to the themed sticker chart on /account/, both in one PDF with one tap. Reuse PRESETS potty-chair / potty-toilet in src/lib/schedule.ts."
+    },
+    {
+      "id": "routine-picker-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "potty-chart-in-program",
+        "routine-chart-in-program"
+      ],
+      "title": "Program (members): turn the potty card on /account/ into an 'Extras for <child>' card: potty chart, morning chart and bedtime chart in the child's theme, pick any, one PDF. Kindergarten children get the morning and bedtime charts only."
+    },
+    {
+      "id": "potty-training-guide",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-training-chart"
+      ],
+      "title": "Learn article: how to start potty training (readiness signs as ranges, the first three days, a sticker for every try, accidents, night time later, the pediatrician line), linking the potty training chart, the morning and bedtime routine charts and the Pre-K plan's free week. Check 'how to start potty training', 'potty training tips' and 'potty training schedule' first.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/",
+        "/preschool-schedule/bedtime-routine-chart/"
+      ]
+    },
+    {
+      "id": "reward-chart-kids",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "potty-training-chart"
+      ],
+      "title": "Reward chart for kids: the sticker chart page type with any goal instead of potty (a goal word and picture in the title, like 'Brush teeth' or 'Stay in bed'), its own page under /preschool-schedule/ if volume holds; check 'reward chart for kids', 'sticker chart' and 'behavior chart for kids' first.",
+      "linkTo": [
+        "/preschool-schedule/potty-training-chart/",
+        "/preschool-schedule/"
+      ]
+    },
+    {
+      "id": "after-school-routine-chart",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "morning-routine-chart"
+      ],
+      "title": "After school routine chart: an After school preset (shoes off, backpack away, wash hands, snack, play outside, homework or reading, dinner) and a section on /preschool-schedule/morning-routine-chart/ or its own page if \"after school routine chart\" volume holds; check first.",
+      "linkTo": [
+        "/preschool-schedule/morning-routine-chart/",
+        "/preschool-schedule/"
+      ]
+    },
+    {
+      "id": "chore-chart-preschool",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "bedtime-routine-chart"
+      ],
+      "title": "Chore chart for preschoolers and kindergartners: a fourth page type on the schedule maker (a week grid with picture chores like make bed, feed pet, set table, put toys away, and a star to color each day), its own page if volume holds. Needs 6 to 8 chore pictures made the same way as public/schedule/routine.json. Check \"chore chart for kids\", \"preschool chore chart\" and \"printable chore chart\".",
+      "linkTo": [
+        "/preschool-schedule/",
+        "/program/"
+      ],
+      "note": "Oct 31, 2026: make bed, feed the pet, set the table, water the plants, lunchbox and clean up pictures already exist (public/schedule/routine.json); 2 to 4 more needed (laundry, dishes, wipe table, put toys away)."
+    },
+    {
+      "id": "routine-chart-in-program",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "bedtime-routine-chart"
+      ],
+      "title": "Program (members): add the child's own morning, bedtime or daily picture schedule as an optional page in the personalized week-1 welcome pack (built from the routine pictures, name in the title), so new members print their routine with their first week.",
+      "linkTo": [
+        "/program/"
+      ]
+    },
+    {
+      "id": "first-then-board",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "guide-preschool-homeschool-schedule"
+      ],
+      "title": "First then board: a fourth page type on /preschool-schedule/ (two big boxes, First and Then, with any two routine pictures, plus a cut-apart strip), with a section and FAQ on the page",
+      "keywords": {
+        "first then visual schedule printable": [
+          210,
+          31
+        ],
+        "first then next visual schedule printable": [
+          30,
+          25
+        ]
+      },
+      "note": "Ubersuggest US, Oct 27, 2026. No new URL unless volume for first then board printable holds up when checked.",
+      "linkTo": [
+        "/preschool-schedule/"
+      ]
+    },
+    {
+      "id": "week-chart-in-pack",
+      "status": "todo",
+      "side": "program",
+      "needs": [
+        "guide-preschool-homeschool-schedule"
+      ],
+      "title": "Program (members): Pre-K and Kindergarten weekly packs: an optional first page, the weekly homeschool chart already filled in with that week's letter, number and day by day activities from the plan (weeks 2 to 36 for members, week 1 free like the rest of the pack)",
+      "note": "Builds on the weekly chart in src/lib/schedule.ts. Program depth, not a new free multi-week set."
     },
     {
       "id": "faq-on-homeschool-articles",
@@ -1067,6 +1970,26 @@
       },
       "buildOn": "Small volume but buyer-friendly audience; reuse versePage() and the cursive tool. Check volume again before building.",
       "side": "free"
+    },
+    {
+      "id": "faq-component-everywhere",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "faq-plus-icon-overflow"
+      ],
+      "title": "Small cleanup: switch the 15 pages that copy the FAQ markup inline (membership, word tracing, letter tracing, name tracing, cursive pages, sight words, number tracing, alphabet chart, coloring collections) to src/components/homeschool/Faqs.astro, so a future fix lands in one place. Keep each page's FAQPage schema and its html answers (links) as they are; check the rendered FAQ text is unchanged.",
+      "linkTo": []
+    },
+    {
+      "id": "wide-scan-in-playbook",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "faq-plus-icon-overflow"
+      ],
+      "title": "Add scripts/qa/wide-scan.cjs (every built page at 390px, all FAQs open, report anything wider than the screen) to the step 7 checks in docs/growth-playbook.md, and extend it to 360px (small Android phones) and fix anything it finds there.",
+      "linkTo": []
     }
   ]
 }

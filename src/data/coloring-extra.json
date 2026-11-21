@@ -78,6 +78,10 @@
         {
           "q": "Which dinosaurs are included?",
           "a": "T. rex, triceratops, stegosaurus, spinosaurus, brachiosaurus, velociraptor, ankylosaurus, and a baby dinosaur hatching from an egg. Each page also has its own conversation starters and simple facts to share while coloring."
+        },
+        {
+          "q": "Is there a dinosaur homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick dinosaurs as their theme, the counting and ten frame pages are drawn with dinosaurs, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
     },
@@ -105,6 +109,10 @@
         {
           "q": "Are these good for a unicorn birthday party?",
           "a": "Yes. Print a stack before the party and set them on a table with crayons. The cake page is a natural fit to color while waiting for the real cake. Pair it with a simple game like pin the horn on the unicorn."
+        },
+        {
+          "q": "Is there a unicorn homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick unicorns as their theme, the counting and ten frame pages are drawn with unicorns, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
     },
@@ -213,6 +221,10 @@
         {
           "q": "How can I use these for a vehicle-themed party?",
           "a": "Print a stack, set out crayons, and let kids pick their favorite truck. Many kids enjoy writing their age or initial on the race car's number circle. A garbage truck or fire truck page also makes a nice thank-you to give the real workers in your neighborhood."
+        },
+        {
+          "q": "Is there a truck homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick trucks and cars as their theme, the counting and ten frame pages are drawn with trucks, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
     },
@@ -321,6 +333,227 @@
         {
           "q": "Can I use these pages for a spring classroom unit?",
           "a": "Yes. The lamb, chick, and egg pages fit a spring or life cycle unit even outside of Easter. The bunny painting eggs page also works well before an egg dyeing activity."
+        }
+      ]
+    },
+    "ocean-animal-coloring-pages": {
+      "skills": [
+        "Learning real sea animal names and body parts like fins, flippers, shells, claws and tentacles",
+        "Counting arms, bubbles, fish and shells",
+        "Sorting animals into fish and not fish (sharks and seahorses are fish; whales, dolphins, octopuses and crabs are not)"
+      ],
+      "ideas": [
+        "Make an ocean wall: color the pages, cut out the animals, and tape them onto a big sheet of blue paper.",
+        "Before a trip to an aquarium or the beach, color the animals you hope to see, then check them off when you spot them.",
+        "Sort the finished pages into animals that come up to breathe air (whale, dolphin, sea turtle) and animals that breathe underwater with gills (shark, seahorse).",
+        "Read an ocean picture book together and color the page that matches each animal you find in the story."
+      ],
+      "faq": [
+        {
+          "q": "What age are these ocean animal coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The whale, jellyfish and crab pages have the biggest open shapes for preschoolers. The sea turtle shell, octopus arms and seahorse stripes have more parts for kids who like detail. If a page feels too busy, color the animal together and let your child finish the water."
+        },
+        {
+          "q": "Which sea animals are included?",
+          "a": "A whale, an octopus, a sea turtle, a dolphin, a shark, a crab with a starfish, a seahorse and two jellyfish. Each page has a few simple facts to share and a letter, counting or sorting idea."
+        },
+        {
+          "q": "Is the shark page scary?",
+          "a": "No. The shark has a closed-mouth smile and swims next to little fish, so it suits younger kids who love sharks but don't want sharp teeth on the page."
+        },
+        {
+          "q": "Is there an ocean homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick ocean animals as their theme, the counting and ten frame pages are drawn with sea animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "bug-coloring-pages": {
+      "skills": [
+        "Naming insect body parts: head, wings, legs and antennae",
+        "Counting spots, stripes, wings and hops",
+        "Talking about life cycles, from caterpillar to butterfly"
+      ],
+      "ideas": [
+        "Take a few finished pages on a backyard or park bug hunt and look for the real thing. Check off each bug you find.",
+        "Make a bug jar picture: color and cut out the bugs, then glue them inside a big jar shape drawn on paper.",
+        "Sort the pages into bugs that fly and bugs that crawl or hop. Some do both, which makes for a good talk.",
+        "In a spring science unit, pair the caterpillar and butterfly pages to talk about how one turns into the other."
+      ],
+      "faq": [
+        {
+          "q": "What age are these bug coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The ladybug, caterpillar and bee have the biggest open shapes for preschoolers. The dragonfly, butterfly and grasshopper pages have more small parts for kids who like detail."
+        },
+        {
+          "q": "Which bugs and insects are included?",
+          "a": "A ladybug, a butterfly, a bumble bee, a caterpillar, an ant, a dragonfly, a grasshopper and a firefly. All of them are insects (a caterpillar is a young butterfly or moth), and each page has simple facts to share while coloring."
+        },
+        {
+          "q": "Are bugs and insects the same thing?",
+          "a": "In everyday talk, people call most small crawling and flying creatures bugs. Insects are one group: they have six legs and three main body parts. Spiders have eight legs, so they are not insects. Counting legs on a real ant or ladybug outside is an easy way to show the difference."
+        },
+        {
+          "q": "Is there a bug homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick bugs as their theme, the counting and ten frame pages are drawn with bugs, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "space-coloring-pages": {
+      "skills": [
+        "Learning the names of the planets, the moon, the sun and the stars",
+        "Counting stars, planets, craters and wheels",
+        "Talking about what is real (planets, rockets, astronauts) and what is pretend (aliens)"
+      ],
+      "ideas": [
+        "Make a night sky wall: color the pages, cut out the rocket, planets and moon, and tape them onto a big sheet of black or dark blue paper.",
+        "Look at the moon together on a clear night, then color the moon page and talk about the shape you saw.",
+        "Line up the solar system page with a ruler and say the planets in order, from Mercury out to Neptune.",
+        "Play countdown: color the rocket, then count down from 10 together and lift it off the table on blast off."
+      ],
+      "faq": [
+        {
+          "q": "What age are these space coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The rocket, moon and planet pages have the biggest open shapes for preschoolers. The solar system, telescope and moon rover pages have more parts for kids who like detail. If a page feels too busy, color part of it together and let your child finish the sky."
+        },
+        {
+          "q": "What is included in these outer space coloring pages?",
+          "a": "A rocket, an astronaut, the sun and eight planets, Saturn with its rings, the moon with craters, a friendly alien in a flying saucer, a child with a telescope and a moon rover. Each page has a few simple facts to share and a letter or counting idea."
+        },
+        {
+          "q": "Does the solar system page show all the planets?",
+          "a": "Yes. It shows the sun and the eight planets in order, from Mercury closest to the sun out to Neptune. The planets are drawn as simple circles to color, not to size: in real life Jupiter is far bigger than the others."
+        },
+        {
+          "q": "Is there a space homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick space as their theme, the counting and ten frame pages are drawn with rockets and planets, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "farm-animal-coloring-pages": {
+      "skills": [
+        "Naming farm animals and their babies: foal, calf, piglet, lamb, chick, duckling and kid",
+        "Making animal sounds and matching them to the pictures",
+        "Counting legs, spots, chicks, eggs and fence posts"
+      ],
+      "ideas": [
+        "Build a paper farm: color and cut out the animals, then stand them around the barn page with a little tape on the back.",
+        "Sing Old MacDonald and hold up each finished page when its animal comes up in the song.",
+        "Before a trip to a farm, petting zoo or county fair, color the animals you hope to see, then check them off when you meet them.",
+        "Sort the finished pages into animals that give us food (cow, chicken) and animals that give us wool (sheep), and talk about the rest."
+      ],
+      "faq": [
+        {
+          "q": "What age are these farm animal coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The pig, sheep and goat pages have the biggest open shapes for preschoolers. The horse's mane, the barn and the duck pond have more small parts for kids who like detail."
+        },
+        {
+          "q": "Do you have more horse coloring pages?",
+          "a": "Yes. Our horse coloring pages have 8 more: a mother horse and foal, a pony, a running horse, a child riding, a horse head, a rocking horse, a carousel horse and a horse in a stable."
+        },
+        {
+          "q": "Which farm animals are included?",
+          "a": "A horse, a cow, a pig, a sheep, a hen with her chicks, a mother duck with ducklings and a baby goat, plus a big barn with a silo. Each page has simple facts to share and the name of the animal's baby."
+        },
+        {
+          "q": "Is there a tractor coloring page?",
+          "a": "Yes. The tractor is in our car and truck coloring pages, so kids who love farm machines can print it next to these farm animals."
+        },
+        {
+          "q": "Is there a farm homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick farm animals as their theme, the counting and ten frame pages are drawn with farm animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "horse-coloring-pages": {
+      "skills": [
+        "Naming the parts of a horse: mane, tail, hooves, saddle and reins",
+        "Learning horse words: a baby is a foal, a small kind of horse is a pony, a horse's home is a stable",
+        "Counting legs, hooves, flowers, blocks and bows"
+      ],
+      "ideas": [
+        "Make a horse story: put the finished pages in order (the foal is born, it grows up, it runs in the field, a child rides it, it rests in the stable) and tell the story together.",
+        "Gallop, trot and walk: after coloring the running horse, move around the room at a walk, then a trot, then a gallop, and talk about which is fastest.",
+        "Before a pony ride, a farm visit or a fair with a carousel, color the matching page so your child knows what to expect.",
+        "Cut out the horse head, tape it to a paper towel tube or a wooden spoon, and make a simple hobby horse to ride around the house."
+      ],
+      "faq": [
+        {
+          "q": "What age are these horse coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The horse head, the pony and the rocking horse have the biggest open shapes for toddlers and preschoolers. The carousel horse and the horse and rider pages have more small parts, like flowers, bows and boots, for kids who like detail."
+        },
+        {
+          "q": "Which horse pictures are included?",
+          "a": "A mother horse with her foal, a pony with a bow, a horse running across a field, a child riding a horse in a helmet, a big horse head, a toy rocking horse, a carousel horse and a horse looking over its stable door. Each page has a simple fact to share and a letter or counting idea."
+        },
+        {
+          "q": "Is there a horse in the farm animal coloring pages too?",
+          "a": "Yes. Our farm animal coloring pages have a horse standing by a fence, next to a cow, a pig, a sheep, a hen with chicks, ducks, a baby goat and a barn. Print it with these if your child wants a whole farm."
+        },
+        {
+          "q": "Is there a farm animal homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick farm animals as their theme, the counting and ten frame pages are drawn with farm animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "dog-coloring-pages": {
+      "skills": [
+        "Naming dog care words: leash, collar, bowl, bed, bath and brush",
+        "Learning dog words: a baby dog is a puppy, and puppies born together are a litter",
+        "Counting puppies, bones, bubbles, flowers and fence boards"
+      ],
+      "ideas": [
+        "Make a puppy's day: put the finished pages in order (wake up, eat, play fetch, go for a walk, take a bath, sleep) and tell the story together.",
+        "Before visiting a friend's dog, talk about safe ways to meet one: ask the owner first, let the dog sniff your hand, and pet its back gently.",
+        "Color the dog house page, then build a dog house for a stuffed dog from a cardboard box.",
+        "Play fetch inside with a rolled up sock after coloring the ball page, and count how many times the ball comes back."
+      ],
+      "faq": [
+        {
+          "q": "What age are these dog coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The puppy, the puppy in the bath and the dachshund have the biggest open shapes for toddlers and preschoolers. The walking the dog and dog house pages have more small parts, like fences, windows and grass, for kids who like detail."
+        },
+        {
+          "q": "Which dog pictures are included?",
+          "a": "A fluffy puppy with a bone, a dog chasing a ball, a sleepy dog in its bed, a puppy in a bubble bath, a dachshund in a sweater, a child walking a dog on a leash, a dog in its dog house and three puppies in a basket. Each page has a simple fact about dogs to share."
+        },
+        {
+          "q": "Do you have cat coloring pages too?",
+          "a": "Yes. Our cat and kitten coloring pages have 8 more pages, including a cat and a dog sitting together as best friends. Our simple coloring pages also have an easy puppy with very big shapes for toddlers."
+        },
+        {
+          "q": "Is there a pets homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick pets as their theme, the counting and ten frame pages are drawn with puppies, kittens and other pets, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "cat-coloring-pages": {
+      "skills": [
+        "Naming the parts of a cat: ears, whiskers, paws, tail and stripes",
+        "Learning cat words: a baby cat is a kitten, and a short sleep is a cat nap",
+        "Counting kittens, stars, yarn balls and whiskers"
+      ],
+      "ideas": [
+        "Count the whiskers on each cat, then draw whiskers on your child's cheeks with a washable marker and talk about what whiskers do.",
+        "Make a cat's day: put the pages in order (play with yarn, watch a bird, hide in a box, take a cat nap) and tell the story together.",
+        "After coloring the cat in a box page, give your child a big cardboard box to turn into a cat bed for a stuffed cat.",
+        "Move like a cat: stretch, tiptoe softly, pounce and curl up for a nap, then talk about which move was hardest."
+      ],
+      "faq": [
+        {
+          "q": "What age are these cat coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The kitten on a cushion, the cat in a box and the cat and dog page have the biggest open shapes for toddlers and preschoolers. The cat in the window and the cat with yarn have more small parts, like curtains, leaves and yarn strands, for kids who like detail."
+        },
+        {
+          "q": "Which cat pictures are included?",
+          "a": "A kitten on a cushion, a cat playing with yarn, a mother cat with three kittens, a sleeping cat, a cat in a box, a cat watching a bird from the window, a cat and dog who are best friends and a cat looking at a goldfish. Each page has a simple fact about cats to share."
+        },
+        {
+          "q": "Do you have dog and puppy coloring pages too?",
+          "a": "Yes. Our dog and puppy coloring pages have 8 more pages: a puppy with a bone, a dog playing fetch, a dog in its bed, a puppy bath, a dachshund, a child walking a dog, a dog house and puppies in a basket."
+        },
+        {
+          "q": "Is there a pets homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick pets as their theme, the counting and ten frame pages are drawn with puppies, kittens and other pets, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
     }
@@ -805,6 +1038,286 @@
       "talkAbout": "This bunny is busy painting stripes on an egg, with a little paint pot nearby and two finished eggs beside it. Some families dye real eggs with food coloring, and others use natural dyes like onion skins or beets. Ask your child what design they would paint on an egg if they had a brush and a pot of paint.",
       "colorTips": "Color the paint in the pot the same color as the stripes the bunny is painting, which is a fun little detail to notice. One finished egg has dots and the other has wavy lines, so give those patterns bright contrasting colors.",
       "learning": "Spotting stripes on one egg, dots on another, and wavy lines on the last builds pattern recognition and describing words. Counting all three eggs, the painted one and the two finished ones, adds a quick number job."
+    },
+    "whale-coloring-page": {
+      "talkAbout": "Whales breathe air through a blowhole on top of their head, and the spout is the warm breath they blow out when they come up. The blue whale is the biggest animal that has ever lived, even bigger than the largest dinosaurs. Ask your child to take a big breath and blow it out like a whale.",
+      "colorTips": "Real whales are often gray, blue or black, so a few shades of blue and gray work well, with a lighter belly. Color the water spout light blue and leave a few drops white. Older kids can color the waves in stripes of blue and green.",
+      "learning": "Whale starts with W. Say the W sound together and look for more W words on the page, like water and waves."
+    },
+    "octopus-coloring-page": {
+      "talkAbout": "An octopus has eight arms covered in suckers that help it grab and taste things. It has no bones, so it can squeeze into tiny cracks between rocks. Many octopuses can change color to blend in with sand and stones. Ask your child which hiding trick they would pick.",
+      "colorTips": "Octopuses can turn red, brown, orange or purple, so any of those fit. Try dots of a darker shade along each arm for the suckers. Color the sand light tan and the seaweed two greens so the octopus stands out.",
+      "learning": "Real octopuses have eight arms. Touch each arm on the page as you count it together, then color the arms one at a time. Touching each thing as you say a number is a great way to practice counting."
+    },
+    "sea-turtle-coloring-page": {
+      "talkAbout": "Sea turtles spend almost their whole lives in the ocean, but mother turtles crawl onto sandy beaches to dig a nest and lay their eggs. When the babies hatch, they scurry across the sand to the water. Ask your child how a flipper is different from a foot.",
+      "colorTips": "Color the shell plates in a pattern, like green, brown, green, brown, or give each plate its own color. The skin can be a lighter green or yellow brown. Add light blue bubbles and a darker green for the seaweed.",
+      "learning": "The shell plates make an easy pattern activity: say the pattern out loud as you color (green, brown, green, brown) and ask what comes next."
+    },
+    "dolphin-coloring-page": {
+      "talkAbout": "Dolphins live in groups called pods and often work together to find fish. They make clicks and whistles to talk to each other, and they listen for the echoes of their clicks to find food. Ask your child to make their best dolphin whistle.",
+      "colorTips": "Many dolphins are gray with a lighter belly, so try a soft gray or blue gray on top and white or very light gray underneath. Use yellow and orange for the sun, then blue for the waves and splashes.",
+      "learning": "Talk about the order of the jump: first the dolphin is in the water, next it flies up in the air, last it splashes back down. Words like first, next and last build early storytelling."
+    },
+    "shark-coloring-page": {
+      "talkAbout": "Sharks are fish, and they breathe through gills on the sides of their head. You can see the gill lines on this shark. Many sharks lose teeth all the time and grow new ones to replace them. Ask your child to show you their own teeth and count a few together.",
+      "colorTips": "Gray or blue gray on top with a white belly looks like a real shark, but a purple or green shark is fun too. Color the little fish in bright yellows and oranges so they pop, and the seaweed in two greens.",
+      "learning": "Shark starts with the SH sound. Say it slowly together, then think of other words that start with SH, like ship, shell and shoe."
+    },
+    "crab-coloring-page": {
+      "talkAbout": "Crabs have a hard shell on the outside of their body and usually scuttle sideways. As a crab grows, it climbs out of its old shell and grows a bigger one. The starfish next to it is not really a fish, so many scientists call it a sea star.",
+      "colorTips": "Red and orange are classic crab colors, with a lighter shade on the claws. Color the starfish yellow or pink, the bucket any bright color, and the sand light tan with the dots in brown.",
+      "learning": "Count the legs you can see on the crab, then count the starfish's arms. Which has more? Comparing two small groups is early math."
+    },
+    "seahorse-coloring-page": {
+      "talkAbout": "Seahorses are a kind of fish, even though they swim upright. They wrap their curly tails around seaweed so the moving water does not push them away. The dad carries the eggs in a pouch on his belly until the tiny babies are ready to swim out.",
+      "colorTips": "Seahorses come in yellow, orange, brown and even pink, so bright colors are fine. Color the bands on the body in two shades for stripes. Add green seaweed and pink or orange coral around it.",
+      "learning": "Seahorse is a compound word: sea plus horse. Clap the two parts together, then try a few more ocean words like starfish and seaweed."
+    },
+    "jellyfish-coloring-page": {
+      "talkAbout": "Jellyfish are mostly water, and they drift with the ocean currents. They have no brain, heart or bones. Some can sting, so if you see one on the beach, look but don't touch.",
+      "colorTips": "Pink, purple and light blue look lovely on jellyfish, and some real ones glow in the dark. Try a different color for each tentacle, or color them in rainbow order. Leave a few bubbles white.",
+      "learning": "Compare the two jellyfish: which is bigger, which is smaller, which has longer tentacles? Size words like big, small, long and short are early math words."
+    },
+    "ladybug-coloring-page": {
+      "talkAbout": "Ladybugs are a kind of beetle. Gardeners like them because they eat aphids, tiny bugs that hurt plants. When a ladybug flies, its hard spotted shell opens up and thin wings unfold from underneath. Ask your child where they have seen a ladybug.",
+      "colorTips": "Red with black spots is the classic look, but some real ladybugs are orange or yellow. Color the leaf green with darker green veins, and pick any color for the flower.",
+      "learning": "Count the spots on the ladybug's shell, then write the number on the back of the page. Counting things that are spread out is a good step up from counting things in a row."
+    },
+    "butterfly-coloring-page": {
+      "talkAbout": "Every butterfly starts as a tiny egg, hatches into a caterpillar, makes a chrysalis, and comes out with wings. Butterflies drink nectar from flowers through a long tongue that stays curled up when they are not using it.",
+      "colorTips": "Butterfly wings are a great place to practice matching: color one shape on the left wing, then the same shape on the right wing in the same color. Bright oranges, blues and yellows look cheerful. Color the flowers to match the wings or in a different color.",
+      "learning": "Matching the two wings is early symmetry and pattern work. Point to a shape on one side and ask your child to find its twin on the other side."
+    },
+    "bee-coloring-page": {
+      "talkAbout": "Bumble bees are fuzzy, and pollen sticks to their hair as they visit flowers. They make a loud buzz by beating their wings very fast. Bees can sting, so watch them from a little distance and let them get on with their work.",
+      "colorTips": "Alternate yellow and black for the stripes, and leave the wings white or color them very light blue. The sunflower petals can be yellow and orange, with a brown center. Follow the dotted flight path with a finger first, then trace it with a crayon.",
+      "learning": "The stripes make an AB pattern: yellow, black, yellow, black. Say the pattern out loud as you color and ask what color comes next."
+    },
+    "caterpillar-coloring-page": {
+      "talkAbout": "Caterpillars are baby butterflies and moths. They munch on leaves almost all day and grow so fast that they shed their skin several times. When they are ready, they make a chrysalis or a cocoon and change inside it. Next time you are outside, look for leaves with bites taken out.",
+      "colorTips": "Give each round body part its own color for a rainbow caterpillar, or alternate two colors in a pattern. Color the leaves in a few greens and the branch brown.",
+      "learning": "Count the caterpillar's round body parts, then count them again starting from the other end. Getting the same number both ways is an important counting idea."
+    },
+    "ant-coloring-page": {
+      "talkAbout": "Ants live together in big groups called colonies, and each ant has a job, like finding food, caring for babies or digging tunnels. They leave a scent trail on the ground so other ants can follow it to food. Ask your child where they have seen a line of ants.",
+      "colorTips": "Real ants are often black, brown or red, so pick one for the ant's body. Make the leaf bright green and the anthill tan or light brown. The pebbles and grass tufts are small spaces for careful coloring.",
+      "learning": "Ant starts with the short A sound, like apple. Say a-a-ant together and think of more short A words, such as cat, hat and map."
+    },
+    "dragonfly-coloring-page": {
+      "talkAbout": "Dragonflies begin life underwater as nymphs, then climb up a plant stem, shed their skin and fly away with wings. Their big eyes help them spot and catch flying insects like mosquitoes. You often see them near ponds and lakes in summer.",
+      "colorTips": "Blue, green and purple look great on a dragonfly's long body. The wings can stay white or be colored very lightly so they look see-through. Color the cattails brown, the lily pad green and the flower pink.",
+      "learning": "Count the dragonfly's wings, then compare: a dragonfly has four wings and a bird has two. Which has more? Comparing numbers like this is early math."
+    },
+    "grasshopper-coloring-page": {
+      "talkAbout": "Grasshoppers use their big back legs to leap and their wings to fly short distances. Many grasshoppers make a chirping sound by rubbing a back leg against a wing. Listen for chirps outside together on a warm day.",
+      "colorTips": "Green or brown helps a grasshopper hide in the grass, so those are natural picks. Try a lighter green for the body and a darker one for the legs. Color the flowers and sun in bright colors so the page feels like summer.",
+      "learning": "Jump and count: after coloring, take turns hopping like a grasshopper and count the hops out loud. Then try counting back down to zero."
+    },
+    "firefly-coloring-page": {
+      "talkAbout": "Fireflies, also called lightning bugs, are beetles that light up to signal to each other. Different kinds of fireflies blink in different patterns. On warm summer evenings, you can sometimes see them blinking over yards and fields.",
+      "colorTips": "Color the tail bright yellow or yellow green so it looks like it's glowing, and make the glow lines around it yellow too. Keep the moon and stars yellow, and color the tall grass in a few greens.",
+      "learning": "Talk about day and night: what do we see in the sky at night? Name the moon and stars, then count the stars on the page."
+    },
+    "rocket-coloring-page": {
+      "talkAbout": "Rockets carry astronauts and machines up into space. Before a launch, everyone counts down: 10, 9, 8, all the way to blast off. Count down together from 10, then have your child jump up on blast off.",
+      "colorTips": "Real rockets are often white, but a pretend rocket can be any color. Try one color for the body and another for the fins. Color the smoke cloud gray, or orange and yellow near the bottom where the fire would be.",
+      "learning": "Rocket starts with R. Say the R sound together, then count the stars on the page and write the number at the bottom."
+    },
+    "astronaut-coloring-page": {
+      "talkAbout": "Astronauts float inside a space station because they are falling around the Earth all the time, so nothing feels heavy. They sleep in sleeping bags tied to the wall so they don't drift away. Ask your child what they would pack for a trip to space.",
+      "colorTips": "Space suits are usually white, so your child can color the patches, gloves and boots in bright colors. Color the helmet window light blue or leave it white. A dark blue or black crayon around the stars makes the sky look like night.",
+      "learning": "Astronaut starts with A. Your child can draw a mission patch with the first letter of their own name on the suit."
+    },
+    "solar-system-coloring-page": {
+      "talkAbout": "All eight planets travel around the sun. The four close to the sun (Mercury, Venus, Earth and Mars) are rocky, and the four far away are giant balls of gas and ice. The circles on this page are not drawn to size: Jupiter is the biggest planet, so big that more than a thousand Earths could fit inside it.",
+      "colorTips": "Color the sun yellow and orange. Make Earth blue and green, Mars red, Jupiter in orange and tan stripes, and Neptune deep blue. Count the planets out loud as your child colors each one.",
+      "learning": "Point to each planet and say its name. Older kids can write the first letter of each planet next to it, from M for Mercury to N for Neptune."
+    },
+    "planet-coloring-page": {
+      "talkAbout": "Saturn is the sixth planet from the sun and the second biggest, after Jupiter. It is made mostly of gas, so there is no ground to stand on. Saturn has many moons, and scientists keep finding more.",
+      "colorTips": "Real Saturn looks pale yellow and tan, with faint stripes. Kids can add stripes across the planet in yellow, orange and brown, then color each ring a different shade. Leave the stars white or make them gold.",
+      "learning": "Planet starts with P. Count the moons around Saturn, then count the stars, and talk about which group has more."
+    },
+    "moon-coloring-page": {
+      "talkAbout": "The moon goes around the Earth, and from here it seems to change shape over about a month, from a thin crescent to a full round moon and back. Astronauts first walked on the moon in 1969. Look for the moon together tonight and talk about its shape.",
+      "colorTips": "The moon looks gray and white, so a few shades of gray work well, with darker gray inside the craters. Color the sky dark blue or purple, and make the little rocket as bright as your child likes.",
+      "learning": "Moon starts with M. Count the craters, then trace a big circle in the air together, just like the shape of a full moon."
+    },
+    "alien-coloring-page": {
+      "talkAbout": "Ask your child to make up a name for the alien and the planet it comes from. What does it eat? What does it say when it waves hello? Inventing a story while coloring builds speaking and listening skills.",
+      "colorTips": "Aliens in stories are often green, but this one can be any color at all. The saucer looks great in silver gray with colored lights around the edge. Kids can draw more stars or a second planet in the empty sky.",
+      "learning": "Alien starts with A. Count the alien's antennae and eyes, then count your child's eyes and ears to compare."
+    },
+    "telescope-coloring-page": {
+      "talkAbout": "People have used telescopes to look at the sky for about 400 years, and they helped us learn about moons and planets we cannot see with just our eyes. On a clear night, step outside together and count how many stars you can see.",
+      "colorTips": "Color the telescope in bright colors, the crescent moon yellow and the stars gold or yellow. Your child can make the sky dark blue and the hill green. Kids can draw their own face looking through the telescope.",
+      "learning": "Telescope starts with T. Count the stars in the sky, then hold up the same number of fingers."
+    },
+    "moon-rover-coloring-page": {
+      "talkAbout": "A rover is a car built to drive where people are exploring, like the moon or Mars. Some rovers carry astronauts, and some drive themselves with cameras so scientists back on Earth can see where they go. Ask your child where they would drive a rover.",
+      "colorTips": "Rovers are often silver, gray or white, but your child can pick any colors. Make the moon ground gray, and color the Earth blue and green. Dark blue or black around the stars makes the sky look like space.",
+      "learning": "Rover starts with R, just like rocket. Count the wheels on the rover and the craters on the ground."
+    },
+    "horse-coloring-page": {
+      "talkAbout": "A baby horse is called a foal. Horses eat grass and hay, and they use their long tails to swish away flies. Ask your child what sound a horse makes, then gallop around the room together.",
+      "colorTips": "Horses can be brown, black, white, gray or golden. Try one color for the body and a darker one for the mane and tail. Color the fence brown and the flowers in any bright colors.",
+      "learning": "Horse starts with H. Count the horse's legs, then count the flowers in the grass."
+    },
+    "cow-coloring-page": {
+      "talkAbout": "A baby cow is called a calf. Cows spend a lot of the day eating grass and resting. Ask your child to name foods that come from milk, like cheese, butter and yogurt.",
+      "colorTips": "Many cows are black and white or brown and white, so your child can color the spots black or brown. Make the bell gold or yellow and the barn red. The flowers can be any color your child likes.",
+      "learning": "Cow starts with C. Count the cow's spots together, then say moo once for each spot."
+    },
+    "pig-coloring-page": {
+      "talkAbout": "A baby pig is called a piglet. Pigs use their flat snouts to sniff and dig for food in the ground. Ask your child what sound a pig makes, then see who can make the best oink.",
+      "colorTips": "Most cartoon pigs are pink, but real pigs can also be black, brown or spotted. Color the mud brown and the fence a lighter brown. Flowers in red, yellow and purple make the page bright.",
+      "learning": "Pig starts with P. Pig rhymes with big, dig and wig. Think of more rhyming words together."
+    },
+    "sheep-coloring-page": {
+      "talkAbout": "A baby sheep is called a lamb. Sheep like to stay together in a group called a flock. Ask your child to find something at home made of wool, like a hat, a sweater or a blanket.",
+      "colorTips": "Wool is often white or cream, so your child can leave the coat white or color it light gray. Make the face and legs black or brown. Color the sun yellow and the cloud light blue.",
+      "learning": "Sheep starts with SH. Say the sh sound together, then count the sheep's legs and the posts on the fence."
+    },
+    "chicken-coloring-page": {
+      "talkAbout": "A grown-up girl chicken is called a hen, a boy is a rooster, and a baby is a chick. Hens lay eggs, and some of the eggs people eat for breakfast come from hens on farms. Ask your child how they like their eggs.",
+      "colorTips": "Hens can be brown, red, white or black. Chicks are often yellow and fluffy. Color the eggs white, brown or even pale blue (some hens lay blue eggs), and the nest a straw yellow.",
+      "learning": "Chicken starts with CH. Count the chicks and the eggs, then talk about which group has more."
+    },
+    "barn-coloring-page": {
+      "talkAbout": "Many farms have a barn for the animals, the hay and the tools. Hay is dried grass, and farmers roll or stack it into bales so animals have food all winter. Ask your child which animals they think live in this barn.",
+      "colorTips": "Barns are often painted red with white trim, so a red crayon for the walls and white for the X on the doors looks classic. Color the silo gray or silver and the hay bales yellow.",
+      "learning": "Barn starts with B. Find the X shapes on the barn doors, then look for squares, rectangles and triangles on the page."
+    },
+    "duck-coloring-page": {
+      "talkAbout": "Baby ducks are called ducklings, and they follow their mother in a line soon after they hatch. Ducks eat plants, seeds and small bugs in and around the water. Ask your child to waddle and quack like a duck.",
+      "colorTips": "Ducklings are often yellow, and the mother can be brown, white or green and brown. Color the beaks and feet orange, the water blue and the lily pads green. The cattails are brown at the top.",
+      "learning": "Duck starts with D. Count the ducklings, then count how many ducks there are in all with the mother."
+    },
+    "goat-coloring-page": {
+      "talkAbout": "A baby goat is called a kid, just like a child. Goats nibble on grass, leaves and hay, and some goats give milk that is made into cheese. Ask your child to find something they can safely climb on, like a step.",
+      "colorTips": "Goats can be white, brown, black, gray or spotted. Color the rock gray and the grass green, and give the flowers bright colors. Kids can add spots or patches to the goat.",
+      "learning": "Goat starts with G. A baby goat is called a kid. Talk about other baby animal names on this page: foal, calf, piglet, lamb, chick and duckling."
+    },
+    "foal-coloring-page": {
+      "talkAbout": "A baby horse is called a foal. A foal drinks its mother's milk at first, then starts nibbling grass while it is still small. Ask your child what they did when they were a baby, and what they can do now that they are bigger.",
+      "colorTips": "A foal often looks a lot like its mother, so your child can use the same color for both, or make them different on purpose. Color the manes a darker shade than the bodies. The flowers in the grass can be any bright color.",
+      "learning": "Foal starts with F. Talk about big and small: which horse is bigger? Count the horses' legs together (4 and 4 make 8)."
+    },
+    "pony-coloring-page": {
+      "talkAbout": "Ponies are a small kind of horse. Many children take their first ride on a pony because ponies are short and close to the ground. Ask your child to name other small and big pairs, like a cat and a lion.",
+      "colorTips": "Ponies can be any horse color, from brown and black to white and spotted, and a pretend pony can be pink or purple too. Make the bow a bright color, the sun yellow and the flowers in a rainbow of colors.",
+      "learning": "Pony starts with P. Count the flowers in the grass, then count the sun's rays and talk about which group has more."
+    },
+    "running-horse-coloring-page": {
+      "talkAbout": "Horses move at different speeds: a walk is slow, a trot is a bouncy middle speed, and a gallop is the fastest. Walk, trot and gallop around the room together, then talk about which one made you tired.",
+      "colorTips": "Pick one color for the horse's body and a darker color for the mane and tail so they stand out as they blow in the wind. Color the hills in two or three greens and the clouds light blue or gray.",
+      "learning": "Run starts with R. Say fast and slow words together: gallop, run and zoom are fast, walk and tiptoe are slow."
+    },
+    "horse-and-rider-coloring-page": {
+      "talkAbout": "Riders sit in a saddle and hold the reins to tell the horse where to go. They wear a helmet to keep their head safe and boots with a small heel so their feet stay in the stirrups. Ask your child what else people wear to stay safe, like a bike helmet or a seat belt.",
+      "colorTips": "Your child can make the rider look like themselves: their hair color, their favorite shirt color and a bright helmet. Color the horse brown, gray or black, the saddle a darker brown and the tree leaves green.",
+      "learning": "Helmet starts with H, just like horse. Find all the things on the page that keep the rider safe: the helmet, the boots and the reins."
+    },
+    "horse-head-coloring-page": {
+      "talkAbout": "Horses can move their ears in different directions to listen, and the way their ears point can show how they feel. Ears pointing forward often mean the horse is curious. Ask your child to show you how they look when they are curious or happy.",
+      "colorTips": "This big page is good for chunky crayons or markers. Color the face one color and the mane a darker shade, or try a few colors for a rainbow mane. The halter can be red, blue or any bright color.",
+      "learning": "Point to the parts of the horse's face together: ears, eyes, nose, mouth and mane. Then point to the same parts on your child's face (people have hair instead of a mane)."
+    },
+    "rocking-horse-coloring-page": {
+      "talkAbout": "A rocking horse is a toy horse that rocks back and forth on curved wood. Some are made of wood and painted, and some are soft. Ask your child which toy they would most like to ride and why.",
+      "colorTips": "Painted rocking horses are often white with bright saddles, but your child can pick any colors. Color the stars yellow, the heart red and the yarn mane brown or orange. Each toy block can be a different color.",
+      "learning": "Count the stars on the rocking horse, then count the toy blocks. Talk about shapes: the blocks are cubes, the stars have 5 points and the rocker is a long curve."
+    },
+    "carousel-horse-coloring-page": {
+      "talkAbout": "Carousel horses are painted in bright colors and decorated with flowers, jewels and ribbons. Each horse on a carousel can look a little different. Ask your child to design their own carousel horse: what colors and decorations would it have?",
+      "colorTips": "This is a page for lots of colors: the horse can be white or any color, the saddle and bows bright, and the pole striped in two colors, like red and white. Kids who like detail can color each flower petal a different color.",
+      "learning": "Carousel starts with C. Count the flowers on the horse and the base, then look for circles, bows and stripes on the page."
+    },
+    "horse-stable-coloring-page": {
+      "talkAbout": "Horses need fresh water, hay or grass to eat, and a clean place to rest. People who care for horses brush them, clean their hooves and fill their buckets every day. Ask your child how they help take care of a pet or a plant at home.",
+      "colorTips": "Stables are often brown or red wood, so your child can color the boards in two shades of brown. Make the horseshoe gray or silver, the hay yellow and the bucket any bright color.",
+      "learning": "Horseshoe has the word horse in it. Trace the U shape of the horseshoe with a finger, then find the bucket, the hay and the hinges on the door."
+    },
+    "puppy-coloring-page": {
+      "talkAbout": "A baby dog is called a puppy. Puppies drink their mother's milk at first, then start eating soft puppy food. Ask your child what a puppy needs to stay happy and healthy: food, water, walks, a bed and lots of love.",
+      "colorTips": "Puppies come in many colors: brown, black, white, golden, gray or spotted. Make the ears a darker shade than the face, the tag shiny yellow or gray, and the flowers any bright colors.",
+      "learning": "Puppy starts with P. Count the flowers on the page together, then count the puppy's legs and ears."
+    },
+    "dog-with-ball-coloring-page": {
+      "talkAbout": "Fetch is a game where you throw a ball and the dog runs to bring it back. Many dogs love to run and chase. Ask your child what games they like to play outside and which ones use a ball.",
+      "colorTips": "Color the ball in two colors so the stripes stand out. The fence can be white or brown, the tree trunk brown and the leaves green. Your child can give the dog spots or patches.",
+      "learning": "Ball starts with B. Talk about position words: the dog is next to the ball, the tree is behind the fence, the grass is under the dog."
+    },
+    "dog-bed-coloring-page": {
+      "talkAbout": "Dogs need a cozy place to sleep, fresh water every day and food at mealtime. Ask your child where they like to sleep, and what they need to get ready for bed, like pajamas, a story or a favorite blanket.",
+      "colorTips": "Pick a soft color for the bed and a different color or pattern for the blanket. The water in the bowl can be light blue and the food brown. The bone toy can be any bright color.",
+      "learning": "Bed starts with B, just like bone and bowl. Find all the things on the page that start with B together."
+    },
+    "puppy-bath-coloring-page": {
+      "talkAbout": "Dogs get baths when they are muddy or smelly, and a brush helps keep their fur clean and smooth. Ask your child how a bath at their house is the same as the puppy's bath, and how it is different.",
+      "colorTips": "Color the bubbles light blue, purple or pink, or leave some white. The rubber duck is usually yellow with an orange beak. Make the tub and the towel bright colors.",
+      "learning": "Bath starts with B. Count the bubbles floating in the air, then circle the biggest bubble and the smallest bubble."
+    },
+    "dachshund-coloring-page": {
+      "talkAbout": "Dachshunds have long bodies and short legs, and some people call them sausage dogs or wiener dogs. Dogs come in many shapes and sizes. Ask your child to name a big dog and a small dog they have seen.",
+      "colorTips": "Dachshunds are often brown, black and tan, or reddish. The sweater can be any colors: try one color for the zigzags and another for the rest. Make the flowers a rainbow of colors.",
+      "learning": "Long and short: the dog's body is long and its legs are short. Find other long and short things in your home, like a spoon and a broom."
+    },
+    "dog-walk-coloring-page": {
+      "talkAbout": "When we walk a dog, we hold the leash so the dog stays close and safe near streets. Ask your child what else keeps people safe on a walk, like holding a grown-up's hand and looking both ways.",
+      "colorTips": "Your child can color the girl to look like themselves or a friend. Make the house and its roof bright colors, the path gray, the leash red or blue and the puppy any dog color.",
+      "learning": "Walk starts with W. Go on a short walk after coloring and count the dogs, trees or houses you see."
+    },
+    "dog-house-coloring-page": {
+      "talkAbout": "Some dogs sleep in a dog house in the yard, and many dogs sleep inside with their families. Ask your child to describe a dream house for a dog: what would it have inside?",
+      "colorTips": "Color the dog house boards red, brown or blue, and the roof a different color. The fence can be white, the grass green and the bone on the bowl white or yellow.",
+      "learning": "Look at the shapes in the dog house: the roof is a triangle and the door is an arch. Find a triangle and a rectangle somewhere else on the page."
+    },
+    "puppies-in-basket-coloring-page": {
+      "talkAbout": "Puppies born together are a litter, and they play, sleep and snuggle together. Ask your child to give each puppy a name, and say which puppy is the biggest.",
+      "colorTips": "Make each puppy a different color, like brown, golden and black, and color the spots on the spotted puppy. The basket can be tan or brown and the blanket any soft color.",
+      "learning": "Count the puppies: 1, 2, 3. Then count their ears together (2 ears each make 6)."
+    },
+    "kitten-coloring-page": {
+      "talkAbout": "A baby cat is called a kitten. Kittens love to play, pounce and climb, and they sleep a lot as they grow. Ask your child what a kitten needs: food, water, a litter box, toys and a quiet place to rest.",
+      "colorTips": "Kittens can be orange, gray, black, white, striped or spotted. Make the bow a bright color and the cushion a different color, with the tassels to match.",
+      "learning": "Kitten starts with K. Count the whiskers on one side of the kitten's face, then on the other side, and compare."
+    },
+    "cat-with-yarn-coloring-page": {
+      "talkAbout": "Cats love toys they can chase and bat with their paws. String and yarn are best for play when a grown-up is there, and get put away after. Ask your child which toys they like to chase or catch.",
+      "colorTips": "Color the stripes on the cat a darker shade than its fur. Pick two bright colors for the yarn balls, and let the loose string match one of them.",
+      "learning": "Yarn starts with Y. Talk about big and small: the big ball of yarn and the small ball of yarn. Which one is closer to the cat?"
+    },
+    "cat-and-kittens-coloring-page": {
+      "talkAbout": "A mother cat takes care of her kittens: she feeds them, keeps them warm and licks them clean. Ask your child how grown-ups in their family take care of them.",
+      "colorTips": "Kittens often look a bit like their mother but can be different colors. The basket can be tan or brown and the blanket any soft color.",
+      "learning": "Count the kittens, then count all the cats on the page (1 mother and 3 kittens make 4)."
+    },
+    "sleeping-cat-coloring-page": {
+      "talkAbout": "Cats nap many times a day and often curl up to stay warm. Ask your child how they feel after a good rest, and talk about the things they do at bedtime.",
+      "colorTips": "Night colors work well here: a dark blue window, a yellow moon and stars, and a soft-colored rug. Color the stripes on the cat a darker shade than its fur.",
+      "learning": "Nap starts with N, just like night. Count the stars in the window, then find the moon and talk about its shape."
+    },
+    "cat-in-a-box-coloring-page": {
+      "talkAbout": "Cats like to hide in boxes, baskets and other small spaces where they feel cozy and safe. Ask your child where they like to hide when they play hide and seek.",
+      "colorTips": "Boxes are often brown or tan, but your child can make this one any color. Color the cat's stripes darker than its fur and the toy mouse gray or pink.",
+      "learning": "Box starts with B. Talk about position words: the cat is in the box, the mouse is next to the box, the tail is out of the box."
+    },
+    "cat-in-window-coloring-page": {
+      "talkAbout": "Many indoor cats love to sit by a window and watch birds, leaves and people outside. Ask your child what they can see from their own window.",
+      "colorTips": "Make the sky light blue and the clouds white or gray. Color the curtains a bright color or a pattern, the plant green and the pot orange or red. The bird can be any color.",
+      "learning": "Window starts with W. Count the windowpanes, then find the bird, the clouds and the leaves outside."
+    },
+    "cat-and-dog-coloring-page": {
+      "talkAbout": "Friends can be different from each other and still have fun together, just like a cat and a dog. Ask your child what makes a good friend, and who their friends are.",
+      "colorTips": "Make the heart red or pink. The cat and the dog can be any colors: try making them very different so they stand out side by side.",
+      "learning": "Cat starts with C and dog starts with D. Count the cat's legs and the dog's legs together (4 and 4 make 8)."
+    },
+    "cat-and-fishbowl-coloring-page": {
+      "talkAbout": "Cats are curious and like to watch anything that moves. Pet goldfish do best in a roomy tank with clean water. Ask your child which pet they would like, and what it would need.",
+      "colorTips": "Goldfish are usually orange or gold. Color the water light blue, the plant green and each pebble a different color. The table can be brown or white.",
+      "learning": "Fish starts with F. Count the bubbles coming from the fish, then count the pebbles at the bottom of the bowl."
     }
   }
 }

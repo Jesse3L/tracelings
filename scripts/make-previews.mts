@@ -18,6 +18,7 @@ import { buildMathPage } from '../src/lib/mathSheets';
 import { FAMILY_INFO, buildFamilyPage } from '../src/lib/wordFamilies';
 import { loadThemeIcons } from '../src/lib/program/themes';
 import { buildWordProblemPage } from '../src/lib/wordProblems';
+import { PRESETS, DEFAULT_SUBJECTS, buildSchedulePage, loadScheduleIcons } from '../src/lib/schedule';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'public/previews');
@@ -149,6 +150,34 @@ jobs.push(render('k-mixed', 'addition-and-subtraction-worksheet-kindergarten', b
 await loadThemeIcons(['farm'], (u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
 jobs.push(render('k-word-problems', 'kindergarten-word-problems-worksheet', buildWordProblemPage({ kind: 'wp-add', range: 5, theme: 'farm', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Kindergarten word problems worksheet within 5: short farm animal stories to read aloud, with pictures to count and a number sentence to fill in'));
+// Preschool schedule: the picture schedule for a homeschool morning (the maker's default page) and the weekly chart.
+await loadScheduleIcons((u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
+jobs.push(render('preschool-schedule', 'preschool-daily-visual-schedule', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: PRESETS[0].steps, subjects: DEFAULT_SUBJECTS }),
+  'Printable preschool daily schedule with pictures: wake up, get dressed, breakfast, brush teeth, letters, numbers, snack, play outside, story time and lunch, each with a box to check off'));
+jobs.push(render('preschool-schedule-week', 'preschool-homeschool-weekly-schedule', buildSchedulePage({ kind: 'week', name: '', paper: 'letter', credit: true, steps: PRESETS[0].steps, subjects: DEFAULT_SUBJECTS }),
+  'Preschool homeschool weekly schedule chart: Monday to Friday rows for letters, numbers, read aloud, art and fine motor, outside time, and music and movement'));
+// Bedtime routine chart: the bedtime sample as a checklist and as cut-apart cards.
+const bed = PRESETS.find((p) => p.v === 'bedtime')!;
+jobs.push(render('bedtime-routine-chart', 'printable-bedtime-routine-chart', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: bed.steps, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' }),
+  'Printable bedtime routine chart with pictures: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out, each with a box to check off'));
+jobs.push(render('bedtime-routine-cards', 'bedtime-routine-picture-cards', buildSchedulePage({ kind: 'cards', name: '', paper: 'letter', credit: true, steps: bed.steps, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' }),
+  'Bedtime routine picture cards to cut apart: bath, pajamas, potty, brush teeth, story time, hugs and kisses, and lights out'));
+// Morning routine chart: the school morning sample as a checklist and as cut-apart cards.
+const morn = PRESETS.find((p) => p.v === 'morning-school')!;
+jobs.push(render('morning-routine-chart', 'printable-morning-routine-chart', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: morn.steps, subjects: DEFAULT_SUBJECTS, routine: 'morning' }),
+  'Printable morning routine chart for preschoolers with pictures: wake up, potty, get dressed, breakfast, brush teeth, brush hair, shoes, coat and backpack, each with a box to check off'));
+jobs.push(render('morning-routine-cards', 'morning-routine-picture-cards', buildSchedulePage({ kind: 'cards', name: '', paper: 'letter', credit: true, steps: morn.steps, subjects: DEFAULT_SUBJECTS, routine: 'morning' }),
+  'Morning routine picture cards to cut apart: wake up, potty, get dressed, breakfast, brush teeth, brush hair, shoes on, coat on and backpack'));
+// Potty training chart: the sticker chart (the page's default) and the potty chair steps.
+const potty = PRESETS.find((p) => p.v === 'potty-chair')!;
+jobs.push(render('potty-sticker-chart', 'printable-potty-training-sticker-chart', buildSchedulePage({ kind: 'stickers', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty', boxes: 5 }),
+  'Printable potty training sticker chart: Monday to Sunday with five sticker circles a day, a star to color in each one, and a reward line at the bottom'));
+jobs.push(render('potty-steps-chart', 'potty-training-steps-chart-with-pictures', buildSchedulePage({ kind: 'day', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty' }),
+  'Potty training steps chart with pictures: pants down, sit on the potty, wipe, pants up, flush or dump, wash hands and dry hands, each with a box to check off'));
+// Potty sticker chart with a picture theme: dinosaurs, five circles a day.
+await loadThemeIcons(['dinosaurs'], (u) => readFile(path.join(ROOT, 'public', u), 'utf8'));
+jobs.push(render('potty-sticker-chart-dinosaurs', 'dinosaur-potty-training-sticker-chart', buildSchedulePage({ kind: 'stickers', name: '', paper: 'letter', credit: true, steps: potty.steps, subjects: DEFAULT_SUBJECTS, routine: 'potty', boxes: 5, theme: 'dinosaurs' }),
+  'Printable dinosaur potty training sticker chart: Monday to Sunday with five circles a day, each with a light dinosaur picture to cover with a sticker or color in, and a reward line at the bottom'));
 // Word families: the hub shows the -at word hunt; each family page shows its word family house.
 jobs.push(render('word-families', 'word-family-worksheet-at-hunt', buildFamilyPage({ family: 'at', kind: 'hunt', name: '', paper: 'letter', credit: true, seed: 1 }),
   'Word family worksheet: find and circle the -at words like cat, hat and mat among -an, -ap and -ag words'));

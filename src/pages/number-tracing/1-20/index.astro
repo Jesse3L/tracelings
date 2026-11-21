@@ -14,7 +14,7 @@ const faqs = [
   { q: 'Can I print numbers 1 to 20 on one page?', a: 'Yes. Choose the One page layout and all twenty numbers print on a single sheet in two columns, 1 to 10 on the left and 11 to 20 on the right. Pick Bigger numbers if your child needs larger rows, and the sheet spreads over a few pages instead.' },
   { q: 'When should kids start tracing numbers 11 to 20?', a: 'Usually once they can write 1 to 10 without much help, which for many children is during the kindergarten year. Counting to 20 out loud comes first, so check that before adding the teen numbers.' },
   { q: 'Why are the teen numbers hard?', a: 'The names don’t match the way they are written. We say “fourteen” with the four first, but write the 1 first. Pointing out that 14 is “ten and four” and that the 1 always comes first in the teens clears up a lot of confusion.' },
-  { q: 'Are these number tracing worksheets free?', a: 'Yes. Add your email once and every sheet on that device stays free, with no password and no limit.' },
+  { q: 'Are these number tracing worksheets free?', a: 'Yes. Add your email once and every sheet on that device is free to print, up to 7 downloads a day, with no password.' },
   { q: 'Can I use these sheets in my classroom?', a: 'Yes. Print as many copies as your students need. Members also get every sheet with no footer line and can print class sets of name worksheets in one PDF.' },
 ];
 
@@ -97,7 +97,7 @@ const schema = [
       <div class="divide-y divide-hairline border-y border-hairline">
         {faqs.map((f) => (
           <details class="group py-4">
-            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="shrink-0 self-start text-muted group-open:rotate-45 transition-transform">+</span></summary>
             <p class="mt-3 mb-0!">{f.a}</p>
           </details>
         ))}

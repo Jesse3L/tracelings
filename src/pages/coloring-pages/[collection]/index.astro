@@ -4,6 +4,7 @@ import { SITE } from '../../../config';
 import { getCollections } from '../../../lib/coloring-data';
 import { fitTitle } from '../../../lib/seo';
 import extra from '../../../data/coloring-extra.json';
+import ThemeFreeWeekCard, { COLORING_THEMES } from '../../../components/site/ThemeFreeWeekCard.tsx';
 
 export function getStaticPaths() {
   return getCollections().map((c) => ({ params: { collection: c.slug }, props: { c } }));
@@ -46,6 +47,34 @@ const tools: Record<string, { href: string; label: string; p: string }[]> = {
   'car-and-truck-coloring-pages': [
     { href: '/letter-tracing/t/', label: 'Letter T tracing', p: 'T is for truck. Trace capital T and lowercase t.' },
     { href: '/letter-tracing/c/', label: 'Letter C tracing', p: 'C is for car. Trace capital C and lowercase c.' },
+  ],
+  'ocean-animal-coloring-pages': [
+    { href: '/letter-tracing/o/', label: 'Letter O tracing', p: 'O is for ocean and octopus. Trace capital O and lowercase o.' },
+    { href: '/math-worksheets/kindergarten-word-problems/', label: 'Kindergarten word problems', p: 'Pick the under the sea theme and count fish, crabs and whales in short read-aloud stories.' },
+  ],
+  'bug-coloring-pages': [
+    { href: '/letter-tracing/b/', label: 'Letter B tracing', p: 'B is for bug, bee and butterfly. Trace capital B and lowercase b.' },
+    { href: '/math-worksheets/ten-frames/', label: 'Ten frame printables', p: 'Count the ladybug’s spots, then show the same number on a ten frame.' },
+  ],
+  'space-coloring-pages': [
+    { href: '/letter-tracing/r/', label: 'Letter R tracing', p: 'R is for rocket and rover. Trace capital R and lowercase r.' },
+    { href: '/math-worksheets/kindergarten-word-problems/', label: 'Kindergarten word problems', p: 'Pick the space theme and count rockets, astronauts and aliens in short read-aloud stories.' },
+  ],
+  'farm-animal-coloring-pages': [
+    { href: '/letter-tracing/f/', label: 'Letter F tracing', p: 'F is for farm. Trace capital F and lowercase f.' },
+    { href: '/math-worksheets/ten-frames/', label: 'Ten frame printables', p: 'Count the chicks and the eggs, then show the same number on a ten frame.' },
+  ],
+  'horse-coloring-pages': [
+    { href: '/letter-tracing/h/', label: 'Letter H tracing', p: 'H is for horse and horseshoe. Trace capital H and lowercase h.' },
+    { href: '/math-worksheets/kindergarten-word-problems/', label: 'Kindergarten word problems', p: 'Pick the farm theme and count horses, cows and hens in short read-aloud stories.' },
+  ],
+  'dog-coloring-pages': [
+    { href: '/letter-tracing/d/', label: 'Letter D tracing', p: 'D is for dog. Trace capital D and lowercase d.' },
+    { href: '/math-worksheets/kindergarten-word-problems/', label: 'Kindergarten word problems', p: 'Pick the pets theme and count puppies and kittens in short read-aloud stories.' },
+  ],
+  'cat-coloring-pages': [
+    { href: '/letter-tracing/c/', label: 'Letter C tracing', p: 'C is for cat. Trace capital C and lowercase c.' },
+    { href: '/math-worksheets/ten-frames/', label: 'Ten frame printables', p: 'Count the kittens, stars and yarn balls, then show the same number on a ten frame.' },
   ],
   'new-years-coloring-pages': [
     { href: '/number-tracing/', label: 'Number tracing', p: 'Practice writing the numbers in the new year.' },
@@ -103,6 +132,8 @@ const schema = [
       ))}
     </ul>
 
+    {COLORING_THEMES[c.slug] && <div class="mt-10"><ThemeFreeWeekCard client:load collection={c.slug} /></div>}
+
     {x && (
       <article class="prose-tl max-w-[68ch] mt-12">
         <h2>What kids practice</h2>
@@ -113,7 +144,7 @@ const schema = [
         <div class="divide-y divide-hairline border-y border-hairline">
           {x.faq.map((f) => (
             <details class="group py-4">
-              <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="text-muted group-open:rotate-45 transition-transform">+</span></summary>
+              <summary class="cursor-pointer list-none flex justify-between gap-4 font-bold text-[1.075rem] text-ink">{f.q}<span aria-hidden="true" class="shrink-0 self-start text-muted group-open:rotate-45 transition-transform">+</span></summary>
               <p class="mt-3 mb-0!">{f.a}</p>
             </details>
           ))}

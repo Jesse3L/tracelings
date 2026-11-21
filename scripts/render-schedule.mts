@@ -1,0 +1,78 @@
+// Render check for the preschool schedule maker (/preschool-schedule/): every page type and preset at US Letter and
+// A4, with a long name, no name, long custom labels and long times, to PNG. Flags anything drawn off the page and
+// text that runs past its margin. Also builds a real PDF of each type to be sure the text encodes.
+// Run: npx -y tsx scripts/render-schedule.mts <outDir>
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import sharp from 'sharp';
+import { pageToSvg, pagesToPdf } from '../src/lib/render';
+import { textW } from '../src/lib/homeschool';
+import { ACTIVITIES, PRESETS, SCHEDULE_KINDS, SUBJECTS, DEFAULT_SUBJECTS, buildSchedulePage, loadScheduleIcons, loadStickerTheme, STICKER_THEMES, type StickerTheme, type Routine, type ScheduleOptions, type Step } from '../src/lib/schedule';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const out = process.argv[2] ?? 'render-schedule';
+await mkdir(out, { recursive: true });
+const readPublic = (u: string) => readFile(path.join(ROOT, 'public', u), 'utf8');
+await loadScheduleIcons(readPublic);
+for (const t of STICKER_THEMES) await loadStickerTheme(t.v, readPublic);
+
+const longSteps: Step[] = ACTIVITIES.slice(0, 12).map((a, i) => ({ icon: a.icon, label: i % 3 === 0 ? 'Practice writing letters' : a.label, time: i % 2 ? '10:45 am' : '' }));
+const allSubjects = SUBJECTS.map((s) => s.id);
+// Every bedtime picture, with the longest labels a parent might type.
+const bedIcons = ['bath', 'pajamas', 'potty', 'wash-hands', 'wash-face', 'brush-teeth', 'drink-water', 'clothes-tomorrow', 'story', 'hug', 'night-light', 'lights-out'];
+const longBed: Step[] = bedIcons.map((icon, i) => ({ icon, label: i % 4 === 1 ? 'Put on cozy pajamas now' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '7:45 pm' : '' }));
+// Every morning picture (wake up to backpack), with long labels and times.
+const mornIcons = ['wake-up', 'potty', 'wash-hands', 'wash-face', 'get-dressed', 'brush-hair', 'make-bed', 'breakfast', 'brush-teeth', 'shoes', 'coat', 'backpack'];
+const longMorn: Step[] = mornIcons.map((icon, i) => ({ icon, label: i % 4 === 2 ? 'Put shoes on by the door' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '6:45 am' : '' }));
+// The chore pictures made with the morning set.
+const chores: Step[] = ['make-bed', 'feed-pet', 'set-table', 'water-plants', 'clean-up', 'lunchbox'].map((icon) => ({ icon, label: ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon, time: '' }));
+// Every potty picture, with long labels.
+const pottyIcons = ['step-stool', 'underwear', 'toilet', 'potty', 'toilet-paper', 'pants-up', 'flush', 'wash-hands', 'soap', 'towel', 'star', 'drink-water'];
+const longPotty: Step[] = pottyIcons.map((icon, i) => ({ icon, label: i % 4 === 1 ? 'Pull pants down to knees' : (ACTIVITIES.find((a) => a.icon === icon)?.label ?? icon), time: i % 3 === 0 ? '10:30 am' : '' }));
+const cases: { tag: string; steps: Step[]; subjects: string[]; routine?: Routine; boxes?: number; reward?: string; theme?: StickerTheme }[] = [
+  ...PRESETS.map((p) => ({ tag: p.v, steps: p.steps, subjects: DEFAULT_SUBJECTS, routine: p.routine })),
+  { tag: 'bedtime-long', steps: longBed, subjects: DEFAULT_SUBJECTS, routine: 'bedtime' },
+  { tag: 'morning-long', steps: longMorn, subjects: DEFAULT_SUBJECTS, routine: 'morning' },
+  { tag: 'chores', steps: chores, subjects: DEFAULT_SUBJECTS },
+  { tag: 'potty-long', steps: longPotty, subjects: DEFAULT_SUBJECTS, routine: 'potty' },
+  ...[3, 4, 5, 6, 8].map((b) => ({ tag: `stickers-${b}`, steps: longPotty, subjects: DEFAULT_SUBJECTS, routine: 'potty' as Routine, boxes: b, reward: b === 8 ? 'A trip to the park and ice cream with Grandma' : b === 5 ? 'New book' : '' })),
+  // Every picture theme at 5 boxes, and the two ends (3 and 8) for the main themes.
+  ...STICKER_THEMES.filter((t) => t.v !== 'stars').map((t) => ({ tag: `stickers-${t.v}-5`, steps: longPotty, subjects: DEFAULT_SUBJECTS, routine: 'potty' as Routine, boxes: 5, reward: 'New book', theme: t.v })),
+  ...(['dinosaurs', 'unicorns', 'trucks'] as StickerTheme[]).flatMap((t) => [3, 8].map((b) => ({ tag: `stickers-${t}-${b}`, steps: longPotty, subjects: DEFAULT_SUBJECTS, routine: 'potty' as Routine, boxes: b, reward: b === 8 ? 'A trip to the park and ice cream with Grandma' : '', theme: t }))),
+  { tag: 'long', steps: longSteps, subjects: allSubjects },
+  { tag: 'four', steps: PRESETS[2].steps.slice(0, 4), subjects: allSubjects.slice(0, 4) },
+];
+let n = 0, issues = 0;
+for (const { v: kind } of SCHEDULE_KINDS) for (const c of cases) for (const paper of ['letter', 'a4'] as const) for (const name of ['Maximiliano Alexander Montgomery', 'Maya', '']) {
+  if (kind === 'week' && c.tag !== 'morning' && c.tag !== 'long' && c.tag !== 'four') continue;
+  if ((kind === 'stickers') !== c.tag.startsWith('stickers-')) continue;
+  if (process.argv[3] && !c.tag.startsWith(process.argv[3])) continue;
+  const o: ScheduleOptions = { kind, name, paper, credit: true, steps: c.steps, subjects: c.subjects, routine: c.routine, boxes: c.boxes, reward: c.reward, theme: c.theme };
+  const page = buildSchedulePage(o);
+  for (const it of page.items) {
+    const xs = it.kind === 'line' ? [it.x1, it.x2] : [];
+    const ys = it.kind === 'line' ? [it.y1, it.y2] : it.kind === 'text' ? [it.y] : [];
+    if (it.kind === 'text') {
+      const wd = textW(it.text, it.size);
+      const x0 = it.align === 'left' ? it.x : it.align === 'right' ? it.x - wd : it.x - wd / 2;
+      xs.push(x0, x0 + wd);
+    }
+    if (it.kind === 'path' && !/[HVQ]/.test(it.d)) {
+      const nums = (it.d.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+      nums.forEach((v, i) => (i % 2 === 0 ? xs : ys).push(v));
+    }
+    if (xs.some((x) => x < 30 || x > page.w - 30) || ys.some((y) => y < 30 || y > page.h - 20)) { issues++; console.log('OUTSIDE', kind, c.tag, paper, name, JSON.stringify(it).slice(0, 120)); }
+  }
+  if (name === 'Maya' && c.tag !== 'long') continue;
+  const svg = pageToSvg(page)
+    .replace('width="100%"', `width="${page.w}" height="${page.h}"`)
+    .replace(/font-family="[^"]*"/g, 'font-family="Helvetica, Arial, Liberation Sans, DejaVu Sans, sans-serif"');
+  await writeFile(path.join(out, `${kind}-${c.tag}-${paper}${name ? (name === 'Maya' ? '-maya' : '-long') : '-noname'}.png`), await sharp(Buffer.from(svg), { density: 100 }).flatten({ background: '#ffffff' }).png().toBuffer());
+  n++;
+}
+for (const { v: kind } of SCHEDULE_KINDS) {
+  const bytes = await pagesToPdf([buildSchedulePage({ kind, name: 'José Núñez', paper: 'letter', credit: true, steps: longSteps, subjects: allSubjects, routine: kind === 'stickers' ? 'potty' : undefined, reward: 'Helado con Abuela', theme: kind === 'stickers' ? 'dinosaurs' : undefined })], 'Schedule test');
+  await writeFile(path.join(out, `${kind}.pdf`), bytes);
+}
+console.log(`${n} renders, ${issues} issues, PDFs built, in ${out}`);

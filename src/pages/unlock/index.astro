@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config';
+---
+<Base title={`Unlimited downloads | ${SITE.name}`} description="Switch on your Tracelings unlimited download pass on this device." noindex>
+  <div class="mx-auto max-w-xl px-4 sm:px-6 py-12">
+    <h1 class="text-[2rem] font-bold text-ink">Unlimited downloads</h1>
+    <p id="unlock-msg" class="mt-4 text-lg text-muted">Checking your link…</p>
+    <p class="mt-6"><a href="/name-tracing/" class="btn-pencil inline-block px-5 py-3 text-lg">Start printing</a></p>
+  </div>
+  <script>
+    const msg = document.getElementById('unlock-msg')!;
+    const t = new URLSearchParams(location.search).get('t') || '';
+    const day = (ms: number) => new Date(ms).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    if (!t) {
+      msg.textContent = 'Open the link from your Tracelings email on this device to switch on unlimited downloads.';
+    } else {
+      fetch(`/api/unlock/check/?t=${encodeURIComponent(t)}`).then((r) => r.json().then((d) => ({ ok: r.ok, d }))).then(({ ok, d }) => {
+        if (ok && d.ok) {
+          try { localStorage.setItem('tl-pass', t); } catch { /* storage off */ }
+          msg.textContent = `You're all set. Unlimited downloads are on for this device through ${day(d.expiresAt)}.`;
+          history.replaceState(null, '', '/unlock/');
+        } else if (d.error === 'expired') {
+          msg.textContent = `This pass ended on ${day(d.expiresAt)}. You can still print 7 free downloads a day, or unlock more from any download button.`;
+        } else {
+          msg.textContent = 'That link did not work. Email hello@tracelings.com and we will sort it out.';
+        }
+      }).catch(() => { msg.textContent = 'We could not check the link just now. Please try again in a minute.'; });
+    }
+  </script>
+</Base>

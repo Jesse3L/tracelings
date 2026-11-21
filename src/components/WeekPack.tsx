@@ -253,7 +253,7 @@ export function WeeklyEmail(props: { level?: Level }) {
     const r = await subscribe(email, props.level === 'kindergarten' ? 'homeschool-k-weekly' : 'homeschool-prek-weekly', 'homeschool');
     if (r === 'invalid') return setState('error');
     if (r === 'unavailable') return setState('down');
-    markEmailOk();
+    markEmailOk(email);
     setState('done');
   }
   if (state === 'done') {

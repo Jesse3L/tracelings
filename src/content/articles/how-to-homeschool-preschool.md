@@ -60,7 +60,7 @@ A week can follow a simple rhythm:
 - **Thursday:** math day, with a number of the week to count and trace. Free [pre-K math worksheets](/math-worksheets/pre-k/) make counting, ten frame and find the number pages for numbers 1 to 20.
 - **Friday:** name practice and a favorite page from the week.
 
-Four days a week is plenty if that fits your family better. Skip a day when someone is sick or tired, and pick it back up the next day.
+Four days a week is plenty if that fits your family better. Skip a day when someone is sick or tired, and pick it back up the next day. For a full day from wake up to bedtime, how it changes from 3 to 5, and what to do when the plan falls apart, see our [preschool homeschool schedule](/learn/preschool-homeschool-schedule/) guide.
 
 ## What you need to homeschool preschool
 

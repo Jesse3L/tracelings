@@ -1,10 +1,11 @@
 // Small private records for the owner's daily digest (server only), one JSON blob per event in the private Vercel
 // Blob store (env BLOB_READ_WRITE_TOKEN, the same store as programStore):
-//   events/YYYY-MM-DD/<ts>-<rand>.json     a download: { at, path, what, pages, member, vid, place }
-//   signups/YYYY-MM-DD/<ts>-<rand>.json    an email sign-up: { at, email, source }
+//   events/YYYY-MM-DD/<ts>-<rand>.json     a download: { at, path, what, pages, member, vid, place, src }
+//   signups/YYYY-MM-DD/<ts>-<rand>.json    an email sign-up: { at, email, source, via }
 //   checkouts/YYYY-MM-DD/<ts>-<rand>.json  a checkout start: { at, plan }
 // The date is the America/Chicago calendar day. Downloads never hold a name or anything typed: `what` is checked
-// against lib/what.ts and `vid` is a random device code. Writes never slow or break a request: recordEvent() always
+// against lib/what.ts and `vid` is a random device code. `src` and `via` are where
+// the visit came from, a label from lib/source.ts (never a URL). Records saved before Oct 28, 2026 have neither. Writes never slow or break a request: recordEvent() always
 // resolves, within RECORD_TIMEOUT_MS, and swallows every error.
 import { randomBytes } from 'node:crypto';
 import { put, list, get, del } from '@vercel/blob';
@@ -16,8 +17,8 @@ export const KEEP_DAYS = 35;
 export type Kind = 'events' | 'signups' | 'checkouts';
 export const KINDS: readonly Kind[] = ['events', 'signups', 'checkouts'];
 
-export interface DownloadEvent { at: string; path: string; what: string | null; pages: number | null; member: boolean; vid: string | null; place: string | null }
-export interface SignupEvent { at: string; email: string; source: string }
+export interface DownloadEvent { at: string; path: string; what: string | null; pages: number | null; member: boolean; vid: string | null; place: string | null; src?: string | null }
+export interface SignupEvent { at: string; email: string; source: string; via?: string | null }
 export interface CheckoutEvent { at: string; plan: string }
 
 // ---------- Chicago dates ----------
@@ -162,3 +163,36 @@ export async function pruneOld(today = chicagoDate(), keepDays = KEEP_DAYS): Pro
   }
   return n;
 }
+
+// ---------- Email list snapshots (lib/server/emailHealth.ts) ----------
+// One small file per digest day with the unsubscribed contact ids (Resend ids, never addresses), so the next digest
+// can say who unsubscribed in between. Kept 14 days.
+const SNAP = 'email-snap/';
+export interface EmailSnapshot { unsub: string[] }
+export async function readSnapshot(date: string): Promise<EmailSnapshot | null> {
+  const s = current();
+  if (!s || !isDate(date)) return null;
+  const text = await s.read(`${SNAP}${date}.json`).catch(() => null);
+  if (!text) return null;
+  try { const d = JSON.parse(text); return Array.isArray(d?.unsub) ? { unsub: d.unsub.map(String) } : null; } catch { return null; }
+}
+/** Saves the day's snapshot once; a second run the same day keeps the first. */
+export async function writeSnapshot(date: string, snap: EmailSnapshot): Promise<void> {
+  const s = current();
+  if (!s || !isDate(date)) return;
+  if (await s.read(`${SNAP}${date}.json`).catch(() => null)) return;
+  await s.put(`${SNAP}${date}.json`, JSON.stringify(snap));
+}
+export async function listSnapshots(): Promise<string[]> {
+  const s = current();
+  if (!s) return [];
+  return (await s.list(SNAP)).map((p) => p.slice(SNAP.length, SNAP.length + 10)).filter(isDate);
+}
+export async function deleteSnapshots(dates: string[]): Promise<void> {
+  const s = current();
+  if (!s || !dates.length) return;
+  await s.del(dates.filter(isDate).map((d) => `${SNAP}${d}.json`));
+}
+
+/** The same private store, for other small records (the weekly email's approvals and sends). Null when not set up. */
+export const recordStore = (): EventStore | null => current();
