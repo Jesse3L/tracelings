@@ -307,6 +307,57 @@
           ]
         },
         "note": "Horse collection built Nov 19, 2026 (program theme farm). The horse page in the farm collection stays there; the new pages use different slugs."
+      },
+      {
+        "date": "2026-11-21",
+        "source": "Ubersuggest US (locId 2840)",
+        "keywords": {
+          "cat coloring pages": [
+            40500,
+            28
+          ],
+          "dog coloring pages": [
+            27100,
+            22
+          ],
+          "puppy coloring pages": [
+            18100,
+            30
+          ],
+          "kitten coloring pages": [
+            18100,
+            30
+          ],
+          "puppy dog coloring pages": [
+            18100,
+            23
+          ],
+          "cat coloring pages cute": [
+            5400,
+            28
+          ],
+          "cute puppy coloring pages": [
+            2900,
+            23
+          ],
+          "dog and cat coloring pages": [
+            2400,
+            29
+          ],
+          "sausage dog coloring pages": [
+            1900,
+            23
+          ],
+          "dachshund dog coloring pages": [
+            1600,
+            18
+          ],
+          "sleeping cat coloring pages": [
+            140,
+            13
+          ]
+        },
+        "note": "Dog and cat collections built Nov 21, 2026 (program theme pets). The easy puppy (simple collection) and valentine puppy pages stay where they are."
       }
     ]
   },
@@ -1192,6 +1243,142 @@
           "prompt": "children's coloring book page, a friendly horse looking out over the open top half of a wooden stable door, a horseshoe hanging above the door, a bucket and a bale of hay beside it, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
           "alt": "Friendly horse looking over a stable door with a horseshoe above and hay and a bucket beside it, coloring sheet",
           "description": "A friendly horse peeks over the top of its stable door, with a horseshoe hanging above and a bucket and hay bale outside. Quick fact to share: a stable is a building where horses sleep and stay dry, and each horse often has its own room called a stall. The wooden boards are easy stripes to color."
+        }
+      ]
+    },
+    {
+      "slug": "dog-coloring-pages",
+      "title": "Dog and Puppy Coloring Pages",
+      "primaryKeyword": "dog coloring pages",
+      "volume": 27100,
+      "sd": 22,
+      "season": "evergreen",
+      "publishBy": "2026-11-21",
+      "intro": "These free dog coloring pages are made for kids who love puppies: a fluffy puppy with a bone, a dog chasing a ball, a sleepy dog in its bed, a puppy in a bubble bath, a dachshund in a sweater, a child walking a dog, a dog in its dog house and three puppies in a basket. Every page has thick outlines and big open shapes, so preschoolers can color with chunky crayons, while collars, bubbles and flowers give older kids detail to fill in. Each puppy coloring page comes with a simple fact about dogs to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "puppy-coloring-page",
+          "title": "Puppy Coloring Page",
+          "prompt": "children's coloring book page, a cute fluffy cartoon puppy sitting and smiling with floppy ears and a collar with a round tag, a bone on the grass beside it, a few flowers, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Fluffy puppy with floppy ears and a collar tag sitting in the grass next to a bone, printable coloring page",
+          "description": "A fluffy puppy with floppy ears and a round tag on its collar sits in the grass, with a bone and flowers beside it. Quick fact to share: puppies are born with their eyes closed, and their eyes usually open when they are around two weeks old. The big round face is an easy first shape for little colorers."
+        },
+        {
+          "slug": "dog-with-ball-coloring-page",
+          "title": "Dog Playing Fetch Coloring Page",
+          "prompt": "children's coloring book page, a happy cartoon dog running on grass to fetch a big ball, tongue out, ears flapping, a fence and a tree in the background, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy dog running across a yard toward a striped ball, with a fence and a tree behind, coloring page",
+          "description": "A happy dog runs across the yard with its ears flapping, about to catch up to a big striped ball. Quick fact to share: a dog's nose is much stronger than ours, so a dog can often find a lost ball by sniffing for it. The stripes on the ball are fun to color in a pattern."
+        },
+        {
+          "slug": "dog-bed-coloring-page",
+          "title": "Sleepy Dog in a Bed Coloring Page",
+          "prompt": "children's coloring book page, a sleepy cartoon dog curled up in a round soft dog bed with a blanket and a chew toy, a food bowl and water bowl next to the bed, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Sleepy dog curled up in a round bed with a blanket and a bone toy, food and water bowls in front, coloring sheet",
+          "description": "A sleepy dog curls up in its round, puffy bed with a blanket and a bone toy, and its food and water bowls wait in front. Quick fact to share: dogs spend a big part of the day sleeping and resting, and puppies sleep even more than grown dogs. The paw print on the food bowl is a small detail to find."
+        },
+        {
+          "slug": "puppy-bath-coloring-page",
+          "title": "Puppy Bath Coloring Page",
+          "prompt": "children's coloring book page, a happy cartoon puppy sitting in a round bath tub full of bubbles, a rubber duck floating, a towel and a brush beside the tub, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Happy puppy in a bubble bath with a rubber duck, a towel and a brush beside the tub, printable coloring page",
+          "description": "A happy puppy sits in a tub full of bubbles with a bubble pile on its head, a rubber duck beside it, and a towel and brush waiting on the floor. Quick fact to share: dogs do not sweat all over like people do. They cool off mostly by panting with their tongue out. Kids can color each bubble a different color."
+        },
+        {
+          "slug": "dachshund-coloring-page",
+          "title": "Dachshund Coloring Page (Sausage Dog)",
+          "prompt": "children's coloring book page, a cute cartoon dachshund sausage dog with a long body and short legs wearing a little knitted sweater, standing on grass with a few flowers, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling dachshund with a long body and short legs wearing a zigzag sweater, standing by flowers, coloring sheet",
+          "description": "A smiling dachshund with a long body and short legs shows off its zigzag sweater in a garden of flowers. Quick fact to share: dachshund is a German word that means badger dog. These dogs were first bred to dig into burrows, which is one reason for their long, low bodies. The zigzag sweater is a fun pattern to color."
+        },
+        {
+          "slug": "dog-walk-coloring-page",
+          "title": "Walking the Dog Coloring Page",
+          "prompt": "children's coloring book page, a smiling young child walking a happy dog on a leash along a sidewalk path, a tree and a house in the background, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling girl walking a happy puppy on a leash along a sidewalk past a tree and a house, coloring page",
+          "description": "A smiling girl walks her happy puppy on a leash along the sidewalk, past a big tree and a house. Quick fact to share: dogs need exercise every day, and a walk lets them sniff, explore and burn off energy. Your child can color the girl to look like themselves."
+        },
+        {
+          "slug": "dog-house-coloring-page",
+          "title": "Dog House Coloring Page",
+          "prompt": "children's coloring book page, a friendly cartoon dog lying in the doorway of a wooden dog house with a pointed roof, a food bowl with a bone shape on it in front, a little fence and grass, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Friendly dog peeking out of a wooden dog house with a food bowl in front and a fence on each side, coloring sheet",
+          "description": "A friendly dog peeks out of the door of its wooden dog house, with a full food bowl in front and a little fence on each side. Quick fact to share: the pattern of bumps and lines on each dog's nose is its own, a bit like a person's fingerprint. The boards on the dog house are easy stripes to color."
+        },
+        {
+          "slug": "puppies-in-basket-coloring-page",
+          "title": "Puppies in a Basket Coloring Page",
+          "prompt": "children's coloring book page, three cute cartoon puppies sitting together in a big woven basket with a soft blanket, one puppy with spots, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Three cute puppies, one with spots, sitting together in a woven basket with a blanket, printable coloring page",
+          "description": "Three cute puppies sit together in a big woven basket on a soft blanket, and one of them has spots. Quick fact to share: puppies born to the same mother at the same time are called a litter, and they are brothers and sisters. Kids can make each puppy a different color."
+        }
+      ]
+    },
+    {
+      "slug": "cat-coloring-pages",
+      "title": "Cat and Kitten Coloring Pages",
+      "primaryKeyword": "cat coloring pages",
+      "volume": 40500,
+      "sd": 28,
+      "season": "evergreen",
+      "publishBy": "2026-11-21",
+      "intro": "These free cat coloring pages are made for kids who love kittens: a cute kitten on a cushion, a cat playing with yarn, a mother cat with her kittens, a sleeping cat, a cat in a box, a cat watching a bird from the window, a cat and dog who are best friends and a cat looking at a goldfish. Every page has thick outlines and big open shapes, so preschoolers can color with chunky crayons, while stripes, whiskers and yarn give older kids detail to fill in. Each kitten coloring page comes with a simple fact about cats to share while your child colors, plus a free printable PDF.",
+      "pages": [
+        {
+          "slug": "kitten-coloring-page",
+          "title": "Kitten Coloring Page",
+          "prompt": "children's coloring book page, a cute cartoon kitten sitting with big eyes, pointy ears, whiskers and a curled tail, a little bow on its collar, sitting on a cushion, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute kitten with big eyes and a bow on its collar sitting on a cushion with tassels, printable coloring page",
+          "description": "A cute kitten with big eyes, long whiskers and a bow on its collar sits on a soft cushion with tassels. Quick fact to share: kittens are born with their eyes closed, and their eyes usually open when they are one to two weeks old. The big head and round cushion are easy shapes for young colorers."
+        },
+        {
+          "slug": "cat-with-yarn-coloring-page",
+          "title": "Cat Playing with Yarn Coloring Page",
+          "prompt": "children's coloring book page, a playful cartoon cat batting at a big ball of yarn with the yarn string looping across the floor, a second small ball of yarn nearby, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Playful striped cat batting at a big ball of yarn with a small ball beside it, coloring page",
+          "description": "A playful striped cat pounces on a big ball of yarn, and a smaller ball rolls away with its string looping across the floor. Quick fact to share: cats use their whiskers to feel what is around them, which helps them move in the dark and judge if they fit through a gap. The yarn balls can be any bright colors."
+        },
+        {
+          "slug": "cat-and-kittens-coloring-page",
+          "title": "Mother Cat and Kittens Coloring Page",
+          "prompt": "children's coloring book page, a mother cat lying in a basket with three small kittens cuddled next to her, a soft blanket, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Mother cat curled around three sleepy kittens in a woven basket, coloring sheet",
+          "description": "A smiling mother cat curls around her three small kittens in a cozy woven basket. Quick fact to share: a mother cat often has several kittens at once, and she keeps them warm, feeds them and cleans them with her tongue. Kids can make the kittens match their mother or give each one its own color."
+        },
+        {
+          "slug": "sleeping-cat-coloring-page",
+          "title": "Sleeping Cat Coloring Page",
+          "prompt": "children's coloring book page, a cartoon cat sleeping curled up in a ball on a round rug with its tail wrapped around, eyes closed, a little moon and stars in a window above, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Striped cat sleeping curled up on a round rug under a window with a moon and stars, coloring page",
+          "description": "A striped cat sleeps curled up on a round rug, its tail tucked around it, under a window with a moon and stars. Quick fact to share: cats sleep for a big part of the day, often in short naps, which is where the words cat nap come from. The stripes on the cat's back and tail are fun to color."
+        },
+        {
+          "slug": "cat-in-a-box-coloring-page",
+          "title": "Cat in a Box Coloring Page",
+          "prompt": "children's coloring book page, a cute cartoon cat peeking out of an open cardboard box, paws on the edge, ears up, a toy mouse on the floor beside the box, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cute striped cat peeking out of a cardboard box with a toy mouse on the floor, printable coloring page",
+          "description": "A cute striped cat peeks out of a cardboard box with its paws on the edge, while a toy mouse waits on the floor. Quick fact to share: many cats love boxes because a small, snug space helps them feel safe and warm. The box is a big simple shape that is easy to color brown."
+        },
+        {
+          "slug": "cat-in-window-coloring-page",
+          "title": "Cat in the Window Coloring Page",
+          "prompt": "children's coloring book page, a cartoon cat sitting on a windowsill looking out the window at a bird on a tree branch, curtains on each side, a potted plant on the sill, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Cat sitting on a windowsill watching a bird on a branch outside, with curtains and a potted plant, coloring sheet",
+          "description": "A cat sits on the windowsill next to a potted plant and watches a little bird on a branch outside, with curtains on each side. Quick fact to share: some cats make a fast chattering sound when they watch birds through a window. Your child can color the sky, the clouds and the leaves outside."
+        },
+        {
+          "slug": "cat-and-dog-coloring-page",
+          "title": "Cat and Dog Coloring Page",
+          "prompt": "children's coloring book page, a friendly cartoon cat and a friendly cartoon dog sitting side by side as best friends, smiling, a heart above them, grass under them, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Smiling cat and dog sitting side by side as best friends with a heart above them, coloring page",
+          "description": "A smiling cat and a happy dog sit side by side on the grass with a big heart above them, best friends. Quick fact to share: cats and dogs can become good friends, often when they grow up together in the same home. Look for the bone on the dog's tag and the round tag on the cat's collar."
+        },
+        {
+          "slug": "cat-and-fishbowl-coloring-page",
+          "title": "Cat and Goldfish Coloring Page",
+          "prompt": "children's coloring book page, a curious cartoon cat sitting on a table looking at a round goldfish bowl with one goldfish inside, a plant in the bowl, thick clean black outlines, no shading, no grayscale, no text, white background, simple shapes, large areas to color, portrait",
+          "alt": "Curious cat sitting on a little table looking at a goldfish in a round fish bowl, printable coloring sheet",
+          "description": "A curious cat sits on a little table and looks at a goldfish swimming in a round bowl with a plant and pebbles. Quick fact to share: a cat can turn each ear on its own to follow a sound. Kids can color the goldfish orange and the pebbles in lots of colors."
         }
       ]
     },

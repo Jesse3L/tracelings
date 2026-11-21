@@ -494,6 +494,68 @@
           "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick farm animals as their theme, the counting and ten frame pages are drawn with farm animals, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
         }
       ]
+    },
+    "dog-coloring-pages": {
+      "skills": [
+        "Naming dog care words: leash, collar, bowl, bed, bath and brush",
+        "Learning dog words: a baby dog is a puppy, and puppies born together are a litter",
+        "Counting puppies, bones, bubbles, flowers and fence boards"
+      ],
+      "ideas": [
+        "Make a puppy's day: put the finished pages in order (wake up, eat, play fetch, go for a walk, take a bath, sleep) and tell the story together.",
+        "Before visiting a friend's dog, talk about safe ways to meet one: ask the owner first, let the dog sniff your hand, and pet its back gently.",
+        "Color the dog house page, then build a dog house for a stuffed dog from a cardboard box.",
+        "Play fetch inside with a rolled up sock after coloring the ball page, and count how many times the ball comes back."
+      ],
+      "faq": [
+        {
+          "q": "What age are these dog coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The puppy, the puppy in the bath and the dachshund have the biggest open shapes for toddlers and preschoolers. The walking the dog and dog house pages have more small parts, like fences, windows and grass, for kids who like detail."
+        },
+        {
+          "q": "Which dog pictures are included?",
+          "a": "A fluffy puppy with a bone, a dog chasing a ball, a sleepy dog in its bed, a puppy in a bubble bath, a dachshund in a sweater, a child walking a dog on a leash, a dog in its dog house and three puppies in a basket. Each page has a simple fact about dogs to share."
+        },
+        {
+          "q": "Do you have cat coloring pages too?",
+          "a": "Yes. Our cat and kitten coloring pages have 8 more pages, including a cat and a dog sitting together as best friends. Our simple coloring pages also have an easy puppy with very big shapes for toddlers."
+        },
+        {
+          "q": "Is there a pets homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick pets as their theme, the counting and ten frame pages are drawn with puppies, kittens and other pets, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
+    },
+    "cat-coloring-pages": {
+      "skills": [
+        "Naming the parts of a cat: ears, whiskers, paws, tail and stripes",
+        "Learning cat words: a baby cat is a kitten, and a short sleep is a cat nap",
+        "Counting kittens, stars, yarn balls and whiskers"
+      ],
+      "ideas": [
+        "Count the whiskers on each cat, then draw whiskers on your child's cheeks with a washable marker and talk about what whiskers do.",
+        "Make a cat's day: put the pages in order (play with yarn, watch a bird, hide in a box, take a cat nap) and tell the story together.",
+        "After coloring the cat in a box page, give your child a big cardboard box to turn into a cat bed for a stuffed cat.",
+        "Move like a cat: stretch, tiptoe softly, pounce and curl up for a nap, then talk about which move was hardest."
+      ],
+      "faq": [
+        {
+          "q": "What age are these cat coloring pages for?",
+          "a": "Most pages suit ages 3 to 8. The kitten on a cushion, the cat in a box and the cat and dog page have the biggest open shapes for toddlers and preschoolers. The cat in the window and the cat with yarn have more small parts, like curtains, leaves and yarn strands, for kids who like detail."
+        },
+        {
+          "q": "Which cat pictures are included?",
+          "a": "A kitten on a cushion, a cat playing with yarn, a mother cat with three kittens, a sleeping cat, a cat in a box, a cat watching a bird from the window, a cat and dog who are best friends and a cat looking at a goldfish. Each page has a simple fact about cats to share."
+        },
+        {
+          "q": "Do you have dog and puppy coloring pages too?",
+          "a": "Yes. Our dog and puppy coloring pages have 8 more pages: a puppy with a bone, a dog playing fetch, a dog in its bed, a puppy bath, a dachshund, a child walking a dog, a dog house and puppies in a basket."
+        },
+        {
+          "q": "Is there a pets homeschool week to go with these?",
+          "a": "Yes. Our free placement check builds week 1 of a preschool or kindergarten plan for your child, and if you pick pets as their theme, the counting and ten frame pages are drawn with puppies, kittens and other pets, and a short story stars your child. It takes about 5 minutes and needs no card. These coloring pages stay free either way."
+        }
+      ]
     }
   },
   "pages": {
@@ -1176,6 +1238,86 @@
       "talkAbout": "Horses need fresh water, hay or grass to eat, and a clean place to rest. People who care for horses brush them, clean their hooves and fill their buckets every day. Ask your child how they help take care of a pet or a plant at home.",
       "colorTips": "Stables are often brown or red wood, so your child can color the boards in two shades of brown. Make the horseshoe gray or silver, the hay yellow and the bucket any bright color.",
       "learning": "Horseshoe has the word horse in it. Trace the U shape of the horseshoe with a finger, then find the bucket, the hay and the hinges on the door."
+    },
+    "puppy-coloring-page": {
+      "talkAbout": "A baby dog is called a puppy. Puppies drink their mother's milk at first, then start eating soft puppy food. Ask your child what a puppy needs to stay happy and healthy: food, water, walks, a bed and lots of love.",
+      "colorTips": "Puppies come in many colors: brown, black, white, golden, gray or spotted. Make the ears a darker shade than the face, the tag shiny yellow or gray, and the flowers any bright colors.",
+      "learning": "Puppy starts with P. Count the flowers on the page together, then count the puppy's legs and ears."
+    },
+    "dog-with-ball-coloring-page": {
+      "talkAbout": "Fetch is a game where you throw a ball and the dog runs to bring it back. Many dogs love to run and chase. Ask your child what games they like to play outside and which ones use a ball.",
+      "colorTips": "Color the ball in two colors so the stripes stand out. The fence can be white or brown, the tree trunk brown and the leaves green. Your child can give the dog spots or patches.",
+      "learning": "Ball starts with B. Talk about position words: the dog is next to the ball, the tree is behind the fence, the grass is under the dog."
+    },
+    "dog-bed-coloring-page": {
+      "talkAbout": "Dogs need a cozy place to sleep, fresh water every day and food at mealtime. Ask your child where they like to sleep, and what they need to get ready for bed, like pajamas, a story or a favorite blanket.",
+      "colorTips": "Pick a soft color for the bed and a different color or pattern for the blanket. The water in the bowl can be light blue and the food brown. The bone toy can be any bright color.",
+      "learning": "Bed starts with B, just like bone and bowl. Find all the things on the page that start with B together."
+    },
+    "puppy-bath-coloring-page": {
+      "talkAbout": "Dogs get baths when they are muddy or smelly, and a brush helps keep their fur clean and smooth. Ask your child how a bath at their house is the same as the puppy's bath, and how it is different.",
+      "colorTips": "Color the bubbles light blue, purple or pink, or leave some white. The rubber duck is usually yellow with an orange beak. Make the tub and the towel bright colors.",
+      "learning": "Bath starts with B. Count the bubbles floating in the air, then circle the biggest bubble and the smallest bubble."
+    },
+    "dachshund-coloring-page": {
+      "talkAbout": "Dachshunds have long bodies and short legs, and some people call them sausage dogs or wiener dogs. Dogs come in many shapes and sizes. Ask your child to name a big dog and a small dog they have seen.",
+      "colorTips": "Dachshunds are often brown, black and tan, or reddish. The sweater can be any colors: try one color for the zigzags and another for the rest. Make the flowers a rainbow of colors.",
+      "learning": "Long and short: the dog's body is long and its legs are short. Find other long and short things in your home, like a spoon and a broom."
+    },
+    "dog-walk-coloring-page": {
+      "talkAbout": "When we walk a dog, we hold the leash so the dog stays close and safe near streets. Ask your child what else keeps people safe on a walk, like holding a grown-up's hand and looking both ways.",
+      "colorTips": "Your child can color the girl to look like themselves or a friend. Make the house and its roof bright colors, the path gray, the leash red or blue and the puppy any dog color.",
+      "learning": "Walk starts with W. Go on a short walk after coloring and count the dogs, trees or houses you see."
+    },
+    "dog-house-coloring-page": {
+      "talkAbout": "Some dogs sleep in a dog house in the yard, and many dogs sleep inside with their families. Ask your child to describe a dream house for a dog: what would it have inside?",
+      "colorTips": "Color the dog house boards red, brown or blue, and the roof a different color. The fence can be white, the grass green and the bone on the bowl white or yellow.",
+      "learning": "Look at the shapes in the dog house: the roof is a triangle and the door is an arch. Find a triangle and a rectangle somewhere else on the page."
+    },
+    "puppies-in-basket-coloring-page": {
+      "talkAbout": "Puppies born together are a litter, and they play, sleep and snuggle together. Ask your child to give each puppy a name, and say which puppy is the biggest.",
+      "colorTips": "Make each puppy a different color, like brown, golden and black, and color the spots on the spotted puppy. The basket can be tan or brown and the blanket any soft color.",
+      "learning": "Count the puppies: 1, 2, 3. Then count their ears together (2 ears each make 6)."
+    },
+    "kitten-coloring-page": {
+      "talkAbout": "A baby cat is called a kitten. Kittens love to play, pounce and climb, and they sleep a lot as they grow. Ask your child what a kitten needs: food, water, a litter box, toys and a quiet place to rest.",
+      "colorTips": "Kittens can be orange, gray, black, white, striped or spotted. Make the bow a bright color and the cushion a different color, with the tassels to match.",
+      "learning": "Kitten starts with K. Count the whiskers on one side of the kitten's face, then on the other side, and compare."
+    },
+    "cat-with-yarn-coloring-page": {
+      "talkAbout": "Cats love toys they can chase and bat with their paws. String and yarn are best for play when a grown-up is there, and get put away after. Ask your child which toys they like to chase or catch.",
+      "colorTips": "Color the stripes on the cat a darker shade than its fur. Pick two bright colors for the yarn balls, and let the loose string match one of them.",
+      "learning": "Yarn starts with Y. Talk about big and small: the big ball of yarn and the small ball of yarn. Which one is closer to the cat?"
+    },
+    "cat-and-kittens-coloring-page": {
+      "talkAbout": "A mother cat takes care of her kittens: she feeds them, keeps them warm and licks them clean. Ask your child how grown-ups in their family take care of them.",
+      "colorTips": "Kittens often look a bit like their mother but can be different colors. The basket can be tan or brown and the blanket any soft color.",
+      "learning": "Count the kittens, then count all the cats on the page (1 mother and 3 kittens make 4)."
+    },
+    "sleeping-cat-coloring-page": {
+      "talkAbout": "Cats nap many times a day and often curl up to stay warm. Ask your child how they feel after a good rest, and talk about the things they do at bedtime.",
+      "colorTips": "Night colors work well here: a dark blue window, a yellow moon and stars, and a soft-colored rug. Color the stripes on the cat a darker shade than its fur.",
+      "learning": "Nap starts with N, just like night. Count the stars in the window, then find the moon and talk about its shape."
+    },
+    "cat-in-a-box-coloring-page": {
+      "talkAbout": "Cats like to hide in boxes, baskets and other small spaces where they feel cozy and safe. Ask your child where they like to hide when they play hide and seek.",
+      "colorTips": "Boxes are often brown or tan, but your child can make this one any color. Color the cat's stripes darker than its fur and the toy mouse gray or pink.",
+      "learning": "Box starts with B. Talk about position words: the cat is in the box, the mouse is next to the box, the tail is out of the box."
+    },
+    "cat-in-window-coloring-page": {
+      "talkAbout": "Many indoor cats love to sit by a window and watch birds, leaves and people outside. Ask your child what they can see from their own window.",
+      "colorTips": "Make the sky light blue and the clouds white or gray. Color the curtains a bright color or a pattern, the plant green and the pot orange or red. The bird can be any color.",
+      "learning": "Window starts with W. Count the windowpanes, then find the bird, the clouds and the leaves outside."
+    },
+    "cat-and-dog-coloring-page": {
+      "talkAbout": "Friends can be different from each other and still have fun together, just like a cat and a dog. Ask your child what makes a good friend, and who their friends are.",
+      "colorTips": "Make the heart red or pink. The cat and the dog can be any colors: try making them very different so they stand out side by side.",
+      "learning": "Cat starts with C and dog starts with D. Count the cat's legs and the dog's legs together (4 and 4 make 8)."
+    },
+    "cat-and-fishbowl-coloring-page": {
+      "talkAbout": "Cats are curious and like to watch anything that moves. Pet goldfish do best in a roomy tank with clean water. Ask your child which pet they would like, and what it would need.",
+      "colorTips": "Goldfish are usually orange or gold. Color the water light blue, the plant green and each pebble a different color. The table can be brown or white.",
+      "learning": "Fish starts with F. Count the bubbles coming from the fish, then count the pebbles at the bottom of the bowl."
     }
   }
 }
