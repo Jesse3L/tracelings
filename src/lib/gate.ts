@@ -2,10 +2,15 @@ import { track } from '@vercel/analytics';
 import { cleanWhat } from './what';
 import { visitSource } from './source';
 
-// Free downloads need an email once per device, before the first download. Members never see the prompt.
+// Free downloads need an email once per device, before the first download. After that, 7 free downloads a day per
+// device; download #8 shows the unlock screen (30-day pass or Storybook Club). Program members, Storybook Club members
+// and pass holders never see a limit.
 const COUNT_KEY = 'tl-downloads';
 const OK_KEY = 'tl-email-ok';
 const VID_KEY = 'tl-vid';
+const DAY_KEY = 'tl-day-downloads';
+const PASS_KEY = 'tl-pass';
+const EMAIL_KEY = 'tl-email';
 
 function read(key: string): string | null {
   try { return localStorage.getItem(key); } catch { return null; }
@@ -15,6 +20,42 @@ function write(key: string, v: string) {
 }
 
 export const FREE_DOWNLOADS = 0;
+export const DAILY_FREE = 7;
+
+/** This device's local date, so the count resets at the family's own midnight. */
+function today(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+export function downloadsToday(): number {
+  try {
+    const v = JSON.parse(read(DAY_KEY) || '{}');
+    return v?.d === today() && Number.isFinite(v?.n) ? Number(v.n) : 0;
+  } catch { return 0; }
+}
+
+/** Expiry (epoch ms) of a saved 30-day pass, or 0. The token is signed by the server; the date is readable here. */
+export function passExpiry(): number {
+  const t = read(PASS_KEY);
+  if (!t) return 0;
+  try {
+    const v = JSON.parse(atob(t.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')));
+    return typeof v?.e === 'number' && v.e > Date.now() ? v.e : 0;
+  } catch { return 0; }
+}
+export function savePass(token: string) { write(PASS_KEY, token); }
+
+/** Program members, Storybook Club members (set by lib/member.ts) and pass holders download without a daily limit. */
+export function unlimited(): boolean {
+  try { if ((window as any).__tlUnlimited === true || (window as any).__tlMember === true) return true; } catch { /* ignore */ }
+  return passExpiry() > 0;
+}
+export function atDailyLimit(): boolean {
+  return !unlimited() && downloadsToday() >= DAILY_FREE;
+}
+export function hasEmail(): boolean { return Boolean(read(OK_KEY)); }
+/** The email given at the gate, kept on this device only to prefill the unlock screen. */
+export function savedEmail(): string { return read(EMAIL_KEY) || ''; }
 
 // Bot filter for download alerts: a real person taps, clicks or types before downloading.
 // Scripted clicks don't produce trusted input events, so pings without one are marked as non-human.
@@ -25,7 +66,10 @@ if (typeof window !== 'undefined') {
   for (const t of ['pointerdown', 'touchstart', 'keydown']) window.addEventListener(t, mark, { capture: true, passive: true });
 }
 
+/** True when the next download must go through EmailGate: no email yet, or today's free downloads are used up.
+ *  (The name is kept so every tool's existing check also enforces the daily limit.) */
 export function needsEmail(): boolean {
+  if (atDailyLimit()) return true;
   if (read(OK_KEY)) return false;
   return Number(read(COUNT_KEY) || '0') >= FREE_DOWNLOADS;
 }
@@ -48,6 +92,7 @@ export function deviceId(): string {
  *  lib/what.ts), the random device code and where the visit came from (a fixed label, lib/source.ts) go out. Never the filename or anything typed (names stay on this device). */
 export function countDownload(pages?: number, what?: string) {
   write(COUNT_KEY, String(Number(read(COUNT_KEY) || '0') + 1));
+  if (!unlimited()) write(DAY_KEY, JSON.stringify({ d: today(), n: downloadsToday() + 1 }));
   try {
     const member = (window as any).__tlMember === true;
     const human = humanAt > 0 && !(navigator as any).webdriver;
@@ -65,8 +110,9 @@ export function countDownload(pages?: number, what?: string) {
     track('pdf_download', { page: location.pathname, pages: pages ?? 1, member });
   } catch { /* never block a download */ }
 }
-export function markEmailOk() {
+export function markEmailOk(email?: string) {
   write(OK_KEY, '1');
+  if (email && /^[^\s@]+@[^\s@]+$/.test(email.trim())) write(EMAIL_KEY, email.trim().toLowerCase());
 }
 
 export type SubscribeResult = 'ok' | 'invalid' | 'unavailable';
