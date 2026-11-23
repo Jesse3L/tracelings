@@ -270,5 +270,81 @@
   "link": "https://tracelings.com/bubble-letters/",
   "title": "Free Printable Bubble Letters A to Z + Bubble Letter Generator",
   "desc": "Free printable bubble letters for the whole alphabet, plus a bubble letter generator for any word or name. Big outlines to color, cut out or trace. #bubbleletters #printableletters #kidscrafts"
+ },
+ {
+  "id": "dog-coloring-pages-set",
+  "batch": "pets-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "8 Free Dog Coloring Pages",
+  "sub": "Puppies, fetch, a bubble bath and more",
+  "kind": "grid",
+  "images": [
+   "public/coloring/dog-coloring-pages/puppy-coloring-page.png",
+   "public/coloring/dog-coloring-pages/dog-with-ball-coloring-page.png",
+   "public/coloring/dog-coloring-pages/puppy-bath-coloring-page.png",
+   "public/coloring/dog-coloring-pages/dachshund-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/dog-coloring-pages/",
+  "title": "8 Free Dog and Puppy Coloring Pages for Kids (Printable PDFs)",
+  "desc": "Free printable dog coloring pages for kids who love puppies: a fluffy puppy with a bone, a dog playing fetch, a puppy in a bubble bath, a dachshund in a sweater, puppies in a basket and more. Thick outlines and big shapes for toddlers, preschool and kindergarten, with a simple dog fact on every page. #dogcoloringpages #puppycoloringpages #freeprintable"
+ },
+ {
+  "id": "cat-coloring-pages-set",
+  "batch": "pets-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "8 Free Cat Coloring Pages",
+  "sub": "Kittens, yarn, a cat in a box and more",
+  "kind": "grid",
+  "images": [
+   "public/coloring/cat-coloring-pages/kitten-coloring-page.png",
+   "public/coloring/cat-coloring-pages/cat-with-yarn-coloring-page.png",
+   "public/coloring/cat-coloring-pages/cat-in-a-box-coloring-page.png",
+   "public/coloring/cat-coloring-pages/sleeping-cat-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/cat-coloring-pages/",
+  "title": "8 Free Cat and Kitten Coloring Pages for Kids (Printable PDFs)",
+  "desc": "Free printable cat coloring pages for kids who love kittens: a kitten on a cushion, a cat playing with yarn, a mother cat with her kittens, a cat in a box, a sleeping cat and more. Thick outlines and big shapes for toddlers, preschool and kindergarten, with a simple cat fact on every page. #catcoloringpages #kittencoloringpages #freeprintable"
+ },
+ {
+  "id": "puppy-coloring-page",
+  "batch": "pets-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Free Puppy Coloring Page",
+  "sub": "A big, easy shape for little hands",
+  "kind": "single",
+  "images": [
+   "public/coloring/dog-coloring-pages/puppy-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/dog-coloring-pages/puppy-coloring-page/",
+  "title": "Cute Puppy Coloring Page for Kids (Free Printable PDF)",
+  "desc": "A fluffy puppy with floppy ears and a tag on its collar sits in the grass with a bone and flowers. The big round face is an easy first shape for toddlers and preschoolers. Fact to share while coloring: puppies are born with their eyes closed. Count the flowers together when the page is done. Free printable PDF. #puppycoloringpages #dogcoloringpages #preschoolactivities"
+ },
+ {
+  "id": "kitten-coloring-page",
+  "batch": "pets-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Free Kitten Coloring Page",
+  "sub": "Big eyes, whiskers and a bow",
+  "kind": "single",
+  "images": [
+   "public/coloring/cat-coloring-pages/kitten-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/cat-coloring-pages/kitten-coloring-page/",
+  "title": "Cute Kitten Coloring Page for Kids (Free Printable PDF)",
+  "desc": "A cute kitten with big eyes, long whiskers and a bow on its collar sits on a soft cushion with tassels. The big head and round cushion are easy shapes for young colorers. Count the whiskers on each side together, then compare. Free printable PDF for toddlers, preschool and kindergarten. #kittencoloringpages #catcoloringpages #preschoolactivities"
+ },
+ {
+  "id": "cat-and-dog-coloring-page",
+  "batch": "pets-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Cat and Dog Coloring Page",
+  "sub": "Best friends, free to print",
+  "kind": "single",
+  "images": [
+   "public/coloring/cat-coloring-pages/cat-and-dog-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/cat-coloring-pages/cat-and-dog-coloring-page/",
+  "title": "Cat and Dog Best Friends Coloring Page (Free Printable PDF)",
+  "desc": "A smiling cat and a happy dog sit side by side on the grass with a big heart above them. A sweet page for kids who can't pick a favorite pet. Talk about how cats and dogs can become friends when they grow up together, and look for the bone on the dog's tag. Free printable PDF. #dogandcatcoloringpages #catcoloringpages #dogcoloringpages"
  }
 ]
