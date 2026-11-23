@@ -219,7 +219,8 @@ export function welcomeDay0(v: Interest): EmailContent {
         { button: { label: 'Open the program page', path: '/program/' } },
         { sign: true },
       ]
-    : [
+    : v === 'homeschool'
+    ? [
         { p: 'Hi there,' },
         { p: d.thanks },
         { p: d.links },
@@ -228,8 +229,37 @@ export function welcomeDay0(v: Interest): EmailContent {
         { p: 'Week 1 is free to print, themed on their favorite things, with their name on the pages. No card needed.' },
         { button: { label: 'Get a free week built around your child', path: '/program/' } },
         { sign: true },
+      ]
+    : [
+        // Free-tool sign-ups (mostly name and letter tracing from ChatGPT) get a $5 first purchase, not a
+        // $14.99/month ask. The program pitch starts on day 2 and runs through day 14.
+        { p: 'Hi there,' },
+        { p: d.thanks },
+        { p: d.links },
+        ...storybookOfferBlocks(),
+        { sign: true },
       ];
   return render({ subject: d.subject, preview: d.preview, blocks, medium: 'welcome', campaign: 'day0', why: WHY_SIGNUP });
+}
+
+/** Christmas book through Dec 25, then the year-round storybook (12 themes). */
+function storybookOfferBlocks(now: Date = new Date()): Block[] {
+  const christmas = now.getMonth() === 10 || (now.getMonth() === 11 && now.getDate() <= 25);
+  return christmas
+    ? [
+        { h: 'Their name in a Christmas story' },
+        { p: 'We also make a **printable Christmas picture book starring your child.** Pip the reindeer, Flake the snowman and Snug the polar bear cub talk to your child by name, and your child has the idea that saves the day.' },
+        { p: 'It is **$5** and downloads right away, and the pictures are line art, so it doubles as a coloring book. Type their name to see the cover and first page free.' },
+        { button: { label: 'See your child\'s Christmas book', path: '/personalized-christmas-book/' } },
+        { small: 'The name stays on your device. We never see it.' },
+      ]
+    : [
+        { h: 'A storybook starring your child' },
+        { p: 'We also make a **printable picture book with your child in the story,** in 12 themes: dinosaurs, trucks, unicorns, space, ocean animals and more. The pictures are line art, so it doubles as a coloring book.' },
+        { p: 'It is **$5** and downloads right away. Type their name to see the cover and first page free.' },
+        { button: { label: 'Make their storybook', path: '/personalized-storybook/' } },
+        { small: 'The name stays on your device. We never see it.' },
+      ];
 }
 
 const D2_TIP: Record<Interest, { subject: string; preview: string; intro: string; tips: string[]; next: { label: string; path: string; line: string } }> = {
