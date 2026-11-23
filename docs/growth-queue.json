@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21",
+  "updated": "2026-11-23",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -1210,12 +1210,69 @@
     },
     {
       "id": "pets-pages-pinterest-pins",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "dog-cat-coloring-collections"
       ],
       "title": "Pinterest pins for the dog and cat coloring pages, same format as horse-pages-pinterest-pins (scripts/pins). Coloring pages are among the most pinned printables; one pin per collection plus the kitten and puppy pages (cat coloring pages 40,500 / SD 28, kitten coloring pages 18,100 / 30, puppy coloring pages 18,100 / 30).",
+      "linkTo": [
+        "/coloring-pages/dog-coloring-pages/",
+        "/coloring-pages/cat-coloring-pages/"
+      ],
+      "done": "2026-11-23",
+      "urls": [],
+      "keywords": {
+        "cat coloring pages": [
+          40500,
+          28
+        ],
+        "dog coloring pages": [
+          27100,
+          22
+        ],
+        "kitten coloring pages": [
+          18100,
+          30
+        ],
+        "puppy coloring pages": [
+          18100,
+          30
+        ],
+        "cute puppy coloring pages": [
+          2900,
+          23
+        ],
+        "cute kitten coloring pages": [
+          1900,
+          30
+        ]
+      },
+      "result": "5 pins (batch pets-2026-11): dog and cat collection grids, puppy, kitten, cat and dog. Images in public/pins/, upload file scripts/pins/pinterest-bulk-pets-2026-11.csv (board Coloring Pages for Kids, Nov 25 to 26). make-pins.py now takes PIN_BATCH so old pins are not rescheduled."
+    },
+    {
+      "id": "theme-collections-pinterest-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "pets-pages-pinterest-pins"
+      ],
+      "title": "Pinterest pins for the ocean animal, bug, space and farm animal coloring collections: one grid pin per collection plus one single pin for the strongest page in each (sea turtle or octopus, butterfly, solar system, cow), as a new PIN_BATCH in scripts/pins. Recheck volumes first (ocean animal coloring pages 6,600 / 28, bug 5,400 / 22, space 6,600 / 30, farm animal 3,600 / 24). No new site URLs.",
+      "linkTo": [
+        "/coloring-pages/ocean-animal-coloring-pages/",
+        "/coloring-pages/bug-coloring-pages/",
+        "/coloring-pages/space-coloring-pages/",
+        "/coloring-pages/farm-animal-coloring-pages/"
+      ]
+    },
+    {
+      "id": "coloring-pin-save-image",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "pets-pages-pinterest-pins"
+      ],
+      "title": "When a parent saves a coloring collection page to Pinterest, offer the tall pin image (public/pins/<collection>-set.jpg) instead of a page thumbnail: add data-pin-media / a hidden pin image on collection pages that have a pin. Check the page still renders the same at 390px and 1280px. No new URLs.",
       "linkTo": [
         "/coloring-pages/dog-coloring-pages/",
         "/coloring-pages/cat-coloring-pages/"

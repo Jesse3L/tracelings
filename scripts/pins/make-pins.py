@@ -1,10 +1,17 @@
 # Renders Pinterest pins (1000x1500) from scripts/pins/pins.json into public/pins/*.jpg, and writes
 # scripts/pins/pinterest-bulk.csv for Pinterest's bulk pin upload. Run: python3 scripts/pins/make-pins.py
+# New pins carry a "batch" name. PIN_BATCH=<batch> renders only that batch and writes
+# scripts/pins/pinterest-bulk-<batch>.csv, so pins already uploaded are not scheduled twice.
+# Example: PIN_BATCH=pets-2026-11 PIN_START=2026-11-25 python3 scripts/pins/make-pins.py
 import asyncio, json, os, csv, datetime, pathlib
 from playwright.async_api import async_playwright
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PINS = json.load(open(ROOT / 'scripts/pins/pins.json'))
+BATCH = os.environ.get('PIN_BATCH')
+if BATCH:
+    PINS = [p for p in PINS if p.get('batch') == BATCH]
+    assert PINS, f'no pins in batch {BATCH}'
 OUT = ROOT / 'public/pins'; OUT.mkdir(exist_ok=True)
 FONT = ROOT / 'node_modules/@fontsource/andika/files'
 MARK = (ROOT / 'public/favicon.svg').read_text()
@@ -70,7 +77,8 @@ async def main():
         when = datetime.datetime.combine(day + datetime.timedelta(days=1 if h == 0 else 0), datetime.time(h, 0))
         rows.append({'Title': p['title'][:100], 'Media URL': f"https://tracelings.com/pins/{p['id']}.jpg", 'Pinterest board': p['board'],
                      'Thumbnail': '', 'Description': p['desc'][:500], 'Link': p['link'], 'Publish date': when.strftime('%Y-%m-%dT%H:%M:%S'), 'Keywords': ''})
-    with open(ROOT / 'scripts/pins/pinterest-bulk.csv', 'w', newline='') as f:
+    csv_name = f'pinterest-bulk-{BATCH}.csv' if BATCH else 'pinterest-bulk.csv'
+    with open(ROOT / 'scripts/pins' / csv_name, 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print(len(PINS), 'pins')
 
