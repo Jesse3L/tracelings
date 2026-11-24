@@ -260,7 +260,7 @@
     },
     {
       "id": 4,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-24",
       "primaryKeyword": "name activities for preschool",
       "volume": 1000,
@@ -272,7 +272,9 @@
         "/name-coloring-pages/",
         "/bubble-letters/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "name-activities-for-preschool",
+      "publishedOn": "2026-11-24"
     },
     {
       "id": 7,
