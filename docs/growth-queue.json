@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23",
+  "updated": "2026-11-25",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -1252,7 +1252,7 @@
     },
     {
       "id": "theme-collections-pinterest-pins",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "pets-pages-pinterest-pins"
@@ -1263,7 +1263,71 @@
         "/coloring-pages/bug-coloring-pages/",
         "/coloring-pages/space-coloring-pages/",
         "/coloring-pages/farm-animal-coloring-pages/"
+      ],
+      "done": "2026-11-25",
+      "urls": [],
+      "keywords": {
+        "ocean animal coloring pages": [
+          6600,
+          28
+        ],
+        "bug coloring pages": [
+          5400,
+          22
+        ],
+        "space coloring pages": [
+          6600,
+          30
+        ],
+        "farm animal coloring pages": [
+          3600,
+          24
+        ],
+        "octopus coloring page": [
+          3600,
+          30
+        ],
+        "sea turtle coloring page": [
+          2900,
+          25
+        ],
+        "butterfly coloring pages": [
+          12100,
+          30
+        ],
+        "solar system coloring page": [
+          4400,
+          22
+        ],
+        "cow coloring page": [
+          1900,
+          20
+        ]
+      },
+      "result": "8 pins in batch themes-2026-11 (4 collection grids; singles for octopus, butterfly, solar system, cow). Octopus picked over sea turtle (3,600 vs 2,900). Images in public/pins/, CSV scripts/pins/pinterest-bulk-themes-2026-11.csv scheduled from Nov 27, 3 a day. No new site URLs."
+    },
+    {
+      "id": "spring-coloring-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "theme-collections-pinterest-pins"
+      ],
+      "title": "Spring pin batch (render by early March, schedule mid March): single pins for the ladybug, bee, sea turtle and caterpillar pages plus the Easter collection grid if it has no pin yet, ahead of the spring peak (Nov 25 trend data: bug coloring pages 2,400 in Nov to 12,100 in April; butterfly coloring pages 22,200 in April; ocean animal coloring pages 12,100 in May and June). New PIN_BATCH, PIN_START in mid March. No new site URLs.",
+      "linkTo": [
+        "/coloring-pages/bug-coloring-pages/",
+        "/coloring-pages/ocean-animal-coloring-pages/"
       ]
+    },
+    {
+      "id": "pin-batch-checklist",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "theme-collections-pinterest-pins"
+      ],
+      "title": "Small cleanup: a pinned batch list in scripts/pins/README.md (batch name, pins, CSV, start date, uploaded yes or no) so Jesse can see which bulk CSVs are still waiting to upload (pets-2026-11 and themes-2026-11 so far), and make-pins.py refuse to rewrite a batch's CSV with a start date already in the past. No new URLs.",
+      "linkTo": []
     },
     {
       "id": "coloring-pin-save-image",
@@ -1272,10 +1336,12 @@
       "needs": [
         "pets-pages-pinterest-pins"
       ],
-      "title": "When a parent saves a coloring collection page to Pinterest, offer the tall pin image (public/pins/<collection>-set.jpg) instead of a page thumbnail: add data-pin-media / a hidden pin image on collection pages that have a pin. Check the page still renders the same at 390px and 1280px. No new URLs.",
+      "title": "When a parent saves a coloring collection page to Pinterest, offer the tall pin image (public/pins/<collection>-set.jpg) instead of a page thumbnail: add data-pin-media / a hidden pin image on collection pages that have a pin (dog, cat, ocean, bug, space, farm, Thanksgiving). Check the page still renders the same at 390px and 1280px. No new URLs.",
       "linkTo": [
         "/coloring-pages/dog-coloring-pages/",
-        "/coloring-pages/cat-coloring-pages/"
+        "/coloring-pages/cat-coloring-pages/",
+        "/coloring-pages/ocean-animal-coloring-pages/",
+        "/coloring-pages/bug-coloring-pages/"
       ]
     },
     {

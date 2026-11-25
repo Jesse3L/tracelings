@@ -346,5 +346,129 @@
   "link": "https://tracelings.com/coloring-pages/cat-coloring-pages/cat-and-dog-coloring-page/",
   "title": "Cat and Dog Best Friends Coloring Page (Free Printable PDF)",
   "desc": "A smiling cat and a happy dog sit side by side on the grass with a big heart above them. A sweet page for kids who can't pick a favorite pet. Talk about how cats and dogs can become friends when they grow up together, and look for the bone on the dog's tag. Free printable PDF. #dogandcatcoloringpages #catcoloringpages #dogcoloringpages"
+ },
+ {
+  "id": "ocean-animal-coloring-pages-set",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "8 Free Ocean Animal Coloring Pages",
+  "sub": "A whale, an octopus, a sea turtle and more",
+  "kind": "grid",
+  "images": [
+   "public/coloring/ocean-animal-coloring-pages/whale-coloring-page.png",
+   "public/coloring/ocean-animal-coloring-pages/octopus-coloring-page.png",
+   "public/coloring/ocean-animal-coloring-pages/sea-turtle-coloring-page.png",
+   "public/coloring/ocean-animal-coloring-pages/jellyfish-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/ocean-animal-coloring-pages/",
+  "title": "8 Free Ocean Animal Coloring Pages for Kids (Printable PDFs)",
+  "desc": "Free printable ocean animal coloring pages for kids: a happy whale, an octopus, a sea turtle, a dolphin, a friendly shark, a crab with a starfish, a seahorse and two jellyfish. Thick outlines and big shapes for toddlers, preschool and kindergarten, with a simple sea animal fact on every page. #oceancoloringpages #seaanimalcoloringpages #freeprintable"
+ },
+ {
+  "id": "bug-coloring-pages-set",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "8 Free Bug Coloring Pages",
+  "sub": "A ladybug, a butterfly, a bee and more",
+  "kind": "grid",
+  "images": [
+   "public/coloring/bug-coloring-pages/ladybug-coloring-page.png",
+   "public/coloring/bug-coloring-pages/butterfly-coloring-page.png",
+   "public/coloring/bug-coloring-pages/bee-coloring-page.png",
+   "public/coloring/bug-coloring-pages/caterpillar-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/bug-coloring-pages/",
+  "title": "8 Free Bug and Insect Coloring Pages for Kids (Printable PDFs)",
+  "desc": "Free printable bug coloring pages for kids: a ladybug on a leaf, a butterfly over two flowers, a bee by a sunflower, a caterpillar, an ant, a dragonfly, a grasshopper and a firefly. Thick outlines and big shapes for toddlers, preschool and kindergarten, with a simple bug fact on every page. #bugcoloringpages #insectcoloringpages #freeprintable"
+ },
+ {
+  "id": "space-coloring-pages-set",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "8 Free Space Coloring Pages",
+  "sub": "A rocket, an astronaut, the planets and more",
+  "kind": "grid",
+  "images": [
+   "public/coloring/space-coloring-pages/rocket-coloring-page.png",
+   "public/coloring/space-coloring-pages/astronaut-coloring-page.png",
+   "public/coloring/space-coloring-pages/solar-system-coloring-page.png",
+   "public/coloring/space-coloring-pages/alien-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/space-coloring-pages/",
+  "title": "8 Free Space Coloring Pages for Kids (Printable PDFs)",
+  "desc": "Free printable space coloring pages for kids: a rocket, an astronaut with a flag, the solar system, Saturn, the moon, a friendly alien, a telescope and a moon rover. Thick outlines and big shapes for toddlers, preschool and kindergarten, with a simple space fact on every page. #spacecoloringpages #solarsystem #freeprintable"
+ },
+ {
+  "id": "farm-animal-coloring-pages-set",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "8 Free Farm Animal Coloring Pages",
+  "sub": "A cow, a pig, a horse and more",
+  "kind": "grid",
+  "images": [
+   "public/coloring/farm-animal-coloring-pages/cow-coloring-page.png",
+   "public/coloring/farm-animal-coloring-pages/pig-coloring-page.png",
+   "public/coloring/farm-animal-coloring-pages/horse-coloring-page.png",
+   "public/coloring/farm-animal-coloring-pages/chicken-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/farm-animal-coloring-pages/",
+  "title": "8 Free Farm Animal Coloring Pages for Kids (Printable PDFs)",
+  "desc": "Free printable farm animal coloring pages for kids: a cow with a bell, a pig in the mud, a horse, a sheep, a hen and her chicks, a barn, a duck family and a baby goat. Thick outlines and big shapes for toddlers, preschool and kindergarten, with a simple farm fact on every page. #farmanimalcoloringpages #farmcoloringpages #freeprintable"
+ },
+ {
+  "id": "octopus-coloring-page",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Free Octopus Coloring Page",
+  "sub": "Curly arms, bubbles and seashells",
+  "kind": "single",
+  "images": [
+   "public/coloring/ocean-animal-coloring-pages/octopus-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/ocean-animal-coloring-pages/octopus-coloring-page/",
+  "title": "Cute Octopus Coloring Page for Kids (Free Printable PDF)",
+  "desc": "A smiling octopus with curly arms floats over the sand with seashells, seaweed and bubbles. Fact to share while coloring: real octopuses have eight arms and no bones, so they can squeeze into tiny cracks between rocks. Touch each arm as you count it together. Free printable PDF for toddlers, preschool and kindergarten. #octopuscoloringpage #oceancoloringpages #preschoolactivities"
+ },
+ {
+  "id": "butterfly-coloring-page",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Free Butterfly Coloring Page",
+  "sub": "Match the two wings, shape by shape",
+  "kind": "single",
+  "images": [
+   "public/coloring/bug-coloring-pages/butterfly-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/bug-coloring-pages/butterfly-coloring-page/",
+  "title": "Easy Butterfly Coloring Page for Kids (Free Printable PDF)",
+  "desc": "A happy butterfly with big round shapes on its wings flies over two flowers. Color a shape on one wing, then its twin on the other wing in the same color: early symmetry and matching practice. Fact to share: every butterfly starts as a tiny egg, then a caterpillar, then a chrysalis. Free printable PDF. #butterflycoloringpages #bugcoloringpages #preschoolactivities"
+ },
+ {
+  "id": "solar-system-coloring-page",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Free Solar System Coloring Page",
+  "sub": "The sun and all eight planets",
+  "kind": "single",
+  "images": [
+   "public/coloring/space-coloring-pages/solar-system-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/space-coloring-pages/solar-system-coloring-page/",
+  "title": "Solar System Coloring Page for Kids (Free Printable PDF)",
+  "desc": "The sun and all eight planets in a row, with Saturn and its ring. Point to each planet and say its name as your child colors it, from Mercury to Neptune. The circles are not drawn to size: Jupiter is the biggest planet. Simple shapes for preschool and kindergarten. Free printable PDF. #solarsystemcoloringpage #spacecoloringpages #kidsactivities"
+ },
+ {
+  "id": "cow-coloring-page",
+  "batch": "themes-2026-11",
+  "board": "Coloring Pages for Kids",
+  "head": "Free Cow Coloring Page",
+  "sub": "Spots, a bell and a barn",
+  "kind": "single",
+  "images": [
+   "public/coloring/farm-animal-coloring-pages/cow-coloring-page.png"
+  ],
+  "link": "https://tracelings.com/coloring-pages/farm-animal-coloring-pages/cow-coloring-page/",
+  "title": "Cute Cow Coloring Page for Kids (Free Printable PDF)",
+  "desc": "A smiling cow with spots and a bell stands in the grass by a fence, with a barn, flowers and the sun behind her. Count the spots together, then say moo once for each spot. Fact to share: a baby cow is called a calf. Free printable PDF for toddlers, preschool and kindergarten. #cowcoloringpage #farmanimalcoloringpages #preschoolactivities"
  }
 ]
