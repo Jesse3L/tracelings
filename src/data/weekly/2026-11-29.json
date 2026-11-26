@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-29",
+  "subject": "Free Hanukkah pages, new puppy pages, and names for holiday cards",
+  "preview": "A menorah to color before Hanukkah starts Dec 4, new dog and cat pages, and name tracing for signing cards.",
+  "intro": "December starts this week, and Hanukkah begins at sundown on Friday, December 4. Here are a few free pages to print for the busy weeks ahead.",
+  "free": [
+    { "title": "Hanukkah coloring pages", "path": "/coloring-pages/hanukkah-coloring-pages/", "blurb": "A menorah, a dreidel, latkes, jelly doughnuts and gelt. Color one more flame on the menorah each night." },
+    { "title": "Name tracing", "path": "/name-tracing/", "blurb": "Type your child's name and print a page or two of practice before they sign their own holiday cards." },
+    { "title": "Dog coloring pages", "path": "/coloring-pages/dog-coloring-pages/", "blurb": "New this month: a puppy bath, a dachshund, puppies in a basket and a walk around the block." },
+    { "title": "Cat coloring pages", "path": "/coloring-pages/cat-coloring-pages/", "blurb": "Also new: a kitten with yarn, a cat in a box and a sleepy cat, simple enough for preschoolers." }
+  ],
+  "picture": { "src": "/coloring/hanukkah-coloring-pages/menorah-coloring-page-880.png", "alt": "Line drawing of a Hanukkah menorah with nine candles and the center candle raised higher, ready to color", "caption": "The menorah page doubles as an eight-night countdown." },
+  "feature": "club",
+  "featureNote": "Type any name, so one membership covers a book for every child in the house, and for visiting cousins over the holidays too.",
+  "tip": { "title": "Let them sign the cards", "body": "Print a name tracing page and have your child trace their name two or three times. Then hand them one holiday card a day to sign on their own. A wobbly name is perfect, and five minutes a day is plenty." }
+}
