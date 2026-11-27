@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25",
+  "updated": "2026-11-27",
   "notes": "Ordered build queue for the every-other-day growth runs. See docs/growth-playbook.md. Keyword numbers are Ubersuggest US monthly volume and SD, pulled 2026-10-13. Oct 24, 2026: every item has a \"side\" (free = one-page tools and guide articles; program = member work in the plans). Items that add pages to weekly packs are program work. No new free multi-week packs or multi-page sets.",
   "items": [
     {
@@ -1317,17 +1317,78 @@
       "linkTo": [
         "/coloring-pages/bug-coloring-pages/",
         "/coloring-pages/ocean-animal-coloring-pages/"
-      ]
+      ],
+      "notBefore": "2027-02-15",
+      "note": "Skipped on Nov 27, 2026: too early (the pins should be rendered close to the upload and scheduled from mid March). Ubersuggest US Nov 27: ladybug coloring page 4,400 / 25 (8,100 in April), bee coloring page 4,400 / 21 (8,100 in April), caterpillar coloring page 1,900 / 21 (5,400 in April), easter coloring pages 33,100 / 29 (22,200 in Feb, 201,000 in March; Easter 2027 is March 28). The Easter collection has no pin yet: schedule its grid pin first, in late February, then the spring singles in mid March. Use scripts/pins/README.md and make-pins.py --status."
     },
     {
       "id": "pin-batch-checklist",
-      "status": "todo",
+      "status": "done",
       "side": "free",
       "needs": [
         "theme-collections-pinterest-pins"
       ],
       "title": "Small cleanup: a pinned batch list in scripts/pins/README.md (batch name, pins, CSV, start date, uploaded yes or no) so Jesse can see which bulk CSVs are still waiting to upload (pets-2026-11 and themes-2026-11 so far), and make-pins.py refuse to rewrite a batch's CSV with a start date already in the past. No new URLs.",
-      "linkTo": []
+      "linkTo": [],
+      "done": "2026-11-27",
+      "urls": [],
+      "keywords": {
+        "easter coloring pages": [
+          33100,
+          29
+        ],
+        "valentines day coloring pages": [
+          22200,
+          25
+        ],
+        "ladybug coloring page": [
+          4400,
+          25
+        ],
+        "bee coloring page": [
+          4400,
+          21
+        ],
+        "caterpillar coloring page": [
+          1900,
+          21
+        ]
+      },
+      "result": "scripts/pins/batches.json lists every batch (pins, CSV, uploaded yes / no / not confirmed) and make-pins.py rebuilds the table in the new scripts/pins/README.md from it. make-pins.py now refuses a CSV whose first pin is past or within the hour, refuses to rewrite a batch marked uploaded, checks the 100 / 500 character limits instead of cutting text, writes no CSV without PIN_BATCH, and has --status, --uploaded <batch> and PIN_SKIP_RENDER=1. Times are now 9am, 1pm and 7pm Central in real Central time (they were an hour early in winter). The 20 original pins got batch launch-2026-10 (uploaded). The pets and themes CSVs were stale (first pins Nov 25 and Nov 27), so they were rewritten with the same pins and images for Nov 30 to Dec 1 and Dec 2 to 4; both stay not confirmed. No new site URLs."
+    },
+    {
+      "id": "valentines-coloring-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "pin-batch-checklist"
+      ],
+      "notBefore": "2026-12-15",
+      "title": "Valentine's Day pin batch: a grid pin for /coloring-pages/valentines-day-coloring-pages/ plus 2 or 3 single pins for its strongest pages, new PIN_BATCH (for example valentines-2027-01), PIN_START about Jan 2 so the pins are up before the January climb. Recheck volumes first. No new site URLs.",
+      "keywords": {
+        "valentines day coloring pages": [
+          22200,
+          25
+        ]
+      },
+      "note": "Ubersuggest US Nov 27, 2026: valentines day coloring pages 22,200 / SD 25, with 90,500 in January and 165,000 in February.",
+      "linkTo": [
+        "/coloring-pages/valentines-day-coloring-pages/"
+      ]
+    },
+    {
+      "id": "homeschool-plan-pins",
+      "status": "todo",
+      "side": "free",
+      "needs": [
+        "pin-batch-checklist"
+      ],
+      "title": "Pinterest pins that point to the program: one pin each for /homeschool/preschool/ (36-week Pre-K plan, week 1 free), /homeschool/kindergarten/ and /program/ (free placement check and free week), using week 1 page previews from public/previews/. Pin text says plainly that week 1 is free and the rest is for members. Check keywords first (preschool homeschool curriculum, kindergarten homeschool curriculum, free homeschool curriculum). New PIN_BATCH, board 'Homeschool Preschool and Kindergarten'. No new site URLs.",
+      "linkTo": [
+        "/homeschool/preschool/",
+        "/homeschool/kindergarten/",
+        "/program/"
+      ]
     },
     {
       "id": "coloring-pin-save-image",

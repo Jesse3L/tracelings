@@ -1,18 +1,27 @@
-# Renders Pinterest pins (1000x1500) from scripts/pins/pins.json into public/pins/*.jpg, and writes
-# scripts/pins/pinterest-bulk.csv for Pinterest's bulk pin upload. Run: python3 scripts/pins/make-pins.py
-# New pins carry a "batch" name. PIN_BATCH=<batch> renders only that batch and writes
-# scripts/pins/pinterest-bulk-<batch>.csv, so pins already uploaded are not scheduled twice.
-# Example: PIN_BATCH=pets-2026-11 PIN_START=2026-11-25 python3 scripts/pins/make-pins.py
-import asyncio, json, os, csv, datetime, pathlib
-from playwright.async_api import async_playwright
+# Renders Pinterest pins (1000x1500) from scripts/pins/pins.json into public/pins/*.jpg, and writes a
+# Pinterest bulk upload CSV for one batch. Batches and their upload status live in scripts/pins/batches.json;
+# the table in scripts/pins/README.md is rebuilt from it every run.
+#
+#   PIN_BATCH=<batch> PIN_START=YYYY-MM-DD python3 scripts/pins/make-pins.py   render the batch, write its CSV
+#   PIN_SKIP_RENDER=1 ...                                                        write the CSV only, keep the jpgs
+#   python3 scripts/pins/make-pins.py --status                                   list batches, flag stale CSVs
+#   python3 scripts/pins/make-pins.py --uploaded <batch>                         mark a batch as uploaded
+#   python3 scripts/pins/make-pins.py                                            render every pin, write no CSV
+#
+# The script refuses to write a CSV whose first pin time is already past (Pinterest's bulk upload only
+# schedules future dates) and refuses to rewrite a batch marked uploaded, so pins are never scheduled twice.
+import asyncio, json, os, csv, datetime, pathlib, sys
+from zoneinfo import ZoneInfo
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PINS = json.load(open(ROOT / 'scripts/pins/pins.json'))
 BATCH = os.environ.get('PIN_BATCH')
-if BATCH:
-    PINS = [p for p in PINS if p.get('batch') == BATCH]
-    assert PINS, f'no pins in batch {BATCH}'
-OUT = ROOT / 'public/pins'; OUT.mkdir(exist_ok=True)
+OUT = ROOT / 'public/pins'
+PINDIR = ROOT / 'scripts/pins'
+BATCHES_FILE = PINDIR / 'batches.json'
+README = PINDIR / 'README.md'
+CENTRAL = ZoneInfo('America/Chicago')
+SLOTS = [9, 13, 19]  # 3 pins a day at 9am, 1pm and 7pm Central, written to the CSV in UTC
 FONT = ROOT / 'node_modules/@fontsource/andika/files'
 MARK = (ROOT / 'public/favicon.svg').read_text()
 
@@ -53,11 +62,13 @@ def html(p):
 <div class="top"><span class="pill">FREE PRINTABLE</span><h1><span>{p['head']}</span></h1><p class="sub">{p['sub']}</p></div>
 {stage}<div class="rule"></div><div class="foot">{MARK}<b>tracelings.com</b><i>Print in seconds</i></div></body></html>"""
 
-async def main():
+async def render(pins):
+    from playwright.async_api import async_playwright
+    OUT.mkdir(exist_ok=True)
     async with async_playwright() as pw:
         b = await pw.chromium.launch(args=['--allow-file-access-from-files'])
         pg = await b.new_page(viewport={'width': 1000, 'height': 1500})
-        for p in PINS:
+        for p in pins:
             path = OUT / f"{p['id']}.html"
             # Measure the headline so the image starts below it.
             path.write_text(html(p)); await pg.goto(f'file://{path}'); await pg.evaluate('document.fonts.ready')
@@ -68,18 +79,106 @@ async def main():
             path.unlink()
         await b.close()
 
-    # Pinterest bulk upload CSV. 3 pins a day at 9am, 1pm and 7pm Central (written in UTC), Thanksgiving first.
-    start = datetime.date.fromisoformat(os.environ['PIN_START']) if os.environ.get('PIN_START') else datetime.date.today() + datetime.timedelta(days=2)
-    slots = [14, 18, 0]  # UTC hours ~ 9am, 1pm, 7pm CDT (7pm lands on the next UTC day)
-    rows = []
-    for i, p in enumerate(PINS):
-        day = start + datetime.timedelta(days=i // 3); h = slots[i % 3]
-        when = datetime.datetime.combine(day + datetime.timedelta(days=1 if h == 0 else 0), datetime.time(h, 0))
-        rows.append({'Title': p['title'][:100], 'Media URL': f"https://tracelings.com/pins/{p['id']}.jpg", 'Pinterest board': p['board'],
-                     'Thumbnail': '', 'Description': p['desc'][:500], 'Link': p['link'], 'Publish date': when.strftime('%Y-%m-%dT%H:%M:%S'), 'Keywords': ''})
-    csv_name = f'pinterest-bulk-{BATCH}.csv' if BATCH else 'pinterest-bulk.csv'
-    with open(ROOT / 'scripts/pins' / csv_name, 'w', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
-    print(len(PINS), 'pins')
 
-asyncio.run(main())
+
+def utc_now():
+    return datetime.datetime.now(datetime.timezone.utc)
+
+def schedule(n, start):
+    """n publish times from start (a date), 3 a day in Central time, returned as naive UTC datetimes."""
+    out = []
+    for i in range(n):
+        local = datetime.datetime.combine(start + datetime.timedelta(days=i // 3), datetime.time(SLOTS[i % 3]), CENTRAL)
+        out.append(local.astimezone(datetime.timezone.utc).replace(tzinfo=None))
+    return out
+
+def load_batches():
+    return json.loads(BATCHES_FILE.read_text())
+
+def csv_times(name):
+    path = PINDIR / name
+    if not path.exists():
+        return []
+    return [datetime.datetime.fromisoformat(r['Publish date']) for r in csv.DictReader(open(path)) if r.get('Publish date')]
+
+def status_word(b, now):
+    times = csv_times(b['csv'])
+    if b.get('uploaded') is True:
+        return 'uploaded'
+    if not times:
+        return 'no CSV'
+    if times[0] <= now:
+        return 'stale: first pin time has passed, rerun with a later PIN_START before uploading'
+    return 'ready to upload'
+
+def save_batches(batches):
+    BATCHES_FILE.write_text(json.dumps(batches, indent=2) + '\n')
+    now = utc_now().replace(tzinfo=None)
+    up = {True: 'yes', False: 'no', None: 'not confirmed'}
+    rows = ['| Batch | Pins | CSV | First pin (UTC) | Last pin (UTC) | Uploaded | Status |', '|---|---|---|---|---|---|---|']
+    for b in batches:
+        t = csv_times(b['csv'])
+        first = t[0].strftime('%Y-%m-%d %H:%M') if t else ''
+        last = t[-1].strftime('%Y-%m-%d %H:%M') if t else ''
+        rows.append(f"| {b['batch']} | {len(b['pins'])} | `{b['csv']}` | {first} | {last} | {up[b.get('uploaded')]} | {status_word(b, now)} |")
+    text = README.read_text()
+    a, z = '<!-- batches:start -->', '<!-- batches:end -->'
+    README.write_text(text[:text.index(a) + len(a)] + '\n' + '\n'.join(rows) + '\n' + text[text.index(z):])
+
+def fail(msg):
+    print('make-pins: ' + msg, file=sys.stderr); sys.exit(1)
+
+def main():
+    batches = load_batches()
+    by_name = {b['batch']: b for b in batches}
+    now = utc_now().replace(tzinfo=None)
+
+    if '--status' in sys.argv:
+        for b in batches:
+            print(f"{b['batch']:<20} {len(b['pins']):>3} pins  {b['csv']:<40} {status_word(b, now)}")
+        save_batches(batches)
+        return
+    if '--uploaded' in sys.argv:
+        name = sys.argv[sys.argv.index('--uploaded') + 1]
+        if name not in by_name: fail(f'no batch named {name} in batches.json')
+        by_name[name]['uploaded'] = True; save_batches(batches); print(name, 'marked uploaded'); return
+
+    if not BATCH:
+        asyncio.run(render(PINS))
+        print(len(PINS), 'pins rendered, no CSV written (set PIN_BATCH to write one)')
+        return
+
+    pins = [p for p in PINS if p.get('batch') == BATCH]
+    if not pins: fail(f'no pins in batch {BATCH}')
+    b = by_name.get(BATCH)
+    if b and b.get('uploaded') is True:
+        fail(f'batch {BATCH} is marked uploaded in batches.json; rewriting its CSV would schedule the pins twice')
+    for p in pins:
+        if len(p['title']) > 100: fail(f"{p['id']}: title is over Pinterest's 100 characters")
+        if len(p['desc']) > 500: fail(f"{p['id']}: description is over Pinterest's 500 characters")
+    start = datetime.date.fromisoformat(os.environ['PIN_START']) if os.environ.get('PIN_START') else datetime.date.today() + datetime.timedelta(days=2)
+    times = schedule(len(pins), start)
+    if times[0] <= now + datetime.timedelta(hours=1):
+        fail(f'the first pin would publish at {times[0]:%Y-%m-%d %H:%M} UTC, which is past or within the hour; '
+             'Pinterest only schedules future dates. Pick a later PIN_START.')
+
+    if os.environ.get('PIN_SKIP_RENDER') != '1':
+        asyncio.run(render(pins))
+    missing = [p['id'] for p in pins if not (OUT / f"{p['id']}.jpg").exists()]
+    if missing: fail('missing pin images: ' + ', '.join(missing))
+
+    rows = [{'Title': p['title'], 'Media URL': f"https://tracelings.com/pins/{p['id']}.jpg", 'Pinterest board': p['board'],
+             'Thumbnail': '', 'Description': p['desc'], 'Link': p['link'], 'Publish date': t.strftime('%Y-%m-%dT%H:%M:%S'), 'Keywords': ''}
+            for p, t in zip(pins, times)]
+    name = f'pinterest-bulk-{BATCH}.csv'
+    with open(PINDIR / name, 'w', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+    # A new batch starts as not uploaded. A rewritten batch keeps its status: "not confirmed" (null)
+    # stays that way, because an older CSV of it may already be on Pinterest.
+    entry = {'batch': BATCH, 'csv': name, 'pins': [p['id'] for p in pins], 'uploaded': b.get('uploaded', False) if b else False}
+    if b: b.update(entry)
+    else: batches.append(entry)
+    save_batches(batches)
+    print(f'{len(pins)} pins, {name}: {times[0]:%Y-%m-%d %H:%M} to {times[-1]:%Y-%m-%d %H:%M} UTC')
+
+main()
