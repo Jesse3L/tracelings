@@ -278,7 +278,7 @@
     },
     {
       "id": 7,
-      "status": "todo",
+      "status": "published",
       "publishAfter": "2026-11-27",
       "primaryKeyword": "name recognition activities",
       "volume": 390,
@@ -290,7 +290,9 @@
         "/name-coloring-pages/",
         "/letter-tracing/"
       ],
-      "season": "evergreen"
+      "season": "evergreen",
+      "slug": "name-recognition-activities",
+      "publishedOn": "2026-11-27"
     },
     {
       "id": 11,
