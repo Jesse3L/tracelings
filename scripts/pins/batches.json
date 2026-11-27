@@ -1,0 +1,59 @@
+[
+  {
+    "batch": "launch-2026-10",
+    "csv": "pinterest-bulk.csv",
+    "pins": [
+      "turkey-coloring-page",
+      "cute-turkey-coloring-page",
+      "pumpkin-pie-coloring-page",
+      "cornucopia-coloring-page",
+      "happy-thanksgiving-coloring-page",
+      "thanksgiving-dinner-coloring-page",
+      "scarecrow-coloring-page",
+      "mayflower-ship-coloring-page",
+      "thanksgiving-coloring-pages-set",
+      "thanksgiving-kids-table-set",
+      "thanksgiving-crafts-preschool",
+      "thanksgiving-activities-preschool",
+      "name-tracing",
+      "name-coloring",
+      "cursive-name",
+      "cursive-a",
+      "number-1-20",
+      "letter-a",
+      "sight-words-k",
+      "bubble-letters"
+    ],
+    "uploaded": true,
+    "note": "Thanksgiving coloring pages and tool pins, Oct 13 to 19. Recorded as uploaded in the Nov 23 build log."
+  },
+  {
+    "batch": "pets-2026-11",
+    "csv": "pinterest-bulk-pets-2026-11.csv",
+    "pins": [
+      "dog-coloring-pages-set",
+      "cat-coloring-pages-set",
+      "puppy-coloring-page",
+      "kitten-coloring-page",
+      "cat-and-dog-coloring-page"
+    ],
+    "uploaded": null,
+    "note": "Dog and cat coloring pages."
+  },
+  {
+    "batch": "themes-2026-11",
+    "csv": "pinterest-bulk-themes-2026-11.csv",
+    "pins": [
+      "ocean-animal-coloring-pages-set",
+      "bug-coloring-pages-set",
+      "space-coloring-pages-set",
+      "farm-animal-coloring-pages-set",
+      "octopus-coloring-page",
+      "butterfly-coloring-page",
+      "solar-system-coloring-page",
+      "cow-coloring-page"
+    ],
+    "uploaded": null,
+    "note": "Ocean, bug, space and farm animal coloring pages."
+  }
+]
